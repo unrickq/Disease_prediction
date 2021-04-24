@@ -28,5 +28,6 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_info"
             android:title="@string/menu_about" />
+
     </group>
 </menu>

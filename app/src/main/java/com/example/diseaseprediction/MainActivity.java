@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.example.diseaseprediction.ui.alert.AlertFragment;
+import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_account, R.id.nav_consultationList, R.id.nav_predictionList,
-                R.id.nav_settings, R.id.nav_about, R.id.nav_alert)
+                R.id.nav_settings, R.id.nav_about)
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -75,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.alert) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //transaction.remove();
-            this.getFragmentManager().popBackStack();
-            transaction.add(R.id.nav_host_fragment, new AccountFragment());
-            //transaction.addToBackStack(null);
+
+            transaction.replace(R.id.nav_host_fragment, new AlertFragment());
+            transaction.addToBackStack(null);
             transaction.commit();
             return true;
         }

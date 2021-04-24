@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
         //set toolbar
         ((MainActivity) getActivity()).setActionBarTitle("");
         ((MainActivity) getActivity()).setIconToolbar();
-
+        container.removeAllViews();
 
         return root;
     }
