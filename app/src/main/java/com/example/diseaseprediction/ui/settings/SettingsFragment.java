@@ -7,9 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,13 +64,35 @@ public class SettingsFragment extends Fragment {
         //Set toolbar
         ((MainActivity) getActivity()).setActionBarTitle("Settings");
         ((MainActivity) getActivity()).setIconToolbar();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //remove current fragment
         container.removeAllViews();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        final View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        //Setting spinner
+        Spinner spLanguage = view.findViewById(R.id.spinner_language);
+        ArrayAdapter spAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.spinner_language));
+        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spLanguage.setAdapter(spAdapter);
+        spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+        return view;
     }
 }

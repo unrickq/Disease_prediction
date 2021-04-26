@@ -9,8 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="410dp"
-        android:layout_height="84dp"
-        android:background="@drawable/list_custom"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_list_custom"
         android:layout_marginBottom="10dp">
 
         <LinearLayout
@@ -20,58 +20,50 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/commercial_background"
+            android:background="@drawable/background_avatar"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/month"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Th8"
-                android:textColor="@color/text_T1_darkMode"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/day"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="12"
-                android:textColor="@color/text_T1_darkMode"
-                android:textSize="16dp" />
-
-
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/prediction_disease"
+            android:id="@+id/consultation_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
-            android:text="Your disease"
+            android:layout_marginTop="16dp"
+            android:text="Name"
             android:textColor="@color/text_T1_lightMode"
             android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/prediction_status"
+            android:id="@+id/consultation_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:text="status: Successful "
+            android:layout_marginTop="8dp"
+            android:text="Message "
             android:textColor="@color/text_T1_lightMode"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/linearLayout"
-            app:layout_constraintTop_toBottomOf="@+id/prediction_disease" />
+            app:layout_constraintTop_toBottomOf="@+id/consultation_name" />
+
+        <TextView
+            android:id="@+id/consultation_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="09:23"
+            android:textColor="@color/text_T1_lightMode"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

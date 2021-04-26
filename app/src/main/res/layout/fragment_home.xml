@@ -22,6 +22,7 @@
 
             <TextView
                 android:id="@+id/homeTitle"
+                style="@style/heading_3_bold"
                 android:layout_width="267dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/searchview_custom" />
+                android:background="@drawable/background_searchview_custom" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -43,7 +44,7 @@
                 android:layout_height="159dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/commercial_background"
+                android:background="@drawable/background_commercial"
                 android:src="@drawable/ic_doctor" />
 
             <LinearLayout
@@ -54,18 +55,19 @@
 
                 <TextView
                     android:id="@+id/prediction_title"
+                    style="@style/subTitle_1_bold"
                     android:layout_width="228dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginLeft="17dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_light"
                     android:text=" Your disease "
-                    android:textColor="@color/text_T1_lightMode"
-                    android:textSize="22dp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/prediction_see_more"
+                    style="@style/subTitle_2_light"
                     android:layout_width="127dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
@@ -73,8 +75,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="right"
                     android:text="See more"
-                    android:textColor="@color/theme_1_P"
-                    android:textSize="14dp" />
+                    android:textColor="@color/theme_1_P_dark"/>
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                tools:listitem="@layout/prediction_item" />
+                tools:listitem="@layout/item_prediction" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,27 +94,26 @@
 
                 <TextView
                     android:id="@+id/consultation_title"
+                    style="@style/subTitle_1_bold"
                     android:layout_width="228dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginLeft="17dp"
                     android:layout_marginTop="10dp"
-                    android:text=" Your disease "
-                    android:textColor="@color/text_T1_lightMode"
-                    android:textSize="22dp"
-                    android:textStyle="bold" />
+                    android:text="Your consultation "
+                    android:textColor="@color/text_T1_lightMode" />
 
                 <TextView
                     android:id="@+id/consultation_see_more"
                     android:layout_width="127dp"
+                    style="@style/subTitle_2_light"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="17dp"
                     android:layout_marginLeft="17dp"
                     android:layout_marginTop="10dp"
                     android:gravity="right"
                     android:text="See more"
-                    android:textColor="@color/theme_1_P"
-                    android:textSize="14dp" />
+                    android:textColor="@color/theme_1_P" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                tools:listitem="@layout/consultation_item" />
+                tools:listitem="@layout/item_consultation" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

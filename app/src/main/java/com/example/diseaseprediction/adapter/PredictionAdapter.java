@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.ViewHolder> {
@@ -27,7 +26,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     @Override
     public PredictionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.prediction_item, parent, false);
+                .inflate(R.layout.item_prediction, parent, false);
         return new PredictionAdapter.ViewHolder(view);
     }
 
@@ -51,7 +50,6 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         public TextView prediction_status;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //System.out.println ("Quang"+ mList.size() );
             prediction_disease = itemView.findViewById(R.id.prediction_disease);
             prediction_status = itemView.findViewById(R.id.prediction_status);
         }
