@@ -14,7 +14,7 @@
         android:layout_marginBottom="10dp">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/img_prediction"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/month"
+                android:id="@+id/txt_month"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -36,7 +36,7 @@
                 android:textSize="18dp" />
 
             <TextView
-                android:id="@+id/day"
+                android:id="@+id/txt_day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -48,30 +48,28 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/prediction_disease"
+            android:id="@+id/txt_prediction_disease"
+            style="@style/subTitle_1_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
             android:text="Your disease"
-            android:textColor="@color/text_T1_lightMode"
-            android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintStart_toEndOf="@+id/img_prediction"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/prediction_status"
+            android:id="@+id/txt_prediction_status"
+            style="@style/subTitle_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:text="status: Successful "
-            android:textColor="@color/text_T1_lightMode"
-            android:textSize="12dp"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout"
-            app:layout_constraintTop_toBottomOf="@+id/prediction_disease" />
+            app:layout_constraintStart_toEndOf="@+id/img_prediction"
+            app:layout_constraintTop_toBottomOf="@+id/txt_prediction_disease" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

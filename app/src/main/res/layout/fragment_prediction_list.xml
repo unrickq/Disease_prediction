@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="Your prediction" />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_disease"
+        android:id="@+id/recycler_view_prediction"
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

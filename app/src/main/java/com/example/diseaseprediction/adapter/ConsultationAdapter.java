@@ -77,7 +77,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
         public ViewHolder(View view) {
             super(view);
-            productName = view.findViewById(R.id.consultation_name);
+            productName = view.findViewById(R.id.txt_consultation_name);
 
             view.setOnClickListener(this);
         }
