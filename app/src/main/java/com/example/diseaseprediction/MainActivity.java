@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //transaction.remove();
 
-            //Comment quang
+            //Comment
             transaction.replace(R.id.nav_host_fragment, new AlertFragment());
             transaction.addToBackStack(null);
             transaction.commit();
