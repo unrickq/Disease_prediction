@@ -24,7 +24,7 @@
             android:layout_marginTop="@dimen/margin_top">
 
             <TextView
-                android:id="@+id/txt_homeTitle"
+                android:id="@+id/home_txt_title"
                 style="@style/heading_3_bold"
                 android:layout_width="267dp"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:background="@drawable/background_searchview_custom" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/home_img_advertise"
                 android:layout_width="match_parent"
                 android:layout_height="159dp"
                 android:layout_gravity="center"
@@ -54,14 +54,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txt_prediction_title"
+                    android:id="@+id/home_txt_prediction_title"
                     style="@style/subTitle_1_bold"
                     android:layout_width="228dp"
                     android:layout_height="wrap_content"
                     android:text="Your disease" />
 
                 <TextView
-                    android:id="@+id/txt_prediction_see_more"
+                    android:id="@+id/home_txt_prediction_see_more"
                     style="@style/subTitle_2_light"
                     android:layout_width="142dp"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_disease"
+                android:id="@+id/home_recycler_view_disease"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -85,14 +85,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txt_consultation_title"
+                    android:id="@+id/home_txt_consultation_title"
                     style="@style/subTitle_1_bold"
                     android:layout_width="228dp"
                     android:layout_height="wrap_content"
                     android:text="Your consultation" />
 
                 <TextView
-                    android:id="@+id/txt_consultation_see_more"
+                    android:id="@+id/home_txt_consultation_see_more"
                     style="@style/subTitle_2_light"
                     android:layout_width="142dp"
                     android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_consultation"
+                android:id="@+id/home_recycler_view_consultation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
