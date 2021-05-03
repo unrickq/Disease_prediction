@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_login_started" >
         <action
             android:id="@+id/action_loginStartedFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

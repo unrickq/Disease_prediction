@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.about.AboutFragment">
 
+
     <ImageView
         android:id="@+id/about_img_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="216dp"
-        android:src="@drawable/ic_about_background"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/ic_rectangle_189"
+        app:layout_constraintBottom_toTopOf="@+id/about_txt_slogan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -31,7 +31,6 @@
         android:id="@+id/about_img_logo"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="156dp"
         android:layout_marginLeft="156dp"
@@ -45,11 +44,11 @@
         style="@style/heading_6_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="5dp"
         android:text="Slogan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/about_img_background" />
+        app:layout_constraintTop_toBottomOf="@+id/about_img_doctor" />
 
     <TextView
         android:id="@+id/txt_about_company"
