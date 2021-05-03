@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="Your notification" />
+        android:text="@string/alert_list_txt_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alert_list_recycler_view_main"

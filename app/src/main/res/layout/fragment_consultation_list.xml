@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="Your consultation" />
+        android:text="@string/consultation_list_txt_title" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/consultation_list_recycler_view_main"
         android:layout_marginTop="@dimen/margin_top"

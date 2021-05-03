@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Th8"
+                android:text="@string/item_prediction_txt_month"
                 android:textColor="@color/text_T1_darkMode"
                 android:textSize="18dp" />
 
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="12"
+                android:text="@string/item_prediction_txt_day"
                 android:textColor="@color/text_T1_darkMode"
                 android:textSize="16dp" />
 
@@ -54,7 +54,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
-            android:text="Your disease"
+            android:text="@string/item_prediction_txt_disease"
             app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +66,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
-            android:text="status: Successful "
+            android:text="@string/item_prediction_txt_status"
             app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
             app:layout_constraintTop_toBottomOf="@+id/item_prediction_txt_disease" />
 

@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name" />
+        android:text="@string/account_txt_title_name" />
 
     <TextView
         android:id="@+id/account_txt_name"
@@ -32,7 +32,7 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/account_txt_name" />
 
     <TextView
         android:id="@+id/account_txt_title_birthday"
@@ -40,7 +40,7 @@
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Birthday" />
+        android:text="@string/account_txt_title_birthday" />
 
     <TextView
         android:id="@+id/account_txt_birthday"
@@ -48,7 +48,7 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/account_txt_birthday" />
 
     <TextView
         android:id="@+id/account_txt_title_sex"
@@ -56,7 +56,7 @@
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sex" />
+        android:text="@string/account_txt_title_sex" />
 
     <TextView
         android:id="@+id/account_txt_sex"
@@ -64,7 +64,7 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/account_txt_sex" />
 
     <TextView
         android:id="@+id/account_txt_title_phone"
@@ -72,7 +72,7 @@
         android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Phone" />
+        android:text="@string/account_txt_title_phone" />
 
     <TextView
         android:id="@+id/account_txt_phone"
@@ -80,6 +80,6 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/account_txt_phone" />
 
 </LinearLayout>
