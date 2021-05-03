@@ -62,7 +62,7 @@ public class SettingsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("Settings");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_settings));
         ((MainActivity) getActivity()).setIconToolbar();
 
     }

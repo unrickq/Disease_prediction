@@ -57,7 +57,7 @@ public class ConsultationListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("Consultation");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_consultationList));
         ((MainActivity) getActivity()).setIconToolbar();
     }
 

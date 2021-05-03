@@ -10,10 +10,11 @@
         android:id="@+id/about_img_background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="315dp"
+        android:layout_marginBottom="164dp"
         android:src="@drawable/ic_rectangle_189"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/login_txt_connect_other"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView

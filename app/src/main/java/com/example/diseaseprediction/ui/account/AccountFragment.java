@@ -58,7 +58,7 @@ public class AccountFragment extends Fragment {
         }
 
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("Account");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_account));
         ((MainActivity) getActivity()).setIconToolbar();
     }
 

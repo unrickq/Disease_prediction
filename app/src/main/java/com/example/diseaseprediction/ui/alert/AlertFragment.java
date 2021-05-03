@@ -58,7 +58,7 @@ public class AlertFragment extends Fragment {
         }
 
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("Notification");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_alert));
         ((MainActivity) getActivity()).setIconToolbar();
     }
 
