@@ -62,7 +62,7 @@ public class SettingsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("Settings");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_settings));
         ((MainActivity) getActivity()).setIconToolbar();
 
     }
@@ -76,7 +76,7 @@ public class SettingsFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //Setting spinner
-        Spinner spLanguage = view.findViewById(R.id.spinner_language);
+        Spinner spLanguage = view.findViewById(R.id.settings_spinner_language);
         ArrayAdapter spAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.spinner_language));
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spLanguage.setAdapter(spAdapter);

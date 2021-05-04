@@ -1,5 +1,6 @@
-package com.example.diseaseprediction.ui.alert;
+package com.example.diseaseprediction.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,16 +8,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AlertFragment#newInstance} factory method to
+ * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlertFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +29,7 @@ public class AlertFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AlertFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -37,11 +39,11 @@ public class AlertFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AlertFragment.
+     * @return A new instance of fragment LoginFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AlertFragment newInstance(String param1, String param2) {
-        AlertFragment fragment = new AlertFragment();
+    public static LoginFragment newInstance(String param1, String param2) {
+        LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,17 +58,22 @@ public class AlertFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_alert));
-        ((MainActivity) getActivity()).setIconToolbar();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        container.removeAllViews();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alert_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ImageView loginNext = view.findViewById(R.id.login_img_next);
+        loginNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+         return view;
     }
 }

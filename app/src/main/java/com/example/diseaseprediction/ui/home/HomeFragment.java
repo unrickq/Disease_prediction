@@ -46,9 +46,9 @@ public class HomeFragment extends Fragment {
         testData.add("TEST 2");
         testData.add("TEST 3");
 
-        recyclerView = root.findViewById(R.id.recycler_view_consultation);
-        consultationAdapter = new ConsultationAdapter(testData);
-        recyclerView.setAdapter(consultationAdapter);
+//        recyclerView = root.findViewById(R.id.recycler_view_consultation);
+//        consultationAdapter = new ConsultationAdapter(testData);
+//        recyclerView.setAdapter(consultationAdapter);
 
 
 

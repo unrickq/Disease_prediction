@@ -1,4 +1,4 @@
-package com.example.diseaseprediction.ui.alert;
+package com.example.diseaseprediction.ui.login;
 
 import android.os.Bundle;
 
@@ -8,15 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AlertFragment#newInstance} factory method to
+ * Use the {@link LoginConfirmFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlertFragment extends Fragment {
+public class LoginConfirmFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +26,7 @@ public class AlertFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AlertFragment() {
+    public LoginConfirmFragment() {
         // Required empty public constructor
     }
 
@@ -37,11 +36,11 @@ public class AlertFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AlertFragment.
+     * @return A new instance of fragment LoginConfirmFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AlertFragment newInstance(String param1, String param2) {
-        AlertFragment fragment = new AlertFragment();
+    public static LoginConfirmFragment newInstance(String param1, String param2) {
+        LoginConfirmFragment fragment = new LoginConfirmFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,17 +55,12 @@ public class AlertFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_alert));
-        ((MainActivity) getActivity()).setIconToolbar();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        container.removeAllViews();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_alert_list, container, false);
+        return inflater.inflate(R.layout.fragment_login_confirm, container, false);
     }
 }

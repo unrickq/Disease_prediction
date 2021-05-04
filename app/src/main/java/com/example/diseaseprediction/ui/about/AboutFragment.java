@@ -58,7 +58,7 @@ public class AboutFragment extends Fragment {
         }
 
         //Set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("About");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_about));
         ((MainActivity) getActivity()).setIconToolbar();
     }
 

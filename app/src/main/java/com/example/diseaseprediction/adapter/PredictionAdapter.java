@@ -50,8 +50,8 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         public TextView prediction_status;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            prediction_disease = itemView.findViewById(R.id.txt_prediction_disease);
-            prediction_status = itemView.findViewById(R.id.txt_prediction_status);
+//            prediction_disease = itemView.findViewById(R.id.item_prediction_txt_disease);
+//            prediction_status = itemView.findViewById(R.id.ite);
         }
 
         @Override
