@@ -76,21 +76,21 @@ public class SettingsFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         //Setting spinner
-        Spinner spLanguage = view.findViewById(R.id.settings_spinner_language);
-        ArrayAdapter spAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.spinner_language));
-        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spLanguage.setAdapter(spAdapter);
-        spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-
-            } // to close the onItemSelected
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-        });
+//        Spinner spLanguage = view.findViewById(R.id.settings_spinner_language);
+//        ArrayAdapter spAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item,getResources().getStringArray(R.array.spinner_language));
+//        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spLanguage.setAdapter(spAdapter);
+//        spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+//        {
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+//            {
+//
+//            } // to close the onItemSelected
+//            public void onNothingSelected(AdapterView<?> parent)
+//            {
+//
+//            }
+//        });
 
 
         return view;

@@ -14,6 +14,8 @@ import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -54,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
         //set toolbar icon
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+
+        //Firebase Test
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("message");
+        myRef.setValue("Hello, World!");
     }
 
     @Override

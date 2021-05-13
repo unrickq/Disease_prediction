@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "61811398358",
+    "project_id": "disease-prediction-f6012",
+    "storage_bucket": "disease-prediction-f6012.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61811398358:android:e8afa210ef2f043b185b77",
+        "android_client_info": {
+          "package_name": "com.example.diseaseprediction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61811398358-rcu2lksvv1n95imrkg3ueqo7hf4amn0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUAp0o4Zrbubu2-9YB6WlzEj0UALUt-Hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61811398358-rcu2lksvv1n95imrkg3ueqo7hf4amn0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
