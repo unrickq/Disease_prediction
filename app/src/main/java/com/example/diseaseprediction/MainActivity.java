@@ -8,15 +8,24 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.diseaseprediction.ui.about.AboutFragment;
 import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.example.diseaseprediction.ui.alert.AlertFragment;
+import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
+import com.example.diseaseprediction.ui.prediction.PredictionFragment;
+import com.example.diseaseprediction.ui.settings.SettingsFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -27,19 +36,35 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.jetbrains.annotations.NotNull;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    private GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //get Google sign in account
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         //Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+        //Set navigation
+        setNavigation();
 
+    }
+
+    private void setNavigation(){
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -53,14 +78,58 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        //set toolbar icon
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
-
-        //Firebase Test
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
-        myRef.setValue("Hello, World!");
+        //set item click on navigation
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new HomeFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_account: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new AccountFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_consultationList: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new ConsultationListFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_predictionList: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new PredictionFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_settings: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new SettingsFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_about: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new AboutFragment()).commit();
+                        drawer.close();
+                        break;
+                    }
+                    case R.id.nav_out: {
+                        FirebaseAuth.getInstance().signOut();
+                        mGoogleSignInClient.revokeAccess();
+                        Intent i = new Intent(MainActivity.this,Login.class);
+                        startActivity(i);
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     @Override

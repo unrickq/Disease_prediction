@@ -108,6 +108,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_top"
                 tools:listitem="@layout/item_consultation" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

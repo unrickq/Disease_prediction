@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class HomeFragment extends Fragment {
         testData.add("TEST 1");
         testData.add("TEST 2");
         testData.add("TEST 3");
+
 
 //        recyclerView = root.findViewById(R.id.recycler_view_consultation);
 //        consultationAdapter = new ConsultationAdapter(testData);

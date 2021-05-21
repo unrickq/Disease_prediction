@@ -13,6 +13,7 @@
     <string name="menu_consultationList">Tư vấn</string>
     <string name="menu_settings">Cài đặt</string>
     <string name="menu_about">Thông tin ứng dụng</string>
+    <string name="menu_signout">Thoát</string>
     <string name="menu_alert">Thông báo</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -38,7 +39,7 @@
     <string name="login_sign_up">Đăng ký</string>
     <string name="login_txt_connect_other">Hoặc kết nối với bên thứ 3</string>
     <string name="login_btn_login">google</string>
-    <string name="login_started_txt_slogan">Slogan</string>
+    <string name="login_started_txt_slogan">Chuẩn đoán bệnh</string>
     <string name="login_started_btn_next">Bắt đầu nào</string>
     <string name="prediction_txt_acc_name">TextView</string>
     <string name="prediction_txt_acc_sex">TextView</string>
