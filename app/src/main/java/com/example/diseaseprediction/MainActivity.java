@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.diseaseprediction.model.AccountModel;
+import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.ui.about.AboutFragment;
 import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.example.diseaseprediction.ui.alert.AlertFragment;
@@ -22,8 +26,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,10 +46,21 @@ import androidx.appcompat.widget.Toolbar;
 
 import org.jetbrains.annotations.NotNull;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MainActivity extends AppCompatActivity {
+    private TextView nav_header_txt_acc_name,nav_header_txt_acc_phone;
+    private CircleImageView nav_header_avatar;
+    private NavigationView nav_view;
+    private Account mAccount;
+    private DatabaseReference mRef;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +80,19 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
         //Set navigation
         setNavigation();
+
+        //Detect data change
+        mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                getUIofNavHeader();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -166,7 +198,42 @@ public class MainActivity extends AppCompatActivity {
         TextView t = (TextView) findViewById(R.id.toolbar_title) ;
         t.setText(title) ;
     }
+
     public void setIconToolbar(){
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+    }
+
+    private void getUIofNavHeader(){
+        //get user by id
+        mAccount = new Account();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //check user exist in firebase
+                //if exist then set UI
+                if (snapshot.hasChild(user.getUid())){
+                    mAccount = snapshot.child(user.getUid()).getValue(Account.class);
+                    //Set text navigation header
+                    nav_view = findViewById(R.id.nav_view);
+                    View headerView = nav_view.getHeaderView(0);
+                    nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
+                    nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
+                    nav_header_txt_acc_name.setText(mAccount.getName());
+                    nav_header_txt_acc_phone.setText(mAccount.getPhone());
+                    //set image
+                    nav_header_avatar = findViewById(R.id.nav_header_avatar);
+                    Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+
+                }else{
+                    System.out.println("k tim ra");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 }

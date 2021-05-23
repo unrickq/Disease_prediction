@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-
-    List<String> testData = new ArrayList<>();
     private RecyclerView recyclerView;
     private ConsultationAdapter consultationAdapter ;
     private HomeViewModel homeViewModel;
@@ -43,10 +41,6 @@ public class HomeFragment extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle("");
         ((MainActivity) getActivity()).setIconToolbar();
         container.removeAllViews();
-
-        testData.add("TEST 1");
-        testData.add("TEST 2");
-        testData.add("TEST 3");
 
 
 //        recyclerView = root.findViewById(R.id.recycler_view_consultation);

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.diseaseprediction.object.Account;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -22,16 +23,24 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.concurrent.Executor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class Login extends AppCompatActivity {
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseUser fUser;
+    private DatabaseReference mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,29 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 signIn();
+            }
+        });
+    }
+
+    //Create new account in firebase
+    private void CreateNewAccount(){
+        Date currentTime = Calendar.getInstance().getTime();
+        fUser = mAuth.getCurrentUser();
+        String userId = fUser.getUid();
+        mRef = FirebaseDatabase.getInstance().getReference();
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //check user exist in firebase
+                if (!snapshot.child("Accounts").hasChild(userId)){
+                    Account account = new Account(userId,1,fUser.getPhoneNumber(),fUser.getDisplayName(),-1,"",fUser.getEmail(),fUser.getPhotoUrl().toString()
+                            ,currentTime,currentTime,0);
+                    mRef.child("Accounts").child(userId).setValue(account);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
             }
         });
     }
@@ -96,6 +128,7 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            CreateNewAccount();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

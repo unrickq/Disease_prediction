@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "61811398358-npl74sfi9rrb00b1i4a1a9kp2ddi0h55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.diseaseprediction",
+            "certificate_hash": "f2414c22fa212581a9a193fe8c150799abe1f8a6"
+          }
+        },
+        {
           "client_id": "61811398358-rcu2lksvv1n95imrkg3ueqo7hf4amn0p.apps.googleusercontent.com",
           "client_type": 3
         }
