@@ -1,85 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingRight="@dimen/padding"
-    android:paddingLeft="@dimen/padding"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/padding"
+    android:paddingRight="@dimen/padding"
     tools:context=".ui.account.AccountFragment">
 
     <!-- TODO: Update blank fragment layout -->
-   <ImageView
-       android:id="@+id/account_img_avatar"
-       android:layout_width="141dp"
-       android:layout_height="141dp"
-       android:layout_marginTop="@dimen/margin_top"
-       android:layout_gravity="center"
-       android:src="@drawable/background_avatar" />
+    <!--   <ImageView-->
+    <!--       android:id="@+id/account_img_avatar"-->
+    <!--       android:layout_width="141dp"-->
+    <!--       android:layout_height="141dp"-->
+    <!--       android:layout_marginTop="@dimen/margin_top"-->
+    <!--       android:layout_gravity="center"-->
+    <!--       android:src="@drawable/background_avatar" />-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/account_img_avatar"
+        android:layout_width="141dp"
+        android:layout_height="141dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_top"
+        android:src="@drawable/background_avatar" />
 
     <TextView
         android:id="@+id/account_txt_title_name"
         style="@style/subTitle_1_bold"
-        android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
         android:text="@string/account_txt_title_name" />
 
     <TextView
         android:id="@+id/account_txt_name"
         style="@style/subTitle_1"
-        android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:text="@string/account_txt_name" />
 
     <TextView
-        android:id="@+id/account_txt_title_birthday"
+        android:id="@+id/account_txt_title_gender"
         style="@style/subTitle_1_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/account_txt_title_birthday" />
+        android:text="@string/account_txt_title_gender" />
 
     <TextView
-        android:id="@+id/account_txt_birthday"
+        android:id="@+id/account_txt_gender"
         style="@style/subTitle_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/account_txt_birthday" />
-
-    <TextView
-        android:id="@+id/account_txt_title_sex"
-        style="@style/subTitle_1_bold"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/account_txt_title_sex" />
-
-    <TextView
-        android:id="@+id/account_txt_sex"
-        style="@style/subTitle_1"
-        android:layout_marginTop="3dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/account_txt_sex" />
+        android:text="@string/account_txt_gender" />
 
     <TextView
         android:id="@+id/account_txt_title_phone"
         style="@style/subTitle_1_bold"
-        android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
         android:text="@string/account_txt_title_phone" />
 
     <TextView
         android:id="@+id/account_txt_phone"
         style="@style/subTitle_1"
-        android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:text="@string/account_txt_phone" />
+
+    <TextView
+        android:id="@+id/account_txt_title_email"
+        style="@style/subTitle_1_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/account_txt_title_email" />
+
+    <TextView
+        android:id="@+id/account_txt_email"
+        style="@style/subTitle_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="@string/account_txt_email" />
+
+    <TextView
+        android:id="@+id/account_txt_title_address"
+        style="@style/subTitle_1_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/account_txt_title_address" />
+
+    <TextView
+        android:id="@+id/account_txt_address"
+        style="@style/subTitle_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="@string/account_txt_address" />
 
 </LinearLayout>

@@ -18,6 +18,7 @@ import com.example.diseaseprediction.ui.alert.AlertFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionFragment;
+import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.example.diseaseprediction.ui.settings.SettingsFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     case R.id.nav_predictionList: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new PredictionFragment()).commit();
+                                new PredictionListFragment()).commit();
                         drawer.close();
                         break;
                     }
@@ -221,10 +222,19 @@ public class MainActivity extends AppCompatActivity {
                     nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
                     nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
                     nav_header_txt_acc_name.setText(mAccount.getName());
-                    nav_header_txt_acc_phone.setText(mAccount.getPhone());
+                    if (mAccount.getPhone().equals("Default")){
+                        nav_header_txt_acc_phone.setText("");
+                    }else{
+                        nav_header_txt_acc_phone.setText(mAccount.getPhone());
+                    }
+
                     //set image
                     nav_header_avatar = findViewById(R.id.nav_header_avatar);
-                    Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+                    if (!mAccount.getImage().equals("Default")){
+                        Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+                    }else{
+                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
+                    }
 
                 }else{
                     System.out.println("k tim ra");

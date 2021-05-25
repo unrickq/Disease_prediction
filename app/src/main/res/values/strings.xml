@@ -23,12 +23,14 @@
     <string name="about_txt_company">NEON COMPANY</string>
     <string name="account_txt_title_name">Name</string>
     <string name="account_txt_name">TextView</string>
-    <string name="account_txt_title_birthday">Birthday</string>
-    <string name="account_txt_birthday">TextView</string>
-    <string name="account_txt_title_sex">Sex</string>
-    <string name="account_txt_sex">TextView</string>
+    <string name="account_txt_title_address">Address</string>
+    <string name="account_txt_address">TextView</string>
+    <string name="account_txt_title_gender">Gender</string>
+    <string name="account_txt_gender">TextView</string>
     <string name="account_txt_title_phone">Phone</string>
     <string name="account_txt_phone">TextView</string>
+    <string name="account_txt_title_email">Email</string>
+    <string name="account_txt_email">TextView</string>
     <string name="consultation_list_txt_title">Your consultation</string>
     <string name="home_txt_title">What is your disease ?</string>
     <string name="home_txt_prediction_title">Your disease</string>
@@ -74,6 +76,14 @@
     <string name="nav_header_txt_acc_name">Tran Van Dan</string>
     <string name="nav_header_txt_acc_phone">+84 093 154 6591</string>
     <string name="alert_list_txt_title">Your notification</string>
+
+    <string name="default_empty_name">Please enter your name</string>
+    <string name="default_empty_gender">Please select your gender</string>
+    <string name="default_gender_male">Male</string>
+    <string name="default_gender_female">Female</string>
+    <string name="default_empty_email">Please enter your email</string>
+    <string name="default_empty_phone">Please enter your phone</string>
+    <string name="default_empty_address">Please enter your address</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

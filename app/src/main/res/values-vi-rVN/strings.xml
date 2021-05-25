@@ -21,11 +21,13 @@
     <string name="about_txt_company">Công ty NEON</string>
     <string name="account_txt_title_name">Tên</string>
     <string name="account_txt_name">TextView</string>
-    <string name="account_txt_title_birthday">Ngày sinh</string>
-    <string name="account_txt_birthday">TextView</string>
-    <string name="account_txt_title_sex">Giới tính</string>
-    <string name="account_txt_sex">TextView</string>
+    <string name="account_txt_title_address">Địa chỉ</string>
+    <string name="account_txt_address">TextView</string>
+    <string name="account_txt_title_gender">Giới tính</string>
+    <string name="account_txt_gender">TextView</string>
     <string name="account_txt_phone">TextView</string>
+    <string name="account_txt_title_email">Email</string>
+    <string name="account_txt_email">TextView</string>
     <string name="account_txt_title_phone">Số điện thoại</string>
     <string name="consultation_list_txt_title">Tư vấn của bạn</string>
     <string name="home_txt_title">Triệu chứng của bạn là gì ?</string>
@@ -72,4 +74,12 @@
     <string name="nav_header_txt_acc_name">Tran Van Dan</string>
     <string name="nav_header_txt_acc_phone">+84 093 154 6591</string>
     <string name="alert_list_txt_title">Thông báo của bạn</string>
+
+    <string name="default_empty_name">Vui lòng nhập tên của bạn</string>
+    <string name="default_empty_gender">Vui lòng chọn giới tính của bạn</string>
+    <string name="default_gender_male">Nam</string>
+    <string name="default_gender_female">Nữ</string>
+    <string name="default_empty_email">Vui lòng nhập email của bạn</string>
+    <string name="default_empty_phone">Vui lòng nhập số điện thoại của bạn</string>
+    <string name="default_empty_address">Vui lòng nhập địa chỉ của bạn</string>
 </resources>

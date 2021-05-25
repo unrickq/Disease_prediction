@@ -76,7 +76,26 @@ public class Login extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase
                 if (!snapshot.child("Accounts").hasChild(userId)){
-                    Account account = new Account(userId,1,fUser.getPhoneNumber(),fUser.getDisplayName(),-1,"",fUser.getEmail(),fUser.getPhotoUrl().toString()
+                    int gender = -1;
+                    String phone = "Default";
+                    String address = "Default";
+                    String email = "Default";
+                    String name = "Default";
+                    String imgURL = "Default";
+
+                    if (fUser.getDisplayName()!=null){
+                        name = fUser.getDisplayName();
+                    }
+                    if (fUser.getPhoneNumber()!=null){
+                        phone = fUser.getPhoneNumber();
+                    }
+                    if (fUser.getEmail()!=null){
+                        email = fUser.getEmail();
+                    }
+                    if (fUser.getPhotoUrl().toString()!=null){
+                        imgURL = fUser.getPhotoUrl().toString();
+                    }
+                    Account account = new Account(userId,1,phone,name,gender,address,email,imgURL
                             ,currentTime,currentTime,0);
                     mRef.child("Accounts").child(userId).setValue(account);
                 }
