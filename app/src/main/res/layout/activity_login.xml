@@ -58,7 +58,7 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="@string/login_eTxt_user"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_txt_title" />
 

@@ -9,15 +9,6 @@
     android:paddingRight="@dimen/padding"
     tools:context=".ui.account.AccountFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <!--   <ImageView-->
-    <!--       android:id="@+id/account_img_avatar"-->
-    <!--       android:layout_width="141dp"-->
-    <!--       android:layout_height="141dp"-->
-    <!--       android:layout_marginTop="@dimen/margin_top"-->
-    <!--       android:layout_gravity="center"-->
-    <!--       android:src="@drawable/background_avatar" />-->
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_img_avatar"
         android:layout_width="141dp"
@@ -42,6 +33,16 @@
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_name" />
 
+    <EditText
+        android:id="@+id/account_edit_txt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/subTitle_1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/account_txt_title_gender"
         style="@style/subTitle_1_bold"
@@ -57,6 +58,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_gender" />
+
+    <EditText
+        android:id="@+id/account_edit_txt_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/subTitle_1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/account_txt_title_phone"
@@ -74,6 +85,16 @@
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_phone" />
 
+    <EditText
+        android:id="@+id/account_edit_txt_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/subTitle_1"
+        android:ems="10"
+        android:inputType="number"
+        android:text=""
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/account_txt_title_email"
         style="@style/subTitle_1_bold"
@@ -90,6 +111,16 @@
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_email" />
 
+    <EditText
+        android:id="@+id/account_edit_txt_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/subTitle_1"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text=""
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/account_txt_title_address"
         style="@style/subTitle_1_bold"
@@ -105,5 +136,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_address" />
+
+    <EditText
+        android:id="@+id/account_edit_txt_address"
+        style="@style/subTitle_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/accout_btn_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/theme_1_P"
+        android:textColor="@color/background_B1_lightMode"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/account_btn_edit" />
+
+    <Button
+        android:id="@+id/accout_btn_edit_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/theme_1_P"
+        android:text="@string/account_btn_edit_done"
+        android:layout_marginTop="@dimen/margin_top"
+        android:textColor="@color/background_B1_lightMode"
+        android:visibility="gone" />
 
 </LinearLayout>

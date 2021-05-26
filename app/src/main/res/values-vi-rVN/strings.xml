@@ -29,6 +29,8 @@
     <string name="account_txt_title_email">Email</string>
     <string name="account_txt_email">TextView</string>
     <string name="account_txt_title_phone">Số điện thoại</string>
+    <string name="account_btn_edit">Chỉnh sửa</string>
+    <string name="account_btn_edit_done">Lưu lại</string>
     <string name="consultation_list_txt_title">Tư vấn của bạn</string>
     <string name="home_txt_title">Triệu chứng của bạn là gì ?</string>
     <string name="home_txt_prediction_title">Bệnh của bạn</string>
@@ -82,4 +84,8 @@
     <string name="default_empty_email">Vui lòng nhập email của bạn</string>
     <string name="default_empty_phone">Vui lòng nhập số điện thoại của bạn</string>
     <string name="default_empty_address">Vui lòng nhập địa chỉ của bạn</string>
+
+    <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
+    <string name="dialog_confirm_change_account_yes">Có</string>
+    <string name="dialog_confirm_change_account_no">Không</string>
 </resources>

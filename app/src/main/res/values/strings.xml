@@ -31,6 +31,8 @@
     <string name="account_txt_phone">TextView</string>
     <string name="account_txt_title_email">Email</string>
     <string name="account_txt_email">TextView</string>
+    <string name="account_btn_edit">Edit</string>
+    <string name="account_btn_edit_done">Done</string>
     <string name="consultation_list_txt_title">Your consultation</string>
     <string name="home_txt_title">What is your disease ?</string>
     <string name="home_txt_prediction_title">Your disease</string>
@@ -84,6 +86,10 @@
     <string name="default_empty_email">Please enter your email</string>
     <string name="default_empty_phone">Please enter your phone</string>
     <string name="default_empty_address">Please enter your address</string>
+
+    <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
+    <string name="dialog_confirm_change_account_yes">Yes</string>
+    <string name="dialog_confirm_change_account_no">No</string>
 
     <string-array name="spinner_language">
         <item>EN</item>
