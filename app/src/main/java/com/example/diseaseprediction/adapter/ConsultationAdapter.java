@@ -13,17 +13,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.R;
+import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.ui.account.AccountFragment;
 
 import java.util.List;
 
-public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapter.ViewHolder>{
-    private final List<String> products;
-//    private Context mContext;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    public ConsultationAdapter(List<String> products) {
-        this.products = products;
-//        this.mContext = context;
+public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapter.ViewHolder>{
+
+
+    private Context mContext;
+    private List<Account> mUser;
+
+    public ConsultationAdapter(Context context, List<Account> mUser) {
+        this.mContext = context;
+        this.mUser = mUser;
     }
 
     /**
@@ -49,12 +56,22 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
      */
     @Override
     public void onBindViewHolder(final ConsultationAdapter.ViewHolder holder, int position) {
-        // Get current product
-        String product = products.get(position);
+        Account users = mUser.get(position);
+        holder.item_consultation_txt_name.setText(users.getName());
+//        holder.item_consultation_txt_message.setText(users.get());
+//        holder.item_consultation_txt_name.setText(users.getName());
+//        Glide.with(holder).load(users.getImage()).into(holder.item_consultation_img_main);
 
-        //Populate the view with data
-        holder.bindTo(product);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent i = new Intent(context, chat.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                i.putExtra("userid",users.getId());
+//                context.startActivity(i);
+            }
+        });
     }
 
     /**
@@ -64,7 +81,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
      */
     @Override
     public int getItemCount() {
-        return products.size();
+        return mUser.size();
     }
 
     /**
@@ -72,26 +89,20 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final TextView productName;
-
+        public TextView item_consultation_txt_name,item_consultation_txt_message,item_consultation_txt_time;
+        public CircleImageView item_consultation_img_main;
 
         public ViewHolder(View view) {
             super(view);
-            productName = view.findViewById(R.id.item_consultation_txt_name);
-
-            view.setOnClickListener(this);
+            item_consultation_txt_name = view.findViewById(R.id.item_consultation_txt_name);
+            item_consultation_txt_message = view.findViewById(R.id.item_consultation_txt_message);
+            item_consultation_txt_time = view.findViewById(R.id.item_consultation_txt_time);
+            item_consultation_img_main = view.findViewById(R.id.item_consultation_img_main);
         }
 
         void bindTo(String product) {
-            // Populate views with data
-            // If product is on sale
-
-
-            productName.setText(product);
-            // load images of product
 
         }
-
 
         /**
          * Called when a view has been clicked.
