@@ -32,11 +32,13 @@
                 android:textSize="36sp" />
 
             <SearchView
+                android:id="@+id/home_search_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_top_home_component"
-                android:background="@drawable/background_searchview_custom" />
+                android:background="@drawable/background_searchview_custom"
+                android:queryHint="@string/home_search_view" />
 
             <ImageView
                 android:id="@+id/home_img_advertise"

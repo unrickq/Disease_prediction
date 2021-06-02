@@ -39,6 +39,7 @@
     <string name="home_txt_prediction_see_more">See more</string>
     <string name="home_txt_consultation_title">Your consultation</string>
     <string name="home_txt_consultation_see_more">See more</string>
+    <string name="home_search_view">Your disease</string>
     <string name="login_txt_title">Login</string>
     <string name="login_eTxt_user">Your phone</string>
     <string name="login_ask_acc">You don\'t have an account ?</string>
@@ -90,6 +91,8 @@
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
     <string name="dialog_confirm_change_account_no">No</string>
+    <string name="chat_menu_view_info">View infomation</string>
+    <string name="chat_menu_end_session">End session</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

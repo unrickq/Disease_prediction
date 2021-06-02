@@ -48,14 +48,16 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Account mAccount;
+    private DatabaseReference mRef;
+    private FirebaseUser fUser;
+
+    private int statusEditTextChange = 0;
+
     private Button accout_btn_edit, accout_btn_edit_done;
     private EditText account_edit_txt_name, account_edit_txt_gender, account_edit_txt_phone, account_edit_txt_email, account_edit_txt_address;
     private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email, account_txt_address;
     private CircleImageView account_img_avatar;
-    private Account mAccount;
-    private DatabaseReference mRef;
-    private FirebaseUser fUser;
-    private int statusEditTextChange = 0;
 
     public AccountFragment() {
         // Required empty public constructor

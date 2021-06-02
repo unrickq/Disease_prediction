@@ -43,15 +43,20 @@ import org.jetbrains.annotations.NotNull;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView nav_header_txt_acc_name,nav_header_txt_acc_phone;
-    private CircleImageView nav_header_avatar;
-    private NavigationView nav_view;
-    private Account mAccount;
+
     private DatabaseReference mRef;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private AppBarConfiguration mAppBarConfiguration;
     private GoogleSignInClient mGoogleSignInClient;
+
+    private Account mAccount;
+
+    private TextView nav_header_txt_acc_name,nav_header_txt_acc_phone;
+    private CircleImageView nav_header_avatar;
+    private NavigationView nav_view;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
