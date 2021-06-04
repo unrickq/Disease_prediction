@@ -1,23 +1,33 @@
 package com.example.diseaseprediction.object;
 
 public class ConsultationList {
-    private String accountID;
+    private String mAccountID;
+    private String receiverID;
     private String sessionID;
-
-    public ConsultationList(String accountID, String sessionID) {
-        this.accountID = accountID;
-        this.sessionID = sessionID;
-    }
 
     public ConsultationList() {
     }
 
-    public String getAccountID() {
-        return accountID;
+    public ConsultationList(String mAccountID, String receiverID, String sessionID) {
+        this.mAccountID = mAccountID;
+        this.receiverID = receiverID;
+        this.sessionID = sessionID;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public String getmAccountID() {
+        return mAccountID;
+    }
+
+    public void setmAccountID(String mAccountID) {
+        this.mAccountID = mAccountID;
+    }
+
+    public String getReceiverID() {
+        return receiverID;
+    }
+
+    public void setReceiverID(String receiverID) {
+        this.receiverID = receiverID;
     }
 
     public String getSessionID() {

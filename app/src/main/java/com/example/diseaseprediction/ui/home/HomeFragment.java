@@ -22,15 +22,23 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.example.diseaseprediction.object.ConsultationList;
+import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.about.AboutFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -48,8 +56,9 @@ public class HomeFragment extends Fragment {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
+    private String  sessionID;
     private final String CHATBOT_ID ="1Gc2soWrtWa36H9i00G7elMsyNG3";
-
+    private ConsultationList consultationList;
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more;
     private SearchView home_search_view;
     private NavigationView navigationView;
@@ -88,6 +97,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
         //set toolbar
         ((MainActivity) getActivity()).setActionBarTitle("");
         ((MainActivity) getActivity()).setIconToolbar();
@@ -98,11 +108,7 @@ public class HomeFragment extends Fragment {
         home_search_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), Chat.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("receiverID",CHATBOT_ID);
-                i.putExtra("isChatBot",true);
-                getContext().startActivity(i);
+                createSession();
             }
         });
         home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
@@ -131,5 +137,111 @@ public class HomeFragment extends Fragment {
         home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
         home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
         home_search_view = view.findViewById(R.id.home_search_view);
+    }
+
+    private void createSession(){
+        mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ConsultationList csl = new ConsultationList();
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    csl = sn.getValue(ConsultationList.class);
+                    if (csl.getmAccountID().equals(fUser.getUid())
+                            && csl.getReceiverID().equals(CHATBOT_ID)) {
+                        //Get consultation of mAccount and there account
+                        consultationList = csl;
+                    }
+                }
+
+                //If consultation list is null
+                //Then create new session, consultation
+                if (consultationList == null) {
+                    mRef = FirebaseDatabase.getInstance().getReference("Session");
+                    sessionID = mRef.push().getKey();
+                    mRef.child(sessionID).setValue(new Session(sessionID, 1));
+                    //Create new consultation list
+                    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            mRef.push().setValue(new ConsultationList(fUser.getUid()
+                                    , CHATBOT_ID, sessionID));
+                            //Send session id
+                            Intent i = new Intent(getActivity(), Chat.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("receiverID",CHATBOT_ID);
+                            i.putExtra("sessionID",sessionID);
+                            i.putExtra("isChatBot",true);
+                            getContext().startActivity(i);
+
+                            //Send message started
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
+                            Message msg = new Message(reference.push().getKey(), fUser.getUid()
+                                    , CHATBOT_ID, "Hello all! Let's started!"
+                                    , new Date(), sessionID, 1);
+                            reference.child(msg.getMessageID()).setValue(msg);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+                //If consultation is not null
+                //Then find the last session,
+                //if it equal to 1, then it is current session,
+                //if not, then create new session and new consultation
+                else {
+                    sessionID = "default";
+                    mRef = FirebaseDatabase.getInstance().getReference("Session");
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Session ss = new Session();
+                            for (DataSnapshot sn : snapshot.getChildren()) {
+                                ss = sn.getValue(Session.class);
+                                if (ss.getSessionID().equals(consultationList.getSessionID())) {
+                                    if (ss.getStatus() == 1) {
+                                        sessionID = ss.getSessionID();
+                                    }
+                                }
+                            }
+                            if (sessionID.equals("default")) {
+                                sessionID = mRef.push().getKey();
+                                mRef.child(sessionID).setValue(new Session(sessionID, 1));
+                                //Create new consultation list
+                                mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+                                mRef.push().setValue(new ConsultationList(fUser.getUid()
+                                        , CHATBOT_ID, sessionID));
+
+                                //Send message started
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
+                                Message msg = new Message(reference.push().getKey(), fUser.getUid()
+                                        , CHATBOT_ID, "Hello all! Let's started!"
+                                        , new Date(), sessionID, 1);
+                                reference.child(msg.getMessageID()).setValue(msg);
+                            }
+                            //Send session id
+                            Intent i = new Intent(getActivity(), Chat.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("receiverID",CHATBOT_ID);
+                            i.putExtra("sessionID",sessionID);
+                            i.putExtra("isChatBot",true);
+                            getContext().startActivity(i);
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
