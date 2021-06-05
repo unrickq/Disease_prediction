@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -21,10 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.Message;
-import com.example.diseaseprediction.object.Session;
-import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,19 +37,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chat extends AppCompatActivity {
 
-    private DatabaseReference myRef;
-    private FirebaseUser firebaseUser;
+    private DatabaseReference mRef;
+    private FirebaseUser fUser;
     private Intent intent;
 
     private ChatAdapter chatAdapter;
     private List<Message> mMessage;
+    private String receiverID, sessionID;
 
-    private Session currentSession;
-    private ConsultationList consultationList;
-
-    private RecyclerView chat_recycler_view;
     private RelativeLayout chat_send_message_layout;
-    private String receiverID, sessionID, endSessionID;
+    private RecyclerView chat_recycler_view;
     private TextView chat_toolbar_txt_name;
     private ImageView chat_toolbar_img_pre, chat_img_send, chat_toolbar_img_hamburger;
     private CircleImageView chat_toolbar_img_avatar;
@@ -77,20 +68,20 @@ public class Chat extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         chat_recycler_view.setLayoutManager(linearLayoutManager);
 
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //Get receiver id
         intent = getIntent();
         receiverID = intent.getStringExtra("receiverID");
         sessionID = intent.getStringExtra("sessionID");
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        myRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
-
-        myRef.addValueEventListener(new ValueEventListener() {
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Account receiver = snapshot.getValue(Account.class);
                 chat_toolbar_txt_name.setText(receiver.getName());
                 Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
-                ReadMessage(firebaseUser.getUid(), receiverID);
+                ReadMessage(fUser.getUid(), receiverID);
             }
 
             @Override
@@ -99,20 +90,22 @@ public class Chat extends AppCompatActivity {
             }
         });
 
-        CheckSessionIsEndOrNot();
-
+        //send message
         chat_img_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String msg = chat_txt_enter_mess.getText().toString();
                 if (!msg.equals("")) {
-                    Message message = new Message("", firebaseUser.getUid(), receiverID, msg
+                    Message message = new Message("", fUser.getUid(), receiverID, msg
                             , new Date(), sessionID, 1);
                     SendMessage(message);
                     chat_txt_enter_mess.getText().clear();
                 }
             }
         });
+
+        //Check is current session is end or not
+        CheckSessionIsEndOrNot();
     }
 
     private void findView() {
@@ -131,6 +124,7 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_txt_name = view.findViewById(R.id.chat_toolbar_txt_name);
         chat_toolbar_img_pre = view.findViewById(R.id.chat_toolbar_img_pre);
         chat_toolbar_img_hamburger = view.findViewById(R.id.chat_toolbar_img_hamburger);
+        //Back button
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,139 +160,28 @@ public class Chat extends AppCompatActivity {
     }
 
     private void SendMessage(Message msg) {
-        myRef = FirebaseDatabase.getInstance().getReference("Message");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef = FirebaseDatabase.getInstance().getReference("Message");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                msg.setMessageID(myRef.push().getKey());
-                myRef.child(msg.getMessageID()).setValue(msg);
+                msg.setMessageID(mRef.push().getKey());
+                mRef.child(msg.getMessageID()).setValue(msg);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
-
     }
 
-    private void SendMessage2(Message msg) {
-        myRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ConsultationList csl = new ConsultationList();
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    csl = sn.getValue(ConsultationList.class);
-                    if (csl.getmAccountID().equals(msg.getSenderID())
-                            && csl.getReceiverID().equals(msg.getReceiverID())) {
-                        consultationList = csl;
-                    }
-                }
-                if (consultationList == null) {
-                    myRef = FirebaseDatabase.getInstance().getReference("Session");
-                    sessionID = myRef.push().getKey();
-                    myRef.child(sessionID).setValue(new Session(sessionID, 1));
-                    //Create new consultation list
-                    myRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            myRef.push().setValue(new ConsultationList(msg.getSenderID()
-                                    , msg.getReceiverID(), sessionID));
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
-                    //Send message
-                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                    //Set message id, and session id
-                    msg.setMessageID(reference.push().getKey());
-                    msg.setSessionID(sessionID);
-                    reference.child(msg.getMessageID()).setValue(msg);
-                } else {
-                    sessionID = "default";
-                    myRef = FirebaseDatabase.getInstance().getReference("Session");
-                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Session ss = new Session();
-                            for (DataSnapshot sn : snapshot.getChildren()) {
-                                ss = sn.getValue(Session.class);
-                                if (ss.getSessionID().equals(consultationList.getSessionID())) {
-                                    if (ss.getStatus() == 1) {
-                                        sessionID = ss.getSessionID();
-                                    }
-                                }
-                            }
-                            if (sessionID.equals("default")) {
-                                sessionID = myRef.push().getKey();
-                                myRef.child(sessionID).setValue(new Session(sessionID, 1));
-                                //Create new consultation list
-                                myRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-                                myRef.push().setValue(new ConsultationList(msg.getSenderID()
-                                        , msg.getReceiverID(), sessionID));
-                            }
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                            //Set message id, and session id
-                            msg.setMessageID(reference.push().getKey());
-                            msg.setSessionID(sessionID);
-                            reference.child(msg.getMessageID()).setValue(msg);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-    }
     private void endSession() {
-        myRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
-        myRef.child("status").setValue(0);
-    }
-    private void endSession2() {
-        myRef = FirebaseDatabase.getInstance().getReference("Message");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    Message msg = sn.getValue(Message.class);
-                    if (msg.getReceiverID().equals(firebaseUser.getUid()) && msg.getSenderID().equals(receiverID)
-                            || msg.getReceiverID().equals(receiverID)
-                            && msg.getSenderID().equals(firebaseUser.getUid())) {
-                        endSessionID = msg.getSessionID().toString();
-                    }
-                }
-                myRef = FirebaseDatabase.getInstance().getReference("Session")
-                        .child(endSessionID);
-                myRef.child("status").setValue(0);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
+        mRef.child("status").setValue(0);
     }
 
     private void CheckSessionIsEndOrNot() {
-        myRef = FirebaseDatabase.getInstance().getReference("Session");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef = FirebaseDatabase.getInstance().getReference("Session");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int status = Integer.valueOf(snapshot.child(sessionID).child("status").getValue().toString());
@@ -317,8 +200,8 @@ public class Chat extends AppCompatActivity {
     //Read message and load it to recycler view
     private void ReadMessage(String mID, String uID) {
         mMessage = new ArrayList<>();
-        myRef = FirebaseDatabase.getInstance().getReference("Message");
-        myRef.addValueEventListener(new ValueEventListener() {
+        mRef = FirebaseDatabase.getInstance().getReference("Message");
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mMessage.clear();
@@ -335,7 +218,6 @@ public class Chat extends AppCompatActivity {
                     chat_recycler_view.setAdapter(chatAdapter);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

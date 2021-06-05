@@ -44,31 +44,31 @@ public class test extends AppCompatActivity {
     }
 
     private void ReadUsers(){
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        myRef = FirebaseDatabase.getInstance().getReference("Accounts");
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mUser.clear();
-                int cout = 0;
-                for (DataSnapshot sh: snapshot.getChildren()){
-                    Account users = sh.getValue(Account.class);
-
-                    assert users!=null;
-                    if (!users.getAccountId().equals(firebaseUser.getUid())){
-                        mUser.add(users);
-                    }
-
-                    userAdapter = new testAdapter(getApplicationContext(),mUser);
-                    recyclerView.setAdapter(userAdapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        myRef = FirebaseDatabase.getInstance().getReference("Accounts");
+//
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                mUser.clear();
+//                int cout = 0;
+//                for (DataSnapshot sh: snapshot.getChildren()){
+//                    Account users = sh.getValue(Account.class);
+//
+//                    assert users!=null;
+//                    if (!users.getAccountId().equals(firebaseUser.getUid())){
+//                        mUser.add(users);
+//                    }
+//
+//                    userAdapter = new testAdapter(getApplicationContext(),mUser);
+//                    recyclerView.setAdapter(userAdapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 }

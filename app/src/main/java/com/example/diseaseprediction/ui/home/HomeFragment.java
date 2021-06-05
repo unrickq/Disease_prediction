@@ -5,32 +5,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
-import com.example.diseaseprediction.adapter.PredictionAdapter;
 import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Session;
-import com.example.diseaseprediction.ui.about.AboutFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -56,12 +49,18 @@ public class HomeFragment extends Fragment {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
-    private String  sessionID;
+    private String sessionID;
     private final String CHATBOT_ID ="1Gc2soWrtWa36H9i00G7elMsyNG3";
+    private List<ConsultationList> consultationLists;
+    private ConsultationAdapter consultationAdapter;
+
     private ConsultationList consultationList;
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more;
     private SearchView home_search_view;
     private NavigationView navigationView;
+    private RecyclerView home_recycler_view_consultation;
+    private RecyclerView consultation_list_recycler_view_main;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -105,12 +104,15 @@ public class HomeFragment extends Fragment {
         //find view
         findView(view);
 
+        //Search clicked
         home_search_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createSession();
             }
         });
+
+        //See more prediction clicked
         home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,6 +121,8 @@ public class HomeFragment extends Fragment {
                         new PredictionListFragment()).commit();
             }
         });
+
+        //See more consultation clicked
         home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,6 +133,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //Create recycler
+        home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
+        home_recycler_view_consultation.setHasFixedSize(true);
+        home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        consultationLists = new ArrayList<>();
+        //Load list consultation to recycler
+        loadConsultationList();
+
         return view;
     }
 
@@ -137,8 +149,10 @@ public class HomeFragment extends Fragment {
         home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
         home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
         home_search_view = view.findViewById(R.id.home_search_view);
+
     }
 
+    //Create new chat session
     private void createSession(){
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -147,8 +161,9 @@ public class HomeFragment extends Fragment {
                 ConsultationList csl = new ConsultationList();
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     csl = sn.getValue(ConsultationList.class);
-                    if (csl.getmAccountID().equals(fUser.getUid())
-                            && csl.getReceiverID().equals(CHATBOT_ID)) {
+                    if (csl.getAccountOne().equals(fUser.getUid())
+                            && csl.getAccountTwo().equals(CHATBOT_ID) ||csl.getAccountOne().equals(CHATBOT_ID)
+                            && csl.getAccountTwo().equals(fUser.getUid())) {
                         //Get consultation of mAccount and there account
                         consultationList = csl;
                     }
@@ -236,6 +251,29 @@ public class HomeFragment extends Fragment {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void loadConsultationList(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sh: snapshot.getChildren()){
+                    ConsultationList cls = sh.getValue(ConsultationList.class);
+                    assert cls!=null;
+                    if (cls.getAccountOne().equals(firebaseUser.getUid())||cls.getAccountTwo().equals(firebaseUser.getUid())){
+                        consultationLists.add(cls);
+                    }
+                    consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
+                    home_recycler_view_consultation.setAdapter(consultationAdapter);
                 }
             }
             @Override

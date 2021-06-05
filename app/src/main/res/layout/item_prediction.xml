@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,68 +7,61 @@
     android:layout_marginStart="2dp"
     android:layout_marginEnd="2dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="410dp"
-        android:layout_height="84dp"
-        android:background="@drawable/background_list_custom"
-        android:layout_marginBottom="10dp">
+    <LinearLayout
+        android:id="@+id/item_prediction_img_main"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_commercial"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/item_prediction_img_main"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/background_commercial"
+        <TextView
+            android:id="@+id/item_prediction_txt_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/item_prediction_txt_month"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/item_prediction_txt_month"
-                android:textColor="@color/text_T1_darkMode"
-                android:textSize="18dp" />
-
-            <TextView
-                android:id="@+id/item_prediction_txt_day"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/item_prediction_txt_day"
-                android:textColor="@color/text_T1_darkMode"
-                android:textSize="16dp" />
-
-        </LinearLayout>
+            android:text="@string/item_prediction_txt_month"
+            android:textColor="@color/text_T1_darkMode"
+            android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/item_prediction_txt_disease"
-            style="@style/subTitle_1_bold"
-            android:layout_width="0dp"
+            android:id="@+id/item_prediction_txt_day"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/item_prediction_txt_disease"
-            app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center"
+            android:text="@string/item_prediction_txt_day"
+            android:textColor="@color/text_T1_darkMode"
+            android:textSize="16dp" />
 
-        <TextView
-            android:id="@+id/item_prediction_txt_status"
-            style="@style/subTitle_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/item_prediction_txt_status"
-            app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
-            app:layout_constraintTop_toBottomOf="@+id/item_prediction_txt_disease" />
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/item_prediction_txt_disease"
+        style="@style/subTitle_1_bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/item_prediction_txt_disease"
+        app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_prediction_txt_status"
+        style="@style/subTitle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/item_prediction_txt_status"
+        app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
+        app:layout_constraintTop_toBottomOf="@+id/item_prediction_txt_disease" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

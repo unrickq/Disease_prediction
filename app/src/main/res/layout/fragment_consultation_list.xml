@@ -8,13 +8,6 @@
     android:paddingLeft="@dimen/padding"
     tools:context=".ui.consultation.ConsultationListFragment">
 
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_top_home_component"
-        android:background="@drawable/background_searchview_custom" />
-
     <TextView
         android:id="@+id/consultation_list_txt_title"
         style="@style/heading_6_bold"
