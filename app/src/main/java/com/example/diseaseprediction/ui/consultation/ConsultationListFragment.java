@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -108,11 +109,13 @@ public class ConsultationListFragment extends Fragment {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                consultationLists.clear();
                 for (DataSnapshot sh: snapshot.getChildren()){
                     ConsultationList cls = sh.getValue(ConsultationList.class);
                     assert cls!=null;
                     if (cls.getAccountOne().equals(firebaseUser.getUid())||cls.getAccountTwo().equals(firebaseUser.getUid())){
                         consultationLists.add(cls);
+                        Collections.reverse(consultationLists);
                     }
                     consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
                     consultation_list_recycler_view_main.setAdapter(consultationAdapter);

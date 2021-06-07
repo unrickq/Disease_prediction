@@ -25,7 +25,6 @@ import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.Query.Direction;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -266,11 +266,13 @@ public class HomeFragment extends Fragment {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                consultationLists.clear();
                 for (DataSnapshot sh: snapshot.getChildren()){
                     ConsultationList cls = sh.getValue(ConsultationList.class);
                     assert cls!=null;
                     if (cls.getAccountOne().equals(firebaseUser.getUid())||cls.getAccountTwo().equals(firebaseUser.getUid())){
                         consultationLists.add(cls);
+                        Collections.reverse(consultationLists);
                     }
                     consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
                     home_recycler_view_consultation.setAdapter(consultationAdapter);

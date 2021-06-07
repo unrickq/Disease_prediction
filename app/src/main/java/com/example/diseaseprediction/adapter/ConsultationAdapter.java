@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,6 +51,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
     @Override
     public void onBindViewHolder(final ConsultationAdapter.ViewHolder holder, int position) {
+        //Collections.reverse(mConsultationList);
         ConsultationList consultation = mConsultationList.get(position);
         //Get username depend on current account
         if(consultation.getAccountOne().equals(fUser.getUid())){
