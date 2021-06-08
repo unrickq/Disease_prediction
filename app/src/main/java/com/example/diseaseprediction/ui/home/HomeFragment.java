@@ -174,7 +174,7 @@ public class HomeFragment extends Fragment {
                 if (consultationList == null) {
                     mRef = FirebaseDatabase.getInstance().getReference("Session");
                     sessionID = mRef.push().getKey();
-                    mRef.child(sessionID).setValue(new Session(sessionID, 1));
+                    mRef.child(sessionID).setValue(new Session(sessionID,new Date(),new Date(), 1));
                     //Create new consultation list
                     mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment {
                             }
                             if (sessionID.equals("default")) {
                                 sessionID = mRef.push().getKey();
-                                mRef.child(sessionID).setValue(new Session(sessionID, 1));
+                                mRef.child(sessionID).setValue(new Session(sessionID,new Date(),new Date(), 1));
                                 //Create new consultation list
                                 mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                                 mRef.push().setValue(new ConsultationList(fUser.getUid()

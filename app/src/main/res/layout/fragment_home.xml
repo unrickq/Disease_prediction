@@ -49,7 +49,7 @@
                 android:background="@drawable/background_commercial"
                 android:src="@drawable/ic_doctor" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
@@ -58,19 +58,20 @@
                 <TextView
                     android:id="@+id/home_txt_prediction_title"
                     style="@style/subTitle_1_bold"
-                    android:layout_width="228dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/home_txt_prediction_title" />
 
                 <TextView
                     android:id="@+id/home_txt_prediction_see_more"
                     style="@style/subTitle_2_light"
-                    android:layout_width="142dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_alignParentRight="true"
                     android:text="@string/home_txt_prediction_see_more"
                     android:textColor="@color/theme_1_P" />
-            </LinearLayout>
+            </RelativeLayout >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_recycler_view_disease"
@@ -80,7 +81,7 @@
                 android:layout_marginTop="@dimen/margin_top"
                 tools:listitem="@layout/item_prediction" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -89,19 +90,20 @@
                 <TextView
                     android:id="@+id/home_txt_consultation_title"
                     style="@style/subTitle_1_bold"
-                    android:layout_width="228dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/home_txt_consultation_title" />
 
                 <TextView
                     android:id="@+id/home_txt_consultation_see_more"
                     style="@style/subTitle_2_light"
-                    android:layout_width="142dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_alignParentRight="true"
                     android:text="@string/home_txt_consultation_see_more"
                     android:textColor="@color/theme_1_P" />
-            </LinearLayout>
+            </RelativeLayout >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_recycler_view_consultation"

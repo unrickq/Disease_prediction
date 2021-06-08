@@ -30,10 +30,9 @@
         android:id="@+id/login_img_logo"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_marginStart="156dp"
-        android:layout_marginLeft="156dp"
         android:layout_marginTop="72dp"
         android:src="@drawable/ic_logo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,13 +107,15 @@
     <Button
         android:id="@+id/login_btn_login_by_google"
         android:layout_width="345dp"
-        android:backgroundTint="@color/theme_1_P"
-        android:textColor="@color/background_B1_lightMode"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:backgroundTint="@color/theme_1_P"
         android:text="@string/login_btn_login"
+        android:textColor="@color/background_B1_lightMode"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_txt_connect_other" />
+        app:layout_constraintTop_toBottomOf="@+id/login_txt_connect_other"
+        app:layout_constraintVertical_bias="0.105" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
