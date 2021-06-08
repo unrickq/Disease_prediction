@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     private Context mContext;
     private String latestMessage, latestTime;
     private List<ConsultationList> mConsultationList;
+    private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 
     public ConsultationAdapter(Context context, List<ConsultationList> mConsultationList) {
         //Get current user
@@ -125,7 +127,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
                     Message msg = sn.getValue(Message.class);
                     if (msg.getSessionID().equals(sessionID)){
                         latestMessage = msg.getMessage();
-                        latestTime = msg.getDateSend().getHours() +":"+ msg.getDateSend().getMinutes();
+                        latestTime = sdf.format(msg.getDateSend().getTime());
                     }
                     item_consultation_txt_message.setText(latestMessage);
                     item_consultation_txt_time.setText(latestTime);

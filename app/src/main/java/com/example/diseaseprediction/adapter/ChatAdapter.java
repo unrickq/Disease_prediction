@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
@@ -51,8 +52,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
         Message msg = mMessage.get(position);
         holder.item_chat_show_message.setText(msg.getMessage());
-        holder.item_chat_time.setText(String.valueOf(msg.getDateSend().getHours())+ ":"
-                +String.valueOf(msg.getDateSend().getMinutes()));
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+        String shortTimeStr = sdf.format(msg.getDateSend().getTime());
+        holder.item_chat_time.setText(shortTimeStr);
 
         holder.item_chat_show_message.setOnClickListener(new View.OnClickListener() {
             @Override
