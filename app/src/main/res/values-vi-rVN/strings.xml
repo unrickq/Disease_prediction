@@ -91,4 +91,5 @@
     <string name="dialog_confirm_change_account_no">Không</string>
     <string name="chat_menu_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
+    <string name="exception_chat_load_user">Không thể tải người dùng</string>
 </resources>

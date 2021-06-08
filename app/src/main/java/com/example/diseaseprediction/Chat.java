@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
@@ -74,38 +75,45 @@ public class Chat extends AppCompatActivity {
         intent = getIntent();
         receiverID = intent.getStringExtra("receiverID");
         sessionID = intent.getStringExtra("sessionID");
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Account receiver = snapshot.getValue(Account.class);
-                chat_toolbar_txt_name.setText(receiver.getName());
-                Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
-                ReadMessage(fUser.getUid(), receiverID);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        //send message
-        chat_img_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String msg = chat_txt_enter_mess.getText().toString();
-                if (!msg.equals("")) {
-                    Message message = new Message("", fUser.getUid(), receiverID, msg
-                            , new Date(), sessionID, 1);
-                    SendMessage(message);
-                    chat_txt_enter_mess.getText().clear();
+        if (!receiverID.equals(null)&&!sessionID.equals(null)){
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Account receiver = snapshot.getValue(Account.class);
+                    chat_toolbar_txt_name.setText(receiver.getName());
+                    Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
+                    ReadMessage(fUser.getUid(), receiverID);
                 }
-            }
-        });
 
-        //Check is current session is end or not
-        CheckSessionIsEndOrNot();
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            //send message
+            chat_img_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String msg = chat_txt_enter_mess.getText().toString();
+                    if (!msg.equals("")) {
+                        Message message = new Message("", fUser.getUid(), receiverID, msg
+                                , new Date(), sessionID, 1);
+                        SendMessage(message);
+                        chat_txt_enter_mess.getText().clear();
+                    }
+                }
+            });
+
+            //Check is current session is end or not
+            CheckSessionIsEndOrNot();
+        }else{
+            Toast toast = Toast.makeText(this, R.string.exception_chat_load_user, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
     }
 
     private void findView() {
