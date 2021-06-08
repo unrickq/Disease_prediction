@@ -82,6 +82,7 @@
 
     <string name="default_empty_name">Please enter your name</string>
     <string name="default_empty_gender">Please select your gender</string>
+    <string name="default_choose_gender">None</string>
     <string name="default_gender_male">Male</string>
     <string name="default_gender_female">Female</string>
     <string name="default_empty_email">Please enter your email</string>

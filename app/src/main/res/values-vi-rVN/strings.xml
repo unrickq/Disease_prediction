@@ -80,6 +80,7 @@
 
     <string name="default_empty_name">Vui lòng nhập tên của bạn</string>
     <string name="default_empty_gender">Vui lòng chọn giới tính của bạn</string>
+    <string name="default_choose_gender">Không xác định</string>
     <string name="default_gender_male">Nam</string>
     <string name="default_gender_female">Nữ</string>
     <string name="default_empty_email">Vui lòng nhập email của bạn</string>
