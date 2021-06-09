@@ -51,13 +51,11 @@
         android:layout_marginTop="@dimen/margin_top"
         android:text="@string/account_txt_title_gender" />
 
-    <TextView
-        android:id="@+id/account_txt_gender"
-        style="@style/subTitle_1"
+    <Spinner
+        android:id="@+id/account_spinner_gender"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="@string/account_txt_gender" />
+        android:layout_height="wrap_content" />
+
 
     <EditText
         android:id="@+id/account_edit_txt_gender"
@@ -74,7 +72,6 @@
         style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
         android:text="@string/account_txt_title_phone" />
 
     <TextView
@@ -151,10 +148,10 @@
         android:id="@+id/accout_btn_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/theme_1_P"
-        android:textColor="@color/background_B1_lightMode"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/account_btn_edit" />
+        android:backgroundTint="@color/theme_1_P"
+        android:text="@string/account_btn_edit"
+        android:textColor="@color/background_B1_lightMode" />
 
     <Button
         android:id="@+id/accout_btn_edit_done"

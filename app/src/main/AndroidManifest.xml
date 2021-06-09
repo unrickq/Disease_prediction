@@ -11,11 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
-
-        <activity android:name=".prediciton_result" />
-        <activity android:name=".Chat" />
+        <activity android:name=".PredicitonResult"></activity>
+        <activity
+            android:name=".Chat"
+            android:theme="@style/Theme.AppCompat.Light" />
         <activity android:name=".test" />
-        <activity android:name=".getStarted" />
+        <activity
+            android:name=".GetStarted"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />

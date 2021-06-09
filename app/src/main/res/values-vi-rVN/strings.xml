@@ -80,6 +80,7 @@
 
     <string name="default_empty_name">Vui lòng nhập tên của bạn</string>
     <string name="default_empty_gender">Vui lòng chọn giới tính của bạn</string>
+    <string name="default_choose_gender">Không xác định</string>
     <string name="default_gender_male">Nam</string>
     <string name="default_gender_female">Nữ</string>
     <string name="default_empty_email">Vui lòng nhập email của bạn</string>
@@ -91,5 +92,9 @@
     <string name="dialog_confirm_change_account_no">Không</string>
     <string name="chat_menu_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
+
     <string name="exception_chat_load_user">Không thể tải người dùng</string>
+
+    <string name="prediction_adapter_waiting_confirm">Đang chờ xác nhận của bác sĩ</string>
+    <string name="prediction_adapter_confirmed">Bác sĩ đã xác nhận</string>
 </resources>

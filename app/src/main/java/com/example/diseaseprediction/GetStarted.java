@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class getStarted extends AppCompatActivity {
+public class GetStarted extends AppCompatActivity {
 
     private Button login_started_btn_next;
     @Override
@@ -20,7 +20,7 @@ public class getStarted extends AppCompatActivity {
         login_started_btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getStarted.this, Login.class);
+                Intent intent = new Intent(GetStarted.this, Login.class);
                 startActivity(intent);
             }
         });

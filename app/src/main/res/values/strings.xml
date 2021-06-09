@@ -82,6 +82,7 @@
 
     <string name="default_empty_name">Please enter your name</string>
     <string name="default_empty_gender">Please select your gender</string>
+    <string name="default_choose_gender">None</string>
     <string name="default_gender_male">Male</string>
     <string name="default_gender_female">Female</string>
     <string name="default_empty_email">Please enter your email</string>
@@ -93,7 +94,11 @@
     <string name="dialog_confirm_change_account_no">No</string>
     <string name="chat_menu_view_info">View information</string>
     <string name="chat_menu_end_session">End session</string>
+
     <string name="exception_chat_load_user">Can\'t load user</string>
+
+    <string name="prediction_adapter_waiting_confirm">Waiting for doctor\'s confirmation</string>
+    <string name="prediction_adapter_confirmed">Doctor confirmed</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

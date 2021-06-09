@@ -12,14 +12,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
+import com.google.android.gms.common.api.internal.LifecycleFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,12 +57,11 @@ public class AccountFragment extends Fragment {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
-    private int statusEditTextChange = 0;
-
     private Button accout_btn_edit, accout_btn_edit_done;
-    private EditText account_edit_txt_name, account_edit_txt_gender, account_edit_txt_phone, account_edit_txt_email, account_edit_txt_address;
-    private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email, account_txt_address;
+    private EditText account_edit_txt_name, account_edit_txt_phone, account_edit_txt_email, account_edit_txt_address;
+    private TextView account_txt_name, account_txt_phone, account_txt_email, account_txt_address;
     private CircleImageView account_img_avatar;
+    private Spinner account_spinner_gender;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -106,8 +110,6 @@ public class AccountFragment extends Fragment {
         findView(view);
         //get data and load it to UI
         getDataForUI();
-        //Set change event on edit text
-        onTextEditChange();
 
         //Click button edit
         accout_btn_edit.setOnClickListener(new View.OnClickListener() {
@@ -122,12 +124,7 @@ public class AccountFragment extends Fragment {
         accout_btn_edit_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (statusEditTextChange ==1){
-                    //Button confirm "yes"
-                    dialogConfirm();
-                }else{
-                    //Button confirm "no"
-                }
+                dialogConfirm();
             }
         });
 
@@ -135,7 +132,7 @@ public class AccountFragment extends Fragment {
     }
 
     //Create dialog confirm
-    private void dialogConfirm(){
+    private void dialogConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.dialog_confirm_change_account));
         builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
@@ -165,137 +162,59 @@ public class AccountFragment extends Fragment {
         accout_btn_edit_done = view.findViewById(R.id.accout_btn_edit_done);
         //Edit text
         account_edit_txt_name = view.findViewById(R.id.account_edit_txt_name);
-        account_edit_txt_gender = view.findViewById(R.id.account_edit_txt_gender);
         account_edit_txt_phone = view.findViewById(R.id.account_edit_txt_phone);
         account_edit_txt_email = view.findViewById(R.id.account_edit_txt_email);
         account_edit_txt_address = view.findViewById(R.id.account_edit_txt_address);
         //Text view
         account_txt_name = view.findViewById(R.id.account_txt_name);
-        account_txt_gender = view.findViewById(R.id.account_txt_gender);
         account_txt_phone = view.findViewById(R.id.account_txt_phone);
         account_txt_email = view.findViewById(R.id.account_txt_email);
         account_txt_address = view.findViewById(R.id.account_txt_address);
         account_img_avatar = view.findViewById(R.id.account_img_avatar);
+        //Spinner
+        account_spinner_gender = view.findViewById(R.id.account_spinner_gender);
+        ArrayList<String> gender = new ArrayList<String>();
+        gender.add(getString(R.string.default_choose_gender));
+        gender.add(getString(R.string.default_gender_male));
+        gender.add(getString(R.string.default_gender_female));
+        ArrayAdapter genderAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, gender);
+        account_spinner_gender.setAdapter(genderAdapter);
+        account_spinner_gender.setEnabled(false);
     }
 
     //Set edit text visible
-    private void setEditVisibility(){
+    private void setEditVisibility() {
         //Edit text
         account_edit_txt_name.setVisibility(View.VISIBLE);
-        account_edit_txt_gender.setVisibility(View.VISIBLE);
         account_edit_txt_phone.setVisibility(View.VISIBLE);
         account_edit_txt_email.setVisibility(View.VISIBLE);
         account_edit_txt_address.setVisibility(View.VISIBLE);
+        account_spinner_gender.setEnabled(true);
         //Text view
         account_txt_name.setVisibility(View.GONE);
-        account_txt_gender.setVisibility(View.GONE);
         account_txt_phone.setVisibility(View.GONE);
         account_txt_email.setVisibility(View.GONE);
         account_txt_address.setVisibility(View.GONE);
     }
 
     //Set view visible
-    private void setViewVisibility(){
+    private void setViewVisibility() {
         //Edit text
         account_edit_txt_name.setVisibility(View.GONE);
-        account_edit_txt_gender.setVisibility(View.GONE);
         account_edit_txt_phone.setVisibility(View.GONE);
         account_edit_txt_email.setVisibility(View.GONE);
         account_edit_txt_address.setVisibility(View.GONE);
+        account_spinner_gender.setEnabled(false);
         //Text view
         account_txt_name.setVisibility(View.VISIBLE);
-        account_txt_gender.setVisibility(View.VISIBLE);
         account_txt_phone.setVisibility(View.VISIBLE);
         account_txt_email.setVisibility(View.VISIBLE);
         account_txt_address.setVisibility(View.VISIBLE);
     }
 
-    //Set event on edit text
-    private void onTextEditChange(){
-        account_edit_txt_name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=i2){
-                    statusEditTextChange = 1;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                account_txt_name.setText(account_edit_txt_name.getText().toString());
-
-            }
-        });
-        account_edit_txt_gender.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=i2){
-                    statusEditTextChange = 1;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                account_txt_gender.setText(account_edit_txt_gender.getText().toString());
-
-            }
-        });
-        account_edit_txt_phone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=i2){
-                    statusEditTextChange = 1;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                account_txt_phone.setText(account_edit_txt_phone.getText().toString());
-
-            }
-        });
-        account_edit_txt_email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=i2){
-                    statusEditTextChange = 1;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                account_txt_email.setText(account_edit_txt_email.getText().toString());
-
-            }
-        });
-        account_edit_txt_address.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length()!=i2){
-                    statusEditTextChange = 1;
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {
-                account_txt_address.setText(account_edit_txt_address.getText().toString());
-
-            }
-        });;
-    }
-
     //Get data for UI
     private void getDataForUI() {
+        //Set spinner
         //get user by id
         mAccount = new Account();
         fUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -307,46 +226,52 @@ public class AccountFragment extends Fragment {
                 //if exist then set UI
                 if (snapshot.hasChild(fUser.getUid())) {
                     mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
-                    String gender = getString(R.string.default_empty_gender);
-                    String phone = getString(R.string.default_empty_phone);
-                    String address = getString(R.string.default_empty_address);
-                    String email = getString(R.string.default_empty_address);
-                    String name = getString(R.string.default_empty_address);
-                    String imgURL = "";
-
+                    //Set name
                     if (!mAccount.getName().equals("Default")) {
-                        name = mAccount.getName();
+                        account_txt_name.setText(mAccount.getName());
+                        account_edit_txt_name.setText(mAccount.getName());
+                    } else {
+                        account_txt_name.setText(getString(R.string.default_empty_name));
+                        account_edit_txt_name.setHint(getString(R.string.default_empty_name));
                     }
-                    if (mAccount.getGender() != -1) {
-                        if (mAccount.getGender() == 1) {
-                            gender = getString(R.string.default_gender_male);
-                        } else {
-                            gender = getString(R.string.default_gender_female);
-                        }
+
+                    //Set gender
+                    if (mAccount.getGender() == 1) {
+                        account_spinner_gender.setSelection(1);
+                    } else if (mAccount.getGender() == 2) {
+                        account_spinner_gender.setSelection(2);
+                    }else{
+                        account_spinner_gender.setSelection(0);
                     }
+
+                    //Set phone
                     if (!mAccount.getPhone().equals("Default")) {
-                        phone = mAccount.getPhone();
+                        account_txt_phone.setText(mAccount.getPhone());
+                        account_edit_txt_phone.setText(mAccount.getPhone());
+                    } else {
+                        account_txt_phone.setText(getString(R.string.default_empty_phone));
+                        account_edit_txt_phone.setHint(getString(R.string.default_empty_phone));
                     }
+
+                    //Set email
                     if (!mAccount.getEmail().equals("Default")) {
-                        email = mAccount.getEmail();
+                        account_txt_email.setText(mAccount.getEmail());
+                        account_edit_txt_email.setText(mAccount.getEmail());
+                    } else {
+                        account_txt_email.setText(getString(R.string.default_empty_email));
+                        account_edit_txt_email.setHint(getString(R.string.default_empty_email));
                     }
+
+                    //Set address
                     if (!mAccount.getAddress().equals("Default")) {
-                        address = mAccount.getAddress();
+                        account_txt_address.setText(mAccount.getAddress());
+                        account_edit_txt_address.setText(mAccount.getAddress());
+                    } else {
+                        account_txt_address.setText(getString(R.string.default_empty_address));
+                        account_edit_txt_address.setHint(getString(R.string.default_empty_address));
                     }
 
-                    account_txt_name.setText(name);
-                    account_txt_gender.setText(gender);
-                    account_txt_phone.setText(phone);
-                    account_txt_email.setText(email);
-                    account_txt_address.setText(address);
-
-                    account_edit_txt_name.setText(name);
-                    account_edit_txt_gender.setText(gender);
-                    account_edit_txt_phone.setText(phone);
-                    account_edit_txt_email.setText(email);
-                    account_edit_txt_address.setText(address);
-
-                    //set image
+                    //Set image
                     if (!mAccount.getImage().equals("Default")) {
                         Glide.with(AccountFragment.this).load(mAccount.getImage()).into(account_img_avatar);
                     } else {
@@ -366,41 +291,51 @@ public class AccountFragment extends Fragment {
     }
 
     //Update value to database
-    private void updateValue(){
+    private void updateValue() {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-
-        if (account_txt_name.getText().toString().equals(getString(R.string.default_empty_name))) {
+        //Name
+        if (account_edit_txt_name.getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("name").setValue("Default");
-        }else{
-            mRef.child(fUser.getUid()).child("name").setValue(account_txt_name.getText().toString());
+            account_txt_name.setText(getString(R.string.default_empty_name));
+        } else {
+            mRef.child(fUser.getUid()).child("name").setValue(account_edit_txt_name.getText().toString());
+            account_txt_name.setText(account_edit_txt_name.getText().toString());
         }
 
         //Gender
-        if (account_txt_gender.getText().toString().equals(getString(R.string.default_empty_gender))) {
+        if (account_spinner_gender.getSelectedItemPosition() == 1) {
+            mRef.child(fUser.getUid()).child("gender").setValue(1);
+        } else if (account_spinner_gender.getSelectedItemPosition() == 2) {
+            mRef.child(fUser.getUid()).child("gender").setValue(2);
+        } else{
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
-        }else{
-            mRef.child(fUser.getUid()).child("gender").setValue(account_txt_gender.getText().toString());
         }
 
         //Phone
-        if (account_txt_phone.getText().toString().equals(getString(R.string.default_empty_phone))) {
+        if (account_edit_txt_phone.getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("phone").setValue("Default");
-        }else{
-            mRef.child(fUser.getUid()).child("phone").setValue(account_txt_phone.getText().toString());
+            account_txt_phone.setText(getString(R.string.default_empty_phone));
+        } else {
+            mRef.child(fUser.getUid()).child("phone").setValue(account_edit_txt_phone.getText().toString());
+            account_txt_phone.setText(account_edit_txt_phone.getText().toString());
         }
 
         //email
-        if (account_txt_email.getText().toString().equals(getString(R.string.default_empty_email))) {
+        if (account_edit_txt_email.getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("email").setValue("Default");
-        }else{
-            mRef.child(fUser.getUid()).child("email").setValue(account_txt_email.getText().toString());
+            account_txt_email.setText(getString(R.string.default_empty_email));
+        } else {
+            mRef.child(fUser.getUid()).child("email").setValue(account_edit_txt_email.getText().toString());
+            account_txt_email.setText(account_edit_txt_email.getText().toString());
         }
 
         //address
-        if (account_txt_address.getText().toString().equals(getString(R.string.default_empty_address))) {
+        if (account_edit_txt_address.getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("address").setValue("Default");
-        }else{
-            mRef.child(fUser.getUid()).child("address").setValue(account_txt_address.getText().toString());
+            account_txt_address.setText(getString(R.string.default_empty_address));
+        } else {
+            mRef.child(fUser.getUid()).child("address").setValue(account_edit_txt_address.getText().toString());
+            account_txt_address.setText(account_edit_txt_address.getText().toString());
         }
     }
 }
