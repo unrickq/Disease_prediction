@@ -17,10 +17,11 @@
     <ImageView
         android:id="@+id/about_img_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
         android:src="@drawable/doctor_2"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +93,7 @@
         android:id="@+id/login_txt_connect_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="48dp"
         android:text="@string/login_txt_connect_other"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +107,7 @@
         android:backgroundTint="@color/theme_1_P"
         android:text="@string/login_btn_login"
         android:textColor="@color/background_B1_lightMode"
-        app:cornerRadius="800dp"
+        app:cornerRadius="@dimen/btn_corner_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_txt_connect_other" />

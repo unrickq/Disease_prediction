@@ -39,13 +39,13 @@
     <string name="home_txt_prediction_see_more">See more</string>
     <string name="home_txt_consultation_title">Your consultation</string>
     <string name="home_txt_consultation_see_more">See more</string>
-    <string name="home_search_view">Your disease</string>
+    <string name="home_search_view">Enter your symptoms</string>
     <string name="login_txt_title">Login</string>
     <string name="login_eTxt_user">Your phone number</string>
     <string name="login_ask_acc">You don\'t have an account ?</string>
     <string name="login_sign_up">Sign up</string>
     <string name="login_txt_connect_other">Or connect with</string>
-    <string name="login_btn_login">google</string>
+    <string name="login_btn_login">Google</string>
     <string name="login_started_txt_slogan">Disease Prediction</string>
     <string name="login_started_btn_next">Let\'s go</string>
     <string name="prediction_txt_acc_name">TextView</string>

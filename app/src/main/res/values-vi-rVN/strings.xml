@@ -37,13 +37,13 @@
     <string name="home_txt_prediction_see_more">Xem thêm</string>
     <string name="home_txt_consultation_see_more">Xem thêm</string>
     <string name="home_txt_consultation_title">Tư vấn của bạn</string>
-    <string name="home_search_view">Triệu chứng của bạn</string>
+    <string name="home_search_view">Hãy nhập triệu chứng của bạn</string>
     <string name="login_txt_title">Đăng nhập</string>
     <string name="login_eTxt_user">Số điện thoại của bạn</string>
     <string name="login_ask_acc">Bạn chưa có tài khoản ?</string>
     <string name="login_sign_up">Đăng ký</string>
-    <string name="login_txt_connect_other">Hoặc kết nối với bên thứ 3</string>
-    <string name="login_btn_login">google</string>
+    <string name="login_txt_connect_other">Hoặc đăng nhập bằng</string>
+    <string name="login_btn_login">Google</string>
     <string name="login_started_txt_slogan">Chuẩn đoán bệnh</string>
     <string name="login_started_btn_next">Bắt đầu nào</string>
     <string name="prediction_txt_acc_name">TextView</string>

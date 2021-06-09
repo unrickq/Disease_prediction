@@ -43,11 +43,11 @@
             <ImageView
                 android:id="@+id/home_img_advertise"
                 android:layout_width="match_parent"
-                android:layout_height="159dp"
+                android:layout_height="160dp"
                 android:layout_gravity="center"
+                android:scaleType="fitCenter"
                 android:layout_marginTop="@dimen/margin_top_home_component"
-                android:background="@drawable/background_commercial"
-                android:src="@drawable/ic_doctor" />
+                android:src="@drawable/doctor_1" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
