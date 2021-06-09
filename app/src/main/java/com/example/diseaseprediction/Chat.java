@@ -76,7 +76,7 @@ public class Chat extends AppCompatActivity {
         receiverID = intent.getStringExtra("receiverID");
         sessionID = intent.getStringExtra("sessionID");
 
-        if (!receiverID.equals(null)&&!sessionID.equals(null)){
+        if (!receiverID.equals(null) && !sessionID.equals(null)) {
             mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -109,7 +109,7 @@ public class Chat extends AppCompatActivity {
 
             //Check is current session is end or not
             CheckSessionIsEndOrNot();
-        }else{
+        } else {
             Toast toast = Toast.makeText(this, R.string.exception_chat_load_user, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -175,6 +175,7 @@ public class Chat extends AppCompatActivity {
                 msg.setMessageID(mRef.push().getKey());
                 mRef.child(msg.getMessageID()).setValue(msg);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -193,11 +194,12 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int status = Integer.valueOf(snapshot.child(sessionID).child("status").getValue().toString());
-                if (status==0){
+                if (status == 0) {
                     chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                     chat_send_message_layout.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -226,6 +228,7 @@ public class Chat extends AppCompatActivity {
                     chat_recycler_view.setAdapter(chatAdapter);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
