@@ -1,15 +1,15 @@
 package com.example.diseaseprediction;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.object.Account;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -64,7 +64,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    //on_start_check_user is logged or not
+    //on_start check user is logged in or not
     @Override
     public void onStart() {
         super.onStart();

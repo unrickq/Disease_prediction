@@ -1,12 +1,5 @@
 package com.example.diseaseprediction;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +11,12 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
@@ -139,6 +138,9 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_txt_name = view.findViewById(R.id.chat_toolbar_txt_name);
         chat_toolbar_img_pre = view.findViewById(R.id.chat_toolbar_img_pre);
         chat_toolbar_img_hamburger = view.findViewById(R.id.chat_toolbar_img_hamburger);
+
+        view.setBackgroundColor(getResources().getColor(R.color.white));
+
         //Back button
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override

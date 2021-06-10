@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.DiseasePrediction" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/theme_1_P_dark</item>
+        <item name="colorPrimary">@color/theme_1_P</item>
         <item name="colorPrimaryVariant">@color/theme_1_P</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

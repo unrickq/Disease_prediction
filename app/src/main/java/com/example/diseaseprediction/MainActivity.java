@@ -2,14 +2,24 @@ package com.example.diseaseprediction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.ui.about.AboutFragment;
 import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.example.diseaseprediction.ui.alert.AlertFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
@@ -24,16 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -84,8 +84,13 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_account, R.id.nav_consultationList, R.id.nav_predictionList,
-                R.id.nav_settings, R.id.nav_about)
+                R.id.nav_home,
+                R.id.nav_account,
+                R.id.nav_consultationList,
+                R.id.nav_predictionList,
+                R.id.nav_settings
+//                R.id.nav_about
+        )
                 .setDrawerLayout(drawer)
                 .build();
 
@@ -127,12 +132,12 @@ public class MainActivity extends AppCompatActivity {
                         drawer.close();
                         break;
                     }
-                    case R.id.nav_about: {
+                   /* case R.id.nav_about: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                                 new AboutFragment()).commit();
                         drawer.close();
                         break;
-                    }
+                    }*/
                     case R.id.nav_out: {
                         FirebaseAuth.getInstance().signOut();
                         Intent i = new Intent(MainActivity.this,Login.class);
@@ -149,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuCompat.setGroupDividerEnabled(menu, true);
         return true;
     }
 

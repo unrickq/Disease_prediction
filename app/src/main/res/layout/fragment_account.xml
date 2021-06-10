@@ -153,12 +153,13 @@
         android:text="@string/account_btn_edit"
         android:textColor="@color/background_B1_lightMode" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/accout_btn_edit_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/theme_1_P"
         android:text="@string/account_btn_edit_done"
+        app:cornerRadius="@dimen/btn_corner_radius"
         android:layout_marginTop="@dimen/margin_top"
         android:textColor="@color/background_B1_lightMode"
         android:visibility="gone" />

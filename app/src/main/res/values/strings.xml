@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Disease prediction</string>
+    <string name="app_name">Pemeprap</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -8,8 +8,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_account">Account</string>
-    <string name="menu_predictionList">Prediction</string>
+    <string name="menu_account">Profile</string>
+    <string name="menu_predictionList">Prescription</string>
     <string name="menu_consultationList">Consultation</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
@@ -76,7 +76,7 @@
     <string name="item_prediction_txt_day">12</string>
     <string name="item_prediction_txt_disease">Your disease</string>
     <string name="item_prediction_txt_status">status: Successful</string>
-    <string name="nav_header_txt_acc_name">Lorem Ipsum is simply dummy text of the printing and typesetting industry</string>
+    <string name="nav_header_txt_acc_name">LOREM IPSUM SCARAMOUCHE SCRARAMOUCHE GALILEO PACCIORETTY LOREM IPSUM SCARAMOUCHE SCRARAMOUCHE GALILEO PACCIORETTY</string>
     <string name="nav_header_txt_acc_phone">+84 093 154 6591</string>
     <string name="alert_list_txt_title">Your notification</string>
 
@@ -93,7 +93,7 @@
     <string name="dialog_confirm_change_account_yes">Yes</string>
     <string name="dialog_confirm_change_account_no">No</string>
 
-    <string name="chat_menu_patient_view_info">View doctor\'sinformation</string>
+    <string name="chat_menu_patient_view_info">View doctor\'s information</string>
     <string name="chat_menu_doctor_view_info">View patient\'s information</string>
     <string name="chat_menu_end_session">End session</string>
 
@@ -110,4 +110,5 @@
         <item>EN</item>
         <item>VN</item>
     </string-array>
+
 </resources>
