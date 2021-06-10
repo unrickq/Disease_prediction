@@ -17,6 +17,7 @@ import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
+import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Session;
@@ -31,7 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -50,12 +54,14 @@ public class HomeFragment extends Fragment {
     private FirebaseUser fUser;
 
     private String sessionID;
-    private final String CHATBOT_ID ="1Gc2soWrtWa36H9i00G7elMsyNG3";
+    private final String CHATBOT_ID = "GFoBDpKPUealixZAOQvfoJhiiSE2";
     private List<ConsultationList> consultationLists;
     private ConsultationAdapter consultationAdapter;
 
     private ConsultationList consultationList;
-    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more;
+    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
+            home_txt_title, home_doctor_txt_title, home_txt_prediction_title, home_doctor_txt_prediction_title,
+            home_txt_consultation_title, home_doctor_txt_consultation_title;
     private SearchView home_search_view;
     private NavigationView navigationView;
     private RecyclerView home_recycler_view_consultation;
@@ -104,6 +110,9 @@ public class HomeFragment extends Fragment {
         //find view
         findView(view);
 
+        //Set UI by role
+        setUIByAccountType();
+
         //Search clicked
         home_search_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,10 +159,16 @@ public class HomeFragment extends Fragment {
         home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
         home_search_view = view.findViewById(R.id.home_search_view);
 
+        home_txt_title = view.findViewById(R.id.home_txt_title);
+        home_doctor_txt_title = view.findViewById(R.id.home_doctor_txt_title);
+        home_txt_prediction_title = view.findViewById(R.id.home_txt_prediction_title);
+        home_doctor_txt_prediction_title = view.findViewById(R.id.home_doctor_txt_prediction_title);
+        home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
+        home_doctor_txt_consultation_title = view.findViewById(R.id.home_doctor_txt_consultation_title);
     }
 
     //Create new chat session
-    private void createSession(){
+    private void createSession() {
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -162,7 +177,7 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     csl = sn.getValue(ConsultationList.class);
                     if (csl.getAccountOne().equals(fUser.getUid())
-                            && csl.getAccountTwo().equals(CHATBOT_ID) ||csl.getAccountOne().equals(CHATBOT_ID)
+                            && csl.getAccountTwo().equals(CHATBOT_ID) || csl.getAccountOne().equals(CHATBOT_ID)
                             && csl.getAccountTwo().equals(fUser.getUid())) {
                         //Get consultation of mAccount and there account
                         consultationList = csl;
@@ -174,7 +189,7 @@ public class HomeFragment extends Fragment {
                 if (consultationList == null) {
                     mRef = FirebaseDatabase.getInstance().getReference("Session");
                     sessionID = mRef.push().getKey();
-                    mRef.child(sessionID).setValue(new Session(sessionID,new Date(),new Date(), 1));
+                    mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
                     //Create new consultation list
                     mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -185,9 +200,9 @@ public class HomeFragment extends Fragment {
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("receiverID",CHATBOT_ID);
-                            i.putExtra("sessionID",sessionID);
-                            i.putExtra("isChatBot",true);
+                            i.putExtra("receiverID", CHATBOT_ID);
+                            i.putExtra("sessionID", sessionID);
+                            i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
 
                             //Send message started
@@ -225,7 +240,7 @@ public class HomeFragment extends Fragment {
                             }
                             if (sessionID.equals("default")) {
                                 sessionID = mRef.push().getKey();
-                                mRef.child(sessionID).setValue(new Session(sessionID,new Date(),new Date(), 1));
+                                mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
                                 //Create new consultation list
                                 mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                                 mRef.push().setValue(new ConsultationList(fUser.getUid()
@@ -241,18 +256,20 @@ public class HomeFragment extends Fragment {
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("receiverID",CHATBOT_ID);
-                            i.putExtra("sessionID",sessionID);
-                            i.putExtra("isChatBot",true);
+                            i.putExtra("receiverID", CHATBOT_ID);
+                            i.putExtra("sessionID", sessionID);
+                            i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
 
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -260,28 +277,72 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void loadConsultationList(){
+    private void loadConsultationList() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 consultationLists.clear();
-                for (DataSnapshot sh: snapshot.getChildren()){
+                for (DataSnapshot sh : snapshot.getChildren()) {
                     ConsultationList cls = sh.getValue(ConsultationList.class);
-                    assert cls!=null;
-                    if (cls.getAccountOne().equals(firebaseUser.getUid())||cls.getAccountTwo().equals(firebaseUser.getUid())){
+                    assert cls != null;
+                    if (cls.getAccountOne().equals(firebaseUser.getUid()) || cls.getAccountTwo().equals(firebaseUser.getUid())) {
                         consultationLists.add(cls);
                         Collections.reverse(consultationLists);
                     }
-                    consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
+                    consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(), consultationLists);
                     home_recycler_view_consultation.setAdapter(consultationAdapter);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
+
+    private void setUIDoctor() {
+        home_txt_title.setVisibility(View.GONE);
+        home_txt_prediction_title.setVisibility(View.GONE);
+        home_txt_consultation_title.setVisibility(View.GONE);
+
+        home_doctor_txt_title.setVisibility(View.VISIBLE);
+        home_doctor_txt_prediction_title.setVisibility(View.VISIBLE);
+        home_doctor_txt_consultation_title.setVisibility(View.VISIBLE);
+    }
+
+    private void setUIPatient() {
+        home_doctor_txt_title.setVisibility(View.GONE);
+        home_doctor_txt_prediction_title.setVisibility(View.GONE);
+        home_doctor_txt_consultation_title.setVisibility(View.GONE);
+
+        home_txt_title.setVisibility(View.VISIBLE);
+        home_txt_prediction_title.setVisibility(View.VISIBLE);
+        home_txt_consultation_title.setVisibility(View.VISIBLE);
+    }
+
+    private void setUIByAccountType() {
+        //Get disease
+        if (!fUser.getUid().equals("")) {
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                        setUIDoctor();
+                    } else {
+                        setUIPatient();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
+
 }

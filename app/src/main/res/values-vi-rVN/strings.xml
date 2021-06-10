@@ -90,11 +90,17 @@
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>
     <string name="dialog_confirm_change_account_no">Không</string>
-    <string name="chat_menu_view_info">Xem thông tin bệnh nhân</string>
+
+    <string name="chat_menu_patient_view_info">Xem thông tin bác sĩ</string>
+    <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
 
     <string name="exception_chat_load_user">Không thể tải người dùng</string>
 
     <string name="prediction_adapter_waiting_confirm">Đang chờ xác nhận của bác sĩ</string>
     <string name="prediction_adapter_confirmed">Bác sĩ đã xác nhận</string>
+
+    <string name="home_doctor_txt_title">Xin chào bác sĩ !</string>
+    <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
+    <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
 </resources>

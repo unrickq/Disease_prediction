@@ -31,6 +31,15 @@
                 android:text="@string/home_txt_title"
                 android:textSize="36sp" />
 
+            <TextView
+                android:id="@+id/home_doctor_txt_title"
+                style="@style/heading_3_bold_black"
+                android:layout_width="267dp"
+                android:layout_height="wrap_content"
+                android:text="@string/home_doctor_txt_title"
+                android:textSize="36sp"
+                android:visibility="gone"/>
+
             <SearchView
                 android:id="@+id/home_search_view"
                 android:layout_width="match_parent"
@@ -64,6 +73,15 @@
                     android:text="@string/home_txt_prediction_title" />
 
                 <TextView
+                    android:id="@+id/home_doctor_txt_prediction_title"
+                    style="@style/subTitle_1_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/home_doctor_txt_prediction_title"
+                    android:visibility="gone"/>
+
+                <TextView
                     android:id="@+id/home_txt_prediction_see_more"
                     style="@style/subTitle_2_light"
                     android:layout_width="wrap_content"
@@ -94,6 +112,15 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/home_txt_consultation_title" />
+
+                <TextView
+                    android:id="@+id/home_doctor_txt_consultation_title"
+                    style="@style/subTitle_1_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/home_doctor_txt_consultation_title"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/home_txt_consultation_see_more"

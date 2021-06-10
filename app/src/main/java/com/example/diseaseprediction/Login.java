@@ -1,6 +1,7 @@
 package com.example.diseaseprediction;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -31,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Login extends AppCompatActivity {
@@ -39,7 +39,6 @@ public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private FirebaseUser fUser;
     private DatabaseReference mRef;
 
     @Override
@@ -65,55 +64,19 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    //Create new account in firebase
-    private void CreateNewAccount(){
-        Date currentTime = Calendar.getInstance().getTime();
-        fUser = mAuth.getCurrentUser();
-        String userId = fUser.getUid();
-        mRef = FirebaseDatabase.getInstance().getReference();
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                if (!snapshot.child("Accounts").hasChild(userId)){
-                    int gender = -1;
-                    String phone = "Default";
-                    String address = "Default";
-                    String email = "Default";
-                    String name = "Default";
-                    String imgURL = "Default";
-
-                    if (fUser.getDisplayName()!=null){
-                        name = fUser.getDisplayName();
-                    }
-                    if (fUser.getPhoneNumber()!=null){
-                        phone = fUser.getPhoneNumber();
-                    }
-                    if (fUser.getEmail()!=null){
-                        email = fUser.getEmail();
-                    }
-                    if (fUser.getPhotoUrl().toString()!=null){
-                        imgURL = fUser.getPhotoUrl().toString();
-                    }
-                    Account account = new Account(userId,1,phone,name,gender,address,email,imgURL
-                            ,currentTime,currentTime,0);
-                    mRef.child("Accounts").child(userId).setValue(account);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
     //on_start_check_user is logged or not
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        if(currentUser==null){
+            //Clear current google account
+            mGoogleSignInClient.revokeAccess();
+        }else{
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     //onactivityresult
@@ -147,7 +110,6 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            CreateNewAccount();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -167,11 +129,61 @@ public class Login extends AppCompatActivity {
     //Go to next screen
     private void updateUI(FirebaseUser user) {
         if(user !=null){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            CreateNewAccount(user);
         }else{
             Toast.makeText(this,"Login failed",Toast.LENGTH_LONG);
         }
     }
 
+    //Create new account in firebase
+    private void CreateNewAccount(FirebaseUser user){
+        mRef = FirebaseDatabase.getInstance().getReference().child("Accounts");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //check user exist in firebase
+                if (!snapshot.hasChild(user.getUid())){
+                    int gender = -1;
+                    String phone = "Default";
+                    String address = "Default";
+                    String email = "Default";
+                    String name = "Default";
+                    String imgURL = "Default";
+
+                    if (user.getDisplayName()!=null){
+                        name = user.getDisplayName();
+                    }
+                    if (user.getPhoneNumber()!=null){
+                        phone = user.getPhoneNumber();
+                    }
+                    if (user.getEmail()!=null){
+                        email = user.getEmail();
+                    }
+                    if (user.getPhotoUrl()!=null){
+                        imgURL = user.getPhotoUrl().toString();
+                    }
+                    Account account = new Account(user.getUid(),1,phone,name,gender,address,email,imgURL
+                            ,new Date(),new Date(),0);
+
+                    //Create new account
+                    //If write data success, start new activity
+                    mRef.child(user.getUid()).setValue(account, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                }else{
+                    //Account existed
+                    Intent intent = new Intent(Login.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ public class Chat extends AppCompatActivity {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
     private Intent intent;
+    private PopupMenu pm;
 
     private ChatAdapter chatAdapter;
     private List<Message> mMessage;
@@ -60,8 +62,13 @@ public class Chat extends AppCompatActivity {
 
         //Find view
         findView();
+
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
         //Set toolbar chat
         setToolbarChat();
+
+        //Set UI by role
+        setUIByAccountType();
 
         //Set recycler view
         chat_recycler_view.setHasFixedSize(true);
@@ -69,13 +76,13 @@ public class Chat extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         chat_recycler_view.setLayoutManager(linearLayoutManager);
 
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
-
         //Get receiver id
         intent = getIntent();
         receiverID = intent.getStringExtra("receiverID");
         sessionID = intent.getStringExtra("sessionID");
 
+        //Check receiver and session
+        //Then load all message
         if (!receiverID.equals(null) && !sessionID.equals(null)) {
             mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
             mRef.addValueEventListener(new ValueEventListener() {
@@ -140,28 +147,31 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+        //Create popup menu
+        pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
+        pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
+        pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.chat_menu_view_info:
+                        System.out.println("chat_menu_view_info");
+                        return true;
+                    case R.id.chat_menu_end_session:
+                        System.out.println("chat_menu_end_session");
+                        endSession();
+                        CheckSessionIsEndOrNot();
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        //Show popup menu when clicked on img_hamburger
         chat_toolbar_img_hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Set popup menu
-                PopupMenu pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
-                pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
-                pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.chat_menu_view_info:
-                                System.out.println("chat_menu_view_info");
-                                return true;
-                            case R.id.chat_menu_end_session:
-                                System.out.println("chat_menu_end_session");
-                                endSession();
-                                CheckSessionIsEndOrNot();
-                                return true;
-                        }
-                        return true;
-                    }
-                });
                 pm.show();
             }
         });
@@ -235,4 +245,27 @@ public class Chat extends AppCompatActivity {
             }
         });
     }
+
+    private void setUIByAccountType() {
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                    Menu m = pm.getMenu();
+                    m.getItem(0).setTitle(getString(R.string.chat_menu_doctor_view_info));
+                } else {
+                    Menu m = pm.getMenu();
+                    m.getItem(1).setVisible(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 }

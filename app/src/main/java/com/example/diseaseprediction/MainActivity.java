@@ -16,9 +16,6 @@ import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.example.diseaseprediction.ui.settings.SettingsFragment;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,10 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mRef;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
+    private FirebaseUser fUser;
     private AppBarConfiguration mAppBarConfiguration;
-    private GoogleSignInClient mGoogleSignInClient;
 
     private Account mAccount;
 
@@ -56,19 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private CircleImageView nav_header_avatar;
     private NavigationView nav_view;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //get Google sign in account
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void setNavigation(){
@@ -150,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     case R.id.nav_out: {
                         FirebaseAuth.getInstance().signOut();
-                        mGoogleSignInClient.revokeAccess();
                         Intent i = new Intent(MainActivity.this,Login.class);
                         startActivity(i);
                         break;
@@ -180,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.alert) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            //transaction.remove();
 
             //Comment
             transaction.replace(R.id.nav_host_fragment, new AlertFragment());
@@ -203,15 +186,15 @@ public class MainActivity extends AppCompatActivity {
     private void getUIofNavHeader(){
         //get user by id
         mAccount = new Account();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase
                 //if exist then set UI
-                if (snapshot.hasChild(user.getUid())){
-                    mAccount = snapshot.child(user.getUid()).getValue(Account.class);
+                if (snapshot.hasChild(fUser.getUid())){
+                    mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
                     //Set text navigation header
                     nav_view = findViewById(R.id.nav_view);
                     View headerView = nav_view.getHeaderView(0);

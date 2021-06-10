@@ -92,13 +92,19 @@
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
     <string name="dialog_confirm_change_account_no">No</string>
-    <string name="chat_menu_view_info">View information</string>
+
+    <string name="chat_menu_patient_view_info">View doctor\'sinformation</string>
+    <string name="chat_menu_doctor_view_info">View patient\'s information</string>
     <string name="chat_menu_end_session">End session</string>
 
     <string name="exception_chat_load_user">Can\'t load user</string>
 
     <string name="prediction_adapter_waiting_confirm">Waiting for doctor\'s confirmation</string>
     <string name="prediction_adapter_confirmed">Doctor confirmed</string>
+
+    <string name="home_doctor_txt_title">Hello doctor !</string>
+    <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
+    <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
 
     <string-array name="spinner_language">
         <item>EN</item>
