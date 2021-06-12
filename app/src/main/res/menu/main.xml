@@ -8,7 +8,7 @@
 <!--        app:showAsAction="never" />-->
     <item
         android:id="@+id/alert"
-        android:icon="@drawable/ic_alert"
+        android:icon="@drawable/ic_noti"
         android:orderInCategory="2"
         app:showAsAction="ifRoom|collapseActionView"
         android:title="" />
