@@ -2,10 +2,15 @@ package com.example.diseaseprediction;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
@@ -13,7 +18,6 @@ import com.example.diseaseprediction.object.Advise;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.Symptom;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,17 +26,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class test extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_SPEECH=10;
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
 
     private RecyclerView recyclerView;
     private testAdapter userAdapter;
     private List<Account> mUser;
+    Button btn;
+    TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,110 @@ public class test extends AppCompatActivity {
 
         mUser = new ArrayList<>();
 
-        //adivse of 9 disease
+        btn = findViewById(R.id.btn1);
+        txt = findViewById(R.id.txt1);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSpeechInput(v);
+            }
+        });
+
+
+    }
+    public void getSpeechInput(View view) {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_CODE_SPEECH:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    txt.setText(result.get(0));
+                }
+                break;
+        }
+    }
+
+    void addDataAdvise(Advise ad){
+        myRef = FirebaseDatabase.getInstance().getReference("Advise");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ad.setAdviseID(myRef.push().getKey());
+                myRef.child(ad.getAdviseID()).setValue(ad);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    void addDataMedicine(Medicine md){
+        myRef = FirebaseDatabase.getInstance().getReference("Medicine");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                md.setMedicineID(myRef.push().getKey());
+                myRef.child(md.getMedicineID()).setValue(md);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    void addDataDisease(Disease ds){
+        myRef = FirebaseDatabase.getInstance().getReference("Disease");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ds.setDiseaseID(myRef.push().getKey());
+                myRef.child(ds.getDiseaseID()).setValue(ds);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    void addDataSymptom(Symptom sm){
+        myRef = FirebaseDatabase.getInstance().getReference("Sympton");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sm.setSymptomsID(myRef.push().getKey());
+                myRef.child(sm.getSymptomsID()).setValue(sm);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    //adivse of 9 disease
 //        addDataAdvise(new Advise("id", "Tham khảo ý kiến bệnh viện gần nhất", new Date(), new Date(), 1));
 //        addDataAdvise(new Advise("id", "tránh thức ăn nhiều dầu mỡ", new Date(), new Date(), 1));
 //        addDataAdvise(new Advise("id", "tránh thức ăn không chay", new Date(), new Date(), 1));
@@ -62,7 +172,7 @@ public class test extends AppCompatActivity {
 //        addDataAdvise(new Advise("id", "tránh đồ ăn lạnh", new Date(), new Date(), 1));
 //        addDataAdvise(new Advise("id", "giữ sốt", new Date(), new Date(), 1));
 
-        //9 disease
+    //9 disease
 //        addDataDisease(new Disease("id", "Bệnh sốt rét", "Một bệnh truyền nhiễm do ký sinh trùng đơn bào thuộc họ Plasmodium gây ra, có thể lây truyền qua vết đốt của muỗi Anopheles hoặc do kim tiêm bị ô nhiễm hoặc truyền máu. Sốt rét Falciparum là loại gây tử vong cao nhất.", new Date(), new Date(), 1));
 //        addDataDisease(new Disease("id", "viêm gan A", "Viêm gan A là một bệnh nhiễm trùng gan rất dễ lây lan do vi rút viêm gan A gây ra. Virus này là một trong số các loại virus viêm gan gây viêm và ảnh hưởng đến khả năng hoạt động của gan.", new Date(), new Date(), 1));
 //        addDataDisease(new Disease("id", "Cảm lạnh thông thường", "Cảm lạnh thông thường là một bệnh nhiễm trùng do vi-rút ở mũi và cổ họng (đường hô hấp trên). Nó thường vô hại, mặc dù nó có thể không cảm thấy như vậy. Nhiều loại vi-rút có thể gây ra cảm lạnh thông thường.", new Date(), new Date(), 1));
@@ -209,70 +319,4 @@ public class test extends AppCompatActivity {
 
 
 //        addDataMedicine(new Medicine("id", "name",  "description",  "manufacturer",  "content", new Date(), new Date(), 1));
-    }
-
-    void addDataAdvise(Advise ad){
-        myRef = FirebaseDatabase.getInstance().getReference("Advise");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ad.setAdviseID(myRef.push().getKey());
-                myRef.child(ad.getAdviseID()).setValue(ad);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataMedicine(Medicine md){
-        myRef = FirebaseDatabase.getInstance().getReference("Medicine");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                md.setMedicineID(myRef.push().getKey());
-                myRef.child(md.getMedicineID()).setValue(md);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataDisease(Disease ds){
-        myRef = FirebaseDatabase.getInstance().getReference("Disease");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ds.setDiseaseID(myRef.push().getKey());
-                myRef.child(ds.getDiseaseID()).setValue(ds);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataSymptom(Symptom sm){
-        myRef = FirebaseDatabase.getInstance().getReference("Sympton");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sm.setSymptomsID(myRef.push().getKey());
-                myRef.child(sm.getSymptomsID()).setValue(sm);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
 }

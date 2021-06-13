@@ -2,6 +2,9 @@ package com.example.diseaseprediction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +36,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chat extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_SPEECH=10;
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -50,7 +56,7 @@ public class Chat extends AppCompatActivity {
     private RelativeLayout chat_send_message_layout;
     private RecyclerView chat_recycler_view;
     private TextView chat_toolbar_txt_name;
-    private ImageView chat_toolbar_img_pre, chat_img_send, chat_toolbar_img_hamburger;
+    private ImageView chat_toolbar_img_pre, chat_img_send, chat_toolbar_img_hamburger, chat_img_mic;
     private CircleImageView chat_toolbar_img_avatar;
     private EditText chat_txt_enter_mess;
 
@@ -99,6 +105,31 @@ public class Chat extends AppCompatActivity {
                 }
             });
 
+            //Edit text input
+            chat_txt_enter_mess.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                //Show icon mic or send depend on edit text
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (chat_txt_enter_mess.getText().toString().equals("")){
+                        chat_img_send.setVisibility(View.GONE);
+                        chat_img_mic.setVisibility(View.VISIBLE);
+                    }else{
+                        chat_img_send.setVisibility(View.VISIBLE);
+                        chat_img_mic.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
             //send message
             chat_img_send.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -110,6 +141,14 @@ public class Chat extends AppCompatActivity {
                         SendMessage(message);
                         chat_txt_enter_mess.getText().clear();
                     }
+                }
+            });
+
+            //Input Voice
+            chat_img_mic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getSpeechInput();
                 }
             });
 
@@ -125,6 +164,7 @@ public class Chat extends AppCompatActivity {
     private void findView() {
         chat_txt_enter_mess = findViewById(R.id.chat_txt_enter_mess);
         chat_img_send = findViewById(R.id.chat_img_send);
+        chat_img_mic = findViewById(R.id.chat_img_mic);
         chat_recycler_view = findViewById(R.id.chat_recycler_view);
     }
 
@@ -267,6 +307,33 @@ public class Chat extends AppCompatActivity {
 
             }
         });
+    }
+
+    //Get text by speech
+    public void getSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Receive text when speech
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_SPEECH:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    chat_txt_enter_mess.setText(result.get(0));
+                }
+                break;
+        }
     }
 
 
