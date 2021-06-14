@@ -2,13 +2,12 @@ package com.example.diseaseprediction.ui.account;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
-import com.google.android.gms.common.api.internal.LifecycleFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -124,11 +122,50 @@ public class AccountFragment extends Fragment {
         accout_btn_edit_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialogConfirm();
+                if (checkEmpty() == 0) {
+                    dialogConfirm();
+                }
             }
         });
 
         return view;
+    }
+
+    //Check empty edit text and spinner
+    //Error: 1 | Normal: 0
+    private int checkEmpty() {
+        if (!account_edit_txt_name.getText().toString().equals("") &&
+                !account_edit_txt_phone.getText().toString().equals("") &&
+                !account_edit_txt_email.getText().toString().equals("") &&
+                !account_edit_txt_address.getText().toString().equals("") &&
+                account_spinner_gender.getSelectedItemPosition() != 0) {
+            if (account_spinner_gender.getSelectedItemPosition() != 0) {
+                //Clear error icon
+                ((TextView) account_spinner_gender.getSelectedView()).setError(null);
+            }
+            //Default color
+            account_edit_txt_name.setHintTextColor(Color.rgb(128, 128, 128));
+            account_edit_txt_phone.setHintTextColor(Color.rgb(128, 128, 128));
+            account_edit_txt_email.setHintTextColor(Color.rgb(128, 128, 128));
+            account_edit_txt_address.setHintTextColor(Color.rgb(128, 128, 128));
+            return 0;
+        } else {
+            if (account_spinner_gender.getSelectedItemPosition() == 0) {
+                //Clear error icon
+                ((TextView) account_spinner_gender.getSelectedView()).setError("Error message");
+            }
+            //Set hint error message
+            account_edit_txt_name.setHint(getString(R.string.default_empty_name));
+            account_edit_txt_phone.setHint(getString(R.string.default_empty_phone));
+            account_edit_txt_email.setHint(getString(R.string.default_empty_email));
+            account_edit_txt_address.setHint(getString(R.string.default_empty_address));
+            //Set color warning
+            account_edit_txt_name.setHintTextColor(Color.RED);
+            account_edit_txt_phone.setHintTextColor(Color.RED);
+            account_edit_txt_email.setHintTextColor(Color.RED);
+            account_edit_txt_address.setHintTextColor(Color.RED);
+            return 1;
+        }
     }
 
     //Create dialog confirm
@@ -240,7 +277,7 @@ public class AccountFragment extends Fragment {
                         account_spinner_gender.setSelection(1);
                     } else if (mAccount.getGender() == 2) {
                         account_spinner_gender.setSelection(2);
-                    }else{
+                    } else {
                         account_spinner_gender.setSelection(0);
                     }
 
@@ -307,7 +344,7 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
         } else if (account_spinner_gender.getSelectedItemPosition() == 2) {
             mRef.child(fUser.getUid()).child("gender").setValue(2);
-        } else{
+        } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }
 
