@@ -59,7 +59,7 @@
     <View
         android:id="@+id/elevation"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="6dp"
         android:background="@drawable/shadow"
         app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar" />
 
@@ -106,8 +106,8 @@
 
             <ImageView
                 android:id="@+id/chat_img_send"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:foregroundGravity="center"
                 android:src="@drawable/ic_chat_send"
                 android:visibility="gone"
@@ -118,10 +118,10 @@
 
             <ImageView
                 android:id="@+id/chat_img_mic"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:foregroundGravity="center"
-                android:src="@drawable/ic_mic"
+                android:src="@drawable/ic_chat_mic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
