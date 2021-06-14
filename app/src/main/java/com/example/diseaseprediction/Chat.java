@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -170,16 +169,10 @@ public class Chat extends AppCompatActivity {
 
     //Set toolbar
     private void setToolbarChat() {
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.chat_toolbar);
-        View view = getSupportActionBar().getCustomView();
-        chat_toolbar_img_avatar = view.findViewById(R.id.chat_toolbar_img_avatar);
-        chat_toolbar_txt_name = view.findViewById(R.id.chat_toolbar_txt_name);
-        chat_toolbar_img_pre = view.findViewById(R.id.chat_toolbar_img_pre);
-        chat_toolbar_img_hamburger = view.findViewById(R.id.chat_toolbar_img_hamburger);
-
-        view.setBackgroundColor(getResources().getColor(R.color.white));
+        chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
+        chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
+        chat_toolbar_img_pre = findViewById(R.id.chat_toolbar_img_pre);
+        chat_toolbar_img_hamburger = findViewById(R.id.chat_toolbar_img_hamburger);
 
         //Back button
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
