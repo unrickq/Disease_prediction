@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,11 +46,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chat extends AppCompatActivity {
 
+  private static final String LOG_TAG = "Chat";
   private static final int REQUEST_CODE_SPEECH = 10;
 
   private DatabaseReference mRef;
   private FirebaseUser fUser;
-  private Intent intent;
   private PopupMenu pm;
 
   private ChatAdapter chatAdapter;
@@ -72,9 +73,11 @@ public class Chat extends AppCompatActivity {
     setContentView(R.layout.activity_chat);
 
     //Find view
-    findView();
+    getViews();
 
+    // Initialize
     fUser = FirebaseAuth.getInstance().getCurrentUser();
+
     //Set toolbar chat
     setToolbarChat();
 
@@ -88,63 +91,26 @@ public class Chat extends AppCompatActivity {
     chat_recycler_view.setLayoutManager(linearLayoutManager);
 
     //Get receiver id
-    intent = getIntent();
+    Intent intent = getIntent();
     receiverID = intent.getStringExtra("receiverID");
     sessionID = intent.getStringExtra("sessionID");
 
     //Check receiver and session
     //Then load all message
-    if (!receiverID.equals(null) && !sessionID.equals(null)) {
-      mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
-      mRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-          Account receiver = snapshot.getValue(Account.class);
-          chat_toolbar_txt_name.setText(receiver.getName());
-          Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
-          ReadMessage(fUser.getUid(), receiverID);
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-      });
-
+    if (receiverID != null && sessionID != null) {
+      getUserChatData();
       //Edit text input
-      chat_txt_enter_mess.addTextChangedListener(new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        //Show icon mic or send depend on edit text
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-          if (chat_txt_enter_mess.getText().toString().equals("")) {
-            chat_img_send.setVisibility(View.GONE);
-            chat_img_mic.setVisibility(View.VISIBLE);
-          } else {
-            chat_img_send.setVisibility(View.VISIBLE);
-            chat_img_mic.setVisibility(View.GONE);
-          }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-      });
+      chat_txt_enter_mess.addTextChangedListener(updateIconOnWriteWatcher());
 
       //send message
       chat_img_send.setOnClickListener(new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
+        public void onClick(View v) {
           String msg = chat_txt_enter_mess.getText().toString();
           if (!msg.equals("")) {
             Message message = new Message("", fUser.getUid(), receiverID, msg
                 , new Date(), sessionID, 1);
-            SendMessage(message);
+            setMessage(message);
             chat_txt_enter_mess.getText().clear();
           }
         }
@@ -159,7 +125,7 @@ public class Chat extends AppCompatActivity {
       });
 
       //Check is current session is end or not
-      CheckSessionIsEndOrNot();
+      checkSessionStatus();
     } else {
       Toast toast = Toast.makeText(this, R.string.exception_chat_load_user, Toast.LENGTH_SHORT);
       toast.show();
@@ -167,14 +133,19 @@ public class Chat extends AppCompatActivity {
 
   }
 
-  private void findView() {
+  /**
+   * Get all views in layout
+   */
+  private void getViews() {
     chat_txt_enter_mess = findViewById(R.id.chat_txt_enter_mess);
     chat_img_send = findViewById(R.id.chat_img_send);
     chat_img_mic = findViewById(R.id.chat_img_mic);
     chat_recycler_view = findViewById(R.id.chat_recycler_view);
   }
 
-  //Set toolbar
+  /**
+   * Set up chat toolbar
+   */
   private void setToolbarChat() {
     chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
     chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
@@ -202,7 +173,7 @@ public class Chat extends AppCompatActivity {
           case R.id.chat_menu_end_session:
             System.out.println("chat_menu_end_session");
             endSession();
-            CheckSessionIsEndOrNot();
+            checkSessionStatus();
             return true;
         }
         return true;
@@ -219,7 +190,71 @@ public class Chat extends AppCompatActivity {
     });
   }
 
-  private void SendMessage(Message msg) {
+  /**
+   * Get user name, avatar and chat messages of user
+   */
+  public void getUserChatData() {
+    mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
+    mRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        Account receiver = snapshot.getValue(Account.class);
+        if (receiver != null) {
+          chat_toolbar_txt_name.setText(receiver.getName());
+          Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
+
+          GetUserMessages(fUser.getUid(), receiverID);
+        } else {
+          Log.d(LOG_TAG, "Cannot get account info");
+        }
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+
+      }
+    });
+  }
+
+  /**
+   * Create a text watcher to update chat icon on typing
+   *
+   * @return a {@link TextWatcher} object
+   */
+  private TextWatcher updateIconOnWriteWatcher() {
+    return new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      //Show icon mic or send depend on edit text
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        // If input empty
+        if (chat_txt_enter_mess.getText().toString().equals("")) {
+          chat_img_send.setVisibility(View.GONE);
+          chat_img_mic.setVisibility(View.VISIBLE);
+        } else {
+          chat_img_send.setVisibility(View.VISIBLE);
+          chat_img_mic.setVisibility(View.GONE);
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {
+
+      }
+    };
+  }
+
+
+  /**
+   * Set new message to Firebase
+   *
+   * @param msg massage to set
+   */
+  private void setMessage(Message msg) {
     mRef = FirebaseDatabase.getInstance().getReference("Message");
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -240,45 +275,59 @@ public class Chat extends AppCompatActivity {
     mRef.child("status").setValue(0);
   }
 
-  private void CheckSessionIsEndOrNot() {
+  /**
+   * Check if the chat session has ended
+   */
+  private void checkSessionStatus() {
     mRef = FirebaseDatabase.getInstance().getReference("Session");
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        int status = Integer.valueOf(snapshot.child(sessionID).child("status").getValue().toString());
-        if (status == 0) {
-          chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
-          chat_send_message_layout.setVisibility(View.GONE);
+        String sessionStatus = (String) snapshot.child(sessionID).child("status").getValue();
+        if (sessionStatus != null) {
+          int status = Integer.parseInt(sessionStatus);
+          if (status == 0) {
+            chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
+            chat_send_message_layout.setVisibility(View.GONE);
+          }
+        } else {
+          Log.d(LOG_TAG, "Status is null!");
         }
       }
 
       @Override
       public void onCancelled(@NonNull DatabaseError error) {
-
       }
     });
   }
 
-  //Read message and load it to recycler view
-  private void ReadMessage(String mID, String uID) {
+  /**
+   * Get chat messages of current user with another user from Firebase and load it to recycler view
+   *
+   * @param currentUserID ID of active user
+   * @param receiverID    ID of receiver user
+   */
+  private void GetUserMessages(String currentUserID, String receiverID) {
     mMessage = new ArrayList<>();
     mRef = FirebaseDatabase.getInstance().getReference("Message");
     mRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        mMessage.clear();
         for (DataSnapshot sn : snapshot.getChildren()) {
           Message msg = sn.getValue(Message.class);
-          if (msg.getReceiverID().equals(mID) && msg.getSenderID().equals(uID)
-              && msg.getSessionID().equals(sessionID)
-              || msg.getReceiverID().equals(uID)
-              && msg.getSenderID().equals(mID)
-              && msg.getSessionID().equals(sessionID)) {
-            mMessage.add(msg);
+
+          if (msg != null && msg.getReceiverID() != null) {
+            if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
+                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
+                && msg.getSenderID().equals(currentUserID)
+                && msg.getSessionID().equals(sessionID)) {
+              mMessage.add(msg);
+            }
+            chatAdapter = new ChatAdapter(Chat.this, mMessage);
+            chat_recycler_view.setAdapter(chatAdapter);
           }
-          chatAdapter = new ChatAdapter(Chat.this, mMessage);
-          chat_recycler_view.setAdapter(chatAdapter);
         }
+        mMessage.clear();
       }
 
       @Override
@@ -288,17 +337,25 @@ public class Chat extends AppCompatActivity {
     });
   }
 
+  /**
+   * Set up element base on Account Type
+   */
   private void setUIByAccountType() {
     mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        if (snapshot.child("typeID").getValue().toString().equals("0")) {
-          Menu m = pm.getMenu();
-          m.getItem(0).setTitle(getString(R.string.chat_menu_doctor_view_info));
+        String accountType = (String) snapshot.child("typeID").getValue();
+        if (accountType != null) {
+          if (accountType.equals("0")) {
+            Menu m = pm.getMenu();
+            m.getItem(0).setTitle(getString(R.string.chat_menu_doctor_view_info));
+          } else {
+            Menu m = pm.getMenu();
+            m.getItem(1).setVisible(false);
+          }
         } else {
-          Menu m = pm.getMenu();
-          m.getItem(1).setVisible(false);
+          Log.d(LOG_TAG, "Account type is null");
         }
       }
 
@@ -309,27 +366,21 @@ public class Chat extends AppCompatActivity {
     });
   }
 
-  //Get text by speech
+  /**
+   * Call default Speech-to-text handler of the phone. Permission checking is included
+   */
   public void getSpeechInput() {
-
+    // Check microphone access permission
     if (ContextCompat.checkSelfPermission(
         this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-      // You can use the API that requires the permission.
+      // Call Voice input
       Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
       intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
       intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi");
 
       startActivityForResult(intent, REQUEST_CODE_SPEECH);
-    }
-//        else if () {
-//            // In an educational UI, explain to the user why your app requires this
-//            // permission for a specific feature to behave as expected. In this UI,
-//            // include a "cancel" or "no thanks" button that allows the user to
-//            // continue using your app without granting the permission.
-//
-//        }
-    else {
-      // You can directly ask for the permission.
+    } else {
+      // ask for the permission.
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         requestPermissions(
             new String[]{Manifest.permission.RECORD_AUDIO},
@@ -339,19 +390,16 @@ public class Chat extends AppCompatActivity {
 
   }
 
-  //Receive text when speech
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    switch (requestCode) {
-      case REQUEST_CODE_SPEECH:
-        if (resultCode == RESULT_OK && data != null) {
-          ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-          chat_txt_enter_mess.setText(result.get(0));
-        }
-        break;
+    // Receive speech-to-text result
+    if (requestCode == REQUEST_CODE_SPEECH) {
+      if (resultCode == RESULT_OK && data != null) {
+        ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        chat_txt_enter_mess.setText(result.get(0));
+      }
     }
   }
-
 
 }
