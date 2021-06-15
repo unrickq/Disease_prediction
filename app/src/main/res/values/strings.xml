@@ -88,6 +88,7 @@
     <string name="default_empty_email">Please enter your email</string>
     <string name="default_empty_phone">Please enter your phone</string>
     <string name="default_empty_address">Please enter your address</string>
+    <string name="default_empty_code">Please enter your code</string>
 
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
@@ -108,6 +109,10 @@
 
     <string name="sign_up_btn_done">Done</string>
     <string name="sign_up_txt_title">Your infomation</string>
+
+    <string name="code_verify_txt_title">Enter your verification code</string>
+    <string name="code_verify_edit_txt_code">Your code</string>
+    <string name="code_verify_re_send">Didn\'t work? Send me another code</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CodeVerify">
+
+    <RelativeLayout
+        android:id="@+id/chat_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="@dimen/margin_top"
+        android:paddingRight="@dimen/margin_top"
+        app:layout_anchorGravity="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/chat_toolbar_img_pre"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back_1" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/code_verify_txt_title"
+        style="@style/heading_6_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/code_verify_txt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar" />
+
+    <EditText
+        android:id="@+id/code_verify_edit_txt_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/theme_1_P"
+        android:ems="10"
+        android:hint="@string/code_verify_edit_txt_code"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@id/code_verify_img_next"
+        app:layout_constraintStart_toStartOf="@id/code_verify_txt_title"
+        app:layout_constraintTop_toBottomOf="@+id/code_verify_txt_title" />
+
+    <ImageView
+        android:id="@+id/code_verify_img_next"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/code_verify_edit_txt_code" />
+
+    <TextView
+        android:id="@+id/code_verify_re_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/code_verify_re_send"
+        android:textColor="@color/theme_1_P"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/code_verify_edit_txt_code" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

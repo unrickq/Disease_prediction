@@ -85,6 +85,7 @@
     <string name="default_empty_email">Vui lòng nhập email của bạn</string>
     <string name="default_empty_phone">Vui lòng nhập số điện thoại của bạn</string>
     <string name="default_empty_address">Vui lòng nhập địa chỉ của bạn</string>
+    <string name="default_empty_code">Vui lòng nhập mã xác minh của bạn</string>
 
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>
@@ -106,4 +107,8 @@
 
     <string name="sign_up_btn_done">Xong</string>
     <string name="sign_up_txt_title">Thông tin của bạn</string>
+
+    <string name="code_verify_txt_title">Nhập mã xác minh của bạn</string>
+    <string name="code_verify_edit_txt_code">Mã xác minh của bạn</string>
+    <string name="code_verify_re_send">Không hoạt động? Gửi cho tôi một mã khác</string>
 </resources>

@@ -21,10 +21,10 @@
 
         <ImageView
             android:id="@+id/chat_toolbar_img_pre"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_chat_back" />
+            android:src="@drawable/ic_back_1" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/chat_toolbar_img_avatar"
