@@ -251,7 +251,6 @@ public class AccountFragment extends Fragment {
 
     //Get data for UI
     private void getDataForUI() {
-        //Set spinner
         //get user by id
         mAccount = new Account();
         fUser = FirebaseAuth.getInstance().getCurrentUser();

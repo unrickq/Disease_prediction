@@ -66,26 +66,6 @@
             app:layout_constraintStart_toStartOf="@id/login_txt_title"
             app:layout_constraintTop_toBottomOf="@+id/login_txt_title" />
 
-        <TextView
-            android:id="@+id/login_ask_acc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/login_ask_acc"
-            app:layout_constraintStart_toStartOf="@id/login_eTxt_user"
-            app:layout_constraintTop_toBottomOf="@+id/login_eTxt_user" />
-
-        <TextView
-            android:id="@+id/login_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/login_sign_up"
-            android:textColor="@color/theme_1_P"
-            app:layout_constraintStart_toEndOf="@+id/login_ask_acc"
-            app:layout_constraintTop_toBottomOf="@+id/login_eTxt_user" />
-
         <ImageView
             android:id="@+id/login_img_next"
             android:layout_width="35dp"
@@ -99,11 +79,11 @@
             android:id="@+id/login_txt_connect_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="70dp"
             android:text="@string/login_txt_connect_other"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_ask_acc" />
+            app:layout_constraintTop_toBottomOf="@+id/login_eTxt_user" />
 
         <Button
             android:id="@+id/login_btn_login_by_google"

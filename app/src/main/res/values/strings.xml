@@ -106,6 +106,9 @@
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
 
+    <string name="sign_up_btn_done">Done</string>
+    <string name="sign_up_txt_title">Your infomation</string>
+
     <string-array name="spinner_language">
         <item>EN</item>
         <item>VN</item>

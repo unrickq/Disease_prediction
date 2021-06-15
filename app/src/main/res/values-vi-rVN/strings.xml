@@ -103,4 +103,7 @@
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
     <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
     <string name="nav_header_txt_acc_name">" Sample"</string>
+
+    <string name="sign_up_btn_done">Xong</string>
+    <string name="sign_up_txt_title">Thông tin của bạn</string>
 </resources>

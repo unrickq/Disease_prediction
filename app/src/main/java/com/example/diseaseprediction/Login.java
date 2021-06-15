@@ -170,7 +170,7 @@ public class Login extends AppCompatActivity {
                     mRef.child(user.getUid()).setValue(account, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            Intent intent = new Intent(Login.this, SignUp.class);
                             startActivity(intent);
                         }
                     });
@@ -186,4 +186,5 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
 }
