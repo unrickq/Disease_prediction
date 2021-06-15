@@ -2,121 +2,250 @@ package com.example.diseaseprediction.object;
 
 import java.util.Date;
 
+/**
+ * Account Class
+ */
 public class Account {
-    private String accountId;
-    private int typeID;
-    private String phone ;
-    private String name ;
-    private int gender;
-    private String address ;
-    private String email ;
-    private String image ;
-    private Date dateCreate;
-    private Date dateUpdate;
-    private int status;
+  private String accountId;
+  private int typeID;
+  private String phone;
+  private String name;
+  private int gender;
+  private String address;
+  private String email;
+  private String image;
+  private Date dateCreate;
+  private Date dateUpdate;
+  private int status;
 
-    public Account() {
-    }
+  public Account() {
+  }
 
-    public Account(String accountId, int typeID, String phone, String name, int gender, String address, String email, String image, Date dateCreate, Date dateUpdate, int status) {
-        this.accountId = accountId;
-        this.typeID = typeID;
-        this.phone = phone;
-        this.name = name;
-        this.gender = gender;
-        this.address = address;
-        this.email = email;
-        this.image = image;
-        this.dateCreate = dateCreate;
-        this.dateUpdate = dateUpdate;
-        this.status = status;
-    }
+  /**
+   * Create new Account
+   *
+   * @param accountId  Account ID
+   * @param typeID     Account Type
+   * @param phone      Phone number
+   * @param name       User name
+   * @param gender     Gender
+   * @param address    User address
+   * @param email      User Email
+   * @param image      User avatar
+   * @param dateCreate Account created date
+   * @param dateUpdate Account update date
+   * @param status     Account status
+   */
+  public Account(String accountId, int typeID, String phone, String name, int gender, String address, String email,
+                 String image, Date dateCreate, Date dateUpdate, int status) {
+    this.accountId = accountId;
+    this.typeID = typeID;
+    this.phone = phone;
+    this.name = name;
+    this.gender = gender;
+    this.address = address;
+    this.email = email;
+    this.image = image;
+    this.dateCreate = dateCreate;
+    this.dateUpdate = dateUpdate;
+    this.status = status;
+  }
 
-    public String getAccountId() {
-        return accountId;
-    }
+  /**
+   * Get Account ID
+   *
+   * @return account ID
+   */
+  public String getAccountId() {
+    return accountId;
+  }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
+  /**
+   * Set account ID
+   *
+   * @param accountId account ID
+   */
+  public void setAccountId(String accountId) {
+    this.accountId = accountId;
+  }
 
-    public int getTypeID() {
-        return typeID;
-    }
+  /**
+   * Get Account Type
+   *
+   * @return type number
+   */
+  public int getTypeID() {
+    return typeID;
+  }
 
-    public void setTypeID(int typeID) {
-        this.typeID = typeID;
-    }
+  /**
+   * Set Account Type
+   *
+   * @param typeID type number
+   */
+  public void setTypeID(int typeID) {
+    this.typeID = typeID;
+  }
 
-    public String getPhone() {
-        return phone;
-    }
+  /**
+   * Get Phone number
+   *
+   * @return phone number
+   */
+  public String getPhone() {
+    return phone;
+  }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+  /**
+   * Set phone number
+   *
+   * @param phone phone number
+   */
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Get user name
+   *
+   * @return user name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Set user name
+   *
+   * @param name user name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public int getGender() {
-        return gender;
-    }
+  /**
+   * Get user gender
+   *
+   * @return user gender
+   */
+  public int getGender() {
+    return gender;
+  }
 
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
+  /**
+   * Set user gender
+   *
+   * @param gender user gender
+   */
+  public void setGender(int gender) {
+    this.gender = gender;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  /**
+   * Get address
+   *
+   * @return Address
+   */
+  public String getAddress() {
+    return address;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  /**
+   * Set address
+   *
+   * @param address address
+   */
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  /**
+   * Get Email
+   *
+   * @return email
+   */
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  /**
+   * Set Email
+   *
+   * @param email email
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getImage() {
-        return image;
-    }
+  /**
+   * Get avatar image path
+   *
+   * @return avatar image path
+   */
+  public String getImage() {
+    return image;
+  }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+  /**
+   * Set avatar image path
+   *
+   * @param image avatar image path
+   */
+  public void setImage(String image) {
+    this.image = image;
+  }
 
-    public Date getDateCreate() {
-        return dateCreate;
-    }
+  /**
+   * Get account created date
+   *
+   * @return account create date
+   */
+  public Date getDateCreate() {
+    return dateCreate;
+  }
 
-    public void setDateCreate(Date dateCreate) {
-        this.dateCreate = dateCreate;
-    }
+  /**
+   * Set account created date
+   *
+   * @param dateCreate account created date
+   */
+  public void setDateCreate(Date dateCreate) {
+    this.dateCreate = dateCreate;
+  }
 
-    public Date getDateUpdate() {
-        return dateUpdate;
-    }
+  /**
+   * Get account updated date
+   *
+   * @return account updated date
+   */
+  public Date getDateUpdate() {
+    return dateUpdate;
+  }
 
-    public void setDateUpdate(Date dateUpdate) {
-        this.dateUpdate = dateUpdate;
-    }
+  /**
+   * Set account updated date
+   *
+   * @param dateUpdate account updated date
+   */
+  public void setDateUpdate(Date dateUpdate) {
+    this.dateUpdate = dateUpdate;
+  }
 
-    public int getStatus() {
-        return status;
-    }
+  /**
+   * Get account status
+   *
+   * @return account status
+   */
+  public int getStatus() {
+    return status;
+  }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
+  /**
+   * Set account status
+   *
+   * @param status account status
+   */
+  public void setStatus(int status) {
+    this.status = status;
+  }
 }
