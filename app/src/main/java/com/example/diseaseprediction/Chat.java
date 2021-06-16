@@ -41,12 +41,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chat extends AppCompatActivity {
 
-  private static final String LOG_TAG = "Chat";
+  private static final String LOG_TAG = "Chat Activity";
   private static final int REQUEST_CODE_SPEECH = 10;
 
   private DatabaseReference mRef;
@@ -110,7 +111,7 @@ public class Chat extends AppCompatActivity {
           if (!msg.equals("")) {
             Message message = new Message("", fUser.getUid(), receiverID, msg
                 , new Date(), sessionID, 1);
-            setMessage(message);
+            setMessageFirebase(message);
             chat_txt_enter_mess.getText().clear();
           }
         }
@@ -203,7 +204,7 @@ public class Chat extends AppCompatActivity {
           chat_toolbar_txt_name.setText(receiver.getName());
           Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
 
-          GetUserMessages(fUser.getUid(), receiverID);
+          getMessagesFirebase(fUser.getUid(), receiverID);
         } else {
           Log.d(LOG_TAG, "Cannot get account info");
         }
@@ -254,7 +255,7 @@ public class Chat extends AppCompatActivity {
    *
    * @param msg massage to set
    */
-  private void setMessage(Message msg) {
+  private void setMessageFirebase(Message msg) {
     mRef = FirebaseDatabase.getInstance().getReference("Message");
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -283,15 +284,16 @@ public class Chat extends AppCompatActivity {
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        String sessionStatus = (String) snapshot.child(sessionID).child("status").getValue();
-        if (sessionStatus != null) {
+        try {
+          String sessionStatus =
+              Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
           int status = Integer.parseInt(sessionStatus);
           if (status == 0) {
             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
             chat_send_message_layout.setVisibility(View.GONE);
           }
-        } else {
-          Log.d(LOG_TAG, "Status is null!");
+        } catch (NullPointerException e) {
+          Log.d(LOG_TAG, "Session status null");
         }
       }
 
@@ -307,12 +309,13 @@ public class Chat extends AppCompatActivity {
    * @param currentUserID ID of active user
    * @param receiverID    ID of receiver user
    */
-  private void GetUserMessages(String currentUserID, String receiverID) {
+  private void getMessagesFirebase(String currentUserID, String receiverID) {
     mMessage = new ArrayList<>();
     mRef = FirebaseDatabase.getInstance().getReference("Message");
     mRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
+        mMessage.clear();
         for (DataSnapshot sn : snapshot.getChildren()) {
           Message msg = sn.getValue(Message.class);
 
@@ -327,7 +330,7 @@ public class Chat extends AppCompatActivity {
             chat_recycler_view.setAdapter(chatAdapter);
           }
         }
-        mMessage.clear();
+
       }
 
       @Override
@@ -345,17 +348,16 @@ public class Chat extends AppCompatActivity {
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        String accountType = (String) snapshot.child("typeID").getValue();
-        if (accountType != null) {
+        try {
+          String accountType = Objects.requireNonNull(snapshot.child("typeID").getValue()).toString();
+          Menu m = pm.getMenu();
           if (accountType.equals("0")) {
-            Menu m = pm.getMenu();
             m.getItem(0).setTitle(getString(R.string.chat_menu_doctor_view_info));
           } else {
-            Menu m = pm.getMenu();
             m.getItem(1).setVisible(false);
           }
-        } else {
-          Log.d(LOG_TAG, "Account type is null");
+        } catch (NullPointerException e) {
+          Log.d(LOG_TAG, "Account type null");
         }
       }
 
@@ -387,7 +389,6 @@ public class Chat extends AppCompatActivity {
             REQUEST_CODE_SPEECH);
       }
     }
-
   }
 
   @Override
