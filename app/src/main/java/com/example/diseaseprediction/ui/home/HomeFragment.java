@@ -189,14 +189,9 @@ public class HomeFragment extends Fragment {
                 ConsultationList csl = new ConsultationList();
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     csl = sn.getValue(ConsultationList.class);
-//                    if (csl.getAccountOne().equals(accountIDOne)
-//                            && csl.getAccountTwo().equals(accountIDTwo) || csl.getAccountOne().equals(accountIDTwo)
-//                            && csl.getAccountTwo().equals(accountIDOne)) {
-//                        consultationList = csl;
-//                    }
-
                     //Check to find consultation is exist or not
-                    if (csl.getAccountTwo().equals(accountIDTwo) || csl.getAccountOne().equals(accountIDTwo)) {
+                    if ((csl.getAccountOne().equals(accountIDOne) && csl.getAccountTwo().equals(accountIDTwo))
+                            || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
                         consultationList = csl;
                     }
                 }
