@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 @PowerMockRunnerDelegate(JUnit4.class)
 @PrepareForTest({FirebaseDatabase.class})
 public class MainActivityUnitTest {
+  // TODO 1: Test eo duoc
   // Test data
   private static final String AccountID = "test_acc_id";
   private static final String AccountName = "Test_account";

@@ -129,7 +129,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/account_info_btn_edit_done"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/theme_1_P"

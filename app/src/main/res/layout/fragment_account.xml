@@ -79,6 +79,7 @@
         style="@style/subTitle_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:layout_marginTop="3dp"
         android:text="@string/account_txt_phone" />
 
@@ -88,7 +89,7 @@
         android:layout_height="wrap_content"
         style="@style/subTitle_1"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="phone"
         android:text=""
         android:visibility="gone" />
 

@@ -40,8 +40,8 @@
     <string name="home_txt_consultation_title">Your consultation</string>
     <string name="home_txt_consultation_see_more">See more</string>
     <string name="home_search_view">Enter your symptoms</string>
-    <string name="login_txt_title">Login</string>
-    <string name="login_eTxt_user">Your phone number</string>
+    <string name="login_txt_title">Log in</string>
+    <string name="login_eTxt_user">Phone number</string>
     <string name="login_ask_acc">You don\'t have an account ?</string>
     <string name="login_sign_up">Sign up</string>
     <string name="login_txt_connect_other">Or connect with</string>
@@ -108,11 +108,14 @@
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
 
     <string name="account_info_btn_done">Done</string>
-    <string name="account_info_txt_title">Your infomation</string>
+    <string name="account_info_txt_title">Personal Infomation</string>
 
-    <string name="code_verify_txt_title">Enter your verification code</string>
-    <string name="code_verify_edit_txt_code">Your code</string>
+    <string name="code_verify_txt_title">Enter verification code</string>
+    <string name="code_verify_edit_txt_code">Verification code</string>
     <string name="code_verify_re_send">Didn\'t work? Send me another code</string>
+
+    <string name="error_field_empty">Field can\'t be empty!</string>
+    <string name="login_phone_login">Log in with phone number</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

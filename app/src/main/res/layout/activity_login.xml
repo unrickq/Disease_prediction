@@ -52,38 +52,71 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/about_img_background" />
 
-        <EditText
-            android:id="@+id/login_eTxt_user"
+        <TextView
+            android:id="@+id/login_txt_phone_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/login_phone_login"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="@+id/login_txt_title"
+            app:layout_constraintTop_toBottomOf="@+id/login_txt_title" />
+
+        <TextView
+            android:id="@+id/login_txt_country_code"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/theme_1_P"
+            android:text="+84"
+            android:textColor="@color/theme_1_P"
+            app:layout_constraintStart_toStartOf="@+id/login_txt_title"
+            app:layout_constraintTop_toTopOf="@+id/login_eTxt_user_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_eTxt_user_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/theme_1_P"
-            android:ems="10"
-            android:hint="@string/login_eTxt_user"
-            android:inputType="number"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toStartOf="@id/login_img_next"
-            app:layout_constraintStart_toStartOf="@id/login_txt_title"
-            app:layout_constraintTop_toBottomOf="@+id/login_txt_title" />
+            app:layout_constraintStart_toEndOf="@+id/login_txt_country_code"
+            app:layout_constraintTop_toBottomOf="@+id/login_txt_phone_login">
+
+            <EditText
+                android:id="@+id/login_eTxt_user"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:hint="@string/login_eTxt_user"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/login_img_next"
-            android:layout_width="35dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
             android:src="@drawable/ic_back"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/login_eTxt_user" />
+            app:layout_constraintTop_toTopOf="@id/login_eTxt_user_layout" />
 
         <TextView
             android:id="@+id/login_txt_connect_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="48dp"
             android:text="@string/login_txt_connect_other"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_eTxt_user" />
+            app:layout_constraintTop_toBottomOf="@+id/login_eTxt_user_layout" />
 
         <Button
             android:id="@+id/login_btn_login_by_google"
