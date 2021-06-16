@@ -34,7 +34,7 @@ public class Account {
    * @param image      User avatar
    * @param dateCreate Account created date
    * @param dateUpdate Account update date
-   * @param status     Account status
+   * @param status     0: Deleted | 1: Normal
    */
   public Account(String accountId, int typeID, String phone, String name, int gender, String address, String email,
                  String image, Date dateCreate, Date dateUpdate, int status) {
@@ -53,7 +53,6 @@ public class Account {
 
   /**
    * Get Account ID
-   *
    * @return account ID
    */
   public String getAccountId() {
@@ -62,7 +61,6 @@ public class Account {
 
   /**
    * Set account ID
-   *
    * @param accountId account ID
    */
   public void setAccountId(String accountId) {
@@ -71,7 +69,6 @@ public class Account {
 
   /**
    * Get Account Type
-   *
    * @return type number
    */
   public int getTypeID() {
@@ -80,7 +77,6 @@ public class Account {
 
   /**
    * Set Account Type
-   *
    * @param typeID type number
    */
   public void setTypeID(int typeID) {
@@ -89,7 +85,6 @@ public class Account {
 
   /**
    * Get Phone number
-   *
    * @return phone number
    */
   public String getPhone() {
@@ -98,7 +93,6 @@ public class Account {
 
   /**
    * Set phone number
-   *
    * @param phone phone number
    */
   public void setPhone(String phone) {
@@ -107,7 +101,6 @@ public class Account {
 
   /**
    * Get user name
-   *
    * @return user name
    */
   public String getName() {
@@ -116,7 +109,6 @@ public class Account {
 
   /**
    * Set user name
-   *
    * @param name user name
    */
   public void setName(String name) {
@@ -125,7 +117,6 @@ public class Account {
 
   /**
    * Get user gender
-   *
    * @return user gender
    */
   public int getGender() {
@@ -134,7 +125,6 @@ public class Account {
 
   /**
    * Set user gender
-   *
    * @param gender user gender
    */
   public void setGender(int gender) {
@@ -143,7 +133,6 @@ public class Account {
 
   /**
    * Get address
-   *
    * @return Address
    */
   public String getAddress() {
@@ -152,7 +141,6 @@ public class Account {
 
   /**
    * Set address
-   *
    * @param address address
    */
   public void setAddress(String address) {
@@ -161,7 +149,6 @@ public class Account {
 
   /**
    * Get Email
-   *
    * @return email
    */
   public String getEmail() {
@@ -170,7 +157,6 @@ public class Account {
 
   /**
    * Set Email
-   *
    * @param email email
    */
   public void setEmail(String email) {
@@ -179,7 +165,6 @@ public class Account {
 
   /**
    * Get avatar image path
-   *
    * @return avatar image path
    */
   public String getImage() {
@@ -188,7 +173,6 @@ public class Account {
 
   /**
    * Set avatar image path
-   *
    * @param image avatar image path
    */
   public void setImage(String image) {
@@ -197,7 +181,6 @@ public class Account {
 
   /**
    * Get account created date
-   *
    * @return account create date
    */
   public Date getDateCreate() {
@@ -206,7 +189,6 @@ public class Account {
 
   /**
    * Set account created date
-   *
    * @param dateCreate account created date
    */
   public void setDateCreate(Date dateCreate) {
@@ -215,7 +197,6 @@ public class Account {
 
   /**
    * Get account updated date
-   *
    * @return account updated date
    */
   public Date getDateUpdate() {
@@ -224,7 +205,6 @@ public class Account {
 
   /**
    * Set account updated date
-   *
    * @param dateUpdate account updated date
    */
   public void setDateUpdate(Date dateUpdate) {
@@ -232,18 +212,16 @@ public class Account {
   }
 
   /**
-   * Get account status
-   *
-   * @return account status
+   * Get status
+   * @return 0: Deleted | 1: Normal
    */
   public int getStatus() {
     return status;
   }
 
   /**
-   * Set account status
-   *
-   * @param status account status
+   * Set status. 0: Deleted | 1: Normal
+   * @param status 0: Deleted | 1: Normal
    */
   public void setStatus(int status) {
     this.status = status;

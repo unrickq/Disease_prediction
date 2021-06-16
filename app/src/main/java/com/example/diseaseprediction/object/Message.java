@@ -149,18 +149,16 @@ public class Message {
   }
 
   /**
-   * Get message status
-   *
-   * @return message status
+   * Get Status
+   * @return 0: Deleted | 1: Normal
    */
   public int getStatus() {
     return status;
   }
 
   /**
-   * Set message status
-   *
-   * @param status messages status
+   * Set Status. 0: Deleted | 1: Normal
+   * @param status 0: Deleted | 1: Normal
    */
   public void setStatus(int status) {
     this.status = status;
