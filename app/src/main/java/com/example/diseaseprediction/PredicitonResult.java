@@ -37,11 +37,11 @@ public class PredicitonResult extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prediciton_result);
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Find view
         findView();
-
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Get receiver id
         intent = getIntent();
@@ -51,6 +51,9 @@ public class PredicitonResult extends AppCompatActivity {
 
     }
 
+    /**
+     * Find view by ID
+     */
     private void findView() {
         prediction_txt_acc_name = findViewById(R.id.prediction_txt_acc_name);
         prediction_txt_acc_gender = findViewById(R.id.prediction_txt_acc_gender);
@@ -63,6 +66,10 @@ public class PredicitonResult extends AppCompatActivity {
         prediction_img_avatar = findViewById(R.id.prediction_img_avatar);
     }
 
+    /**
+     * Load data to UI
+     * @param mPrediction
+     */
     private void getDataToUI(Prediction mPrediction){
         getAccInformation(mPrediction);
         //Get disease
@@ -120,6 +127,10 @@ public class PredicitonResult extends AppCompatActivity {
 
     }
 
+    /**
+     * Get account information and load it to UI
+     * @param mPrediction
+     */
     private void getAccInformation(Prediction mPrediction){
         mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(mPrediction.getPatientID());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {

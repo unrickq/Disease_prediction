@@ -33,6 +33,7 @@ public class CodeVerify extends AppCompatActivity {
         setContentView(R.layout.activity_code_verify);
         findView();
 
+        //Next button
         code_verify_img_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +44,7 @@ public class CodeVerify extends AppCompatActivity {
             }
         });
 
+        //Resend code
         code_verify_re_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,15 +53,20 @@ public class CodeVerify extends AppCompatActivity {
         });
     }
 
-    //Find view by ID
+    /**
+     * Find view by ID
+     */
     private void findView() {
         code_verify_img_next = findViewById(R.id.code_verify_img_next);
         code_verify_edit_txt_code = findViewById(R.id.code_verify_edit_txt_code);
         code_verify_re_send = findViewById(R.id.code_verify_re_send);
     }
 
-    //Check empty edit text and spinner
-    //Error: 1 | Normal: 0
+    /**
+     * Check empty edit text and spinner
+     * Error: 1 | Normal: 0
+     * @return
+     */
     private int checkEmpty() {
         if (!code_verify_edit_txt_code.getText().toString().equals("")) {
             //Default color

@@ -107,8 +107,8 @@
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
 
-    <string name="sign_up_btn_done">Done</string>
-    <string name="sign_up_txt_title">Your infomation</string>
+    <string name="account_info_btn_done">Done</string>
+    <string name="account_info_txt_title">Your infomation</string>
 
     <string name="code_verify_txt_title">Enter your verification code</string>
     <string name="code_verify_edit_txt_code">Your code</string>

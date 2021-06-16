@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
         <activity android:name=".CodeVerify"></activity>
-        <activity android:name=".SignUp" />
+        <activity android:name=".AccountInfo" />
         <activity android:name=".PredicitonResult" />
         <activity android:name=".Chat" />
         <activity android:name=".test" />

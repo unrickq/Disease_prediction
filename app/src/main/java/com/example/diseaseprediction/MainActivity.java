@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
     private AppBarConfiguration mAppBarConfiguration;
-
     private Account mAccount;
 
     private TextView nav_header_txt_acc_name,nav_header_txt_acc_phone;
@@ -55,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -78,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Set left navigation
+     */
     private void setNavigation(){
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -89,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_consultationList,
                 R.id.nav_predictionList,
                 R.id.nav_settings
-//                R.id.nav_about
         )
                 .setDrawerLayout(drawer)
                 .build();
@@ -132,12 +135,6 @@ public class MainActivity extends AppCompatActivity {
                         drawer.close();
                         break;
                     }
-                   /* case R.id.nav_about: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new AboutFragment()).commit();
-                        drawer.close();
-                        break;
-                    }*/
                     case R.id.nav_out: {
                         FirebaseAuth.getInstance().signOut();
                         Intent i = new Intent(MainActivity.this,Login.class);
@@ -180,19 +177,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Set title of toolbar
+     * @param title
+     */
     public void setActionBarTitle(String title) {
         TextView t = (TextView) findViewById(R.id.toolbar_title) ;
         t.setText(title) ;
     }
 
+    /**
+     * Set toolbar icon
+     */
     public void setIconToolbar(){
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
     }
 
+    /**
+     * Get data for navigation header
+     */
     private void getUIofNavHeader(){
         //get user by id
         mAccount = new Account();
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -222,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }else{
-                    System.out.println("k tim ra");
+                    //Can't find any data
                 }
             }
             @Override

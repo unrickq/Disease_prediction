@@ -105,8 +105,8 @@
     <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
     <string name="nav_header_txt_acc_name">" Sample"</string>
 
-    <string name="sign_up_btn_done">Xong</string>
-    <string name="sign_up_txt_title">Thông tin của bạn</string>
+    <string name="account_info_btn_done">Xong</string>
+    <string name="account_info_txt_title">Thông tin của bạn</string>
 
     <string name="code_verify_txt_title">Nhập mã xác minh của bạn</string>
     <string name="code_verify_edit_txt_code">Mã xác minh của bạn</string>

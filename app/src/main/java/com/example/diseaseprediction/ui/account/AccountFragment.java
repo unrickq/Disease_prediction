@@ -131,8 +131,11 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
-    //Check empty edit text and spinner
-    //Error: 1 | Normal: 0
+    /**
+     * Check empty edit text and spinner
+     * Error: 1 | Normal: 0
+     * @return
+     */
     private int checkEmpty() {
         if (!account_edit_txt_name.getText().toString().equals("") &&
                 !account_edit_txt_phone.getText().toString().equals("") &&
@@ -151,7 +154,7 @@ public class AccountFragment extends Fragment {
             return 0;
         } else {
             if (account_spinner_gender.getSelectedItemPosition() == 0) {
-                //Clear error icon
+                //Set error icon
                 ((TextView) account_spinner_gender.getSelectedView()).setError("Error message");
             }
             //Set hint error message
@@ -168,7 +171,10 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    //Create dialog confirm
+    /**
+     * Create dialog confirm
+     * Dialog show when data on change
+     */
     private void dialogConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(getString(R.string.dialog_confirm_change_account));
@@ -192,7 +198,10 @@ public class AccountFragment extends Fragment {
         builder.show();
     }
 
-    //Find view by ID
+    /**
+     * Find view by ID
+     * @param view
+     */
     private void findView(View view) {
         //Button
         accout_btn_edit = view.findViewById(R.id.accout_btn_edit);
@@ -210,6 +219,7 @@ public class AccountFragment extends Fragment {
         account_img_avatar = view.findViewById(R.id.account_img_avatar);
         //Spinner
         account_spinner_gender = view.findViewById(R.id.account_spinner_gender);
+        //Set data for spinner
         ArrayList<String> gender = new ArrayList<String>();
         gender.add(getString(R.string.default_choose_gender));
         gender.add(getString(R.string.default_gender_male));
@@ -219,7 +229,9 @@ public class AccountFragment extends Fragment {
         account_spinner_gender.setEnabled(false);
     }
 
-    //Set edit text visible
+    /**
+     * Set edit text visible
+     */
     private void setEditVisibility() {
         //Edit text
         account_edit_txt_name.setVisibility(View.VISIBLE);
@@ -234,7 +246,9 @@ public class AccountFragment extends Fragment {
         account_txt_address.setVisibility(View.GONE);
     }
 
-    //Set view visible
+    /**
+     * Set view visible
+     */
     private void setViewVisibility() {
         //Edit text
         account_edit_txt_name.setVisibility(View.GONE);
@@ -249,11 +263,12 @@ public class AccountFragment extends Fragment {
         account_txt_address.setVisibility(View.VISIBLE);
     }
 
-    //Get data for UI
+    /**
+     * Get data for UI
+     */
     private void getDataForUI() {
         //get user by id
         mAccount = new Account();
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -326,7 +341,10 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    //Update value to database
+    /**
+     * Update value to database
+     * Then update all text view
+     */
     private void updateValue() {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
         //Name

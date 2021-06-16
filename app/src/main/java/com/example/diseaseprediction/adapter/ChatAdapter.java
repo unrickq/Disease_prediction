@@ -39,6 +39,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     @NotNull
     @Override
     public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //Get view type. Right layout if sender, left layout if receiver
         if (viewType == MSG_TYPE_RIGHT) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_right, parent, false);
             return new ChatAdapter.ViewHolder(view);
@@ -50,12 +51,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
+        //Get message
         Message msg = mMessage.get(position);
         holder.item_chat_show_message.setText(msg.getMessage());
+
+        //Custom date under message
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
         String shortTimeStr = sdf.format(msg.getDateSend().getTime());
         holder.item_chat_time.setText(shortTimeStr);
 
+        //On clicked in message then show time send
         holder.item_chat_show_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +83,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         public TextView item_chat_show_message,item_chat_time;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            //Find view
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
             item_chat_time = itemView.findViewById(R.id.item_chat_time);
         }
@@ -85,6 +91,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
+        //Get type depend on user
+        //Right if sender, Left if receiver
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mMessage.get(position).getSenderID().equals(fUser.getUid())){
             return MSG_TYPE_RIGHT;

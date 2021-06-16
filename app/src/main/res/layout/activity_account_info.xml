@@ -6,15 +6,15 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/padding"
     android:paddingRight="@dimen/padding"
-    tools:context=".SignUp">
+    tools:context=".AccountInfo">
 
     <TextView
-        android:id="@+id/sign_up_txt_title"
+        android:id="@+id/account_info_txt_title"
         style="@style/heading_3_bold_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:text="@string/sign_up_txt_title"
+        android:text="@string/account_info_txt_title"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.059"
@@ -28,15 +28,15 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding"
         android:paddingRight="@dimen/padding"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_btn_edit_done"
+        app:layout_constraintBottom_toTopOf="@+id/account_info_btn_edit_done"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_txt_title"
+        app:layout_constraintTop_toBottomOf="@+id/account_info_txt_title"
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/sign_up_txt_title_name"
+            android:id="@+id/account_info_txt_title_name"
             style="@style/subTitle_1_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:text="@string/account_txt_title_name" />
 
         <EditText
-            android:id="@+id/sign_up_edit_txt_name"
+            android:id="@+id/account_info_edit_txt_name"
             style="@style/subTitle_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:text="" />
 
         <TextView
-            android:id="@+id/sign_up_txt_title_gender"
+            android:id="@+id/account_info_txt_title_gender"
             style="@style/subTitle_1_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,20 +61,19 @@
             android:text="@string/account_txt_title_gender" />
 
         <Spinner
-            android:id="@+id/sign_up_spinner_gender"
+            android:id="@+id/account_info_spinner_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
         <TextView
-            android:id="@+id/sign_up_txt_title_phone"
+            android:id="@+id/account_info_txt_title_phone"
             style="@style/subTitle_1_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/account_txt_title_phone" />
 
         <EditText
-            android:id="@+id/sign_up_edit_txt_phone"
+            android:id="@+id/account_info_edit_txt_phone"
             style="@style/subTitle_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +82,7 @@
             android:text="" />
 
         <TextView
-            android:id="@+id/sign_up_txt_title_email"
+            android:id="@+id/account_info_txt_title_email"
             style="@style/subTitle_1_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +90,7 @@
             android:text="@string/account_txt_title_email" />
 
         <EditText
-            android:id="@+id/sign_up_edit_txt_email"
+            android:id="@+id/account_info_edit_txt_email"
             style="@style/subTitle_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +99,7 @@
             android:text="" />
 
         <TextView
-            android:id="@+id/sign_up_txt_title_address"
+            android:id="@+id/account_info_txt_title_address"
             style="@style/subTitle_1_bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +107,7 @@
             android:text="@string/account_txt_title_address" />
 
         <EditText
-            android:id="@+id/sign_up_edit_txt_address"
+            android:id="@+id/account_info_edit_txt_address"
             style="@style/subTitle_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,16 +117,15 @@
     </LinearLayout>
 
 
-
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/sign_up_btn_edit_done"
+        android:id="@+id/account_info_btn_edit_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/padding"
         android:layout_marginRight="@dimen/padding"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/theme_1_P"
-        android:text="@string/sign_up_btn_done"
+        android:text="@string/account_info_btn_done"
         android:textColor="@color/background_B1_lightMode"
         app:cornerRadius="@dimen/btn_corner_radius"
         app:layout_constraintBottom_toBottomOf="parent"

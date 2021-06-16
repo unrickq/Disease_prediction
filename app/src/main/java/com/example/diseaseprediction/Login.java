@@ -37,13 +37,14 @@ import java.util.Date;
 public class Login extends AppCompatActivity {
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
-    private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mRef;
 
+    private Account mAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Configure Google Sign In
@@ -52,8 +53,6 @@ public class Login extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
 
         Button login_btn_login_by_google = findViewById(R.id.login_btn_login_by_google);
         login_btn_login_by_google.setOnClickListener(new View.OnClickListener() {
@@ -64,26 +63,26 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    //on_start check user is logged in or not
+    /**
+     * on_start check user is logged in or not
+     */
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser==null){
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
             //Clear current google account
             mGoogleSignInClient.revokeAccess();
-        }else{
+        } else {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
         }
     }
 
-    //onactivityresult
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -99,17 +98,21 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    //Auth_with_google
+    /**
+     * Auth_with_google
+     *
+     * @param idToken
+     */
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -120,29 +123,41 @@ public class Login extends AppCompatActivity {
                 });
     }
 
-    //Sign in
+    /**
+     * Open google sign in intent
+     */
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    //Go to next screen
+    /**
+     * Go to next screen
+     *
+     * @param user current user
+     */
     private void updateUI(FirebaseUser user) {
-        if(user !=null){
+        //If current user isn't null, then create new account
+        if (user != null) {
             CreateNewAccount(user);
-        }else{
-            Toast.makeText(this,"Login failed",Toast.LENGTH_LONG);
+        } else {
+            Toast.makeText(this, "Login failed", Toast.LENGTH_LONG);
         }
     }
 
-    //Create new account in firebase
-    private void CreateNewAccount(FirebaseUser user){
+    /**
+     * Create new account in firebase
+     *
+     * @param user current user
+     */
+    private void CreateNewAccount(FirebaseUser user) {
         mRef = FirebaseDatabase.getInstance().getReference().child("Accounts");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase
-                if (!snapshot.hasChild(user.getUid())){
+                if (!snapshot.hasChild(user.getUid())) {
+                    //Set default data
                     int gender = -1;
                     String phone = "Default";
                     String address = "Default";
@@ -150,36 +165,77 @@ public class Login extends AppCompatActivity {
                     String name = "Default";
                     String imgURL = "Default";
 
-                    if (user.getDisplayName()!=null){
+                    //Get data of current user (data is exist if login by google)
+                    if (user.getDisplayName() != null) {
                         name = user.getDisplayName();
                     }
-                    if (user.getPhoneNumber()!=null){
+                    if (user.getPhoneNumber() != null) {
                         phone = user.getPhoneNumber();
                     }
-                    if (user.getEmail()!=null){
+                    if (user.getEmail() != null) {
                         email = user.getEmail();
                     }
-                    if (user.getPhotoUrl()!=null){
+                    if (user.getPhotoUrl() != null) {
                         imgURL = user.getPhotoUrl().toString();
                     }
-                    Account account = new Account(user.getUid(),1,phone,name,gender,address,email,imgURL
-                            ,new Date(),new Date(),0);
 
                     //Create new account
+                    Account account = new Account(user.getUid(), 1, phone, name, gender, address, email, imgURL
+                            , new Date(), new Date(), 1);
+                    //Save new account to firebase
                     //If write data success, start new activity
                     mRef.child(user.getUid()).setValue(account, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                            Intent intent = new Intent(Login.this, SignUp.class);
+                            //Go to account information activity
+                            Intent intent = new Intent(Login.this, AccountInfo.class);
                             startActivity(intent);
                         }
                     });
-                }else{
+                } else {
                     //Account existed
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    startActivity(intent);
+                    checkDataOfAccount(user);
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    /**
+     * Check data of current account
+     * If there exists default data, go to account information activity
+     * If data is full, go to main activity
+     *
+     * @param user current user
+     */
+    private void checkDataOfAccount(FirebaseUser user) {
+        mAccount = new Account();
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //check user exist in firebase
+                //if exist then set UI
+                if (snapshot.hasChild(user.getUid())) {
+                    mAccount = snapshot.child(user.getUid()).getValue(Account.class);
+                    if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
+                            mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
+                            mAccount.getAddress().equals("Default")) {
+                        Intent intent = new Intent(Login.this, AccountInfo.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    //IF can't find any data
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 

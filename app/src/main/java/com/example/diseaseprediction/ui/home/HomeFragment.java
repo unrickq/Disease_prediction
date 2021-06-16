@@ -102,11 +102,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        //Get current user
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //set toolbar
         ((MainActivity) getActivity()).setActionBarTitle("");
         ((MainActivity) getActivity()).setIconToolbar();
         container.removeAllViews();
+
         //find view
         findView(view);
 
@@ -117,7 +120,7 @@ public class HomeFragment extends Fragment {
         home_search_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createSession();
+                createSession(fUser.getUid(),CHATBOT_ID);
             }
         });
 
@@ -153,6 +156,10 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Find view by ID
+     * @param view view
+     */
     private void findView(View view) {
         navigationView = getActivity().findViewById(R.id.nav_view);
         home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
@@ -167,8 +174,14 @@ public class HomeFragment extends Fragment {
         home_doctor_txt_consultation_title = view.findViewById(R.id.home_doctor_txt_consultation_title);
     }
 
-    //Create new chat session
-    private void createSession() {
+    /**
+     * Create new chat session
+     * accountIDOne is sender
+     * accountIDTwo is receiver
+     * CHATBOT_ID is receiver (account two in consultation)
+     */
+    private void createSession(String accountIDOne, String accountIDTwo) {
+        //Get consultation list of two account
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,15 +189,19 @@ public class HomeFragment extends Fragment {
                 ConsultationList csl = new ConsultationList();
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     csl = sn.getValue(ConsultationList.class);
-                    if (csl.getAccountOne().equals(fUser.getUid())
-                            && csl.getAccountTwo().equals(CHATBOT_ID) || csl.getAccountOne().equals(CHATBOT_ID)
-                            && csl.getAccountTwo().equals(fUser.getUid())) {
-                        //Get consultation of mAccount and there account
+//                    if (csl.getAccountOne().equals(accountIDOne)
+//                            && csl.getAccountTwo().equals(accountIDTwo) || csl.getAccountOne().equals(accountIDTwo)
+//                            && csl.getAccountTwo().equals(accountIDOne)) {
+//                        consultationList = csl;
+//                    }
+
+                    //Check to find consultation is exist or not
+                    if (csl.getAccountTwo().equals(accountIDTwo) || csl.getAccountOne().equals(accountIDTwo)) {
                         consultationList = csl;
                     }
                 }
 
-                //If consultation list is null
+                //If consultation is null
                 //Then create new session, consultation
                 if (consultationList == null) {
                     mRef = FirebaseDatabase.getInstance().getReference("Session");
@@ -195,20 +212,20 @@ public class HomeFragment extends Fragment {
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            mRef.push().setValue(new ConsultationList(fUser.getUid()
-                                    , CHATBOT_ID, sessionID));
+                            mRef.push().setValue(new ConsultationList(accountIDOne
+                                    , accountIDTwo, sessionID));
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("receiverID", CHATBOT_ID);
+                            i.putExtra("receiverID", accountIDTwo);
                             i.putExtra("sessionID", sessionID);
                             i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
 
                             //Send message started
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                            Message msg = new Message(reference.push().getKey(), fUser.getUid()
-                                    , CHATBOT_ID, "Hello all! Let's started!"
+                            Message msg = new Message(reference.push().getKey(), accountIDOne
+                                    , accountIDTwo, "Hello all! Let's started!"
                                     , new Date(), sessionID, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                         }
@@ -243,20 +260,20 @@ public class HomeFragment extends Fragment {
                                 mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
                                 //Create new consultation list
                                 mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-                                mRef.push().setValue(new ConsultationList(fUser.getUid()
-                                        , CHATBOT_ID, sessionID));
+                                mRef.push().setValue(new ConsultationList(accountIDOne
+                                        , accountIDTwo, sessionID));
 
                                 //Send message started
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                                Message msg = new Message(reference.push().getKey(), fUser.getUid()
-                                        , CHATBOT_ID, "Hello all! Let's started!"
+                                Message msg = new Message(reference.push().getKey(), accountIDOne
+                                        , accountIDTwo, "Hello all! Let's started!"
                                         , new Date(), sessionID, 1);
                                 reference.child(msg.getMessageID()).setValue(msg);
                             }
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("receiverID", CHATBOT_ID);
+                            i.putExtra("receiverID", accountIDTwo);
                             i.putExtra("sessionID", sessionID);
                             i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
@@ -277,6 +294,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Load consultation of current account
+     */
     private void loadConsultationList() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
@@ -303,6 +323,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * UI of doctor role
+     */
     private void setUIDoctor() {
         home_txt_title.setVisibility(View.GONE);
         home_txt_prediction_title.setVisibility(View.GONE);
@@ -313,6 +336,9 @@ public class HomeFragment extends Fragment {
         home_doctor_txt_consultation_title.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * UI of user role
+     */
     private void setUIPatient() {
         home_doctor_txt_title.setVisibility(View.GONE);
         home_doctor_txt_prediction_title.setVisibility(View.GONE);
@@ -323,6 +349,9 @@ public class HomeFragment extends Fragment {
         home_txt_consultation_title.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Set UI by type of account
+     */
     private void setUIByAccountType() {
         //Get disease
         if (!fUser.getUid().equals("")) {

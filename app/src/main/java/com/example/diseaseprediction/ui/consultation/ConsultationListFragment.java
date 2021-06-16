@@ -92,19 +92,25 @@ public class ConsultationListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_consultation_list, container, false);
 
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //Create recycler
         consultation_list_recycler_view_main = view.findViewById(R.id.consultation_list_recycler_view_main);
         consultation_list_recycler_view_main.setHasFixedSize(true);
         consultation_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         consultationLists = new ArrayList<>();
+
         //Load user to recycler
         ReadUsers();
 
         return view;
     }
 
+    /**
+     * Load all consultation list depend on user ID
+     */
     private void ReadUsers(){
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -113,10 +119,13 @@ public class ConsultationListFragment extends Fragment {
                 for (DataSnapshot sh: snapshot.getChildren()){
                     ConsultationList cls = sh.getValue(ConsultationList.class);
                     assert cls!=null;
-                    if (cls.getAccountOne().equals(firebaseUser.getUid())||cls.getAccountTwo().equals(firebaseUser.getUid())){
+                    //Get all consultation list depend on user ID 1 or user ID 2
+                    if (cls.getAccountOne().equals(fUser.getUid())||cls.getAccountTwo().equals(fUser.getUid())){
                         consultationLists.add(cls);
+                        //Reverse list index to get latest consultation
                         Collections.reverse(consultationLists);
                     }
+                    //Set adapter
                     consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
                     consultation_list_recycler_view_main.setAdapter(consultationAdapter);
                 }
