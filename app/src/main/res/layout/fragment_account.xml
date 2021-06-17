@@ -17,133 +17,221 @@
         android:layout_marginTop="@dimen/margin_top"
         android:src="@drawable/background_avatar" />
 
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/account_txt_title_name"
-        style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/account_txt_title_name" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <TextView
-        android:id="@+id/account_txt_name"
-        style="@style/subTitle_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="@string/account_txt_name" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/account_edit_txt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="@string/account_txt_title_name"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/account_edit_txt_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/subTitle_1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text=""
-        android:visibility="gone" />
-
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/account_txt_title_gender"
-        style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/account_txt_title_gender" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <Spinner
-        android:id="@+id/account_spinner_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <AutoCompleteTextView
+            android:id="@+id/account_spinner_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:hint="@string/account_txt_title_gender"/>
 
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/account_edit_txt_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/subTitle_1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text=""
-        android:visibility="gone" />
-
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/account_txt_title_phone"
-        style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/account_txt_title_phone" />
+        android:layout_marginTop="@dimen/margin_top"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <TextView
-        android:id="@+id/account_txt_phone"
-        style="@style/subTitle_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_marginTop="3dp"
-        android:text="@string/account_txt_phone" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/account_edit_txt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="phone"
+            android:hint="@string/account_txt_title_phone"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/account_edit_txt_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/subTitle_1"
-        android:ems="10"
-        android:inputType="phone"
-        android:text=""
-        android:visibility="gone" />
-
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/account_txt_title_email"
-        style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/account_txt_title_email" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <TextView
-        android:id="@+id/account_txt_email"
-        style="@style/subTitle_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="@string/account_txt_email" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/account_edit_txt_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="@string/account_txt_title_email"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/account_edit_txt_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/subTitle_1"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text=""
-        android:visibility="gone" />
-
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/account_txt_title_address"
-        style="@style/subTitle_1_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/account_txt_title_address" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <TextView
-        android:id="@+id/account_txt_address"
-        style="@style/subTitle_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="@string/account_txt_address" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/account_edit_txt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="@string/account_txt_title_address"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/account_edit_txt_address"
-        style="@style/subTitle_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text=""
-        android:visibility="gone" />
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_title_name"-->
+<!--        style="@style/subTitle_1_bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/margin_top"-->
+<!--        android:text="@string/account_txt_title_name" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_name"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="3dp"-->
+<!--        android:text="@string/account_txt_name" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/account_edit_txt_name"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text=""-->
+<!--        android:visibility="gone" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_title_gender"-->
+<!--        style="@style/subTitle_1_bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/margin_top"-->
+<!--        android:text="@string/account_txt_title_gender" />-->
+
+<!--    <Spinner-->
+<!--        android:id="@+id/account_spinner_gender"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+
+
+<!--    <EditText-->
+<!--        android:id="@+id/account_edit_txt_gender"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text=""-->
+<!--        android:visibility="gone" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_title_phone"-->
+<!--        style="@style/subTitle_1_bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/account_txt_title_phone" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_phone"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:inputType="number"-->
+<!--        android:layout_marginTop="3dp"-->
+<!--        android:text="@string/account_txt_phone" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/account_edit_txt_phone"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="phone"-->
+<!--        android:text=""-->
+<!--        android:visibility="gone" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_title_email"-->
+<!--        style="@style/subTitle_1_bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/margin_top"-->
+<!--        android:text="@string/account_txt_title_email" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_email"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="3dp"-->
+<!--        android:text="@string/account_txt_email" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/account_edit_txt_email"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textEmailAddress"-->
+<!--        android:text=""-->
+<!--        android:visibility="gone" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_title_address"-->
+<!--        style="@style/subTitle_1_bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/margin_top"-->
+<!--        android:text="@string/account_txt_title_address" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/account_txt_address"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="3dp"-->
+<!--        android:text="@string/account_txt_address" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/account_edit_txt_address"-->
+<!--        style="@style/subTitle_1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:text=""-->
+<!--        android:visibility="gone" />-->
 
     <Button
         android:id="@+id/accout_btn_edit"
@@ -154,7 +242,7 @@
         android:text="@string/account_btn_edit"
         android:textColor="@color/background_B1_lightMode" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/accout_btn_edit_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

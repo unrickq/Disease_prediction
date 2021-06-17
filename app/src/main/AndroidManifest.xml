@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
         <activity android:name=".CodeVerify"></activity>
-        <activity android:name=".AccountInfo" />
+        <activity android:name=".test" />
         <activity android:name=".PredicitonResult" />
         <activity android:name=".Chat" />
-        <activity android:name=".test" />
+        <activity android:name=".AccountInfo" />
         <activity android:name=".GetStarted" />
         <activity
             android:name=".MainActivity"

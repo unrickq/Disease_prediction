@@ -7,8 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +24,7 @@ import com.example.diseaseprediction.object.Advise;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.Symptom;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +45,9 @@ public class test extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
 
+    private TextInputLayout testlayout, testlayout2;
+    private AutoCompleteTextView spinnerr;
+    EditText editText;
     private RecyclerView recyclerView;
     private testAdapter userAdapter;
     private List<Account> mUser;
@@ -46,23 +59,44 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        testlayout = findViewById(R.id.testlayout);
+        testlayout2 = findViewById(R.id.testlayout2);
+
+        spinnerr = findViewById(R.id.spinnerr);
+        ArrayList<String> gender = new ArrayList<String>();
+        gender.add(getString(R.string.default_choose_gender));
+        gender.add(getString(R.string.default_gender_male));
+        gender.add(getString(R.string.default_gender_female));
+        ArrayAdapter genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
+        spinnerr.setAdapter(genderAdapter);
+        spinnerr.setText(spinnerr.getAdapter().getItem(0).toString());
+        genderAdapter.getFilter().filter(null);
+
 //        recyclerView = findViewById(R.id.recycler);
 //        recyclerView.setHasFixedSize(true);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        mUser = new ArrayList<>();
-
+//        mUser = new ArrayList<>();
+//      txt = findViewById(R.id.txt1);
         btn = findViewById(R.id.btn1);
-        txt = findViewById(R.id.txt1);
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSpeechInput(v);
+                if(spinnerr.getText().toString().equals(spinnerr.getAdapter().getItem(0).toString())){
+                    testlayout.setError("loi roi");
+                    testlayout2.setError("loi roi");
+                }else{
+                    testlayout.setError(null);
+                    testlayout2.setError(null);
+                }
+                System.out.println("chon"+ testlayout.getEditText().getText().toString());
             }
         });
 
 
+//
     }
     public void getSpeechInput(View view) {
 
@@ -96,7 +130,7 @@ public class test extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ad.setAdviseID(myRef.push().getKey());
+//                ad.setAdviseID(myRef.push().getKey());
                 myRef.child(ad.getAdviseID()).setValue(ad);
             }
 
@@ -112,7 +146,7 @@ public class test extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                md.setMedicineID(myRef.push().getKey());
+//                md.setMedicineID(myRef.push().getKey());
                 myRef.child(md.getMedicineID()).setValue(md);
             }
 
@@ -128,7 +162,7 @@ public class test extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ds.setDiseaseID(myRef.push().getKey());
+//                ds.setDiseaseID(myRef.push().getKey());
                 myRef.child(ds.getDiseaseID()).setValue(ds);
             }
 
@@ -144,7 +178,7 @@ public class test extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sm.setSymptomsID(myRef.push().getKey());
+//                sm.setSymptomsID(myRef.push().getKey());
                 myRef.child(sm.getSymptomsID()).setValue(sm);
             }
 
@@ -154,6 +188,61 @@ public class test extends AppCompatActivity {
             }
         });
     }
+
+//        addDataAdvise(new Advise("1", "che miệng trong lúc ho", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("2", "tham khảo ý kiến bác sĩ", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("3", "uống thuốc theo hướng dẫn của bác sĩ", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("4", "nghỉ ngơi điều độ", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("5", "ăn uống lành mạnh, khoa học", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("6", "theo dõi tình hình sức khỏe bản thân", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("7", "không uống rượu, bia", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("8", "tập luyện thể thao", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("9", "không hút thuốc lá", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("10", "ăn uống lành mạnh", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("11", "thường xuyên rữa tay", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("12", "tránh ăn đồ ăn có nhiều chất béo, cay, nóng...", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("13", "đến bệnh viện gần nhất để kiểm tra (đây là bệnh có tỉ lệ tử vong cao)", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("14", "tránh bị muỗi đốt", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("15", "uống đồ uống giàu vitamin c", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("16", "tránh đồ ăn, thức uống lạnh", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("17", "thực hiện các biện pháp giảm sốt", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("18", "đến ngay bệnh viện để kiểm tra tình trạng bệnh", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("19", "tránh tiếp xúc trực tiếp với mọi người xung quanh", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("20", "uống nước nhiều nước", new Date(), new Date(), 1));
+//        addDataAdvise(new Advise("21", "sử dụng các biện pháp giảm nhiệt độ", new Date(), new Date(), 1));
+
+//        addDataSymptom(new Symptom("1",  "ho mãn tính",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("2",  "ho",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("3",  "sốt",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("4",  "ho ra máu",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("5",  "sụt cân",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("6",  "buồn nôn",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("7",  "nhức đầu",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("8",  "đau họng",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("9",  "sổ mũi",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("10",  "ho khan",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("11",  "khó thở",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("12",  "thở nhanh",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("13",  "mệt mỏi",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("14",  "mất vị giác",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("15",  "mất khứ giác",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("16",  "nước tiểu đậm",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("17",  "tiêu chảy",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("18",  "vàng da",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("19",  "buồn nôn ói mửa",  "Default", new Date(),  new Date(), 1));
+//        addDataSymptom(new Symptom("20",  "đau tinh hoàn",  "Default", new Date(),  new Date(), 1));
+
+//        addDataDisease(new Disease("1", "Bệnh sốt rét", "Một bệnh truyền nhiễm do ký sinh trùng đơn bào thuộc họ Plasmodium gây ra, có thể lây truyền qua vết đốt của muỗi Anopheles hoặc do kim tiêm bị ô nhiễm hoặc truyền máu. Sốt rét Falciparum là loại gây tử vong cao nhất.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("2", "viêm gan A", "Viêm gan A là một bệnh nhiễm trùng gan rất dễ lây lan do vi rút viêm gan A gây ra. Virus này là một trong số các loại virus viêm gan gây viêm và ảnh hưởng đến khả năng hoạt động của gan.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("3", "Cảm lạnh thông thường", "Cảm lạnh thông thường là một bệnh nhiễm trùng do vi-rút ở mũi và cổ họng (đường hô hấp trên). Nó thường vô hại, mặc dù nó có thể không cảm thấy như vậy. Nhiều loại vi-rút có thể gây ra cảm lạnh thông thường.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("4", "Bệnh viêm gan B", "Viêm gan B là một bệnh nhiễm trùng ở gan của bạn. Nó có thể gây sẹo nội tạng, suy gan và ung thư. Nó có thể gây tử vong nếu không được điều trị. Nó lây lan khi mọi người tiếp xúc với máu, vết loét hở hoặc chất dịch cơ thể của người có vi rút viêm gan B.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("5", "Viêm gan C", "Viêm gan do siêu vi viêm gan C (HCV), thường lây lan qua truyền máu (hiếm gặp), chạy thận nhân tạo và dùng kim tiêm. Những tổn thương mà viêm gan C gây ra cho gan có thể dẫn đến xơ gan và các biến chứng của nó cũng như ung thư.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("6", "Viêm gan E", "Một dạng viêm gan hiếm gặp do nhiễm vi rút viêm gan E (HEV). Nó lây truyền qua thức ăn hoặc đồ uống do người bị nhiễm bệnh cầm nắm hoặc qua nguồn cung cấp nước bị nhiễm bệnh ở những khu vực mà phân có thể ngấm vào nước. Viêm gan E không gây ra bệnh gan mãn tính.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("7", "Viêm gan siêu vi D", "Viêm gan D, còn được gọi là virus viêm gan delta, là một bệnh nhiễm trùng khiến gan bị viêm. Vết sưng này có thể làm suy giảm chức năng gan và gây ra các vấn đề về gan lâu dài, bao gồm cả sẹo gan và ung thư. Tình trạng này do vi rút viêm gan D (HDV) gây ra.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("8", "Viêm phổi", "Viêm phổi là tình trạng nhiễm trùng ở một hoặc cả hai phổi. Vi khuẩn, vi rút và nấm gây ra nó. Nhiễm trùng gây viêm các túi khí trong phổi của bạn, được gọi là phế nang. Các phế nang chứa đầy dịch hoặc mủ, gây khó thở.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("9", "Bệnh lao", "Bệnh lao (TB) là một bệnh truyền nhiễm thường do vi khuẩn Mycobacterium tuberculosis (MTB) gây ra. Bệnh lao thường ảnh hưởng đến phổi, nhưng cũng có thể ảnh hưởng đến các bộ phận khác của cơ thể. Hầu hết các trường hợp nhiễm trùng không có triệu chứng, trong trường hợp đó, nó được gọi là bệnh lao tiềm ẩn.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("10", "Covid 19", "COVID-19 (từ tiếng Anh: coronavirus disease 2019 nghĩa là bệnh virus corona 2019)là một bệnh đường hô hấp cấp tính truyền nhiễm gây ra bởi chủng virus corona SARS-CoV-2. Bệnh được phát hiện lần đầu tiên trong đại dịch COVID-19 năm 2019–2020.", new Date(), new Date(), 1));
+
 
     //adivse of 9 disease
 //        addDataAdvise(new Advise("id", "Tham khảo ý kiến bệnh viện gần nhất", new Date(), new Date(), 1));

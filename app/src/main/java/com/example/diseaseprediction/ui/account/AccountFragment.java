@@ -2,25 +2,25 @@ package com.example.diseaseprediction.ui.account;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -55,11 +55,13 @@ public class AccountFragment extends Fragment {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
+    private TextInputLayout account_txt_title_name, account_txt_title_gender, account_txt_title_phone, account_txt_title_email, account_txt_title_address;
+    private AutoCompleteTextView account_spinner_gender;
+    ArrayAdapter genderAdapter;
+
     private Button accout_btn_edit, accout_btn_edit_done;
-    private EditText account_edit_txt_name, account_edit_txt_phone, account_edit_txt_email, account_edit_txt_address;
-    private TextView account_txt_name, account_txt_phone, account_txt_email, account_txt_address;
     private CircleImageView account_img_avatar;
-    private Spinner account_spinner_gender;
+
 
     public AccountFragment() {
         // Required empty public constructor
@@ -108,14 +110,15 @@ public class AccountFragment extends Fragment {
         findView(view);
         //get data and load it to UI
         getDataForUI();
-
+        //Set disable edit
+        disableEdit();
         //Click button edit
         accout_btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setEditVisibility();
-                accout_btn_edit.setVisibility(View.GONE);
+                enableEdit();
                 accout_btn_edit_done.setVisibility(View.VISIBLE);
+                accout_btn_edit.setVisibility(View.GONE);
             }
         });
         //If edit done
@@ -134,39 +137,18 @@ public class AccountFragment extends Fragment {
     /**
      * Check empty edit text and spinner
      * Error: 1 | Normal: 0
+     *
      * @return
      */
     private int checkEmpty() {
-        if (!account_edit_txt_name.getText().toString().equals("") &&
-                !account_edit_txt_phone.getText().toString().equals("") &&
-                !account_edit_txt_email.getText().toString().equals("") &&
-                !account_edit_txt_address.getText().toString().equals("") &&
-                account_spinner_gender.getSelectedItemPosition() != 0) {
-            if (account_spinner_gender.getSelectedItemPosition() != 0) {
-                //Clear error icon
-                ((TextView) account_spinner_gender.getSelectedView()).setError(null);
-            }
-            //Default color
-            account_edit_txt_name.setHintTextColor(Color.rgb(128, 128, 128));
-            account_edit_txt_phone.setHintTextColor(Color.rgb(128, 128, 128));
-            account_edit_txt_email.setHintTextColor(Color.rgb(128, 128, 128));
-            account_edit_txt_address.setHintTextColor(Color.rgb(128, 128, 128));
+        if (!account_txt_title_name.getEditText().getText().toString().equals("") &&
+                !account_txt_title_phone.getEditText().getText().toString().equals("") &&
+                !account_txt_title_email.getEditText().getText().toString().equals("") &&
+                !account_txt_title_address.getEditText().getText().toString().equals("") &&
+                !account_spinner_gender.getText().toString().isEmpty()) {
             return 0;
         } else {
-            if (account_spinner_gender.getSelectedItemPosition() == 0) {
-                //Set error icon
-                ((TextView) account_spinner_gender.getSelectedView()).setError("Error message");
-            }
-            //Set hint error message
-            account_edit_txt_name.setHint(getString(R.string.default_empty_name));
-            account_edit_txt_phone.setHint(getString(R.string.default_empty_phone));
-            account_edit_txt_email.setHint(getString(R.string.default_empty_email));
-            account_edit_txt_address.setHint(getString(R.string.default_empty_address));
-            //Set color warning
-            account_edit_txt_name.setHintTextColor(Color.RED);
-            account_edit_txt_phone.setHintTextColor(Color.RED);
-            account_edit_txt_email.setHintTextColor(Color.RED);
-            account_edit_txt_address.setHintTextColor(Color.RED);
+            showErrorMess();
             return 1;
         }
     }
@@ -183,9 +165,9 @@ public class AccountFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 updateValue();
                 //Set UI
-                setViewVisibility();
                 accout_btn_edit_done.setVisibility(View.GONE);
                 accout_btn_edit.setVisibility(View.VISIBLE);
+                disableEdit();
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
@@ -200,67 +182,81 @@ public class AccountFragment extends Fragment {
 
     /**
      * Find view by ID
+     *
      * @param view
      */
     private void findView(View view) {
         //Button
         accout_btn_edit = view.findViewById(R.id.accout_btn_edit);
         accout_btn_edit_done = view.findViewById(R.id.accout_btn_edit_done);
-        //Edit text
-        account_edit_txt_name = view.findViewById(R.id.account_edit_txt_name);
-        account_edit_txt_phone = view.findViewById(R.id.account_edit_txt_phone);
-        account_edit_txt_email = view.findViewById(R.id.account_edit_txt_email);
-        account_edit_txt_address = view.findViewById(R.id.account_edit_txt_address);
-        //Text view
-        account_txt_name = view.findViewById(R.id.account_txt_name);
-        account_txt_phone = view.findViewById(R.id.account_txt_phone);
-        account_txt_email = view.findViewById(R.id.account_txt_email);
-        account_txt_address = view.findViewById(R.id.account_txt_address);
+
+        //Find view
+        account_txt_title_name = view.findViewById(R.id.account_txt_title_name);
+        account_txt_title_gender = view.findViewById(R.id.account_txt_title_gender);
+        account_txt_title_phone = view.findViewById(R.id.account_txt_title_phone);
+        account_txt_title_email = view.findViewById(R.id.account_txt_title_email);
+        account_txt_title_address = view.findViewById(R.id.account_txt_title_address);
         account_img_avatar = view.findViewById(R.id.account_img_avatar);
+
+        //Set event for layout
+        account_txt_title_name.getEditText().addTextChangedListener(clearErrorOnTyping(account_txt_title_name));
+        account_txt_title_gender.getEditText().addTextChangedListener(clearErrorOnTyping(account_txt_title_gender));
+        account_txt_title_phone.getEditText().addTextChangedListener(clearErrorOnTyping(account_txt_title_phone));
+        account_txt_title_email.getEditText().addTextChangedListener(clearErrorOnTyping(account_txt_title_email));
+        account_txt_title_address.getEditText().addTextChangedListener(clearErrorOnTyping(account_txt_title_address));
+
         //Spinner
         account_spinner_gender = view.findViewById(R.id.account_spinner_gender);
         //Set data for spinner
         ArrayList<String> gender = new ArrayList<String>();
-        gender.add(getString(R.string.default_choose_gender));
         gender.add(getString(R.string.default_gender_male));
         gender.add(getString(R.string.default_gender_female));
-        ArrayAdapter genderAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, gender);
+        genderAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, gender);
         account_spinner_gender.setAdapter(genderAdapter);
-        account_spinner_gender.setEnabled(false);
     }
 
     /**
-     * Set edit text visible
+     * Show message error when field is empty
      */
-    private void setEditVisibility() {
-        //Edit text
-        account_edit_txt_name.setVisibility(View.VISIBLE);
-        account_edit_txt_phone.setVisibility(View.VISIBLE);
-        account_edit_txt_email.setVisibility(View.VISIBLE);
-        account_edit_txt_address.setVisibility(View.VISIBLE);
-        account_spinner_gender.setEnabled(true);
-        //Text view
-        account_txt_name.setVisibility(View.GONE);
-        account_txt_phone.setVisibility(View.GONE);
-        account_txt_email.setVisibility(View.GONE);
-        account_txt_address.setVisibility(View.GONE);
+    private void showErrorMess(){
+        if (account_txt_title_name.getEditText().getText().toString().isEmpty()){
+            account_txt_title_name.setError(getString(R.string.default_empty_name));
+        }
+        if (account_spinner_gender.getText().toString().isEmpty()){
+            account_txt_title_gender.setError(getString(R.string.default_empty_gender));
+        }
+        if (account_txt_title_phone.getEditText().getText().toString().isEmpty()){
+            account_txt_title_phone.setError(getString(R.string.default_empty_phone));
+        }
+        if (account_txt_title_email.getEditText().getText().toString().isEmpty()){
+            account_txt_title_email.setError(getString(R.string.default_empty_email));
+        }
+        if (account_txt_title_address.getEditText().getText().toString().isEmpty()){
+            account_txt_title_address.setError(getString(R.string.default_empty_address));
+        }
     }
 
     /**
-     * Set view visible
+     * Enable edit
      */
-    private void setViewVisibility() {
+    private void enableEdit() {
         //Edit text
-        account_edit_txt_name.setVisibility(View.GONE);
-        account_edit_txt_phone.setVisibility(View.GONE);
-        account_edit_txt_email.setVisibility(View.GONE);
-        account_edit_txt_address.setVisibility(View.GONE);
-        account_spinner_gender.setEnabled(false);
-        //Text view
-        account_txt_name.setVisibility(View.VISIBLE);
-        account_txt_phone.setVisibility(View.VISIBLE);
-        account_txt_email.setVisibility(View.VISIBLE);
-        account_txt_address.setVisibility(View.VISIBLE);
+        account_txt_title_name.getEditText().setEnabled(true);
+        account_txt_title_gender.getEditText().setEnabled(true);
+        account_txt_title_phone.getEditText().setEnabled(true);
+        account_txt_title_email.getEditText().setEnabled(true);
+        account_txt_title_address.getEditText().setEnabled(true);
+    }
+
+    /**
+     * Disable edit
+     */
+    private void disableEdit() {
+        account_txt_title_name.getEditText().setEnabled(false);
+        account_txt_title_gender.getEditText().setEnabled(false);
+        account_txt_title_phone.getEditText().setEnabled(false);
+        account_txt_title_email.getEditText().setEnabled(false);
+        account_txt_title_address.getEditText().setEnabled(false);
     }
 
     /**
@@ -279,47 +275,31 @@ public class AccountFragment extends Fragment {
                     mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
                     //Set name
                     if (!mAccount.getName().equals("Default")) {
-                        account_txt_name.setText(mAccount.getName());
-                        account_edit_txt_name.setText(mAccount.getName());
-                    } else {
-                        account_txt_name.setText(getString(R.string.default_empty_name));
-                        account_edit_txt_name.setHint(getString(R.string.default_empty_name));
+                        account_txt_title_name.getEditText().setText(mAccount.getName());
                     }
 
                     //Set gender
-                    if (mAccount.getGender() == 1) {
-                        account_spinner_gender.setSelection(1);
-                    } else if (mAccount.getGender() == 2) {
-                        account_spinner_gender.setSelection(2);
-                    } else {
-                        account_spinner_gender.setSelection(0);
+                    if (mAccount.getGender() == 0) {
+                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(0).toString());
+                        genderAdapter.getFilter().filter(null);
+                    } else if (mAccount.getGender() == 1) {
+                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
+                        genderAdapter.getFilter().filter(null);
                     }
 
                     //Set phone
                     if (!mAccount.getPhone().equals("Default")) {
-                        account_txt_phone.setText(mAccount.getPhone());
-                        account_edit_txt_phone.setText(mAccount.getPhone());
-                    } else {
-                        account_txt_phone.setText(getString(R.string.default_empty_phone));
-                        account_edit_txt_phone.setHint(getString(R.string.default_empty_phone));
+                        account_txt_title_phone.getEditText().setText(mAccount.getPhone());
                     }
 
                     //Set email
                     if (!mAccount.getEmail().equals("Default")) {
-                        account_txt_email.setText(mAccount.getEmail());
-                        account_edit_txt_email.setText(mAccount.getEmail());
-                    } else {
-                        account_txt_email.setText(getString(R.string.default_empty_email));
-                        account_edit_txt_email.setHint(getString(R.string.default_empty_email));
+                        account_txt_title_email.getEditText().setText(mAccount.getEmail());
                     }
 
                     //Set address
                     if (!mAccount.getAddress().equals("Default")) {
-                        account_txt_address.setText(mAccount.getAddress());
-                        account_edit_txt_address.setText(mAccount.getAddress());
-                    } else {
-                        account_txt_address.setText(getString(R.string.default_empty_address));
-                        account_edit_txt_address.setHint(getString(R.string.default_empty_address));
+                        account_txt_title_address.getEditText().setText(mAccount.getAddress());
                     }
 
                     //Set image
@@ -342,54 +322,70 @@ public class AccountFragment extends Fragment {
     }
 
     /**
+     * Create a {@link TextWatcher} to clear {@link TextInputLayout} error notification
+     *
+     * @return a {@link TextWatcher}
+     */
+    private TextWatcher clearErrorOnTyping(TextInputLayout layout) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                layout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+    }
+
+    /**
      * Update value to database
      * Then update all text view
      */
     private void updateValue() {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
         //Name
-        if (account_edit_txt_name.getText().toString().equals("")) {
+        if (account_txt_title_name.getEditText().getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("name").setValue("Default");
-            account_txt_name.setText(getString(R.string.default_empty_name));
         } else {
-            mRef.child(fUser.getUid()).child("name").setValue(account_edit_txt_name.getText().toString());
-            account_txt_name.setText(account_edit_txt_name.getText().toString());
+            mRef.child(fUser.getUid()).child("name").setValue(account_txt_title_name.getEditText().getText().toString());
         }
 
         //Gender
-        if (account_spinner_gender.getSelectedItemPosition() == 1) {
+        if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(0).toString())) {
+            mRef.child(fUser.getUid()).child("gender").setValue(0);
+        } else if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(1).toString())) {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
-        } else if (account_spinner_gender.getSelectedItemPosition() == 2) {
-            mRef.child(fUser.getUid()).child("gender").setValue(2);
         } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }
 
         //Phone
-        if (account_edit_txt_phone.getText().toString().equals("")) {
+        if (account_txt_title_phone.getEditText().getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("phone").setValue("Default");
-            account_txt_phone.setText(getString(R.string.default_empty_phone));
         } else {
-            mRef.child(fUser.getUid()).child("phone").setValue(account_edit_txt_phone.getText().toString());
-            account_txt_phone.setText(account_edit_txt_phone.getText().toString());
+            mRef.child(fUser.getUid()).child("phone").setValue(account_txt_title_phone.getEditText().getText().toString());
         }
 
         //email
-        if (account_edit_txt_email.getText().toString().equals("")) {
+        if (account_txt_title_email.getEditText().getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("email").setValue("Default");
-            account_txt_email.setText(getString(R.string.default_empty_email));
         } else {
-            mRef.child(fUser.getUid()).child("email").setValue(account_edit_txt_email.getText().toString());
-            account_txt_email.setText(account_edit_txt_email.getText().toString());
+            mRef.child(fUser.getUid()).child("email").setValue(account_txt_title_email.getEditText().getText().toString());
         }
 
         //address
-        if (account_edit_txt_address.getText().toString().equals("")) {
+        if (account_txt_title_address.getEditText().getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("address").setValue("Default");
-            account_txt_address.setText(getString(R.string.default_empty_address));
         } else {
-            mRef.child(fUser.getUid()).child("address").setValue(account_edit_txt_address.getText().toString());
-            account_txt_address.setText(account_edit_txt_address.getText().toString());
+            mRef.child(fUser.getUid()).child("address").setValue(account_txt_title_address.getEditText().getText().toString());
         }
     }
 }
