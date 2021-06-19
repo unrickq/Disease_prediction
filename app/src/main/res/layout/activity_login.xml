@@ -76,7 +76,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_eTxt_user_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -84,6 +84,7 @@
             android:layout_marginEnd="16dp"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
+            app:boxBackgroundColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/login_img_next"
             app:layout_constraintStart_toEndOf="@+id/login_txt_country_code"
             app:layout_constraintTop_toBottomOf="@+id/login_txt_phone_login">

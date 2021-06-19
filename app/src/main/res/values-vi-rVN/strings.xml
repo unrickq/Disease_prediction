@@ -113,4 +113,10 @@
     <string name="code_verify_re_send">Không hoạt động? Gửi cho tôi một mã khác</string>
     <string name="error_field_empty">Không được để trống</string>
     <string name="login_phone_login">Đăng nhập bằng số điện thoại</string>
+    <string name="code_verify_error_code_invalid">Mã xác nhận không chính xác!</string>
+    <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
+    <string name="code_verify_exception_phone_invalid">Đã có lỗi xảy ra trong quá trình xử lý số điện thoại! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
+    <string name="code_verify_exception_device_blocked">Thiết bị của bạn đã bị chặn do đã cố gắng đăng nhập quá nhiều lần! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
+    <string name="code_verify_exception_verification_failed_unknown">Đã có lỗi trong quá trình xác thực! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
+    <string name="code_verify_txt_note">Tin nhắn SMS chưa mã xác nhận đã được gửi tới điện thoại của bạn\nXin hãy kiểm tra tin nhắn của chúng tôi trong ứng dụng Nhắn tin của bạn</string>
 </resources>

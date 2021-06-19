@@ -37,6 +37,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar" />
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/code_verify_txt_note"
+        app:layout_constraintTop_toBottomOf="@id/code_verify_txt_title"
+        app:layout_constraintStart_toStartOf="@id/code_verify_txt_title"
+        app:layout_constraintEnd_toEndOf="@id/code_verify_img_next"
+        android:layout_marginTop="16dp"
+        android:text="@string/code_verify_txt_note" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/code_verify_edit_txt_code_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -48,7 +58,7 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toStartOf="@id/code_verify_img_next"
         app:layout_constraintStart_toStartOf="@id/code_verify_txt_title"
-        app:layout_constraintTop_toBottomOf="@+id/code_verify_txt_title">
+        app:layout_constraintTop_toBottomOf="@+id/code_verify_txt_note">
 
         <EditText
             android:id="@+id/code_verify_edit_txt_code"

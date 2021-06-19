@@ -1,8 +1,5 @@
 package com.example.diseaseprediction;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +10,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.object.Account;
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,6 +38,7 @@ public class AccountInfo extends AppCompatActivity {
     private Button account_info_btn_edit_done;
     private AutoCompleteTextView account_info_spinner_gender;
     private ArrayAdapter genderAdapter;
+    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,10 @@ public class AccountInfo extends AppCompatActivity {
         setContentView(R.layout.activity_account_info);
         //Get current user
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //getting mobile number from the previous activity
+        Intent intent = getIntent();
+        phoneNumber = intent.getStringExtra(Login.INTENT_MOBILE);
 
         //Find view
         setView();

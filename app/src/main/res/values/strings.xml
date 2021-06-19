@@ -113,9 +113,17 @@
     <string name="code_verify_txt_title">Enter verification code</string>
     <string name="code_verify_edit_txt_code">Verification code</string>
     <string name="code_verify_re_send">Didn\'t work? Send me another code</string>
+    <string name="code_verify_error_code_invalid">Verification code is incorrect!</string>
+    <string name="code_verify_exception_phone_invalid">Error in phone number processing! \nPlease contact the developer for assistance!</string>
+    <string name="code_verify_exception_device_blocked">Your device has been blocked due to too much log in attempt! \nPlease contact the developer for assistance!</string>
+    <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease contact the developer for assistance!</string>
+
 
     <string name="error_field_empty">Field can\'t be empty!</string>
+    <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="login_phone_login">Log in with phone number</string>
+    <string name="code_verify_txt_note">A SMS message contains verification code had been sent to your phone\nPlease check for our message in your Messaging app</string>
+
 
     <string-array name="spinner_language">
         <item>EN</item>
