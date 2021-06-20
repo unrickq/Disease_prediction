@@ -45,6 +45,8 @@ public class Login extends AppCompatActivity {
   Button login_btn_login_by_google;
 
   private static final String TAG = "GoogleActivity";
+  public static final String INTENT_MOBILE = "mobile";
+
   private static final int RC_SIGN_IN = 9001;
   private GoogleSignInClient mGoogleSignInClient;
   private DatabaseReference mRef;
@@ -312,8 +314,28 @@ public class Login extends AppCompatActivity {
   }
 
   private void signInWithPhone() {
-    Intent intent = new Intent(Login.this, CodeVerify.class);
-    startActivity(intent);
+    // Check input
+    if (checkPhoneNumberInput()) {
+      String phone = phoneInputLayout.getEditText().getText().toString();
+      Intent intent = new Intent(Login.this, CodeVerify.class);
+      intent.putExtra(INTENT_MOBILE, addCountryCode(phone));
+      startActivity(intent);
+    }
+  }
+
+  /**
+   * Add country code to phone number
+   *
+   * @param phone raw phone number
+   * @return phone number with country code
+   */
+  private String addCountryCode(String phone) {
+    // if user input 0123 -> +84 123
+    if (phone.startsWith("0")) {
+      return "+84" + phone.substring(1);
+    } else {
+      return "+84" + phone;
+    }
   }
 
 }
