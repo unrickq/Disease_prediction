@@ -33,14 +33,18 @@
     <string name="account_txt_email">TextView</string>
     <string name="account_btn_edit">Edit</string>
     <string name="account_btn_edit_done">Done</string>
+
     <string name="consultation_list_txt_title">Your consultation</string>
+
     <string name="home_txt_title">What is your disease ?</string>
     <string name="home_txt_prediction_title">Your disease</string>
     <string name="home_txt_prediction_see_more">See more</string>
     <string name="home_txt_consultation_title">Your consultation</string>
     <string name="home_txt_consultation_see_more">See more</string>
     <string name="home_search_view">Enter your symptoms</string>
+
     <string name="login_txt_title">Log in</string>
+    <string name="login_txt_title_doctor">Log in</string>
     <string name="login_eTxt_user">Phone number</string>
     <string name="login_ask_acc">You don\'t have an account ?</string>
     <string name="login_sign_up">Sign up</string>
@@ -48,6 +52,10 @@
     <string name="login_btn_login">Google</string>
     <string name="login_started_txt_slogan">Disease Prediction</string>
     <string name="login_started_btn_next">Let\'s go</string>
+    <string name="login_txt_by_type">Login as user</string>
+    <string name="login_txt_by_type_doctor">Only choose here if you are a doctor</string>
+    <string name="login_phone_login">Log in with phone number</string>
+
     <string name="prediction_txt_acc_name">TextView</string>
     <string name="prediction_txt_acc_sex">TextView</string>
     <string name="prediction_txt_acc_phone">TextView</string>
@@ -62,10 +70,12 @@
     <string name="prediction_txt_advice_title">Advice</string>
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">Your prediction</string>
+
     <string name="settings_txt_turn_notification">Notification</string>
     <string name="settings_txt_select_language">Language</string>
     <string name="settings_txt_title_version">Version</string>
     <string name="settings_txt_version">12.2</string>
+
     <string name="item_alert_txt_title">Notification</string>
     <string name="item_alert_txt_content">Message</string>
     <string name="item_alert_txt_time">09:23</string>
@@ -126,15 +136,11 @@
     <string name="code_verify_exception_phone_invalid">Error in phone number processing! \nPlease contact the developer for assistance!</string>
     <string name="code_verify_exception_device_blocked">Your device has been blocked due to too much log in attempt! \nPlease contact the developer for assistance!</string>
     <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease contact the developer for assistance!</string>
-
+    <string name="code_verify_txt_note">A SMS message contains verification code had been sent to your phone\nPlease check for our message in your Messaging app</string>
 
     <string name="error_field_empty">Field can\'t be empty!</string>
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="error_unknown_contactDev">An error happened. Please contact the developer for assistance!</string>
-    <string name="login_phone_login">Log in with phone number</string>
-    <string name="code_verify_txt_note">A SMS message contains verification code had been sent to your phone\nPlease check for our message in your Messaging app</string>
-
-
 
     <string-array name="spinner_language">
         <item>EN</item>

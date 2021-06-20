@@ -180,8 +180,8 @@ public class AccountInfoDoctor extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
-//                Intent intent = new Intent(AccountInfoDoctor.this, MainActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(AccountInfoDoctor.this, AccountInfoDoctor.class);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
@@ -263,6 +263,18 @@ public class AccountInfoDoctor extends AppCompatActivity {
     private void saveData() {
         mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
 
+        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().equals("")){
+            mRef.child(fUser.getUid()).child("experience").setValue(-1);
+        }else{
+            mRef.child(fUser.getUid()).child("experience").setValue(Double.valueOf(account_info_doctor_txt_title_experience.getEditText().getText().toString()));
+        }
+
+        if (account_info_doctor_txt_title_description.getEditText().getText().toString().equals("")) {
+            mRef.child(fUser.getUid()).child("shortDescription").setValue("Default");
+        } else {
+            mRef.child(fUser.getUid()).child("shortDescription").setValue(account_info_doctor_txt_title_description.getEditText().getText().toString());
+        }
+
         if (account_info_doctor_spinner_specialization.getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("specializationID").setValue("Default");
         } else {
@@ -287,18 +299,6 @@ public class AccountInfoDoctor extends AppCompatActivity {
                 }
 
             });
-        }
-
-        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().equals("")){
-            mRef.child(fUser.getUid()).child("experience").setValue(-1);
-        }else{
-            mRef.child(fUser.getUid()).child("experience").setValue(Double.valueOf(account_info_doctor_txt_title_experience.getEditText().getText().toString()));
-        }
-
-        if (account_info_doctor_txt_title_description.getEditText().getText().toString().equals("")) {
-            mRef.child(fUser.getUid()).child("shortDescription").setValue("Default");
-        } else {
-            mRef.child(fUser.getUid()).child("shortDescription").setValue(account_info_doctor_txt_title_description.getEditText().getText().toString());
         }
 
     }

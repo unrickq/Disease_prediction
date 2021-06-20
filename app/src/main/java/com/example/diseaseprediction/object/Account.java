@@ -25,7 +25,7 @@ public class Account {
    * Create new Account
    *
    * @param accountId  Account ID
-   * @param typeID     Account Type
+   * @param typeID     0: Doctor | 1: User
    * @param phone      Phone number
    * @param name       User name
    * @param gender     Gender

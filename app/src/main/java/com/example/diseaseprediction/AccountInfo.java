@@ -20,6 +20,7 @@ import com.example.diseaseprediction.object.Account;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -214,8 +215,33 @@ public class AccountInfo extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
-                Intent intent = new Intent(AccountInfo.this, MainActivity.class);
-                startActivity(intent);
+                mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        try {
+                            if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                                Intent intent = new Intent(AccountInfo.this, AccountInfoDoctor.class);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(AccountInfo.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, "Move to doctor information: TypeID Null", e);
+                            Toast.makeText(AccountInfo.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().signOut();
+                            Intent i = new Intent(AccountInfo.this, Login.class);
+                            startActivity(i);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
