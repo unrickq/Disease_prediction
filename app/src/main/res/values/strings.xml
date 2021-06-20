@@ -89,6 +89,9 @@
     <string name="default_empty_phone">Please enter your phone</string>
     <string name="default_empty_address">Please enter your address</string>
     <string name="default_empty_code">Please enter your code</string>
+    <string name="default_empty_experience">Please enter your year experience</string>
+    <string name="default_empty_description">Please enter some description about you</string>
+    <string name="default_empty_specialization">Please select specialization</string>
 
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
@@ -109,6 +112,10 @@
 
     <string name="account_info_btn_done">Done</string>
     <string name="account_info_txt_title">Personal Infomation</string>
+    <string name="account_info_doctor_experience">Experience (Year)</string>
+    <string name="account_info_doctor_specialization">Specialization</string>
+    <string name="account_info_doctor_description">Short description</string>
+    <string name="account_info_doctor_txt_title">Doctor Information</string>
 
     <string name="code_verify_txt_title">Enter verification code</string>
     <string name="code_verify_edit_txt_code">Verification code</string>
@@ -116,6 +123,7 @@
 
     <string name="error_field_empty">Field can\'t be empty!</string>
     <string name="login_phone_login">Log in with phone number</string>
+
 
     <string-array name="spinner_language">
         <item>EN</item>

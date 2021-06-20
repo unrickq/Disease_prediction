@@ -5,9 +5,8 @@ package com.example.diseaseprediction.object;
  */
 public class DoctorInfo {
     private String accountID;
-    private String specialist;
-    private String academicLevel;
-    private String certificate;
+    private String specializationID;
+    private String shortDescription;
     private double experience;
     private int status;
 
@@ -19,18 +18,16 @@ public class DoctorInfo {
 
     /**
      * Create doctor information
-     * @param accountID     Account ID
-     * @param specialist    Special list
-     * @param academicLevel Academic level
-     * @param certificate   Certificate
-     * @param experience    Experience
-     * @param status        0: Deleted | 1: Normal
+     * @param accountID         Account ID
+     * @param specializationID  Specialization ID
+     * @param shortDescription  shortDescription
+     * @param experience        Experience
+     * @param status            0: Deleted | 1: Normal
      */
-    public DoctorInfo(String accountID, String specialist, String academicLevel, String certificate, double experience, int status) {
+    public DoctorInfo(String accountID, String specializationID, String shortDescription, double experience, int status) {
         this.accountID = accountID;
-        this.specialist = specialist;
-        this.academicLevel = academicLevel;
-        this.certificate = certificate;
+        this.specializationID = specializationID;
+        this.shortDescription = shortDescription;
         this.experience = experience;
         this.status = status;
     }
@@ -52,51 +49,35 @@ public class DoctorInfo {
     }
 
     /**
-     * Get Special list
-     * @return Special list
+     * Get Specialization ID
+     * @return Specialization ID
      */
-    public String getSpecialist() {
-        return specialist;
+    public String getSpecializationID() {
+        return specializationID;
     }
 
     /**
-     * Set Special list
-     * @param specialist Special list
+     * Set Specialization ID
+     * @param specializationID Specialization ID
      */
-    public void setSpecialist(String specialist) {
-        this.specialist = specialist;
+    public void setSpecializationID(String specializationID) {
+        this.specializationID = specializationID;
     }
 
     /**
-     * Get Academic level
-     * @return Academic level
+     * Get short description
+     * @return Short description
      */
-    public String getAcademicLevel() {
-        return academicLevel;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
     /**
-     * Set Academic level
-     * @param academicLevel
+     * Set short description
+     * @param shortDescription short description
      */
-    public void setAcademicLevel(String academicLevel) {
-        this.academicLevel = academicLevel;
-    }
-
-    /**
-     * Get Certificate
-     * @return Certificate
-     */
-    public String getCertificate() {
-        return certificate;
-    }
-
-    /**
-     * Set Certificate
-     * @param certificate Certificate
-     */
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     /**
@@ -109,7 +90,7 @@ public class DoctorInfo {
 
     /**
      * Set Experience
-     * @param experience
+     * @param experience Experience
      */
     public void setExperience(double experience) {
         this.experience = experience;

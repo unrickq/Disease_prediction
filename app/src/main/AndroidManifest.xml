@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
-        <activity android:name=".CodeVerify"></activity>
+        <activity android:name=".Login"></activity>
+        <activity android:name=".CodeVerify" />
         <activity android:name=".test" />
         <activity android:name=".PredicitonResult" />
         <activity android:name=".Chat" />
@@ -21,7 +22,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
-        <activity android:name=".Login">
+        <activity android:name=".AccountInfoDoctor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

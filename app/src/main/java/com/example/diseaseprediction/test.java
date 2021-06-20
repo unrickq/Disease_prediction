@@ -22,6 +22,7 @@ import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Advise;
 import com.example.diseaseprediction.object.Disease;
+import com.example.diseaseprediction.object.DoctorSpecialization;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.android.material.textfield.TextInputLayout;
@@ -59,18 +60,22 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        testlayout = findViewById(R.id.testlayout);
-        testlayout2 = findViewById(R.id.testlayout2);
+        addDataSpecialization(new DoctorSpecialization("1","Respiratory",1));
+        addDataSpecialization(new DoctorSpecialization("1","Hepatology",1));
+        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",1));
 
-        spinnerr = findViewById(R.id.spinnerr);
-        ArrayList<String> gender = new ArrayList<String>();
-        gender.add(getString(R.string.default_choose_gender));
-        gender.add(getString(R.string.default_gender_male));
-        gender.add(getString(R.string.default_gender_female));
-        ArrayAdapter genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
-        spinnerr.setAdapter(genderAdapter);
-        spinnerr.setText(spinnerr.getAdapter().getItem(0).toString());
-        genderAdapter.getFilter().filter(null);
+//        testlayout = findViewById(R.id.testlayout);
+//        testlayout2 = findViewById(R.id.testlayout2);
+//
+//        spinnerr = findViewById(R.id.spinnerr);
+//        ArrayList<String> gender = new ArrayList<String>();
+//        gender.add(getString(R.string.default_choose_gender));
+//        gender.add(getString(R.string.default_gender_male));
+//        gender.add(getString(R.string.default_gender_female));
+//        ArrayAdapter genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
+//        spinnerr.setAdapter(genderAdapter);
+//        spinnerr.setText(spinnerr.getAdapter().getItem(0).toString());
+//        genderAdapter.getFilter().filter(null);
 
 //        recyclerView = findViewById(R.id.recycler);
 //        recyclerView.setHasFixedSize(true);
@@ -78,22 +83,22 @@ public class test extends AppCompatActivity {
 
 //        mUser = new ArrayList<>();
 //      txt = findViewById(R.id.txt1);
-        btn = findViewById(R.id.btn1);
-
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(spinnerr.getText().toString().equals(spinnerr.getAdapter().getItem(0).toString())){
-                    testlayout.setError("loi roi");
-                    testlayout2.setError("loi roi");
-                }else{
-                    testlayout.setError(null);
-                    testlayout2.setError(null);
-                }
-                System.out.println("chon"+ testlayout.getEditText().getText().toString());
-            }
-        });
+//        btn = findViewById(R.id.btn1);
+//
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(spinnerr.getText().toString().equals(spinnerr.getAdapter().getItem(0).toString())){
+//                    testlayout.setError("loi roi");
+//                    testlayout2.setError("loi roi");
+//                }else{
+//                    testlayout.setError(null);
+//                    testlayout2.setError(null);
+//                }
+//                System.out.println("chon"+ testlayout.getEditText().getText().toString());
+//            }
+//        });
 
 
 //
@@ -123,6 +128,22 @@ public class test extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    void addDataSpecialization(DoctorSpecialization sp){
+        myRef = FirebaseDatabase.getInstance().getReference("Specialization");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                sp.setSpecializationID(myRef.push().getKey());
+                myRef.child(sp.getSpecializationID()).setValue(sp);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     void addDataAdvise(Advise ad){

@@ -86,6 +86,9 @@
     <string name="default_empty_phone">Vui lòng nhập số điện thoại của bạn</string>
     <string name="default_empty_address">Vui lòng nhập địa chỉ của bạn</string>
     <string name="default_empty_code">Vui lòng nhập mã xác minh của bạn</string>
+    <string name="default_empty_experience">Vui lòng nhập số năm kinh nghiệm</string>
+    <string name="default_empty_description">Vui lòng nhập mô tả ngắn về bạn</string>
+    <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
 
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>
@@ -107,10 +110,15 @@
 
     <string name="account_info_btn_done">Xong</string>
     <string name="account_info_txt_title">Thông tin của bạn</string>
+    <string name="account_info_doctor_experience">Kinh nghiệm (Năm)</string>
+    <string name="account_info_doctor_specialization">Chuyên khoa</string>
+    <string name="account_info_doctor_description">Mô tả ngắn về bạn</string>
+    <string name="account_info_doctor_txt_title">Thông tin bác sĩ</string>
 
     <string name="code_verify_txt_title">Nhập mã xác minh của bạn</string>
     <string name="code_verify_edit_txt_code">Mã xác minh của bạn</string>
     <string name="code_verify_re_send">Không hoạt động? Gửi cho tôi một mã khác</string>
     <string name="error_field_empty">Không được để trống</string>
     <string name="login_phone_login">Đăng nhập bằng số điện thoại</string>
+
 </resources>
