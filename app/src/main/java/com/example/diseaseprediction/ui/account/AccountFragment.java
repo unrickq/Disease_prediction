@@ -3,18 +3,19 @@ package com.example.diseaseprediction.ui.account;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.MainActivity;
@@ -37,20 +38,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public class AccountFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private static final String TAG = "AccountFragment";
     private Account mAccount;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -67,31 +59,10 @@ public class AccountFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         //Set toolbar
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_account));
@@ -125,7 +96,7 @@ public class AccountFragment extends Fragment {
         accout_btn_edit_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkEmpty() == 0) {
+                if (checkEmpty()) {
                     dialogConfirm();
                 }
             }
@@ -136,21 +107,39 @@ public class AccountFragment extends Fragment {
 
     /**
      * Check empty edit text and spinner
-     * Error: 1 | Normal: 0
      *
-     * @return
+     * @return true if all input valid
      */
-    private int checkEmpty() {
-        if (!account_txt_title_name.getEditText().getText().toString().equals("") &&
-                !account_txt_title_phone.getEditText().getText().toString().equals("") &&
-                !account_txt_title_email.getEditText().getText().toString().equals("") &&
-                !account_txt_title_address.getEditText().getText().toString().equals("") &&
-                !account_spinner_gender.getText().toString().isEmpty()) {
-            return 0;
-        } else {
-            showErrorMess();
-            return 1;
+    private boolean checkEmpty() {
+        boolean isValid = true;
+        try {
+            if (account_txt_title_name.getEditText().getText().toString().trim().isEmpty()) {
+                account_txt_title_name.setError(getString(R.string.default_empty_name));
+                isValid = false;
+            }
+            if (account_spinner_gender.getText().toString().trim().isEmpty()) {
+                account_spinner_gender.setError(getString(R.string.default_empty_gender));
+                isValid = false;
+            }
+            if (account_txt_title_phone.getEditText().getText().toString().trim().isEmpty()) {
+                account_txt_title_phone.setError(getString(R.string.default_empty_phone));
+                isValid = false;
+            }
+            if (account_txt_title_email.getEditText().getText().toString().trim().isEmpty()) {
+                account_txt_title_email.setError(getString(R.string.default_empty_email));
+                isValid = false;
+            }
+            if (account_txt_title_address.getEditText().getText().toString().trim().isEmpty()) {
+                account_txt_title_address.setError(getString(R.string.default_empty_address));
+                isValid = false;
+            }
+
+        } catch (NullPointerException e) {
+            Log.e(TAG, "An EditText is null", e);
+            Toast.makeText(getContext(), getText(R.string.error_unknown_contactDev), Toast.LENGTH_LONG).show();
+            isValid = false;
         }
+        return isValid;
     }
 
     /**
@@ -170,14 +159,14 @@ public class AccountFragment extends Fragment {
                 disableEdit();
             }
         });
-        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
+            new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
         });
-        builder.create();
-        builder.show();
+        builder.create().show();
     }
 
     /**
@@ -211,29 +200,9 @@ public class AccountFragment extends Fragment {
         ArrayList<String> gender = new ArrayList<String>();
         gender.add(getString(R.string.default_gender_male));
         gender.add(getString(R.string.default_gender_female));
+        gender.add(getString(R.string.default_gender_other));
         genderAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, gender);
         account_spinner_gender.setAdapter(genderAdapter);
-    }
-
-    /**
-     * Show message error when field is empty
-     */
-    private void showErrorMess(){
-        if (account_txt_title_name.getEditText().getText().toString().isEmpty()){
-            account_txt_title_name.setError(getString(R.string.default_empty_name));
-        }
-        if (account_spinner_gender.getText().toString().isEmpty()){
-            account_txt_title_gender.setError(getString(R.string.default_empty_gender));
-        }
-        if (account_txt_title_phone.getEditText().getText().toString().isEmpty()){
-            account_txt_title_phone.setError(getString(R.string.default_empty_phone));
-        }
-        if (account_txt_title_email.getEditText().getText().toString().isEmpty()){
-            account_txt_title_email.setError(getString(R.string.default_empty_email));
-        }
-        if (account_txt_title_address.getEditText().getText().toString().isEmpty()){
-            account_txt_title_address.setError(getString(R.string.default_empty_address));
-        }
     }
 
     /**
@@ -284,6 +253,9 @@ public class AccountFragment extends Fragment {
                         genderAdapter.getFilter().filter(null);
                     } else if (mAccount.getGender() == 1) {
                         account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
+                        genderAdapter.getFilter().filter(null);
+                    } else if (mAccount.getGender() == 2) {
+                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(2).toString());
                         genderAdapter.getFilter().filter(null);
                     }
 
@@ -363,6 +335,8 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("gender").setValue(0);
         } else if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(1).toString())) {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
+        } else if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(2).toString())) {
+            mRef.child(fUser.getUid()).child("gender").setValue(2);
         } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }

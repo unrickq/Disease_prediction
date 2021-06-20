@@ -294,6 +294,7 @@ public class CodeVerify extends AppCompatActivity {
                     //check user exist in firebase
                     //if exist then set UI
                     if (snapshot.hasChild(user.getUid())) {
+                      Log.d(TAG, "User exist");
                       mAccount = snapshot.child(user.getUid()).getValue(Account.class);
                       if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
                           mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
@@ -302,12 +303,15 @@ public class CodeVerify extends AppCompatActivity {
                         intent.putExtra(INTENT_MOBILE, phoneNumber);
                         startActivity(intent);
                       } else {
-                        createNewFirebaseAccount(user);
+                        Intent intent = new Intent(CodeVerify.this, MainActivity.class);
+                        startActivity(intent);
                       }
+                    } else {
+                      createNewFirebaseAccount(user);
                     }
                   } catch (NullPointerException e) {
                     Log.e(TAG, "signInWithPhoneAuthCredential: UID Null", e);
-                    Toast.makeText(CodeVerify.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CodeVerify.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_LONG).show();
                   }
                 }
 
@@ -362,7 +366,7 @@ public class CodeVerify extends AppCompatActivity {
   private void createNewFirebaseAccount(FirebaseUser user) {
     //Set default data
     int gender = -1;
-    String phone = "Default";
+    String phone = phoneNumber;
     String address = "Default";
     String email = "Default";
     String name = "Default";

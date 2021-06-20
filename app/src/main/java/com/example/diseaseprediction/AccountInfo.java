@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,11 +32,15 @@ import java.util.ArrayList;
 
 
 public class AccountInfo extends AppCompatActivity {
+
+    private static final String TAG = "AccountInfo";
+
     private Account mAccount;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
-    private TextInputLayout account_info_txt_title_name, account_info_txt_title_gender, account_info_txt_title_phone, account_info_txt_title_email, account_info_txt_title_address;
+    private TextInputLayout account_info_txt_title_name, account_info_txt_title_gender, account_info_txt_title_phone,
+        account_info_txt_title_email, account_info_txt_title_address;
     private Button account_info_btn_edit_done;
     private AutoCompleteTextView account_info_spinner_gender;
     private ArrayAdapter genderAdapter;
@@ -50,6 +56,7 @@ public class AccountInfo extends AppCompatActivity {
         //getting mobile number from the previous activity
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra(Login.INTENT_MOBILE);
+        Log.d(TAG, "Phone:" + phoneNumber);
 
         //Find view
         setView();
@@ -62,7 +69,7 @@ public class AccountInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Check field is empty or not
-                if (checkEmpty() == 0) {
+                if (checkEmpty()) {
                     dialogConfirm();
                 }
             }
@@ -93,8 +100,14 @@ public class AccountInfo extends AppCompatActivity {
         ArrayList<String> gender = new ArrayList<String>();
         gender.add(getString(R.string.default_gender_male));
         gender.add(getString(R.string.default_gender_female));
+        gender.add("Other");
         genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
         account_info_spinner_gender.setAdapter(genderAdapter);
+
+        // If previous activity send phone number => display on edit text
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            account_info_txt_title_phone.getEditText().setText(phoneNumber);
+        }
     }
 
     /**
@@ -122,6 +135,9 @@ public class AccountInfo extends AppCompatActivity {
                         genderAdapter.getFilter().filter(null);
                     } else if (mAccount.getGender() == 1) {
                         account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(1).toString());
+                        genderAdapter.getFilter().filter(null);
+                    } else if (mAccount.getGender() == 2) {
+                        account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(2).toString());
                         genderAdapter.getFilter().filter(null);
                     }
 
@@ -153,42 +169,39 @@ public class AccountInfo extends AppCompatActivity {
 
     /**
      * Check empty edit text and spinner
-     * Error: 1 | Normal: 0
      *
-     * @return
+     * @return true if all input valid
      */
-    private int checkEmpty() {
-        if (!account_info_txt_title_name.getEditText().getText().toString().isEmpty() &&
-                !account_info_txt_title_phone.getEditText().getText().toString().isEmpty() &&
-                !account_info_txt_title_email.getEditText().getText().toString().isEmpty() &&
-                !account_info_txt_title_address.getEditText().getText().toString().isEmpty() &&
-                !account_info_spinner_gender.getText().toString().isEmpty()) {
-            return 0;
-        } else {
-            showErrorMess();
-            return 1;
-        }
-    }
+    private boolean checkEmpty() {
+        boolean isValid = true;
+        try {
+            if (account_info_txt_title_name.getEditText().getText().toString().trim().isEmpty()) {
+                account_info_txt_title_name.setError(getString(R.string.default_empty_name));
+                isValid = false;
+            }
+            if (account_info_spinner_gender.getText().toString().trim().isEmpty()) {
+                account_info_txt_title_gender.setError(getString(R.string.default_empty_gender));
+                isValid = false;
+            }
+            if (account_info_txt_title_phone.getEditText().getText().toString().trim().isEmpty()) {
+                account_info_txt_title_phone.setError(getString(R.string.default_empty_phone));
+                isValid = false;
+            }
+            if (account_info_txt_title_email.getEditText().getText().toString().trim().isEmpty()) {
+                account_info_txt_title_email.setError(getString(R.string.default_empty_email));
+                isValid = false;
+            }
+            if (account_info_txt_title_address.getEditText().getText().toString().trim().isEmpty()) {
+                account_info_txt_title_address.setError(getString(R.string.default_empty_address));
+                isValid = false;
+            }
 
-    /**
-     * Show error message when field is empty
-     */
-    private void showErrorMess(){
-        if (account_info_txt_title_name.getEditText().getText().toString().isEmpty()){
-            account_info_txt_title_name.setError(getString(R.string.default_empty_name));
+        } catch (NullPointerException e) {
+            Log.e(TAG, "An EditText is null", e);
+            Toast.makeText(this, getText(R.string.error_unknown_contactDev), Toast.LENGTH_LONG).show();
+            isValid = false;
         }
-        if (account_info_spinner_gender.getText().toString().isEmpty()){
-            account_info_txt_title_gender.setError(getString(R.string.default_empty_gender));
-        }
-        if (account_info_txt_title_phone.getEditText().getText().toString().isEmpty()){
-            account_info_txt_title_phone.setError(getString(R.string.default_empty_phone));
-        }
-        if (account_info_txt_title_email.getEditText().getText().toString().isEmpty()){
-            account_info_txt_title_email.setError(getString(R.string.default_empty_email));
-        }
-        if (account_info_txt_title_address.getEditText().getText().toString().isEmpty()){
-            account_info_txt_title_address.setError(getString(R.string.default_empty_address));
-        }
+        return isValid;
     }
 
     /**
@@ -208,7 +221,7 @@ public class AccountInfo extends AppCompatActivity {
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+            //Do nothing
             }
         });
         builder.create();
@@ -256,6 +269,8 @@ public class AccountInfo extends AppCompatActivity {
             mRef.child(fUser.getUid()).child("gender").setValue(0);
         } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(1).toString())) {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
+        } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(2).toString())) {
+            mRef.child(fUser.getUid()).child("gender").setValue(2);
         } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }
