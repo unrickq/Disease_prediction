@@ -123,7 +123,7 @@
     <string name="nav_header_txt_acc_name">" Sample"</string>
 
     <string name="account_info_btn_done">Xong</string>
-    <string name="account_info_txt_title">Thông tin của bạn</string>
+    <string name="account_info_txt_title">Thông tin cá nhân</string>
     <string name="account_info_doctor_experience">Kinh nghiệm (Năm)</string>
     <string name="account_info_doctor_specialization">Chuyên khoa</string>
     <string name="account_info_doctor_description">Mô tả ngắn về bạn</string>

@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.diseaseprediction.AccountInfoDoctor;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
@@ -45,19 +45,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AccountFragment extends Fragment {
 
     private static final String TAG = "AccountFragment";
+
+    private DatabaseReference mRef;
+    private FirebaseUser fUser;
+
     private Account mAccount;
     private DoctorInfo mDoctor;
     private DoctorSpecialization ds;
-    private DatabaseReference mRef;
-    private FirebaseUser fUser;
     private ArrayAdapter<DoctorSpecialization> specializationAdapter;
     private ArrayList<DoctorSpecialization> specialization;
+    private ArrayAdapter genderAdapter;
 
     private TextInputLayout account_txt_title_name, account_txt_title_gender, account_txt_title_phone, account_txt_title_email, account_txt_title_address,
             account_doctor_txt_title_experience, account_doctor_txt_title_description, account_doctor_txt_title_specialization;
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
-    ArrayAdapter genderAdapter;
 
+    private LinearLayout account_layout_doctor;
     private Button accout_btn_edit, accout_btn_edit_done;
     private CircleImageView account_img_avatar;
 
@@ -140,6 +143,21 @@ public class AccountFragment extends Fragment {
                 account_txt_title_address.setError(getString(R.string.default_empty_address));
                 isValid = false;
             }
+            //If account type is doctoc
+            if (account_layout_doctor.getVisibility()==View.VISIBLE){
+                if (account_doctor_txt_title_experience.getEditText().getText().toString().trim().isEmpty()) {
+                    account_doctor_txt_title_experience.setError(getString(R.string.default_empty_experience));
+                    isValid = false;
+                }
+                if (account_doctor_txt_title_description.getEditText().getText().toString().trim().isEmpty()) {
+                    account_doctor_txt_title_description.setError(getString(R.string.default_empty_description));
+                    isValid = false;
+                }
+                if (account_doctor_txt_title_specialization.getEditText().getText().toString().trim().isEmpty()) {
+                    account_doctor_txt_title_specialization.setError(getString(R.string.default_empty_specialization));
+                    isValid = false;
+                }
+            }
 
         } catch (NullPointerException e) {
             Log.e(TAG, "An EditText is null", e);
@@ -182,6 +200,7 @@ public class AccountFragment extends Fragment {
      * @param view
      */
     private void findView(View view) {
+        account_layout_doctor = view.findViewById(R.id.account_layout_doctor);
         //Button
         accout_btn_edit = view.findViewById(R.id.accout_btn_edit);
         accout_btn_edit_done = view.findViewById(R.id.accout_btn_edit_done);
@@ -226,22 +245,30 @@ public class AccountFragment extends Fragment {
      */
     private void enableEdit() {
         //Edit text
-        account_txt_title_name.getEditText().setEnabled(true);
-        account_txt_title_gender.getEditText().setEnabled(true);
-        account_txt_title_phone.getEditText().setEnabled(true);
-        account_txt_title_email.getEditText().setEnabled(true);
-        account_txt_title_address.getEditText().setEnabled(true);
+        account_txt_title_name.setEnabled(true);
+        account_txt_title_gender.setEnabled(true);
+        account_txt_title_phone.setEnabled(true);
+        account_txt_title_email.setEnabled(true);
+        account_txt_title_address.setEnabled(true);
+
+        account_doctor_txt_title_experience.setEnabled(true);
+        account_doctor_txt_title_description.setEnabled(true);
+        account_doctor_txt_title_specialization.setEnabled(true);
     }
 
     /**
      * Disable edit
      */
     private void disableEdit() {
-        account_txt_title_name.getEditText().setEnabled(false);
-        account_txt_title_gender.getEditText().setEnabled(false);
-        account_txt_title_phone.getEditText().setEnabled(false);
-        account_txt_title_email.getEditText().setEnabled(false);
-        account_txt_title_address.getEditText().setEnabled(false);
+        account_txt_title_name.setEnabled(false);
+        account_txt_title_gender.setEnabled(false);
+        account_txt_title_phone.setEnabled(false);
+        account_txt_title_email.setEnabled(false);
+        account_txt_title_address.setEnabled(false);
+
+        account_doctor_txt_title_experience.setEnabled(false);
+        account_doctor_txt_title_description.setEnabled(false);
+        account_doctor_txt_title_specialization.setEnabled(false);
     }
 
     /**
@@ -258,6 +285,13 @@ public class AccountFragment extends Fragment {
                 //if exist then set UI
                 if (snapshot.hasChild(fUser.getUid())) {
                     mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
+                    //Set Doctor information by type
+                    if (mAccount.getTypeID()==0){
+                        account_layout_doctor.setVisibility(View.VISIBLE);
+                        loadDataOfDoctor();
+                    }else{
+                        account_layout_doctor.setVisibility(View.GONE);
+                    }
                     //Set name
                     if (!mAccount.getName().equals("Default")) {
                         account_txt_title_name.getEditText().setText(mAccount.getName());
@@ -333,6 +367,7 @@ public class AccountFragment extends Fragment {
         };
     }
 
+
     /**
      * Update value to database
      * Then update all text view
@@ -376,6 +411,10 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("address").setValue("Default");
         } else {
             mRef.child(fUser.getUid()).child("address").setValue(account_txt_title_address.getEditText().getText().toString());
+        }
+
+        if(account_layout_doctor.getVisibility()==View.VISIBLE){
+            saveDataOfDoctor();
         }
     }
 
@@ -439,5 +478,51 @@ public class AccountFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Save data to firebase
+     */
+    private void saveDataOfDoctor() {
+        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+
+        if (account_doctor_txt_title_experience.getEditText().getText().toString().equals("")) {
+            mRef.child(fUser.getUid()).child("experience").setValue(-1);
+        } else {
+            mRef.child(fUser.getUid()).child("experience").setValue(Double.valueOf(account_doctor_txt_title_experience.getEditText().getText().toString()));
+        }
+
+        if (account_doctor_txt_title_description.getEditText().getText().toString().equals("")) {
+            mRef.child(fUser.getUid()).child("shortDescription").setValue("Default");
+        } else {
+            mRef.child(fUser.getUid()).child("shortDescription").setValue(account_doctor_txt_title_description.getEditText().getText().toString());
+        }
+
+        if (account_doctor_spinner_specialization.getText().toString().equals("")) {
+            mRef.child(fUser.getUid()).child("specializationID").setValue("Default");
+        } else {
+            mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot sh : snapshot.getChildren()) {
+                        ds = sh.getValue(DoctorSpecialization.class);
+                        assert ds != null;
+                        if (ds.getName().equals(account_doctor_spinner_specialization.getText().toString())) {
+                            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+                            mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+
+            });
+        }
+
     }
 }

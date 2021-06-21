@@ -44,10 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
-    private AppBarConfiguration mAppBarConfiguration;
+
     private Account mAccount;
     private DoctorInfo mDoctor;
 
+    private AppBarConfiguration mAppBarConfiguration;
     private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
     private CircleImageView nav_header_avatar;
     private NavigationView nav_view;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Get current user
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //Check data of account
         checkDataOfAccount(fUser);
         //Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);

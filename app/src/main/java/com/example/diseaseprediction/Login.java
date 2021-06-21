@@ -70,6 +70,7 @@ public class Login extends AppCompatActivity {
         login_txt_by_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Send type account 0:doctor | 1:user
                 Intent i = new Intent(Login.this, Login.class);
                 if (type == 0) {
                     i.putExtra("type", 1);
@@ -108,6 +109,9 @@ public class Login extends AppCompatActivity {
 
     }
 
+    /**
+     * Get view
+     */
     private void initUIElements() {
         login_btn_login_by_google = findViewById(R.id.login_btn_login_by_google);
         phoneInputLayout = findViewById(R.id.login_eTxt_user_layout);

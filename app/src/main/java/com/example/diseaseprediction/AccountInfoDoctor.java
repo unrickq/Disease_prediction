@@ -31,18 +31,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class AccountInfoDoctor extends AppCompatActivity {
+    private DatabaseReference mRef;
+    private FirebaseUser fUser;
 
     private ArrayAdapter<DoctorSpecialization> specializationAdapter;
     private ArrayList<DoctorSpecialization> specialization;
     private DoctorInfo mDoctor;
     private DoctorSpecialization ds;
-    private DatabaseReference mRef;
-    private FirebaseUser fUser;
 
     private TextInputLayout account_info_doctor_txt_title_experience, account_info_doctor_txt_title_description, account_info_doctor_txt_title_specialization;
     private Button account_info_doctor_btn_edit_done;
     private AutoCompleteTextView account_info_doctor_spinner_specialization;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,34 +80,6 @@ public class AccountInfoDoctor extends AppCompatActivity {
 
         //Spinner
         account_info_doctor_spinner_specialization = findViewById(R.id.account_info_doctor_spinner_specialization);
-    }
-
-    /**
-     * Load all specialization to spinner
-     */
-    public void setSpinnerValue() {
-
-        specialization = new ArrayList<DoctorSpecialization>();
-        mRef = FirebaseDatabase.getInstance().getReference("Specialization");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sh : snapshot.getChildren()) {
-                    ds = sh.getValue(DoctorSpecialization.class);
-                    assert ds != null;
-                    specialization.add(ds);
-                }
-                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(AccountInfoDoctor.this, R.layout.support_simple_spinner_dropdown_item, specialization);
-                account_info_doctor_spinner_specialization.setAdapter(specializationAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-
-        });
-
     }
 
     /**

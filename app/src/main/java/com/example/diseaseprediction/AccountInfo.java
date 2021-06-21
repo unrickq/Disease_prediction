@@ -33,19 +33,19 @@ import java.util.ArrayList;
 
 
 public class AccountInfo extends AppCompatActivity {
-
     private static final String TAG = "AccountInfo";
 
-    private Account mAccount;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
+
+    private Account mAccount;
+    private ArrayAdapter genderAdapter;
+    private String phoneNumber;
 
     private TextInputLayout account_info_txt_title_name, account_info_txt_title_gender, account_info_txt_title_phone,
         account_info_txt_title_email, account_info_txt_title_address;
     private Button account_info_btn_edit_done;
     private AutoCompleteTextView account_info_spinner_gender;
-    private ArrayAdapter genderAdapter;
-    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,9 @@ public class AccountInfo extends AppCompatActivity {
         });
     }
 
-    //Find view by ID
+    /**
+     * Get view
+     */
     private void setView() {
         //Button
         account_info_btn_edit_done = findViewById(R.id.account_info_btn_edit_done);
@@ -162,9 +164,7 @@ public class AccountInfo extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
         });
     }
 
