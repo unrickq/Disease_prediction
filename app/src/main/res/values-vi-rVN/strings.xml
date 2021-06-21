@@ -75,7 +75,7 @@
     <string name="settings_txt_turn_notification">Thông báo</string>
     <string name="settings_txt_select_language">Ngôn ngữ</string>
     <string name="settings_txt_title_version">Phiên bản</string>
-    <string name="settings_txt_version">12.2</string>
+    <string name="settings_txt_version">1.0.0</string>
 
     <string name="item_alert_txt_title">Thông báo</string>
     <string name="item_alert_txt_content">Tin nhắn</string>
@@ -134,13 +134,16 @@
     <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
     <string name="error_unknown_contactDev">Đã có lỗi xảy ra. Vui lòng liên hệ nhà phát triển để được hỗ trợ</string>
 
-    <string name="code_verify_txt_title">Nhập mã xác minh của bạn</string>
-    <string name="code_verify_edit_txt_code">Mã xác minh của bạn</string>
-    <string name="code_verify_re_send">Không hoạt động? Gửi cho tôi một mã khác</string>
+    <string name="code_verify_txt_title">Nhập mã xác nhận</string>
+    <string name="code_verify_edit_txt_code">Mã xác nhận</string>
+    <string name="code_verify_re_send">Gửi lại mã xác nhận</string>
     <string name="code_verify_error_code_invalid">Mã xác nhận không chính xác!</string>
     <string name="code_verify_exception_phone_invalid">Đã có lỗi xảy ra trong quá trình xử lý số điện thoại! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
-    <string name="code_verify_exception_device_blocked">Thiết bị của bạn đã bị chặn do đã cố gắng đăng nhập quá nhiều lần! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
-    <string name="code_verify_exception_verification_failed_unknown">Đã có lỗi trong quá trình xác thực! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
-    <string name="code_verify_txt_note">Tin nhắn SMS chưa mã xác nhận đã được gửi tới điện thoại của bạn\nXin hãy kiểm tra tin nhắn của chúng tôi trong ứng dụng Nhắn tin của bạn</string>
+    <string name="code_verify_exception_device_blocked">Thiết bị của bạn bị chặn do đã cố gắng đăng nhập quá nhiều lần! \nXin hãy liên hệ nhà phát triển để được hỗ trợ!</string>
+    <string name="code_verify_exception_verification_failed_unknown">Đã có lỗi trong quá trình xác thực! \nXin hãy nhấn nút \'Gửi lại\' hoặc liên hệ nhà phát triển để được giúp đỡ!</string>
+    <string name="code_verify_txt_note">Xin hãy kiểm tra mã xác nhận trong ứng dụng Nhắn tin của bạn</string>
+    <string name="code_verify_resend_title">Đã gửi mã xác nhận!</string>
+    <string name="code_verify_resend_content">Mã xác nhận đã được gửi đi</string>
+    <string name="error_txt">Lỗi!</string>
 
 </resources>

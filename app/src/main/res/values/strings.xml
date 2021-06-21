@@ -18,7 +18,6 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="about_txt_slogan">Slogan</string>
     <string name="about_txt_company">NEON COMPANY</string>
     <string name="account_txt_title_name">Name</string>
@@ -48,7 +47,7 @@
     <string name="login_eTxt_user">Phone number</string>
     <string name="login_ask_acc">You don\'t have an account ?</string>
     <string name="login_sign_up">Sign up</string>
-    <string name="login_txt_connect_other">Or connect with</string>
+    <string name="login_txt_connect_other">Or log in using</string>
     <string name="login_btn_login">Google</string>
     <string name="login_started_txt_slogan">Disease Prediction</string>
     <string name="login_started_btn_next">Let\'s go</string>
@@ -74,7 +73,7 @@
     <string name="settings_txt_turn_notification">Notification</string>
     <string name="settings_txt_select_language">Language</string>
     <string name="settings_txt_title_version">Version</string>
-    <string name="settings_txt_version">12.2</string>
+    <string name="settings_txt_version">1.0.0</string>
 
     <string name="item_alert_txt_title">Notification</string>
     <string name="item_alert_txt_content">Message</string>
@@ -132,12 +131,16 @@
     <string name="code_verify_txt_title">Enter verification code</string>
     <string name="code_verify_edit_txt_code">Verification code</string>
     <string name="code_verify_re_send">Resend verification code</string>
+    <string name="code_verify_resend_title">Verification code Sent!</string>
+    <string name="code_verify_resend_content">The verification code had been sent</string>
     <string name="code_verify_error_code_invalid">Verification code is incorrect!</string>
     <string name="code_verify_exception_phone_invalid">Error in phone number processing! \nPlease contact the developer for assistance!</string>
     <string name="code_verify_exception_device_blocked">Your device has been blocked due to too much log in attempt! \nPlease contact the developer for assistance!</string>
-    <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease contact the developer for assistance!</string>
-    <string name="code_verify_txt_note">A SMS message contains verification code had been sent to your phone\nPlease check for our message in your Messaging app</string>
+    <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease click \'Resend\' button or contact the developer for assistance!</string>
+    <string name="code_verify_txt_note">Please check for the verification code in your Mesaging app</string>
 
+
+    <string name="error_txt">Error!</string>
     <string name="error_field_empty">Field can\'t be empty!</string>
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="error_unknown_contactDev">An error happened. Please contact the developer for assistance!</string>
