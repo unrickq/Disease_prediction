@@ -15,12 +15,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.AccountInfo;
+import com.example.diseaseprediction.AccountInfoDoctor;
 import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
+import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.ConsultationList;
+import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
@@ -34,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -44,6 +50,8 @@ public class HomeFragment extends Fragment {
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
+    private Account mAccount;
+    private DoctorInfo mDoctor;
 
     private String sessionID;
     private final String CHATBOT_ID = "GFoBDpKPUealixZAOQvfoJhiiSE2";

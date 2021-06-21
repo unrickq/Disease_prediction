@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 public class AccountInfoDoctor extends AppCompatActivity {
 
-    private Account mAccount;
     private ArrayAdapter<DoctorSpecialization> specializationAdapter;
     private ArrayList<DoctorSpecialization> specialization;
     private DoctorInfo mDoctor;
@@ -87,7 +86,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
     /**
      * Load all specialization to spinner
      */
-    public void setSpinnerValue(){
+    public void setSpinnerValue() {
 
         specialization = new ArrayList<DoctorSpecialization>();
         mRef = FirebaseDatabase.getInstance().getReference("Specialization");
@@ -140,14 +139,14 @@ public class AccountInfoDoctor extends AppCompatActivity {
     /**
      * Show error message when field is empty
      */
-    private void showErrorMess(){
-        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().isEmpty()){
+    private void showErrorMess() {
+        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().isEmpty()) {
             account_info_doctor_txt_title_experience.setError(getString(R.string.default_empty_experience));
         }
-        if (account_info_doctor_txt_title_description.getEditText().getText().toString().isEmpty()){
+        if (account_info_doctor_txt_title_description.getEditText().getText().toString().isEmpty()) {
             account_info_doctor_txt_title_description.setError(getString(R.string.default_empty_description));
         }
-        if (account_info_doctor_txt_title_specialization.getEditText().getText().toString().isEmpty()){
+        if (account_info_doctor_txt_title_specialization.getEditText().getText().toString().isEmpty()) {
             account_info_doctor_txt_title_specialization.setError(getString(R.string.default_empty_specialization));
         }
 
@@ -180,7 +179,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
-                Intent intent = new Intent(AccountInfoDoctor.this, AccountInfoDoctor.class);
+                Intent intent = new Intent(AccountInfoDoctor.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -211,34 +210,33 @@ public class AccountInfoDoctor extends AppCompatActivity {
                     mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
 
                     //Set spinner
-                    if (!mDoctor.getSpecializationID().equals("Default")) {
-                        specialization = new ArrayList<DoctorSpecialization>();
-                        mRef = FirebaseDatabase.getInstance().getReference("Specialization");
-                        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot sh : snapshot.getChildren()) {
-                                    ds = sh.getValue(DoctorSpecialization.class);
-                                    assert ds != null;
-                                    if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())){
-                                        account_info_doctor_spinner_specialization.setText(ds.getName());
-                                    }
-                                    specialization.add(ds);
+                    specialization = new ArrayList<DoctorSpecialization>();
+                    mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot sh : snapshot.getChildren()) {
+                                ds = sh.getValue(DoctorSpecialization.class);
+                                assert ds != null;
+                                if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
+                                    account_info_doctor_spinner_specialization.setText(ds.getName());
                                 }
-                                //Set spinner
-                                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(AccountInfoDoctor.this, R.layout.support_simple_spinner_dropdown_item, specialization);
-                                account_info_doctor_spinner_specialization.setAdapter(specializationAdapter);
+                                specialization.add(ds);
                             }
+                            //Set spinner
+                            specializationAdapter = new ArrayAdapter<DoctorSpecialization>(AccountInfoDoctor.this, R.layout.support_simple_spinner_dropdown_item, specialization);
+                            account_info_doctor_spinner_specialization.setAdapter(specializationAdapter);
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                            }
+                        }
 
-                        });
-                    }
+                    });
 
-                    if (mDoctor.getExperience()!=-1) {
+
+                    if (mDoctor.getExperience() != -1) {
                         account_info_doctor_txt_title_experience.getEditText().setText(String.valueOf(mDoctor.getExperience()));
                     }
 
@@ -263,9 +261,9 @@ public class AccountInfoDoctor extends AppCompatActivity {
     private void saveData() {
         mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
 
-        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().equals("")){
+        if (account_info_doctor_txt_title_experience.getEditText().getText().toString().equals("")) {
             mRef.child(fUser.getUid()).child("experience").setValue(-1);
-        }else{
+        } else {
             mRef.child(fUser.getUid()).child("experience").setValue(Double.valueOf(account_info_doctor_txt_title_experience.getEditText().getText().toString()));
         }
 
@@ -285,7 +283,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
                     for (DataSnapshot sh : snapshot.getChildren()) {
                         ds = sh.getValue(DoctorSpecialization.class);
                         assert ds != null;
-                        if (ds.getName().equals(account_info_doctor_spinner_specialization.getText().toString())){
+                        if (ds.getName().equals(account_info_doctor_spinner_specialization.getText().toString())) {
                             mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
                             mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
                         }

@@ -54,8 +54,6 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mRef;
 
-    private Account mAccount;
-    private DoctorInfo mDoctor;
     private int type = 1;
 
     @Override
@@ -254,90 +252,15 @@ public class Login extends AppCompatActivity {
                             if (account.getTypeID() == 0) {
                                 DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, 1);
                                 mRef = FirebaseDatabase.getInstance().getReference().child("DoctorInfo");
-                                mRef.child(user.getUid()).setValue(doctorInfo, new DatabaseReference.CompletionListener() {
-                                    @Override
-                                    public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error,
-                                                           @NonNull DatabaseReference ref) {
-                                        //Go to account information activity
-                                        Intent intent = new Intent(Login.this, AccountInfo.class);
-                                        startActivity(intent);
-                                    }
-                                });
+                                mRef.child(user.getUid()).setValue(doctorInfo);
                             }
                             //Go to account information activity
-                            Intent intent = new Intent(Login.this, AccountInfo.class);
+                            Intent intent = new Intent(Login.this, MainActivity.class);
                             startActivity(intent);
                         }
                     });
                 } else {
                     //Account existed
-                    checkDataOfAccount(user);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    /**
-     * Check data of current account
-     * If there exists default data, go to account information activity
-     * If data is full, go to main activity
-     *
-     * @param user current user
-     */
-    private void checkDataOfAccount(FirebaseUser user) {
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                //if exist then set UI
-                if (snapshot.hasChild(user.getUid())) {
-                    mAccount = snapshot.child(user.getUid()).getValue(Account.class);
-                    if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
-                            mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
-                            mAccount.getAddress().equals("Default")) {
-                        Intent intent = new Intent(Login.this, AccountInfo.class);
-                        startActivity(intent);
-                    } else {
-                        checkDataOfAccountDoctor(user);
-                    }
-                } else {
-                    //IF can't find any data
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void checkDataOfAccountDoctor(FirebaseUser user) {
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                //if exist then set UI
-                if (snapshot.hasChild(user.getUid())) {
-                    mDoctor = snapshot.child(user.getUid()).getValue(DoctorInfo.class);
-                    if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
-                            mDoctor.getSpecializationID().equals("Default")) {
-                        Intent intent = new Intent(Login.this, AccountInfoDoctor.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(Login.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                } else {
                     Intent intent = new Intent(Login.this, MainActivity.class);
                     startActivity(intent);
                 }
