@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,248 +9,230 @@
     android:paddingRight="@dimen/padding"
     tools:context=".ui.account.AccountFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/account_img_avatar"
-        android:layout_width="141dp"
-        android:layout_height="141dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_top"
-        android:src="@drawable/background_avatar" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_txt_title_name"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        app:boxBackgroundColor="@color/background_B1_lightMode">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_edit_txt_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/account_txt_title_name"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_txt_title_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        app:boxBackgroundColor="@color/background_B1_lightMode">
+            <TextView
+                android:id="@+id/account_txt_title"
+                style="@style/heading_3_bold_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:text="@string/account_info_txt_title"
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <AutoCompleteTextView
-            android:id="@+id/account_spinner_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:hint="@string/account_txt_title_gender"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/account_img_avatar"
+                android:layout_width="141dp"
+                android:layout_height="141dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_top"
+                android:src="@drawable/background_avatar" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_txt_title_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_txt_title_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        app:boxBackgroundColor="@color/background_B1_lightMode">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_edit_txt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/account_txt_title_name"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_edit_txt_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="phone"
-            android:hint="@string/account_txt_title_phone"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_txt_title_gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_txt_title_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        app:boxBackgroundColor="@color/background_B1_lightMode">
+                <AutoCompleteTextView
+                    android:id="@+id/account_spinner_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/account_txt_title_gender"
+                    android:inputType="none" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_edit_txt_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="@string/account_txt_title_email"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/account_txt_title_address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        app:boxBackgroundColor="@color/background_B1_lightMode">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_txt_title_phone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_edit_txt_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="@string/account_txt_title_address"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_edit_txt_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/account_txt_title_phone"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_title_name"-->
-<!--        style="@style/subTitle_1_bold"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_top"-->
-<!--        android:text="@string/account_txt_title_name" />-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_txt_title_email"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_name"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="3dp"-->
-<!--        android:text="@string/account_txt_name" />-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_edit_txt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/account_txt_title_email"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <EditText-->
-<!--        android:id="@+id/account_edit_txt_name"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text=""-->
-<!--        android:visibility="gone" />-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/account_txt_title_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_title_gender"-->
-<!--        style="@style/subTitle_1_bold"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_top"-->
-<!--        android:text="@string/account_txt_title_gender" />-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/account_edit_txt_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/account_txt_title_address"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <Spinner-->
-<!--        android:id="@+id/account_spinner_gender"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content" />-->
+            <LinearLayout
+                android:id="@+id/account_layout_doctor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/account_txt_title_doctor"
+                    style="@style/heading_3_bold_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:text="@string/account_info_doctor_txt_title"
+                    android:textSize="34sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.495"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/account_doctor_txt_title_specialization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    app:boxBackgroundColor="@color/background_B1_lightMode">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/account_doctor_spinner_specialization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:hint="@string/account_info_doctor_specialization"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/account_doctor_txt_title_experience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@color/background_B1_lightMode">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/account_doctor_edit_txt_experience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:hint="@string/account_info_doctor_experience"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/account_doctor_txt_title_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@color/background_B1_lightMode">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/account_doctor_edit_txt_title_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/account_info_doctor_description"
+                        android:inputType="textMultiLine"
+                        android:overScrollMode="always"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-<!--    <EditText-->
-<!--        android:id="@+id/account_edit_txt_gender"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text=""-->
-<!--        android:visibility="gone" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_title_phone"-->
-<!--        style="@style/subTitle_1_bold"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/account_txt_title_phone" />-->
+            </LinearLayout>
+            <Button
+                android:id="@+id/accout_btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:backgroundTint="@color/theme_1_P"
+                android:text="@string/account_btn_edit"
+                android:textColor="@color/background_B1_lightMode" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_phone"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:inputType="number"-->
-<!--        android:layout_marginTop="3dp"-->
-<!--        android:text="@string/account_txt_phone" />-->
+            <Button
+                android:id="@+id/accout_btn_edit_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top"
+                android:backgroundTint="@color/theme_1_P"
+                android:text="@string/account_btn_edit_done"
+                android:textColor="@color/background_B1_lightMode"
+                android:visibility="gone"
+                app:cornerRadius="@dimen/btn_corner_radius" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/account_edit_txt_phone"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="phone"-->
-<!--        android:text=""-->
-<!--        android:visibility="gone" />-->
+        </LinearLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_title_email"-->
-<!--        style="@style/subTitle_1_bold"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_top"-->
-<!--        android:text="@string/account_txt_title_email" />-->
+    </androidx.core.widget.NestedScrollView>
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_email"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="3dp"-->
-<!--        android:text="@string/account_txt_email" />-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/account_edit_txt_email"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textEmailAddress"-->
-<!--        android:text=""-->
-<!--        android:visibility="gone" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_title_address"-->
-<!--        style="@style/subTitle_1_bold"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_top"-->
-<!--        android:text="@string/account_txt_title_address" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/account_txt_address"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="3dp"-->
-<!--        android:text="@string/account_txt_address" />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/account_edit_txt_address"-->
-<!--        style="@style/subTitle_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:text=""-->
-<!--        android:visibility="gone" />-->
-
-    <Button
-        android:id="@+id/accout_btn_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        android:backgroundTint="@color/theme_1_P"
-        android:text="@string/account_btn_edit"
-        android:textColor="@color/background_B1_lightMode" />
-
-    <Button
-        android:id="@+id/accout_btn_edit_done"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/theme_1_P"
-        android:text="@string/account_btn_edit_done"
-        app:cornerRadius="@dimen/btn_corner_radius"
-        android:layout_marginTop="@dimen/margin_top"
-        android:textColor="@color/background_B1_lightMode"
-        android:visibility="gone" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
