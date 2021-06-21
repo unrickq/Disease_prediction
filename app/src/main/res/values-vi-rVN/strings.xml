@@ -54,7 +54,6 @@
     <string name="login_started_txt_slogan">Chuẩn đoán bệnh</string>
     <string name="login_started_btn_next">Bắt đầu nào</string>
     <string name="login_txt_by_type">Đăng nhập với tư cách người dùng</string>
-    <string name="login_txt_by_type_doctor">Chỉ chọn vào đây nếu bạn là bác sĩ</string>
     <string name="login_phone_login">Đăng nhập bằng số điện thoại</string>
 
     <string name="prediction_txt_acc_name">TextView</string>
@@ -145,5 +144,6 @@
     <string name="code_verify_resend_title">Đã gửi mã xác nhận!</string>
     <string name="code_verify_resend_content">Mã xác nhận đã được gửi đi</string>
     <string name="error_txt">Lỗi!</string>
+    <string name="login_txt_by_type_doctor">Đăng nhập bằng tài khoản Bác sĩ</string>
 
 </resources>

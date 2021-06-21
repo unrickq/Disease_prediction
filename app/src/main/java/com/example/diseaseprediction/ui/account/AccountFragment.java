@@ -118,7 +118,7 @@ public class AccountFragment extends Fragment {
     /**
      * Check empty edit text and spinner
      *
-     * @return true if all input valid
+     * @return true if all inputs valid
      */
     private boolean checkEmpty() {
         boolean isValid = true;
@@ -143,7 +143,7 @@ public class AccountFragment extends Fragment {
                 account_txt_title_address.setError(getString(R.string.default_empty_address));
                 isValid = false;
             }
-            //If account type is doctoc
+            //If account type is doctor
             if (account_layout_doctor.getVisibility()==View.VISIBLE){
                 if (account_doctor_txt_title_experience.getEditText().getText().toString().trim().isEmpty()) {
                     account_doctor_txt_title_experience.setError(getString(R.string.default_empty_experience));
@@ -197,7 +197,7 @@ public class AccountFragment extends Fragment {
     /**
      * Find view by ID
      *
-     * @param view
+     * @param view View of current activity
      */
     private void findView(View view) {
         account_layout_doctor = view.findViewById(R.id.account_layout_doctor);
@@ -235,7 +235,6 @@ public class AccountFragment extends Fragment {
         ArrayList<String> gender = new ArrayList<String>();
         gender.add(getString(R.string.default_gender_male));
         gender.add(getString(R.string.default_gender_female));
-        gender.add(getString(R.string.default_gender_other));
         genderAdapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, gender);
         account_spinner_gender.setAdapter(genderAdapter);
     }
@@ -303,9 +302,6 @@ public class AccountFragment extends Fragment {
                         genderAdapter.getFilter().filter(null);
                     } else if (mAccount.getGender() == 1) {
                         account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
-                        genderAdapter.getFilter().filter(null);
-                    } else if (mAccount.getGender() == 2) {
-                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(2).toString());
                         genderAdapter.getFilter().filter(null);
                     }
 
@@ -386,8 +382,6 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("gender").setValue(0);
         } else if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(1).toString())) {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
-        } else if (account_spinner_gender.getText().toString().equals(account_spinner_gender.getAdapter().getItem(2).toString())) {
-            mRef.child(fUser.getUid()).child("gender").setValue(2);
         } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }

@@ -20,7 +20,6 @@ import com.example.diseaseprediction.object.Account;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,7 +102,6 @@ public class AccountInfo extends AppCompatActivity {
         ArrayList<String> gender = new ArrayList<String>();
         gender.add(getString(R.string.default_gender_male));
         gender.add(getString(R.string.default_gender_female));
-        gender.add("Other");
         genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
         account_info_spinner_gender.setAdapter(genderAdapter);
 
@@ -138,9 +136,6 @@ public class AccountInfo extends AppCompatActivity {
                         genderAdapter.getFilter().filter(null);
                     } else if (mAccount.getGender() == 1) {
                         account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(1).toString());
-                        genderAdapter.getFilter().filter(null);
-                    } else if (mAccount.getGender() == 2) {
-                        account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(2).toString());
                         genderAdapter.getFilter().filter(null);
                     }
 
@@ -295,8 +290,6 @@ public class AccountInfo extends AppCompatActivity {
             mRef.child(fUser.getUid()).child("gender").setValue(0);
         } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(1).toString())) {
             mRef.child(fUser.getUid()).child("gender").setValue(1);
-        } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(2).toString())) {
-            mRef.child(fUser.getUid()).child("gender").setValue(2);
         } else {
             mRef.child(fUser.getUid()).child("gender").setValue(-1);
         }

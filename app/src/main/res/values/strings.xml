@@ -52,7 +52,7 @@
     <string name="login_started_txt_slogan">Disease Prediction</string>
     <string name="login_started_btn_next">Let\'s go</string>
     <string name="login_txt_by_type">Login as user</string>
-    <string name="login_txt_by_type_doctor">Only choose here if you are a doctor</string>
+    <string name="login_txt_by_type_doctor">Log in as a Doctor</string>
     <string name="login_phone_login">Log in with phone number</string>
 
     <string name="prediction_txt_acc_name">TextView</string>
