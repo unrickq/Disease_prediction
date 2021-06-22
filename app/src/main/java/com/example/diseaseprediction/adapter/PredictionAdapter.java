@@ -11,12 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.diseaseprediction.PredicitonResult;
+import com.example.diseaseprediction.PredictionResult;
 import com.example.diseaseprediction.R;
-import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.object.Disease;
-import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -61,7 +56,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, PredicitonResult.class);
+                Intent i = new Intent(mContext, PredictionResult.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("mPrediction", (Parcelable) prediction);
                 mContext.startActivity(i);

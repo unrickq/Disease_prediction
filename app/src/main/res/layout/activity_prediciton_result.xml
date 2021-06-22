@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/padding"
     android:paddingRight="@dimen/padding"
-    tools:context=".PredicitonResult">
+    tools:context=".PredictionResult">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

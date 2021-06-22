@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.object.Prediction;
-import com.example.diseaseprediction.ui.account.AccountFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PredicitonResult extends AppCompatActivity {
+public class PredictionResult extends AppCompatActivity {
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -149,10 +148,10 @@ public class PredicitonResult extends AppCompatActivity {
 
                 //Set image
                 if (!snapshot.child("image").getValue().toString().equals("Default")) {
-                    Glide.with(PredicitonResult.this).load(snapshot.child("image").getValue().toString())
+                    Glide.with(PredictionResult.this).load(snapshot.child("image").getValue().toString())
                             .into(prediction_img_avatar);
                 } else {
-                    Glide.with(PredicitonResult.this).load(R.drawable.background_avatar).into(prediction_img_avatar);
+                    Glide.with(PredictionResult.this).load(R.drawable.background_avatar).into(prediction_img_avatar);
                 }
             }
             @Override
