@@ -254,7 +254,7 @@ public class Login extends AppCompatActivity {
                                                @NonNull DatabaseReference ref) {
                             //If account type is doctor, then create new doctor information
                             if (account.getTypeID() == 0) {
-                                DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, 1);
+                                DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(), new Date(), 1);
                                 mRef = FirebaseDatabase.getInstance().getReference().child("DoctorInfo");
                                 mRef.child(user.getUid()).setValue(doctorInfo);
                             }

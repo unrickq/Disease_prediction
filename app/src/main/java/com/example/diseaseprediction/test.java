@@ -60,9 +60,9 @@ public class test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        addDataSpecialization(new DoctorSpecialization("1","Respiratory",1));
-        addDataSpecialization(new DoctorSpecialization("1","Hepatology",1));
-        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",1));
+        addDataSpecialization(new DoctorSpecialization("1","Respiratory",new Date(),new Date(),1));
+        addDataSpecialization(new DoctorSpecialization("1","Hepatology",new Date(),new Date(),1));
+        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",new Date(),new Date(),1));
 
 //        testlayout = findViewById(R.id.testlayout);
 //        testlayout2 = findViewById(R.id.testlayout2);

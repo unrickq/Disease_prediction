@@ -1,8 +1,12 @@
 package com.example.diseaseprediction.object;
 
+import java.util.Date;
+
 public class DoctorSpecialization {
     private String specializationID;
     private String name;
+    private Date dateCreate;
+    private Date dateUpdate;
     private int status;
 
     /**
@@ -13,18 +17,24 @@ public class DoctorSpecialization {
 
     /**
      * Create doctor specialization
-     * @param specializationID  Specialization ID
-     * @param name              Name of specialization
-     * @param status            0: Deleted | 1: Normal
+     *
+     * @param specializationID Specialization ID
+     * @param name             Name of specialization
+     * @param dateCreate       Date create
+     * @param dateUpdate       Date update
+     * @param status           0: Deleted | 1: Normal
      */
-    public DoctorSpecialization(String specializationID, String name, int status) {
+    public DoctorSpecialization(String specializationID, String name, Date dateCreate, Date dateUpdate, int status) {
         this.specializationID = specializationID;
         this.name = name;
+        this.dateCreate = dateCreate;
+        this.dateUpdate = dateUpdate;
         this.status = status;
     }
 
     /**
      * Get specialization ID
+     *
      * @return specialization ID
      */
     public String getSpecializationID() {
@@ -33,6 +43,7 @@ public class DoctorSpecialization {
 
     /**
      * Set specialization ID
+     *
      * @param specializationID specialization ID
      */
     public void setSpecializationID(String specializationID) {
@@ -41,6 +52,7 @@ public class DoctorSpecialization {
 
     /**
      * Get name
+     *
      * @return name
      */
     public String getName() {
@@ -49,6 +61,7 @@ public class DoctorSpecialization {
 
     /**
      * Set name
+     *
      * @param name name
      */
     public void setName(String name) {
@@ -57,6 +70,7 @@ public class DoctorSpecialization {
 
     /**
      * Get status
+     *
      * @return 0: Deleted | 1: Normal
      */
     public int getStatus() {
@@ -64,7 +78,44 @@ public class DoctorSpecialization {
     }
 
     /**
+     * Get date create
+     *
+     * @return date create
+     */
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    /**
+     * Set date create
+     *
+     * @param dateCreate date create
+     */
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    /**
+     * Get date update
+     *
+     * @return date update
+     */
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    /**
+     * Set date update
+     *
+     * @param dateUpdate date update
+     */
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
+    }
+
+    /**
      * Set status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {
@@ -74,6 +125,7 @@ public class DoctorSpecialization {
     /**
      * Set string return is name
      * Return name of object in spinner
+     *
      * @return name
      */
     @Override
