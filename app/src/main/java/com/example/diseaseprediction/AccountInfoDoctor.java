@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.DoctorSpecialization;
 import com.google.android.material.textfield.TextInputLayout;

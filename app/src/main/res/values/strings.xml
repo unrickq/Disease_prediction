@@ -103,6 +103,7 @@
     <string name="default_empty_description">Please enter some description about you</string>
     <string name="default_empty_specialization">Please select specialization</string>
 
+    <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
     <string name="dialog_confirm_change_account_no">No</string>
@@ -144,6 +145,9 @@
     <string name="error_field_empty">Field can\'t be empty!</string>
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="error_unknown_contactDev">An error happened. Please contact the developer for assistance!</string>
+
+    <string name="upload_img_waiting">Uploading...</string>
+    <string name="upload_img_done">Uploaded</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

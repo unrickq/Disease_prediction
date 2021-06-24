@@ -103,6 +103,7 @@
     <string name="default_empty_description">Vui lòng nhập mô tả ngắn về bạn</string>
     <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
 
+    <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>
     <string name="dialog_confirm_change_account_no">Không</string>
@@ -145,5 +146,8 @@
     <string name="code_verify_resend_content">Mã xác nhận đã được gửi đi</string>
     <string name="error_txt">Lỗi!</string>
     <string name="login_txt_by_type_doctor">Đăng nhập bằng tài khoản Bác sĩ</string>
+
+    <string name="upload_img_waiting">Đang tải lên...</string>
+    <string name="upload_img_done">Tải lên hoàn tất</string>
 
 </resources>

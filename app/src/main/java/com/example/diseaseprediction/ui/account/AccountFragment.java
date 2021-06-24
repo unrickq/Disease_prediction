@@ -1,7 +1,10 @@
 package com.example.diseaseprediction.ui.account;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +28,8 @@ import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.DoctorSpecialization;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,10 +38,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,13 +56,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AccountFragment extends Fragment {
 
     private static final String TAG = "AccountFragment";
+    private final int PICK_IMAGE_REQUEST = 71;
 
+    //Firebase
+    private StorageReference sRef;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
     private Account mAccount;
     private DoctorInfo mDoctor;
     private DoctorSpecialization ds;
+    private Uri imgPath;
     private ArrayAdapter<DoctorSpecialization> specializationAdapter;
     private ArrayList<DoctorSpecialization> specialization;
     private ArrayAdapter genderAdapter;
@@ -59,10 +74,11 @@ public class AccountFragment extends Fragment {
     private TextInputLayout account_txt_title_name, account_txt_title_gender, account_txt_title_phone, account_txt_title_email, account_txt_title_address,
             account_doctor_txt_title_experience, account_doctor_txt_title_description, account_doctor_txt_title_specialization;
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
+    private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
 
     private LinearLayout account_layout_doctor;
     private Button accout_btn_edit, accout_btn_edit_done;
-    private CircleImageView account_img_avatar;
+    private CircleImageView account_img_avatar, nav_header_avatar;
 
 
     public AccountFragment() {
@@ -111,8 +127,25 @@ public class AccountFragment extends Fragment {
                 }
             }
         });
+        account_img_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogConfirmUploadImg();
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Open file image mobile
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK
+                && data != null && data.getData() != null) {
+            imgPath = data.getData();
+            uploadImage();
+        }
     }
 
     /**
@@ -144,7 +177,7 @@ public class AccountFragment extends Fragment {
                 isValid = false;
             }
             //If account type is doctor
-            if (account_layout_doctor.getVisibility()==View.VISIBLE){
+            if (account_layout_doctor.getVisibility() == View.VISIBLE) {
                 if (account_doctor_txt_title_experience.getEditText().getText().toString().trim().isEmpty()) {
                     account_doctor_txt_title_experience.setError(getString(R.string.default_empty_experience));
                     isValid = false;
@@ -182,6 +215,32 @@ public class AccountFragment extends Fragment {
                 accout_btn_edit_done.setVisibility(View.GONE);
                 accout_btn_edit.setVisibility(View.VISIBLE);
                 disableEdit();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+        builder.create().show();
+    }
+
+    /**
+     * Create dialog confirm
+     * Dialog show when data on change
+     */
+    private void dialogConfirmUploadImg() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getString(R.string.dialog_confirm_change_img));
+        builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
@@ -249,9 +308,9 @@ public class AccountFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mAccount = snapshot.getValue(Account.class);
-                if (mAccount.getTypeLogin()==0){
+                if (mAccount.getTypeLogin() == 0) {
                     account_txt_title_email.setEnabled(true);
-                }else{
+                } else {
                     account_txt_title_phone.setEnabled(true);
                 }
             }
@@ -301,10 +360,10 @@ public class AccountFragment extends Fragment {
                 if (snapshot.hasChild(fUser.getUid())) {
                     mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
                     //Set Doctor information by type
-                    if (mAccount.getTypeID()==0){
+                    if (mAccount.getTypeID() == 0) {
                         account_layout_doctor.setVisibility(View.VISIBLE);
                         loadDataOfDoctor();
-                    }else{
+                    } else {
                         account_layout_doctor.setVisibility(View.GONE);
                     }
                     //Set name
@@ -391,6 +450,9 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("name").setValue("Default");
         } else {
             mRef.child(fUser.getUid()).child("name").setValue(account_txt_title_name.getEditText().getText().toString());
+            //Set nav bar
+            nav_header_txt_acc_name = getActivity().findViewById(R.id.nav_header_txt_acc_name);
+            nav_header_txt_acc_name.setText(account_txt_title_name.getEditText().getText().toString());
         }
 
         //Gender
@@ -407,6 +469,9 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("phone").setValue("Default");
         } else {
             mRef.child(fUser.getUid()).child("phone").setValue(account_txt_title_phone.getEditText().getText().toString());
+            //Set nav bar
+            nav_header_txt_acc_phone = getActivity().findViewById(R.id.nav_header_txt_acc_phone);
+            nav_header_txt_acc_phone.setText(account_txt_title_phone.getEditText().getText().toString());
         }
 
         //email
@@ -423,7 +488,7 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("address").setValue(account_txt_title_address.getEditText().getText().toString());
         }
 
-        if(account_layout_doctor.getVisibility()==View.VISIBLE){
+        if (account_layout_doctor.getVisibility() == View.VISIBLE) {
             saveDataOfDoctor();
         }
     }
@@ -534,5 +599,54 @@ public class AccountFragment extends Fragment {
             });
         }
 
+    }
+
+    /**
+     * Upload file img to storage firebase
+     */
+    private void uploadImage() {
+        if (imgPath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle(getString(R.string.upload_img_waiting));
+            progressDialog.show();
+
+            //Get reference "images" in storage firebase
+            sRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
+            sRef.putFile(imgPath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), getString(R.string.upload_img_done), Toast.LENGTH_SHORT).show();
+                            //Get url of image in storage firebase
+                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+                                    mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
+                                    Glide.with(AccountFragment.this).load(uri.toString()).into(account_img_avatar);
+                                    //Set nav bar
+                                    nav_header_avatar = getActivity().findViewById(R.id.nav_header_avatar);
+                                    Glide.with(AccountFragment.this).load(uri.toString()).into(nav_header_avatar);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
     }
 }

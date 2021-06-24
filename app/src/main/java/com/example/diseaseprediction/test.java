@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +30,8 @@ import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.DoctorSpecialization;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.Symptom;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,17 +39,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class test extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_SPEECH=10;
+    private static final int REQUEST_CODE_SPEECH = 10;
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
 
@@ -52,17 +65,45 @@ public class test extends AppCompatActivity {
     private RecyclerView recyclerView;
     private testAdapter userAdapter;
     private List<Account> mUser;
-    Button btn;
+    Button btn, btn2;
     TextView txt;
+    ImageView imageView2;
+
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 71;
+    //Firebase
+    StorageReference sRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        btn = findViewById(R.id.btn1);
+        imageView2 = findViewById(R.id.imageView2);
+        btn2 = findViewById(R.id.button);
 
-        addDataSpecialization(new DoctorSpecialization("1","Respiratory",new Date(),new Date(),1));
-        addDataSpecialization(new DoctorSpecialization("1","Hepatology",new Date(),new Date(),1));
-        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",new Date(),new Date(),1));
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImage();
+            }
+        });
+
+
+//        addDataSpecialization(new DoctorSpecialization("1","Respiratory",new Date(),new Date(),1));
+//        addDataSpecialization(new DoctorSpecialization("1","Hepatology",new Date(),new Date(),1));
+//        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",new Date(),new Date(),1));
 
 //        testlayout = findViewById(R.id.testlayout);
 //        testlayout2 = findViewById(R.id.testlayout2);
@@ -83,132 +124,175 @@ public class test extends AppCompatActivity {
 
 //        mUser = new ArrayList<>();
 //      txt = findViewById(R.id.txt1);
-//        btn = findViewById(R.id.btn1);
 //
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(spinnerr.getText().toString().equals(spinnerr.getAdapter().getItem(0).toString())){
-//                    testlayout.setError("loi roi");
-//                    testlayout2.setError("loi roi");
-//                }else{
-//                    testlayout.setError(null);
-//                    testlayout2.setError(null);
-//                }
-//                System.out.println("chon"+ testlayout.getEditText().getText().toString());
-//            }
-//        });
 
 
 //
-    }
-    public void getSpeechInput(View view) {
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_CODE_SPEECH);
-        } else {
-            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case REQUEST_CODE_SPEECH:
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txt.setText(result.get(0));
-                }
-                break;
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imageView2.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
-    void addDataSpecialization(DoctorSpecialization sp){
-        myRef = FirebaseDatabase.getInstance().getReference("Specialization");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                sp.setSpecializationID(myRef.push().getKey());
-                myRef.child(sp.getSpecializationID()).setValue(sp);
-            }
+    private void uploadImage() {
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+            sRef = FirebaseStorage.getInstance().getReference().child("images/"+ UUID.randomUUID().toString());
+            sRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(test.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Toast.makeText(test.this, uri.toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(test.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
     }
+//    public void getSpeechInput(View view) {
+//
+//        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+//
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(intent, REQUEST_CODE_SPEECH);
+//        } else {
+//            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-    void addDataAdvise(Advise ad){
-        myRef = FirebaseDatabase.getInstance().getReference("Advise");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                ad.setAdviseID(myRef.push().getKey());
-                myRef.child(ad.getAdviseID()).setValue(ad);
-            }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        switch (requestCode) {
+//            case REQUEST_CODE_SPEECH:
+//                if (resultCode == RESULT_OK && data != null) {
+//                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+//                    txt.setText(result.get(0));
+//                }
+//                break;
+//        }
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataMedicine(Medicine md){
-        myRef = FirebaseDatabase.getInstance().getReference("Medicine");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                md.setMedicineID(myRef.push().getKey());
-                myRef.child(md.getMedicineID()).setValue(md);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataDisease(Disease ds){
-        myRef = FirebaseDatabase.getInstance().getReference("Disease");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                ds.setDiseaseID(myRef.push().getKey());
-                myRef.child(ds.getDiseaseID()).setValue(ds);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    void addDataSymptom(Symptom sm){
-        myRef = FirebaseDatabase.getInstance().getReference("Sympton");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                sm.setSymptomsID(myRef.push().getKey());
-                myRef.child(sm.getSymptomsID()).setValue(sm);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    void addDataSpecialization(DoctorSpecialization sp){
+//        myRef = FirebaseDatabase.getInstance().getReference("Specialization");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                sp.setSpecializationID(myRef.push().getKey());
+//                myRef.child(sp.getSpecializationID()).setValue(sp);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    void addDataAdvise(Advise ad){
+//        myRef = FirebaseDatabase.getInstance().getReference("Advise");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                ad.setAdviseID(myRef.push().getKey());
+//                myRef.child(ad.getAdviseID()).setValue(ad);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    void addDataMedicine(Medicine md){
+//        myRef = FirebaseDatabase.getInstance().getReference("Medicine");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                md.setMedicineID(myRef.push().getKey());
+//                myRef.child(md.getMedicineID()).setValue(md);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    void addDataDisease(Disease ds){
+//        myRef = FirebaseDatabase.getInstance().getReference("Disease");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                ds.setDiseaseID(myRef.push().getKey());
+//                myRef.child(ds.getDiseaseID()).setValue(ds);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    void addDataSymptom(Symptom sm){
+//        myRef = FirebaseDatabase.getInstance().getReference("Sympton");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                sm.setSymptomsID(myRef.push().getKey());
+//                myRef.child(sm.getSymptomsID()).setValue(sm);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
 //        addDataAdvise(new Advise("1", "che miệng trong lúc ho", new Date(), new Date(), 1));
 //        addDataAdvise(new Advise("2", "tham khảo ý kiến bác sĩ", new Date(), new Date(), 1));
