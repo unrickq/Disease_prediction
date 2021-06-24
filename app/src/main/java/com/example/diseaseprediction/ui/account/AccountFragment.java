@@ -243,11 +243,27 @@ public class AccountFragment extends Fragment {
      * Enable edit
      */
     private void enableEdit() {
+        mAccount = new Account();
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mAccount = snapshot.getValue(Account.class);
+                if (mAccount.getTypeLogin()==0){
+                    account_txt_title_email.setEnabled(true);
+                }else{
+                    account_txt_title_phone.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         //Edit text
         account_txt_title_name.setEnabled(true);
         account_txt_title_gender.setEnabled(true);
-        account_txt_title_phone.setEnabled(true);
-        account_txt_title_email.setEnabled(true);
         account_txt_title_address.setEnabled(true);
 
         account_doctor_txt_title_experience.setEnabled(true);

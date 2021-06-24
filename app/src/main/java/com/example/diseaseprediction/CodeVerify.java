@@ -57,6 +57,7 @@ public class CodeVerify extends AppCompatActivity {
   private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
   private String phoneNumber;
+  private int type = 1; //Account type: doctor or user
 
   private TextInputLayout code_verify_edit_txt_code_layout;
   private ImageView code_verify_img_next;
@@ -106,6 +107,7 @@ public class CodeVerify extends AppCompatActivity {
     //and sending the verification code to the number
     Intent intent = getIntent();
     phoneNumber = intent.getStringExtra(Login.INTENT_MOBILE);
+    type = intent.getIntExtra("type", 1);
 
     // Initialize phone auth callbacks
     mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -373,7 +375,7 @@ public class CodeVerify extends AppCompatActivity {
     String name = "Default";
     String imgURL = "Default";
     //Create new account
-    Account account = new Account(user.getUid(), 1, phone, name, gender, address, email, imgURL
+    Account account = new Account(user.getUid(), type,0, phone, name, gender, address, email, imgURL
         , new Date(), new Date(), 1);
     //Save new account to firebase
     //If write data success, start new activity

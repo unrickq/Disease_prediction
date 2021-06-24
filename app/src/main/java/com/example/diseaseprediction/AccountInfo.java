@@ -142,11 +142,17 @@ public class AccountInfo extends AppCompatActivity {
                     //Set phone
                     if (!mAccount.getPhone().equals("Default")) {
                         account_info_txt_title_phone.getEditText().setText(mAccount.getPhone());
+                        if (mAccount.getTypeLogin()==0){
+                            account_info_txt_title_phone.setEnabled(false);
+                        }
                     }
 
                     //Set email
                     if (!mAccount.getEmail().equals("Default")) {
                         account_info_txt_title_email.getEditText().setText(mAccount.getEmail());
+                        if (mAccount.getTypeLogin()==1){
+                            account_info_txt_title_email.setEnabled(false);
+                        }
                     }
 
                     //Set address

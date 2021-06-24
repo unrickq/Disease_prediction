@@ -8,6 +8,7 @@ import java.util.Date;
 public class Account {
   private String accountId;
   private int typeID;
+  private int typeLogin;
   private String phone;
   private String name;
   private int gender;
@@ -26,6 +27,7 @@ public class Account {
    *
    * @param accountId  Account ID
    * @param typeID     0: Doctor | 1: User
+   * @param typeLogin  0: Phone | 1: Google
    * @param phone      Phone number
    * @param name       User name
    * @param gender     Gender
@@ -36,10 +38,11 @@ public class Account {
    * @param dateUpdate Account update date
    * @param status     0: Deleted | 1: Normal
    */
-  public Account(String accountId, int typeID, String phone, String name, int gender, String address, String email,
+  public Account(String accountId, int typeID, int typeLogin, String phone, String name, int gender, String address, String email,
                  String image, Date dateCreate, Date dateUpdate, int status) {
     this.accountId = accountId;
     this.typeID = typeID;
+    this.typeLogin = typeLogin;
     this.phone = phone;
     this.name = name;
     this.gender = gender;
@@ -81,6 +84,22 @@ public class Account {
    */
   public void setTypeID(int typeID) {
     this.typeID = typeID;
+  }
+
+  /**
+   * Get type login
+   * @return type login
+   */
+  public int getTypeLogin() {
+    return typeLogin;
+  }
+
+  /**
+   * Set type login
+   * @param typeLogin type login
+   */
+  public void setTypeLogin(int typeLogin) {
+    this.typeLogin = typeLogin;
   }
 
   /**

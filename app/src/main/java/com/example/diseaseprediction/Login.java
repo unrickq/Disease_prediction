@@ -244,7 +244,7 @@ public class Login extends AppCompatActivity {
                     }
 
                     //Create new account
-                    Account account = new Account(user.getUid(), type, phone, name, gender, address, email, imgURL
+                    Account account = new Account(user.getUid(), type,1, phone, name, gender, address, email, imgURL
                             , new Date(), new Date(), 1);
                     //Save new account to firebase
                     //If write data success, start new activity
@@ -320,6 +320,7 @@ public class Login extends AppCompatActivity {
             String phone = phoneInputLayout.getEditText().getText().toString();
             Intent intent = new Intent(Login.this, CodeVerify.class);
             intent.putExtra(INTENT_MOBILE, addCountryCode(phone));
+            intent.putExtra("type", type);
             startActivity(intent);
         }
     }
