@@ -149,5 +149,6 @@
 
     <string name="upload_img_waiting">Đang tải lên...</string>
     <string name="upload_img_done">Tải lên hoàn tất</string>
+    <string name="item_chat_checkbox_done">Hoàn tất</string>
 
 </resources>

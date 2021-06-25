@@ -148,6 +148,7 @@
 
     <string name="upload_img_waiting">Uploading...</string>
     <string name="upload_img_done">Uploaded</string>
+    <string name="item_chat_checkbox_done">Done</string>
 
     <string-array name="spinner_language">
         <item>EN</item>
