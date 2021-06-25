@@ -27,16 +27,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25,
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 scores = cross_val_score(model, X_test, y_test, cv=3)
-print("score random forest : " + str(model.score(X_test, y_test)))
+# print("score random forest : " + str(model.score(X_test, y_test)))
 X = df_norm.iloc[:, 1:]
 Y = df_norm.iloc[:, 0:1]
 
 # # List of symptoms
 dataset_symptoms = list(X.columns)
-print(dataset_symptoms)
 
-
-# print(y_train)
 
 def get_key_word(input):
     input = input.lower()
@@ -66,7 +63,6 @@ def input_rec(input):
     user_symptoms = input
 
     # Preprocessing the input symptoms
-    print(user_symptoms)
     processed_user_symptoms = get_key_word(user_symptoms)
     # Loop over all the symptoms in dataset and check its similarity score to the synonym string of the user-input
     # symptoms. If similarity>0.5, add the symptom to the final list
@@ -81,19 +77,11 @@ def input_rec(input):
             if count / len(data_sym_split) > 0.5:
                 found_symptoms.add(data_sym)
     found_symptoms = list(found_symptoms)
-    print("symtoms")
-    print(found_symptoms)
     return found_symptoms
 
 
 # confirm symtoms
 def confirmSymtoms(found_symptoms):
-    found_symptoms = found_symptoms.split(".")
-    found_symptoms.pop()
-    print("Xác nhận triệu chứng bạn đang mắc  !")
-    for idx, symp in enumerate(found_symptoms):
-        print(idx, ":", symp),
-
     # Find other relevant symptoms from the dataset based on user symptoms based on the highest co-occurance with the
     # ones that is input by the user
     dis_list = set()
@@ -113,7 +101,9 @@ def confirmSymtoms(found_symptoms):
     # Symptoms that co-occur with the ones selected by user
     dict_symp = dict(Counter(counter_list))
     dict_symp_tup = sorted(dict_symp.items(), key=operator.itemgetter(1), reverse=True)
-    print(dict_symp_tup)
+    return dict_symp_tup
+
+def otherSymtoms(dict_symp_tup,select_list ):
     # Iteratively, suggest top co-occuring symptoms to the user and ask to select the ones applicable
     found_symptoms = []
     count = 0
@@ -124,7 +114,6 @@ def confirmSymtoms(found_symptoms):
             print("\nBạn có bị các triệu chứng khác theo gợi ý không:")
             for idx, ele in enumerate(found_symptoms):
                 print(idx, ":", ele)
-            select_list = ""
             if select_list[0] == 'không':
                 break
             if select_list[0] == 'skip':
