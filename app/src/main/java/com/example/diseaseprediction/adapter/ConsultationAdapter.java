@@ -24,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,9 +44,10 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
         this.mConsultationList = mConsultationList;
     }
 
+    //
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_consultation,parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_consultation, parent, false);
         return new ConsultationAdapter.ViewHolder(view);
     }
 
