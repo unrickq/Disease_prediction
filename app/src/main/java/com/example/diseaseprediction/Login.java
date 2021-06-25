@@ -141,6 +141,7 @@ public class Login extends AppCompatActivity {
         } else {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -260,13 +261,17 @@ public class Login extends AppCompatActivity {
                             }
                             //Go to account information activity
                             Intent intent = new Intent(Login.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+                            finish();
                         }
                     });
                 } else {
                     //Account existed
                     Intent intent = new Intent(Login.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    finish();
                 }
             }
 

@@ -150,7 +150,9 @@ public class AccountInfoDoctor extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveData();
                 Intent intent = new Intent(AccountInfoDoctor.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {

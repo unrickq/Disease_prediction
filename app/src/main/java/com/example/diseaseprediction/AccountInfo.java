@@ -224,9 +224,11 @@ public class AccountInfo extends AppCompatActivity {
                             if (snapshot.child("typeID").getValue().toString().equals("0")) {
                                 Intent intent = new Intent(AccountInfo.this, AccountInfoDoctor.class);
                                 startActivity(intent);
+                                finish();
                             } else {
                                 Intent intent = new Intent(AccountInfo.this, MainActivity.class);
                                 startActivity(intent);
+                                finish();
                             }
 
                         } catch (NullPointerException e) {
@@ -235,6 +237,7 @@ public class AccountInfo extends AppCompatActivity {
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(AccountInfo.this, Login.class);
                             startActivity(i);
+                            finish();
                         }
                     }
 

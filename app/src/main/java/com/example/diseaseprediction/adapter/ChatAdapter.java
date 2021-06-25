@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -61,7 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         holder.item_chat_time.setText(shortTimeStr);
 
         //On clicked in message then show time send
-        holder.item_chat_show_message.setOnClickListener(new View.OnClickListener() {
+        holder.item_chat_layout_show_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (holder.item_chat_time.getVisibility() == View.VISIBLE){
@@ -81,11 +82,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView item_chat_show_message,item_chat_time;
+        public LinearLayout item_chat_layout_show_message;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             //Find view
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
             item_chat_time = itemView.findViewById(R.id.item_chat_time);
+            item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
         }
     }
 
