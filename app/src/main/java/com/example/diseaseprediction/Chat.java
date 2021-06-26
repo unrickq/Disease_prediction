@@ -386,7 +386,6 @@ public class Chat extends AppCompatActivity {
                         //TEST list array symptom
                         List<String> testList = new ArrayList<>();
                         testList.add("1sd");
-                        testList.add("gvcxvcxvxc");
                         testList.add("ycxvxcv vxcvxcv");
                         chatAdapter = new ChatAdapter(Chat.this, mMessage, testList);
                         chat_recycler_view.setAdapter(chatAdapter);
