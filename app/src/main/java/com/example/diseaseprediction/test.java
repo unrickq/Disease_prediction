@@ -11,7 +11,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +20,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.object.Message;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -33,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,46 +71,25 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        mSymptom = new ArrayList<>();
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("aaavxcvxc");
-        mSymptom.add("aaa");
-        mSymptom.add("afsda");
-        mSymptom.add("vvvvvvvvvvvvvvvvvvvvvvvvvv");
-        ListView ls = findViewById(R.id.item_chat_checkbox);
-        symptomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, mSymptom);
-        ls.setAdapter(symptomAdapter);
+        List ls = new ArrayList<>();
+        ls.add("mnb");
+        ls.add("mnvcb");
+        ls.add("mnbvnb");
+        Message msg = new Message("QUANGNE", "12343543", "1312312321", "TEST MESSAGE"
+                , new Date(), "123", ls, 1);
+        myRef = FirebaseDatabase.getInstance().getReference("Message");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //msg.setMessageID(myRef.push().getKey());
+                myRef.child(msg.getMessageID()).setValue(msg);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
 //        btn = findViewById(R.id.btn1);

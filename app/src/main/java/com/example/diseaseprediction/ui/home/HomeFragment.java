@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
                             Message msg = new Message(reference.push().getKey(), accountIDOne
                                     , accountIDTwo, "Hello all! Let's started!"
-                                    , new Date(), sessionID, 1);
+                                    , new Date(), sessionID, null, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                         }
 
@@ -236,7 +236,7 @@ public class HomeFragment extends Fragment {
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
                                 Message msg = new Message(reference.push().getKey(), accountIDOne
                                         , accountIDTwo, "Hello all! Let's started!"
-                                        , new Date(), sessionID, 1);
+                                        , new Date(), sessionID, null, 1);
                                 reference.child(msg.getMessageID()).setValue(msg);
                             }
                             //Send session id
@@ -246,7 +246,6 @@ public class HomeFragment extends Fragment {
                             i.putExtra("sessionID", sessionID);
                             i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
-
                         }
 
                         @Override
