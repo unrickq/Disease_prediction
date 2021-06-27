@@ -44,6 +44,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //        this.imgURL = imgURL;
     }
 
+
     @NotNull
     @Override
     public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -99,6 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 if (msg.getListSymptom() != null) {
                     System.out.println("Quang k null");
                     //Set layout checkbox visible
+
                     holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
                     //Create new adapter
                     symptomAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_multiple_choice, msg.getListSymptom());
