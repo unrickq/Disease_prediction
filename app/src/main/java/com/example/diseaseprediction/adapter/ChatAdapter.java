@@ -30,18 +30,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Message> mMessage;
-    private List<String> mSymptom;
+    //private List<String> mSymptom;
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
     private String imgURL;
     private ArrayAdapter<String> symptomAdapter;
 
 
-    public ChatAdapter(@NonNull Context context, List<Message> mMessage, List<String> mSymptom) {
+    public ChatAdapter(@NonNull Context context, List<Message> mMessage) {
         this.mContext = context;
         this.mMessage = mMessage;
-        this.mSymptom = mSymptom;
-        this.imgURL = imgURL;
+//        this.mSymptom = mSymptom;
+//        this.imgURL = imgURL;
     }
 
     @NotNull
@@ -92,6 +92,43 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         //Get message
         Message msg = mMessage.get(position);
         holder.item_chat_show_message.setText(msg.getMessage());
+        if (msg.getListSymptom() != null) {
+
+            //Set symptom adapter
+            if (holder.item_chat_layout_checkbox != null) {
+                if (msg.getListSymptom() != null) {
+                    System.out.println("Quang k null");
+                    //Set layout checkbox visible
+                    holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
+                    //Create new adapter
+                    symptomAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_multiple_choice, msg.getListSymptom());
+                    holder.item_chat_checkbox.setAdapter(symptomAdapter);
+                    //Set height of checkbox
+                    setListViewHeightBasedOnChildren(holder.item_chat_checkbox);
+
+                    //Set onclick in item
+                    holder.item_chat_checkbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            //Get item value checked
+                            String value = holder.item_chat_checkbox.getItemAtPosition(i).toString();
+
+                            //Button done clicked
+                            holder.item_chat_checkbox_done.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // do something
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    //Layout checkbox gone
+                    holder.item_chat_layout_checkbox.setVisibility(View.GONE);
+                }
+
+            }
+        }
 
         //Custom date under message
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
@@ -110,39 +147,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
 
-        //Set symptom adapter
-        if (holder.item_chat_layout_checkbox != null) {
-            if (!mSymptom.isEmpty()) {
-                //Set layout checkbox visible
-                holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
-                //Create new adapter
-                symptomAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_multiple_choice, mSymptom);
-                holder.item_chat_checkbox.setAdapter(symptomAdapter);
-                //Set height of checkbox
-                setListViewHeightBasedOnChildren(holder.item_chat_checkbox);
 
-                //Set onclick in item
-                holder.item_chat_checkbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //Get item value checked
-                        String value = holder.item_chat_checkbox.getItemAtPosition(i).toString();
-
-                        //Button done clicked
-                        holder.item_chat_checkbox_done.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // do something
-                            }
-                        });
-                    }
-                });
-            } else {
-                //Layout checkbox gone
-                holder.item_chat_layout_checkbox.setVisibility(View.GONE);
-            }
-
-        }
     }
 
     @Override

@@ -42,7 +42,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,45 +117,44 @@ public class Chat extends AppCompatActivity {
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
                     if (!msg.equals("")) {
-                        //chat voi user
-                        if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
-                            Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID, 1);
-                            System.out.println("idla" + fUser.getUid());
-                            setMessageFirebase(message);
-                            //
-                            chat_txt_enter_mess.getText().clear();
-                        } else {
-//                            user chat
-                            Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID, 1);
-                            System.out.println("idla" + fUser.getUid());
-                            setMessageFirebase(message);
-
-                            // chat bot tra loi
-//                            List<String> symtoms = new ArrayList<>();
-                            String symtoms = "Triệu chứng của bạn là :";
-                            int i = 1;
-                            Python py = Python.getInstance();
-                            PyObject pyObject = py.getModule("recognition_speech");
-                            PyObject pyObject1 = pyObject.callAttr("input_rec", msg);
-                            List<PyObject> pyList = pyObject1.asList();
-                            System.out.println("list" + pyList);
-                            for (PyObject var : pyList) {
-                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        symtoms
-                                        , new Date(), sessionID, 1);
-                                setMessageFirebase(message2);
-
-                                symtoms = i + ". " + var.toString();
-                                i++;
-                                System.out.println("check sym" + symtoms);
-                            }
-                            System.out.println("check sym" + symtoms);
-                            Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                    symtoms
-                                    , new Date(), sessionID, 1);
-                            setMessageFirebase(message2);
+//                        //chat voi user
+//                        if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
+//                            Message message = new Message("", fUser.getUid(), receiverID, msg
+//                                    , new Date(), sessionID, 1);
+//                            System.out.println("idla" + fUser.getUid());
+//                            setMessageFirebase(message);
+//                            //
+//                            chat_txt_enter_mess.getText().clear();
+//                        } else {
+//////                            user chat
+//                            Message message = new Message("", fUser.getUid(), receiverID, msg
+//                                    , new Date(), sessionID,ls, 1);
+//                            setMessageFirebase(message);
+//
+//                            // chat bot tra loi
+////                            List<String> symtoms = new ArrayList<>();
+//                            String symtoms = "Triệu chứng của bạn là :";
+//                            int i = 1;
+//                            Python py = Python.getInstance();
+//                            PyObject pyObject = py.getModule("recognition_speech");
+//                            PyObject pyObject1 = pyObject.callAttr("input_rec", msg);
+//                            List<PyObject> pyList = pyObject1.asList();
+//                            System.out.println("list" + pyList);
+//                            for (PyObject var : pyList) {
+//                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+//                                        symtoms
+//                                        , new Date(), sessionID, 1);
+//                                setMessageFirebase(message2);
+//
+//                                symtoms = i + ". " + var.toString();
+//                                i++;
+//                                System.out.println("check sym" + symtoms);
+//                            }
+//                            System.out.println("check sym" + symtoms);
+//                            Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+//                                    symtoms
+//                                    , new Date(), sessionID, 1);
+//                            setMessageFirebase(message2);
 
 //        PyObject pyObject2 = pyObject.callAttr("confirmSymtoms",uInput);
 //        //Bạn có những triệu chứng này không? Nếu Có, hãy nhập các chỉ số (được phân tách bằng dấu cách), 'không' để dừng, 'skip' để bỏ qua:\n
@@ -168,7 +166,7 @@ public class Chat extends AppCompatActivity {
 //                            setMessageFirebase(message2);
 //
 //                            chat_txt_enter_mess.getText().clear();
-                        }
+//                        }
                     }
                 }
             });
@@ -382,12 +380,12 @@ public class Chat extends AppCompatActivity {
                                 && msg.getSessionID().equals(sessionID)) {
                             mMessage.add(msg);
                         }
-
-                        //TEST list array symptom
-                        List<String> testList = new ArrayList<>();
-                        testList.add("1sd");
-                        testList.add("ycxvxcv vxcvxcv");
-                        chatAdapter = new ChatAdapter(Chat.this, mMessage, testList);
+//
+//                        //TEST list array symptom
+//                        List<String> testList = new ArrayList<>();
+//                        //testList.add("1sd");
+//                        //testList.add("ycxvxcv vxcvxcv");
+                        chatAdapter = new ChatAdapter(Chat.this, mMessage);
                         chat_recycler_view.setAdapter(chatAdapter);
                     }
                 }

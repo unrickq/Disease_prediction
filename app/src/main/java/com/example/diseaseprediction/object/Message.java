@@ -1,166 +1,189 @@
 package com.example.diseaseprediction.object;
 
 import java.util.Date;
+import java.util.List;
 
 public class Message {
 
-  private String messageID;
-  private String senderID;
-  private String receiverID;
-  private String message;
-  private Date dateSend;
-  private String sessionID;
-  private int status;
+    private String messageID;
+    private String senderID;
+    private String receiverID;
+    private String message;
+    private Date dateSend;
+    private String sessionID;
+    private List<String> listSymptom;
+    private int status;
 
-  /**
-   * Init new Message
-   */
-  public Message() {
-  }
+    /**
+     * Init new Message
+     */
+    public Message() {
+    }
 
-  /**
-   * Init new Message
-   *
-   * @param messageID  Message ID
-   * @param senderID   Sender ID
-   * @param receiverID Receiver ID
-   * @param message    Message content
-   * @param dateSend   Send date
-   * @param sessionID  Session ID
-   * @param status     Message status
-   */
-  public Message(String messageID, String senderID, String receiverID, String message, Date dateSend,
-                 String sessionID, int status) {
-    this.messageID = messageID;
-    this.senderID = senderID;
-    this.receiverID = receiverID;
-    this.message = message;
-    this.dateSend = dateSend;
-    this.sessionID = sessionID;
-    this.status = status;
-  }
+    /**
+     * Init new Message
+     *
+     * @param messageID  Message ID
+     * @param senderID   Sender ID
+     * @param receiverID Receiver ID
+     * @param message    Message content
+     * @param dateSend   Send date
+     * @param sessionID  Session ID
+     * @param status     Message status
+     */
+    public Message(String messageID, String senderID, String receiverID, String message, Date dateSend,
+                   String sessionID, List<String> listSymptom, int status) {
+        this.messageID = messageID;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.message = message;
+        this.dateSend = dateSend;
+        this.sessionID = sessionID;
+        this.listSymptom = listSymptom;
+        this.status = status;
+    }
 
-  /**
-   * Get Message ID
-   *
-   * @return message ID
-   */
-  public String getMessageID() {
-    return messageID;
-  }
+    /**
+     * Get Message ID
+     *
+     * @return message ID
+     */
+    public String getMessageID() {
+        return messageID;
+    }
 
-  /**
-   * set Message ID
-   *
-   * @param messageID message ID
-   */
-  public void setMessageID(String messageID) {
-    this.messageID = messageID;
-  }
+    /**
+     * set Message ID
+     *
+     * @param messageID message ID
+     */
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
+    }
 
-  /**
-   * Get sender ID
-   *
-   * @return sender ID
-   */
-  public String getSenderID() {
-    return senderID;
-  }
+    /**
+     * Get sender ID
+     *
+     * @return sender ID
+     */
+    public String getSenderID() {
+        return senderID;
+    }
 
-  /**
-   * Set sender ID
-   *
-   * @param senderID sender ID
-   */
-  public void setSenderID(String senderID) {
-    this.senderID = senderID;
-  }
+    /**
+     * Set sender ID
+     *
+     * @param senderID sender ID
+     */
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
+    }
 
-  /**
-   * Get receiver ID
-   *
-   * @return receiver ID
-   */
-  public String getReceiverID() {
-    return receiverID;
-  }
+    /**
+     * Get receiver ID
+     *
+     * @return receiver ID
+     */
+    public String getReceiverID() {
+        return receiverID;
+    }
 
-  /**
-   * Set receiver ID
-   *
-   * @param receiverID receiver ID
-   */
-  public void setReceiverID(String receiverID) {
-    this.receiverID = receiverID;
-  }
+    /**
+     * Set receiver ID
+     *
+     * @param receiverID receiver ID
+     */
+    public void setReceiverID(String receiverID) {
+        this.receiverID = receiverID;
+    }
 
-  /**
-   * Get message content
-   *
-   * @return message content
-   */
-  public String getMessage() {
-    return message;
-  }
+    /**
+     * Get message content
+     *
+     * @return message content
+     */
+    public String getMessage() {
+        return message;
+    }
 
-  /**
-   * Set message content
-   *
-   * @param message message content
-   */
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    /**
+     * Set message content
+     *
+     * @param message message content
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  /**
-   * Get send date
-   *
-   * @return send date
-   */
-  public Date getDateSend() {
-    return dateSend;
-  }
+    /**
+     * Get send date
+     *
+     * @return send date
+     */
+    public Date getDateSend() {
+        return dateSend;
+    }
 
-  /**
-   * Set send date
-   *
-   * @param dateSend send date
-   */
-  public void setDateSend(Date dateSend) {
-    this.dateSend = dateSend;
-  }
+    /**
+     * Set send date
+     *
+     * @param dateSend send date
+     */
+    public void setDateSend(Date dateSend) {
+        this.dateSend = dateSend;
+    }
 
-  /**
-   * Get session ID
-   *
-   * @return session ID
-   */
-  public String getSessionID() {
-    return sessionID;
-  }
+    /**
+     * Get session ID
+     *
+     * @return session ID
+     */
+    public String getSessionID() {
+        return sessionID;
+    }
 
-  /**
-   * Set session ID
-   *
-   * @param sessionID session ID
-   */
-  public void setSessionID(String sessionID) {
-    this.sessionID = sessionID;
-  }
+    /**
+     * Set session ID
+     *
+     * @param sessionID session ID
+     */
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
+    }
 
-  /**
-   * Get Status
-   * @return 0: Deleted | 1: Normal
-   */
-  public int getStatus() {
-    return status;
-  }
+    /**
+     * Get list symptom
+     *
+     * @return list symptom
+     */
+    public List<String> getListSymptom() {
+        return listSymptom;
+    }
 
-  /**
-   * Set Status. 0: Deleted | 1: Normal
-   * @param status 0: Deleted | 1: Normal
-   */
-  public void setStatus(int status) {
-    this.status = status;
-  }
+    /**
+     * Set list symptom
+     *
+     * @param listSymptom list symptom
+     */
+    public void setListSymptom(List<String> listSymptom) {
+        this.listSymptom = listSymptom;
+    }
+
+    /**
+     * Get Status
+     *
+     * @return 0: Deleted | 1: Normal
+     */
+    public int getStatus() {
+        return status;
+    }
+
+    /**
+     * Set Status. 0: Deleted | 1: Normal
+     *
+     * @param status 0: Deleted | 1: Normal
+     */
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }
