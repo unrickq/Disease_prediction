@@ -1,56 +1,39 @@
 package com.example.diseaseprediction;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.speech.RecognizerIntent;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.object.Advise;
-import com.example.diseaseprediction.object.Disease;
-import com.example.diseaseprediction.object.DoctorSpecialization;
-import com.example.diseaseprediction.object.Medicine;
-import com.example.diseaseprediction.object.Symptom;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class test extends AppCompatActivity {
@@ -58,6 +41,10 @@ public class test extends AppCompatActivity {
     private static final int REQUEST_CODE_SPEECH = 10;
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
+
+    private List<String> mSymptom;
+    private ArrayAdapter<String> symptomAdapter;
+
 
     private TextInputLayout testlayout, testlayout2;
     private AutoCompleteTextView spinnerr;
@@ -79,26 +66,68 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        btn = findViewById(R.id.btn1);
-        imageView2 = findViewById(R.id.imageView2);
-        btn2 = findViewById(R.id.button);
+        mSymptom = new ArrayList<>();
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("aaavxcvxc");
+        mSymptom.add("aaa");
+        mSymptom.add("afsda");
+        mSymptom.add("vvvvvvvvvvvvvvvvvvvvvvvvvv");
+        ListView ls = findViewById(R.id.item_chat_checkbox);
+        symptomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, mSymptom);
+        ls.setAdapter(symptomAdapter);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-            }
-        });
 
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadImage();
-            }
-        });
+//        btn = findViewById(R.id.btn1);
+//        imageView2 = findViewById(R.id.imageView2);
+//        btn2 = findViewById(R.id.button);
+//
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+//            }
+//        });
+//
+//        btn2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                uploadImage();
+//            }
+//        });
 
 
 //        addDataSpecialization(new DoctorSpecialization("1","Respiratory",new Date(),new Date(),1));

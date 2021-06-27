@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,6 +57,36 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
+    /**
+     * Set height of listview manual
+     *
+     * @param listView
+     */
+    public static void setListViewHeightBasedOnChildren(final ListView listView) {
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                ListAdapter listAdapter = listView.getAdapter();
+                if (listAdapter == null) {
+                    return;
+                }
+                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+                int listWidth = listView.getMeasuredWidth();
+                for (int i = 0; i < listAdapter.getCount(); i++) {
+                    View listItem = listAdapter.getView(i, null, listView);
+                    listItem.measure(
+                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    totalHeight += listItem.getMeasuredHeight();
+                }
+                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
+                listView.setLayoutParams(params);
+                listView.requestLayout();
+            }
+        });
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
         //Get message
@@ -80,10 +111,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         });
 
         //Set symptom adapter
-        if (holder.item_chat_checkbox != null) {
+        if (holder.item_chat_layout_checkbox != null) {
             if (!mSymptom.isEmpty()) {
+                //Set layout checkbox visible
+                holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
+                //Create new adapter
                 symptomAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_multiple_choice, mSymptom);
                 holder.item_chat_checkbox.setAdapter(symptomAdapter);
+                //Set height of checkbox
+                setListViewHeightBasedOnChildren(holder.item_chat_checkbox);
+
                 //Set onclick in item
                 holder.item_chat_checkbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -100,10 +137,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         });
                     }
                 });
+            } else {
+                //Layout checkbox gone
+                holder.item_chat_layout_checkbox.setVisibility(View.GONE);
             }
+
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -124,7 +164,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_chat_show_message, item_chat_time;
-        public LinearLayout item_chat_layout_show_message;
+        public LinearLayout item_chat_layout_show_message, item_chat_layout_checkbox;
         public ListView item_chat_checkbox;
         public Button item_chat_checkbox_done;
 
@@ -134,6 +174,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
             item_chat_time = itemView.findViewById(R.id.item_chat_time);
             item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
+            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
             item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
             item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
         }
