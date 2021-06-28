@@ -33,6 +33,7 @@ import com.chaquo.python.android.AndroidPlatform;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.RecommendSymptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -465,6 +466,27 @@ public class Chat extends AppCompatActivity {
                 chat_txt_enter_mess.setText(result.get(0));
             }
         }
+    }
+
+    /**
+     * Create recommend symptom
+     *
+     * @param rcs RecommendSymptom
+     */
+    private void createRecommendSymptom(RecommendSymptom rcs) {
+        mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mRef.child(rcs.getMessageID()).setValue(rcs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void chatbot(String msg) {

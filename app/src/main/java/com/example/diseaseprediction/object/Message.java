@@ -1,7 +1,6 @@
 package com.example.diseaseprediction.object;
 
 import java.util.Date;
-import java.util.List;
 
 public class Message {
 
@@ -11,7 +10,6 @@ public class Message {
     private String message;
     private Date dateSend;
     private String sessionID;
-    private List<String> listSymptom;
     private int status;
 
     /**
@@ -32,14 +30,13 @@ public class Message {
      * @param status     Message status
      */
     public Message(String messageID, String senderID, String receiverID, String message, Date dateSend,
-                   String sessionID, List<String> listSymptom, int status) {
+                   String sessionID, int status) {
         this.messageID = messageID;
         this.senderID = senderID;
         this.receiverID = receiverID;
         this.message = message;
         this.dateSend = dateSend;
         this.sessionID = sessionID;
-        this.listSymptom = listSymptom;
         this.status = status;
     }
 
@@ -149,24 +146,6 @@ public class Message {
      */
     public void setSessionID(String sessionID) {
         this.sessionID = sessionID;
-    }
-
-    /**
-     * Get list symptom
-     *
-     * @return list symptom
-     */
-    public List<String> getListSymptom() {
-        return listSymptom;
-    }
-
-    /**
-     * Set list symptom
-     *
-     * @param listSymptom list symptom
-     */
-    public void setListSymptom(List<String> listSymptom) {
-        this.listSymptom = listSymptom;
     }
 
     /**
