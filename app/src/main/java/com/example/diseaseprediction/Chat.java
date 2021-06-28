@@ -412,7 +412,7 @@ public class Chat extends AppCompatActivity {
                         m.getItem(1).setVisible(false);
                     }
                 } catch (NullPointerException e) {
-                    Log.d(LOG_TAG, "Account type null");
+                    Log.d(LOG_TAG, "Account type null", e);
                 }
             }
 

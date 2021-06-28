@@ -2,6 +2,7 @@ package com.example.diseaseprediction.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapter.ViewHolder>{
+public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapter.ViewHolder> {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
+    private static final String LOG_TAG = "Consultation adapter";
     private Context mContext;
     private String latestMessage, latestTime;
     private List<ConsultationList> mConsultationList;
@@ -56,26 +58,26 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
         //Collections.reverse(mConsultationList);
         ConsultationList consultation = mConsultationList.get(position);
         //Get username depend on current account
-        if(consultation.getAccountOne().equals(fUser.getUid())){
-            getUserName(consultation.getAccountTwo(),holder.item_consultation_txt_name,holder.item_consultation_img_main);
-        }else{
-            getUserName(consultation.getAccountOne(),holder.item_consultation_txt_name,holder.item_consultation_img_main);
+        if (consultation.getAccountOne().equals(fUser.getUid())) {
+            getUserName(consultation.getAccountTwo(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
+        } else {
+            getUserName(consultation.getAccountOne(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
         }
         //Get messeage
-        getLatestMessageAndTime(consultation.getSessionID(),holder.item_consultation_txt_message, holder.item_consultation_txt_time);
+        getLatestMessageAndTime(consultation.getSessionID(), holder.item_consultation_txt_message, holder.item_consultation_txt_time);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, Chat.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //Open chat depend on current account
-                if(consultation.getAccountOne().equals(fUser.getUid())){
-                    i.putExtra("receiverID",consultation.getAccountTwo());
-                }else{
-                    i.putExtra("receiverID",consultation.getAccountOne());
+                if (consultation.getAccountOne().equals(fUser.getUid())) {
+                    i.putExtra("receiverID", consultation.getAccountTwo());
+                } else {
+                    i.putExtra("receiverID", consultation.getAccountOne());
                 }
-                i.putExtra("sessionID",consultation.getSessionID());
-                i.putExtra("isChatBot",false);
+                i.putExtra("sessionID", consultation.getSessionID());
+                i.putExtra("isChatBot", false);
                 mContext.startActivity(i);
             }
         });
@@ -86,21 +88,8 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
         return mConsultationList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView item_consultation_txt_name,item_consultation_txt_message,item_consultation_txt_time;
-        public CircleImageView item_consultation_img_main;
-
-        public ViewHolder(View view) {
-            super(view);
-            item_consultation_txt_name = view.findViewById(R.id.item_consultation_txt_name);
-            item_consultation_txt_message = view.findViewById(R.id.item_consultation_txt_message);
-            item_consultation_txt_time = view.findViewById(R.id.item_consultation_txt_time);
-            item_consultation_img_main = view.findViewById(R.id.item_consultation_img_main);
-        }
-    }
-
     //Get user by user ID
-    public void getUserName(String userId,TextView item_consultation_txt_name, CircleImageView item_consultation_img_main){
+    public void getUserName(String userId, TextView item_consultation_txt_name, CircleImageView item_consultation_img_main) {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(userId);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -117,26 +106,44 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     }
 
     //Get message by session ID
-    public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time){
+    public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time) {
         latestMessage = "";
         mRef = FirebaseDatabase.getInstance().getReference("Message");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()){
+                for (DataSnapshot sn : snapshot.getChildren()) {
                     Message msg = sn.getValue(Message.class);
-                    if (msg.getSessionID().equals(sessionID)){
-                        latestMessage = msg.getMessage();
-                        latestTime = sdf.format(msg.getDateSend().getTime());
+                    try {
+                        if (msg.getSessionID().equals(sessionID)) {
+                            latestMessage = msg.getMessage();
+                            latestTime = sdf.format(msg.getDateSend().getTime());
+                        }
+                        item_consultation_txt_message.setText(latestMessage);
+                        item_consultation_txt_time.setText(latestTime);
+                    } catch (NullPointerException e) {
+                        Log.d(LOG_TAG, "Consultation. Session ID null", e);
                     }
-                    item_consultation_txt_message.setText(latestMessage);
-                    item_consultation_txt_time.setText(latestTime);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView item_consultation_txt_name, item_consultation_txt_message, item_consultation_txt_time;
+        public CircleImageView item_consultation_img_main;
+
+        public ViewHolder(View view) {
+            super(view);
+            item_consultation_txt_name = view.findViewById(R.id.item_consultation_txt_name);
+            item_consultation_txt_message = view.findViewById(R.id.item_consultation_txt_message);
+            item_consultation_txt_time = view.findViewById(R.id.item_consultation_txt_time);
+            item_consultation_img_main = view.findViewById(R.id.item_consultation_img_main);
+        }
     }
 }

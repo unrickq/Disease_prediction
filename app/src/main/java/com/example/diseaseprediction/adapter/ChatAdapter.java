@@ -39,6 +39,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
 
+    private static final String LOG_TAG = "Chat adapter";
     private Context mContext;
     private List<Message> mMessage;
     private List<Symptom> mSymptom;
@@ -147,9 +148,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
      * @param holder View holder
      * @param ls     List<Symptom>()
      */
-    public void createCheckBox(ChatAdapter.ViewHolder holder, List<Symptom> ls, List<RecommendSymptom> rc) {
+    public void createCheckBox(ChatAdapter.ViewHolder holder, List<Symptom> ls, List<RecommendSymptom> rc, Message msg) {
         if (holder.item_chat_layout_checkbox != null) {
             if (ls.size() != 0) {
+                //Set checkbox layout enable or disable
+                if (msg.getStatus() == 2) {
+                    holder.item_chat_checkbox.setEnabled(false);
+                    holder.item_chat_checkbox_done.setEnabled(false);
+                } else {
+                    holder.item_chat_checkbox.setEnabled(true);
+                    holder.item_chat_checkbox_done.setEnabled(true);
+                }
+
                 //Set layout checkbox visible
                 holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
                 //Create new adapter
@@ -206,6 +216,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 }
                             }
                         }
+                        //Set disable checkbox layout
+                        mRef2 = FirebaseDatabase.getInstance().getReference("Message");
+                        mRef2.child(msg.getMessageID()).child("status").setValue(2);
                     }
                 });
             } else {
@@ -261,7 +274,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             }
                         }
                         //Create checkbox layout
-                        createCheckBox(holder, mSymptom, tempRecommend);
+                        createCheckBox(holder, mSymptom, tempRecommend, msg);
                     }
 
                     @Override

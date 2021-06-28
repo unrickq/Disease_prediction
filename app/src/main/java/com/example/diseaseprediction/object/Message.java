@@ -151,7 +151,7 @@ public class Message {
     /**
      * Get Status
      *
-     * @return 0: Deleted | 1: Normal
+     * @return 0: Deleted | 1: Normal | 2: Recommend symptom disable
      */
     public int getStatus() {
         return status;
