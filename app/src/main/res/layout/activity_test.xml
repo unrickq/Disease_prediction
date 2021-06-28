@@ -91,14 +91,12 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/btn1"-->
     <!--        tools:srcCompat="@tools:sample/avatars" />-->
 
-    <!--    <Button-->
-    <!--        android:id="@+id/button"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="48dp"-->
-    <!--        android:layout_marginTop="156dp"-->
-    <!--        android:text="uplen"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/btn1"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/testlayout2" />-->
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="156dp"
+        android:text="clicked" />
 
 </LinearLayout>

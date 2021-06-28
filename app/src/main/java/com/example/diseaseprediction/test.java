@@ -6,11 +6,17 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.SparseBooleanArray;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +26,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.Symptom;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -47,8 +49,8 @@ public class test extends AppCompatActivity {
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
 
-    private List<String> mSymptom;
-    private ArrayAdapter<String> symptomAdapter;
+    private List<Symptom> mSymptom;
+    private ArrayAdapter<Symptom> symptomAdapter;
 
 
     private TextInputLayout testlayout, testlayout2;
@@ -66,31 +68,46 @@ public class test extends AppCompatActivity {
     //Firebase
     StorageReference sRef;
 
+    public static void setListViewHeightBasedOnChildren(final ListView listView) {
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                ListAdapter listAdapter = listView.getAdapter();
+                if (listAdapter == null) {
+                    return;
+                }
+                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+                int listWidth = listView.getMeasuredWidth();
+                for (int i = 0; i < listAdapter.getCount(); i++) {
+                    View listItem = listAdapter.getView(i, null, listView);
+                    listItem.measure(
+                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    totalHeight += listItem.getMeasuredHeight();
+                }
+                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
+                listView.setLayoutParams(params);
+                listView.requestLayout();
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        List ls = new ArrayList<>();
-        ls.add("mnb");
-        ls.add("mnvcb");
-        ls.add("mnbvnb");
-        Message msg = new Message("QUANGNE", "12343543", "1312312321", "TEST MESSAGE"
-                , new Date(), "123", ls, 1);
-        myRef = FirebaseDatabase.getInstance().getReference("Message");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //msg.setMessageID(myRef.push().getKey());
-                myRef.child(msg.getMessageID()).setValue(msg);
-            }
+        btn = findViewById(R.id.button);
+        ListView item_chat_checkbox = findViewById(R.id.item_chat_checkbox);
+        Symptom sm = new Symptom("1", "ho", "ho 123", new Date(), new Date(), 1);
+        Symptom sm2 = new Symptom("2", "hvo", "ho 123", new Date(), new Date(), 1);
+        Symptom sm3 = new Symptom("3", "hxcvo", "ho 123", new Date(), new Date(), 1);
+        mSymptom = new ArrayList<>();
+        mSymptom.add(sm);
+        mSymptom.add(sm2);
+        mSymptom.add(sm3);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        createCheckBox(item_chat_checkbox, mSymptom);
 
 //        btn = findViewById(R.id.btn1);
 //        imageView2 = findViewById(R.id.imageView2);
@@ -114,61 +131,67 @@ public class test extends AppCompatActivity {
 //        });
 
 
-//        addDataSpecialization(new DoctorSpecialization("1","Respiratory",new Date(),new Date(),1));
-//        addDataSpecialization(new DoctorSpecialization("1","Hepatology",new Date(),new Date(),1));
-//        addDataSpecialization(new DoctorSpecialization("1","Polyclinic",new Date(),new Date(),1));
-
-//        testlayout = findViewById(R.id.testlayout);
-//        testlayout2 = findViewById(R.id.testlayout2);
 //
-//        spinnerr = findViewById(R.id.spinnerr);
-//        ArrayList<String> gender = new ArrayList<String>();
-//        gender.add(getString(R.string.default_choose_gender));
-//        gender.add(getString(R.string.default_gender_male));
-//        gender.add(getString(R.string.default_gender_female));
-//        ArrayAdapter genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
-//        spinnerr.setAdapter(genderAdapter);
-//        spinnerr.setText(spinnerr.getAdapter().getItem(0).toString());
-//        genderAdapter.getFilter().filter(null);
+    }
 
-//        recyclerView = findViewById(R.id.recycler);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    public void createCheckBox(ListView item_chat_checkboxx, List<Symptom> ls) {
+        //Create new adapter
+        symptomAdapter = new ArrayAdapter<Symptom>(test.this, android.R.layout.simple_list_item_multiple_choice, ls);
+        symptomAdapter.toString();
+        item_chat_checkboxx.setAdapter(symptomAdapter);
+        //Set height of checkbox
+        setListViewHeightBasedOnChildren(item_chat_checkboxx);
 
-//        mUser = new ArrayList<>();
-//      txt = findViewById(R.id.txt1);
-//
+        //Set onclick in item
+        item_chat_checkboxx.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Get item value checked
+                Symptom value = (Symptom) item_chat_checkboxx.getItemAtPosition(i);
+                System.out.println("quangfgfgfd" + value.getName());
+            }
+        });
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SparseBooleanArray sparseBooleanArray = item_chat_checkboxx.getCheckedItemPositions();
+                String itemsSelected = "";
 
-//
+                for (int i = 0; i < sparseBooleanArray.size(); i++) {
+                    int position = sparseBooleanArray.keyAt(i);
+                    if (sparseBooleanArray.get(position)) {
+                        itemsSelected += item_chat_checkboxx.getItemAtPosition(i).toString();
+                    }
+                }
+                Toast.makeText(test.this, itemsSelected, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 imageView2.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     private void uploadImage() {
-        if(filePath != null)
-        {
+        if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            sRef = FirebaseStorage.getInstance().getReference().child("images/"+ UUID.randomUUID().toString());
+            sRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
             sRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -187,15 +210,15 @@ public class test extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(test.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(test.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
@@ -292,7 +315,7 @@ public class test extends AppCompatActivity {
 //    }
 //
 //    void addDataSymptom(Symptom sm){
-//        myRef = FirebaseDatabase.getInstance().getReference("Sympton");
+//        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
 //        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {

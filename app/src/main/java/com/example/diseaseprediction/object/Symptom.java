@@ -127,9 +127,15 @@ public class Symptom {
 
     /**
      * Set Status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }
