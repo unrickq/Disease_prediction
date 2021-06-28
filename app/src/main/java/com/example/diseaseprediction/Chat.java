@@ -91,6 +91,7 @@ public class Chat extends AppCompatActivity {
 
         client = new TextClassificationClient(getApplicationContext());
         handler = new Handler();
+
         //Find view
         getViews();
 
