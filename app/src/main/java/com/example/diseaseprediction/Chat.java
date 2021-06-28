@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.text.Editable;
@@ -27,9 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Message;
@@ -41,6 +39,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+//import tensorflow lite
+import com.google.android.gms.tasks.Continuation;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
+import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
+
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.label.Category;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,16 +79,18 @@ public class Chat extends AppCompatActivity {
 
     private SpeechRecognizer speechRecognizer;
 
+    private TextClassificationClient client;
+    private Handler handler;
+
+    private static final String TAG = "TextClassificationDemo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-
+        client = new TextClassificationClient(getApplicationContext());
+        handler = new Handler();
         //Find view
         getViews();
 
@@ -122,60 +132,28 @@ public class Chat extends AppCompatActivity {
                         // User request
                         if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
                             Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID,null, 1);
+                                    , new Date(), sessionID, 1);
                             setMessageFirebase(message);
                             //
                             chat_txt_enter_mess.getText().clear();
                         } else {
 //                            user chat
                             Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID,null, 1);
+                                    , new Date(), sessionID, 1);
                             setMessageFirebase(message);
+                            //chatbot chat
+                            Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), "Bệnh của bạn là: "
+                                    , new Date(), sessionID, 1);
+                            setMessageFirebase(message1);
                             chat_txt_enter_mess.getText().clear();
-                            // chatbot reposes
-
-                            int i = 1;
-                            Python py = Python.getInstance();
-                            PyObject pyObject = py.getModule("recognition_speech");
-                            PyObject input_rec = pyObject.callAttr("input_rec", msg);
-                            List<PyObject> pyList = input_rec.asList();
-
-                            if (pyList.size()!=0) {
-                                //print list user enter symtoms
-                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        "Triệu chứng của bạn là :"
-                                        , new Date(), sessionID,null, 1);
+                            System.out.println("check msg" + msg);
+                            List<Result> results = client.classify(msg);
+                            for (Result var : results) {
+                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), var.getTitle()+" "+var.getConfidence()
+                                        , new Date(), sessionID, 1);
                                 setMessageFirebase(message2);
-                                //list symtoms
-                                for (PyObject var : pyList) {
-                                    Message message3 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                            i + ". " + var.toString()
-                                            , new Date(), sessionID,null, 1);
-                                    setMessageFirebase(message3);
-                                    i++;
-                                }
-                                PyObject confirmSymtoms = pyObject.callAttr("confirmSymtoms", input_rec);
-                                List<PyObject> dict_symp_tup = confirmSymtoms.asList();
-                                int count = 0;
-                                ArrayList<String> found_symptoms = new ArrayList<>();
-                                for (PyObject var : dict_symp_tup) {
-                                    count += 1;
-                                    found_symptoms.add(var.asList().get(0).toString());
-
-                                    }
-
-                                Message ms4 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        "Bạn có bị các triệu chứng khác theo gợi ý không:"
-                                        , new Date(), sessionID,found_symptoms, 1);
-                                setMessageFirebase(ms4);
-
-                            } else {
-                                Message message3 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        "Không đủ dữ liệu để chuẩn đoán bệnh !"
-                                        , new Date(), sessionID,null, 1);
-                                setMessageFirebase(message3);
                             }
-
+                            chat_txt_enter_mess.getText().clear();
 
                         }
                     }
@@ -489,24 +467,25 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    private void chatbot(String msg) {
-
-        Python py = Python.getInstance();
-        PyObject pyObject = py.getModule("recognition_speech");
-//        PyObject pyObject1 = pyObject.callAttr("input_rec","hôm nay tôi bị nhức đầu sốt ");
-
-        PyObject pyObject1 = pyObject.callAttr("input_rec", msg);
-        System.out.println("check test:" + pyObject1.toString());
-//        String uInput = "";
-//
-//        List<PyObject> pyList = pyObject1.asList();
-//        for (PyObject var : pyList) {
-//
-//            uInput += var.toString()+".";
-//        }
-//        //Xác nhận triệu chứng bạn đang mắc  !
-//        PyObject pyObject2 = pyObject.callAttr("confirmSymtoms",uInput);
-//        //Bạn có những triệu chứng này không? Nếu Có, hãy nhập các chỉ số (được phân tách bằng dấu cách), 'không' để dừng, 'skip' để bỏ qua:\n
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v(TAG, "onStart");
+        handler.post(
+                () -> {
+                    client.load();
+                });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v(TAG, "onStop");
+        handler.post(
+                () -> {
+                    client.unload();
+                });
+    }
+
+
 }

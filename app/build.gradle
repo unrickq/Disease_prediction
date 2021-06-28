@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'com.chaquo.python'
+
 }
 apply plugin: 'com.google.gms.google-services'
 android {
@@ -16,25 +16,7 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
-        python {
-            buildPython "C:/Users/Admin/AppData/Local/Programs/Python/Python38/python.exe"
-            pip {
-                install "statistics"
-                install "numpy"
-                install "pandas"
-                install "sklearn"
-                install "nltk"
-                install "collection"
-            }
-        }
-        sourceSets {
-            main {
-                python.srcDir "src/main/python"
-            }
-        }
+
     }
 
     buildTypes {
@@ -46,6 +28,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        mlModelBinding true
     }
 }
 
@@ -82,4 +67,13 @@ dependencies {
     //Circle image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    // Add Firebase ML dependency
+    //noinspection OutdatedLibrary
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.3'
+    // Add TFLite Task API (Text) dependency
+    implementation 'org.tensorflow:tensorflow-lite-support:0.2.0'
+    implementation 'org.tensorflow:tensorflow-lite-task-text:0.2.0'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
+    //read file csv
+    implementation 'com.opencsv:opencsv:4.6'
 }
