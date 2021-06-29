@@ -2,7 +2,6 @@ package com.example.diseaseprediction.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +32,13 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     private Context mContext;
     private List<Prediction> mPredictions;
     private SimpleDateFormat sdf;
+    private int typeAccount;
 
-    public PredictionAdapter(Context context, List<Prediction> mPredictions) {
+    public PredictionAdapter(Context context, List<Prediction> mPredictions, int typeAccount) {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         this.mContext = context;
         this.mPredictions = mPredictions;
+        this.typeAccount = typeAccount;
     }
 
     @NonNull
@@ -56,10 +57,15 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, PredictionResult.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("mPrediction", (Parcelable) prediction);
-                mContext.startActivity(i);
+                if (typeAccount == 0) {
+                    //Doctor confirm prediction
+                } else if (typeAccount == 1) {
+                    //Patient prediction
+                    Intent i = new Intent(mContext, PredictionResult.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("mPrediction", prediction);
+                    mContext.startActivity(i);
+                }
             }
         });
 
@@ -67,7 +73,6 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
     @Override
     public int getItemCount() {
-        System.out.println("size of predict " + mPredictions.size());
         return mPredictions.size();
     }
 

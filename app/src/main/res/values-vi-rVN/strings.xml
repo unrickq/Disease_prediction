@@ -126,6 +126,8 @@
     <string name="home_doctor_txt_title">Xin chào bác sĩ !</string>
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
     <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
+    <string name="home_doctor_all_prediction_txt_title">Chẩn đoán cần xác nhận</string>
+
     <string name="nav_header_txt_acc_name">" Sample"</string>
 
     <string name="account_info_btn_done">Xong</string>
@@ -156,6 +158,5 @@
     <string name="upload_img_waiting">Đang tải lên...</string>
     <string name="upload_img_done">Tải lên hoàn tất</string>
     <string name="item_chat_checkbox_done">Hoàn tất</string>
-    <string name="home_doctor_all_prediction_txt_title">Prediction</string>
 
 </resources>

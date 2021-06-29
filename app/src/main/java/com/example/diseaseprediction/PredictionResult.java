@@ -3,6 +3,7 @@ package com.example.diseaseprediction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PredictionResult extends AppCompatActivity {
-
+    private static final String TAG = "PredictionResult";
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
     private FirebaseUser fUser;
@@ -100,24 +101,8 @@ public class PredictionResult extends AppCompatActivity {
 
         //Get receiver id
         intent = getIntent();
-        mPrediction = (Prediction) intent.getSerializableExtra("mPrediction");
-
-//        Prediction pm = new Prediction("idpre1", "kwTsRETY26NguL5v5ffyg3argSG3", "GFoBDpKPUealixZAOQvfoJhiiSE2",
-//                "-MdGsAcm_EPiCRhw3PWS", "1", "Default", new Date(), new Date(), 0);
-
-//        mRef = FirebaseDatabase.getInstance().getReference("Prediction").child("idpre1");
-//        mRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Prediction pr = snapshot.getValue(Prediction.class);
-//                getDataToUI(pr);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        mPrediction = intent.getParcelableExtra("mPrediction");
+        getDataToUI(mPrediction);
 
     }
 
@@ -147,23 +132,30 @@ public class PredictionResult extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     Prediction pr = sn.getValue(Prediction.class);
-                    if (pr.getPredictionID().equals(mPrediction.getPredictionID())) {
-                        if (pr.getStatus() == 0) {
-                            prediction_btn_contact_doctor.setEnabled(false);
-                            prediction_txt_status.setText(getString(R.string.prediction_txt_status_pending));
-                            prediction_txt_status.setTextColor(Color.parseColor("#ff9931"));
-                            prediction_img_status.setImageResource(R.drawable.ic_pending);
-                        } else if (pr.getStatus() == 1) {
-                            prediction_btn_contact_doctor.setEnabled(true);
-                            prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
-                            prediction_txt_status.setTextColor(Color.parseColor("#3bbf45"));
-                            prediction_img_status.setImageResource(R.drawable.ic_correct);
-                        } else if (pr.getStatus() == 2) {
-                            prediction_btn_contact_doctor.setEnabled(true);
-                            prediction_txt_status.setText(getString(R.string.prediction_txt_status_incorrect));
-                            prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
-                            prediction_img_status.setImageResource(R.drawable.ic_incorrect);
+                    try {
+                        if (pr.getPatientID().equals(fUser.getUid())) {
+                            //Load status
+                            if (pr.getPredictionID().equals(mPrediction.getPredictionID())) {
+                                if (pr.getStatus() == 0) {
+                                    prediction_btn_contact_doctor.setEnabled(false);
+                                    prediction_txt_status.setText(getString(R.string.prediction_txt_status_pending));
+                                    prediction_txt_status.setTextColor(Color.parseColor("#ff9931"));
+                                    prediction_img_status.setImageResource(R.drawable.ic_pending);
+                                } else if (pr.getStatus() == 1) {
+                                    prediction_btn_contact_doctor.setEnabled(true);
+                                    prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
+                                    prediction_txt_status.setTextColor(Color.parseColor("#3bbf45"));
+                                    prediction_img_status.setImageResource(R.drawable.ic_correct);
+                                } else if (pr.getStatus() == 2) {
+                                    prediction_btn_contact_doctor.setEnabled(true);
+                                    prediction_txt_status.setText(getString(R.string.prediction_txt_status_incorrect));
+                                    prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
+                                    prediction_img_status.setImageResource(R.drawable.ic_incorrect);
+                                }
+                            }
                         }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "PredictionResult. getDataToUI", e);
                     }
                 }
             }
@@ -185,12 +177,16 @@ public class PredictionResult extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
         getAdviseList(mPrediction.getDiseaseID());
     }
 
+    /**
+     * Get list advise by disease ID
+     *
+     * @param diseaseID disease ID
+     */
     private void getAdviseList(String diseaseID) {
         ArrayList<String> tempAdvise = new ArrayList<>();
         List<String> mAdvise = new ArrayList<>();
@@ -201,9 +197,13 @@ public class PredictionResult extends AppCompatActivity {
                 //Loop and get all value that equal to disease ID
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     DiseaseAdvise da = sn.getValue(DiseaseAdvise.class);
-                    if (da.getDiseaseID().equals(diseaseID)) {
-                        //Add adviseID to temp array
-                        tempAdvise.add(da.getAdviseID());
+                    try {
+                        if (da.getDiseaseID().equals(diseaseID)) {
+                            //Add adviseID to temp array
+                            tempAdvise.add(da.getAdviseID());
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "PredictionResult. getAdviseList", e);
                     }
                 }
 
@@ -215,9 +215,13 @@ public class PredictionResult extends AppCompatActivity {
                         for (DataSnapshot sn : snapshot.getChildren()) {
                             for (String id : tempAdvise) {
                                 Advise av = sn.getValue(Advise.class);
-                                if (id.equals(av.getAdviseID())) {
-                                    //Add symptom to list symptom (Object)
-                                    mAdvise.add(av.getDescription());
+                                try {
+                                    if (id.equals(av.getAdviseID())) {
+                                        //Add symptom to list symptom (Object)
+                                        mAdvise.add(av.getDescription());
+                                    }
+                                } catch (NullPointerException e) {
+                                    Log.d(TAG, "PredictionResult. getAdviseList", e);
                                 }
                             }
                         }
@@ -228,15 +232,12 @@ public class PredictionResult extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 }

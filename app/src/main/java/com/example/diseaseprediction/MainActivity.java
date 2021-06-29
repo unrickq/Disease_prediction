@@ -2,6 +2,7 @@ package com.example.diseaseprediction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,9 +39,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -261,18 +265,22 @@ public class MainActivity extends AppCompatActivity {
                 //check user exist in firebase
                 if (snapshot.hasChild(user.getUid())) {
                     mAccount = snapshot.child(user.getUid()).getValue(Account.class);
-                    //Get data
-                    //Go to info activity if data is default
-                    if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
-                            mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
-                            mAccount.getAddress().equals("Default")) {
-                        Intent intent = new Intent(MainActivity.this, AccountInfo.class);
-                        startActivity(intent);
-                    } else {
-                        //Check data if account type is doctor
-                        if (mAccount.getTypeID() == 0) {
-                            checkDataOfAccountDoctor(user);
+                    try {
+                        //Get data
+                        //Go to info activity if data is default
+                        if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
+                                mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
+                                mAccount.getAddress().equals("Default")) {
+                            Intent intent = new Intent(MainActivity.this, AccountInfo.class);
+                            startActivity(intent);
+                        } else {
+                            //Check data if account type is doctor
+                            if (mAccount.getTypeID() == 0) {
+                                checkDataOfAccountDoctor(user);
+                            }
                         }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "Home. Patient ID null", e);
                     }
                 } else {
                     //IF can't find any data
@@ -302,13 +310,20 @@ public class MainActivity extends AppCompatActivity {
                 //check user exist in firebase
                 if (snapshot.hasChild(user.getUid())) {
                     mDoctor = snapshot.child(user.getUid()).getValue(DoctorInfo.class);
-                    //Get data
-                    //Go to info activity if data is default
-                    if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
-                            mDoctor.getSpecializationID().equals("Default")) {
-                        Intent intent = new Intent(MainActivity.this, AccountInfoDoctor.class);
-                        startActivity(intent);
+                    try {
+                        //Get data
+                        //Go to info activity if data is default
+                        if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
+                                mDoctor.getSpecializationID().equals("Default")) {
+                            Intent intent = new Intent(MainActivity.this, AccountInfoDoctor.class);
+                            startActivity(intent);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "Main. checkDataOfAccountDoctor", e);
                     }
+                } else {
+                    DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(), new Date(), 1);
+                    mRef.child(user.getUid()).setValue(doctorInfo);
                 }
             }
 

@@ -359,47 +359,51 @@ public class AccountFragment extends Fragment {
                 //if exist then set UI
                 if (snapshot.hasChild(fUser.getUid())) {
                     mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
-                    //Set Doctor information by type
-                    if (mAccount.getTypeID() == 0) {
-                        account_layout_doctor.setVisibility(View.VISIBLE);
-                        loadDataOfDoctor();
-                    } else {
-                        account_layout_doctor.setVisibility(View.GONE);
-                    }
-                    //Set name
-                    if (!mAccount.getName().equals("Default")) {
-                        account_txt_title_name.getEditText().setText(mAccount.getName());
-                    }
+                    try {
+                        //Set Doctor information by type
+                        if (mAccount.getTypeID() == 0) {
+                            account_layout_doctor.setVisibility(View.VISIBLE);
+                            loadDataOfDoctor();
+                        } else {
+                            account_layout_doctor.setVisibility(View.GONE);
+                        }
+                        //Set name
+                        if (!mAccount.getName().equals("Default")) {
+                            account_txt_title_name.getEditText().setText(mAccount.getName());
+                        }
 
-                    //Set gender
-                    if (mAccount.getGender() == 0) {
-                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(0).toString());
-                        genderAdapter.getFilter().filter(null);
-                    } else if (mAccount.getGender() == 1) {
-                        account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
-                        genderAdapter.getFilter().filter(null);
-                    }
+                        //Set gender
+                        if (mAccount.getGender() == 0) {
+                            account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(0).toString());
+                            genderAdapter.getFilter().filter(null);
+                        } else if (mAccount.getGender() == 1) {
+                            account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
+                            genderAdapter.getFilter().filter(null);
+                        }
 
-                    //Set phone
-                    if (!mAccount.getPhone().equals("Default")) {
-                        account_txt_title_phone.getEditText().setText(mAccount.getPhone());
-                    }
+                        //Set phone
+                        if (!mAccount.getPhone().equals("Default")) {
+                            account_txt_title_phone.getEditText().setText(mAccount.getPhone());
+                        }
 
-                    //Set email
-                    if (!mAccount.getEmail().equals("Default")) {
-                        account_txt_title_email.getEditText().setText(mAccount.getEmail());
-                    }
+                        //Set email
+                        if (!mAccount.getEmail().equals("Default")) {
+                            account_txt_title_email.getEditText().setText(mAccount.getEmail());
+                        }
 
-                    //Set address
-                    if (!mAccount.getAddress().equals("Default")) {
-                        account_txt_title_address.getEditText().setText(mAccount.getAddress());
-                    }
+                        //Set address
+                        if (!mAccount.getAddress().equals("Default")) {
+                            account_txt_title_address.getEditText().setText(mAccount.getAddress());
+                        }
 
-                    //Set image
-                    if (!mAccount.getImage().equals("Default")) {
-                        Glide.with(AccountFragment.this).load(mAccount.getImage()).into(account_img_avatar);
-                    } else {
-                        Glide.with(AccountFragment.this).load(R.drawable.background_avatar).into(account_img_avatar);
+                        //Set image
+                        if (!mAccount.getImage().equals("Default")) {
+                            Glide.with(AccountFragment.this).load(mAccount.getImage()).into(account_img_avatar);
+                        } else {
+                            Glide.with(AccountFragment.this).load(R.drawable.background_avatar).into(account_img_avatar);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "Account. Account ID null", e);
                     }
 
                 } else {
@@ -508,41 +512,49 @@ public class AccountFragment extends Fragment {
                 System.out.println(fUser.getUid());
                 if (snapshot.hasChild(fUser.getUid())) {
                     mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
-
-                    //Set spinner
-                    specialization = new ArrayList<DoctorSpecialization>();
-                    mRef = FirebaseDatabase.getInstance().getReference("Specialization");
-                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot sh : snapshot.getChildren()) {
-                                ds = sh.getValue(DoctorSpecialization.class);
-                                assert ds != null;
-                                if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
-                                    account_doctor_spinner_specialization.setText(ds.getName());
+                    try {
+                        //Set spinner
+                        specialization = new ArrayList<DoctorSpecialization>();
+                        mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot sh : snapshot.getChildren()) {
+                                    ds = sh.getValue(DoctorSpecialization.class);
+                                    try {
+                                        assert ds != null;
+                                        if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
+                                            account_doctor_spinner_specialization.setText(ds.getName());
+                                        }
+                                        specialization.add(ds);
+                                    } catch (NullPointerException e) {
+                                        Log.d(TAG, "Account. loadDataOfDoctor", e);
+                                    }
                                 }
-                                specialization.add(ds);
+                                //Set spinner
+                                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(getContext(), R.layout.support_simple_spinner_dropdown_item, specialization);
+                                account_doctor_spinner_specialization.setAdapter(specializationAdapter);
                             }
-                            //Set spinner
-                            specializationAdapter = new ArrayAdapter<DoctorSpecialization>(getContext(), R.layout.support_simple_spinner_dropdown_item, specialization);
-                            account_doctor_spinner_specialization.setAdapter(specializationAdapter);
+
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                            }
+
+                        });
+
+
+                        if (mDoctor.getExperience() != -1) {
+                            account_doctor_txt_title_experience.getEditText().setText(String.valueOf(mDoctor.getExperience()));
                         }
 
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
+                        if (!mDoctor.getShortDescription().equals("Default")) {
+                            account_doctor_txt_title_description.getEditText().setText(mDoctor.getShortDescription());
                         }
-
-                    });
-
-
-                    if (mDoctor.getExperience() != -1) {
-                        account_doctor_txt_title_experience.getEditText().setText(String.valueOf(mDoctor.getExperience()));
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "Account. loadDataOfDoctor", e);
                     }
 
-                    if (!mDoctor.getShortDescription().equals("Default")) {
-                        account_doctor_txt_title_description.getEditText().setText(mDoctor.getShortDescription());
-                    }
                 } else {
                     //IF can't find any data
                 }
@@ -582,11 +594,16 @@ public class AccountFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot sh : snapshot.getChildren()) {
                         ds = sh.getValue(DoctorSpecialization.class);
-                        assert ds != null;
-                        if (ds.getName().equals(account_doctor_spinner_specialization.getText().toString())) {
-                            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
-                            mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
+                        try {
+                            assert ds != null;
+                            if (ds.getName().equals(account_doctor_spinner_specialization.getText().toString())) {
+                                mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+                                mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "Account. saveDataOfDoctor", e);
                         }
+
 
                     }
                 }

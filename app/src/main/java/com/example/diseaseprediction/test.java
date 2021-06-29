@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.Symptom;
@@ -42,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,9 +71,12 @@ public class test extends AppCompatActivity {
     private RecyclerView recyclerView;
     private testAdapter userAdapter;
     private List<Account> mUser;
+    ArrayList<Disease> list;
+    boolean isLoaded = false;
     Button btn, btn2;
     TextView txt;
     ImageView imageView2;
+    private Disease mDisease;
 
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
@@ -106,9 +112,35 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        loadAllPredictionPending();
+        testData();
 
-//
+        System.out.println("quang " + mDisease);
+
+    }
+
+    private void printData() {
+        System.out.println("quang " + list.get(0).getName());
+    }
+
+    private void testData() {
+        list = new ArrayList<>();
+        myRef = FirebaseDatabase.getInstance().getReference("Disease");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Disease dsc = ds.getValue(Disease.class);
+                    mDisease = dsc;
+                    list.add(dsc);
+                    //printData();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void loadAllPredictionPending() {

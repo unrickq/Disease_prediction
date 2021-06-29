@@ -126,6 +126,7 @@
     <string name="home_doctor_txt_title">Hello doctor !</string>
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
+    <string name="home_doctor_all_prediction_txt_title">Prediction in pending</string>
 
     <string name="account_info_btn_done">Done</string>
     <string name="account_info_txt_title">Personal Infomation</string>
@@ -146,7 +147,6 @@
     <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease click \'Resend\' button or contact the developer for assistance!</string>
     <string name="code_verify_txt_note">Please check for the verification code in your Mesaging app</string>
 
-
     <string name="error_txt">Error!</string>
     <string name="error_field_empty">Field can\'t be empty!</string>
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
@@ -155,8 +155,6 @@
     <string name="upload_img_waiting">Uploading...</string>
     <string name="upload_img_done">Uploaded</string>
     <string name="item_chat_checkbox_done">Done</string>
-
-    <string name="home_doctor_all_prediction_txt_title">Prediction</string>
 
 
     <string-array name="spinner_language">

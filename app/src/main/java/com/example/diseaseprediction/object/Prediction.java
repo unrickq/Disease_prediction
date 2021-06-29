@@ -1,11 +1,14 @@
 package com.example.diseaseprediction.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Prediction
  */
-public class Prediction {
+public class Prediction implements Parcelable {
     private String predictionID;
     private String patientID;
     private String doctorID;
@@ -49,6 +52,29 @@ public class Prediction {
         this.dateUpdate = dateUpdate;
         this.hiddenSpecializationID = hiddenSpecializationID;
         this.status = status;
+    }
+
+    public static final Creator<Prediction> CREATOR = new Creator<Prediction>() {
+        @Override
+        public Prediction createFromParcel(Parcel in) {
+            return new Prediction(in);
+        }
+
+        @Override
+        public Prediction[] newArray(int size) {
+            return new Prediction[size];
+        }
+    };
+
+    protected Prediction(Parcel in) {
+        predictionID = in.readString();
+        patientID = in.readString();
+        doctorID = in.readString();
+        sessionID = in.readString();
+        diseaseID = in.readString();
+        notes = in.readString();
+        hiddenSpecializationID = in.readString();
+        status = in.readInt();
     }
 
     /**
@@ -229,5 +255,22 @@ public class Prediction {
      */
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(predictionID);
+        parcel.writeString(patientID);
+        parcel.writeString(doctorID);
+        parcel.writeString(sessionID);
+        parcel.writeString(diseaseID);
+        parcel.writeString(notes);
+        parcel.writeString(hiddenSpecializationID);
+        parcel.writeInt(status);
     }
 }

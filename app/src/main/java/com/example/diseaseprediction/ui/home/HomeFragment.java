@@ -53,18 +53,19 @@ public class HomeFragment extends Fragment {
     private String sessionID;
     private final String CHATBOT_ID = "hmVF1lBCzlddOHl6qFeP0t76iMy1";
     private List<ConsultationList> consultationLists;
-    private List<Prediction> mPredictionList;
+    private List<Prediction> mPredictionListDoctor;
+    private List<Prediction> mPredictionListPatient;
     private ConsultationAdapter consultationAdapter;
-    private PredictionAdapter doctorPredictionPendingistAdapter;
+    private PredictionAdapter doctorPredictionPendingListAdapter;
+    private PredictionAdapter patientPredictionAdapter;
 
     private ConsultationList consultationList;
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
-            home_txt_title, home_doctor_txt_title, home_txt_prediction_title, home_doctor_txt_prediction_title,
-            home_txt_consultation_title, home_doctor_txt_consultation_title;
+            home_txt_title, home_txt_prediction_title, home_txt_consultation_title;
     private RelativeLayout home_doctor_all_prediction_layout_title;
     private SearchView home_search_view;
     private NavigationView navigationView;
-    private RecyclerView home_recycler_view_consultation, home_doctor_all_prediction_recycle_view;
+    private RecyclerView home_recycler_view_consultation, home_recycler_view_disease, home_doctor_all_prediction_recycle_view;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -122,11 +123,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //Create recycler
-        home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
-        home_recycler_view_consultation.setHasFixedSize(true);
-        home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        consultationLists = new ArrayList<>();
         //Load list consultation to recycler
         loadConsultationList();
 
@@ -145,11 +141,18 @@ public class HomeFragment extends Fragment {
         home_search_view = view.findViewById(R.id.home_search_view);
 
         home_txt_title = view.findViewById(R.id.home_txt_title);
-        home_doctor_txt_title = view.findViewById(R.id.home_doctor_txt_title);
         home_txt_prediction_title = view.findViewById(R.id.home_txt_prediction_title);
-        home_doctor_txt_prediction_title = view.findViewById(R.id.home_doctor_txt_prediction_title);
         home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
-        home_doctor_txt_consultation_title = view.findViewById(R.id.home_doctor_txt_consultation_title);
+
+        //Create consultation recycle
+        home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
+        home_recycler_view_consultation.setHasFixedSize(true);
+        home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
+        //Create disease recycle
+        home_recycler_view_disease = view.findViewById(R.id.home_recycler_view_disease);
+        home_recycler_view_disease.setHasFixedSize(true);
+        home_recycler_view_disease.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
         home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
         home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
@@ -273,6 +276,7 @@ public class HomeFragment extends Fragment {
      * Load consultation of current account
      */
     private void loadConsultationList() {
+        consultationLists = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -297,25 +301,40 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * DOCTOR TYPE
+     * Load all prediction pending
+     */
     private void loadAllPredictionPending() {
-        mPredictionList = new ArrayList<>();
+        mPredictionListDoctor = new ArrayList<>();
+        //Find specialization id of doctor account
         mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mDoctor = snapshot.getValue(DoctorInfo.class);
+                //Go to prediction
                 mRef = FirebaseDatabase.getInstance().getReference("Prediction");
                 mRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        mPredictionListDoctor.clear();
                         for (DataSnapshot sh : snapshot.getChildren()) {
                             Prediction pr = sh.getValue(Prediction.class);
-                            if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                                mPredictionList.add(pr);
+                            assert pr != null;
+                            try {
+                                //Check if specializationID in prediction equal with specializationID in doctor account
+                                if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                    //Add to prediction list
+                                    mPredictionListDoctor.add(pr);
+                                }
+                            } catch (NullPointerException e) {
+                                Log.d(TAG, "Home. Patient ID null", e);
                             }
                         }
-                        doctorPredictionPendingistAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionList);
-                        home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingistAdapter);
+                        //Create adapter
+                        doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionListDoctor, 0);
+                        home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
                     }
 
                     @Override
@@ -331,14 +350,46 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * PATIENT TYPE
+     * Load all prediction of patient
+     */
+    private void loadAllPredictionOfAccount() {
+        mPredictionListPatient = new ArrayList<>();
+        mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mPredictionListPatient.clear();
+                for (DataSnapshot sh : snapshot.getChildren()) {
+                    Prediction pr = sh.getValue(Prediction.class);
+                    //If patientId equal with current accountID
+                    try {
+                        if (pr.getPatientID().equals(fUser.getUid())) {
+                            mPredictionListPatient.add(pr);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "Home. Patient ID null", e);
+                    }
+                }
+                patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionListPatient, 1);
+                home_recycler_view_disease.setAdapter(patientPredictionAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     /**
      * UI of doctor role
      */
     private void setUIDoctor() {
-        home_txt_title.setVisibility(View.GONE);
-        home_txt_prediction_title.setVisibility(View.GONE);
-        home_txt_consultation_title.setVisibility(View.GONE);
+        home_txt_title.setText(getString(R.string.home_doctor_txt_title));
+        home_txt_prediction_title.setText(getString(R.string.home_doctor_txt_prediction_title));
+        home_txt_consultation_title.setText(getString(R.string.home_doctor_txt_consultation_title));
 
         //All prediction in pending
         home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
@@ -347,23 +398,21 @@ public class HomeFragment extends Fragment {
         home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
         home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         loadAllPredictionPending();
-
-        home_doctor_txt_title.setVisibility(View.VISIBLE);
-        home_doctor_txt_prediction_title.setVisibility(View.VISIBLE);
-        home_doctor_txt_consultation_title.setVisibility(View.VISIBLE);
     }
 
     /**
      * UI of user role
      */
     private void setUIPatient() {
-        home_doctor_txt_title.setVisibility(View.GONE);
-        home_doctor_txt_prediction_title.setVisibility(View.GONE);
-        home_doctor_txt_consultation_title.setVisibility(View.GONE);
+        //Set doctor visibility gone
+        home_doctor_all_prediction_layout_title.setVisibility(View.GONE);
+        home_doctor_all_prediction_recycle_view.setVisibility(View.GONE);
 
-        home_txt_title.setVisibility(View.VISIBLE);
-        home_txt_prediction_title.setVisibility(View.VISIBLE);
-        home_txt_consultation_title.setVisibility(View.VISIBLE);
+        //Patient
+        loadAllPredictionOfAccount();
+        home_txt_title.setText(getString(R.string.home_txt_title));
+        home_txt_prediction_title.setText(getString(R.string.home_txt_prediction_title));
+        home_txt_consultation_title.setText(getString(R.string.home_txt_consultation_title));
     }
 
     /**
@@ -399,5 +448,4 @@ public class HomeFragment extends Fragment {
             });
         }
     }
-
 }
