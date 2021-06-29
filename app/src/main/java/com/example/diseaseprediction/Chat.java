@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
@@ -39,12 +40,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+//import tensorflow lite
+import com.google.android.gms.tasks.Continuation;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
+import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
+
+import org.jetbrains.annotations.NotNull;
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.label.Category;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,6 +68,7 @@ public class Chat extends AppCompatActivity {
     private static final int REQUEST_CODE_SPEECH = 10;
 
     private DatabaseReference mRef;
+    private DatabaseReference mRef2;
     private FirebaseUser fUser;
     private PopupMenu pm;
 
@@ -69,7 +84,6 @@ public class Chat extends AppCompatActivity {
     private EditText chat_txt_enter_mess;
 
     private SpeechRecognizer speechRecognizer;
-
     private TextClassificationClient client;
     private Handler handler;
 
@@ -129,23 +143,29 @@ public class Chat extends AppCompatActivity {
                             //
                             chat_txt_enter_mess.getText().clear();
                         } else {
-//                            user chat
-                            Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID, 1);
-                            setMessageFirebase(message);
-                            //chatbot chat
-                            Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), "Bệnh của bạn là: "
-                                    , new Date(), sessionID, 1);
-                            setMessageFirebase(message1);
-                            chat_txt_enter_mess.getText().clear();
-                            System.out.println("check msg" + msg);
-                            List<Result> results = client.classify(msg);
-                            for (Result var : results) {
-                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), var.getTitle()+" "+var.getConfidence()
-                                        , new Date(), sessionID, 1);
+                            try {
+                                // user chat
+                                System.out.println("check msg"+msg);
+                                Message message = new Message("", fUser.getUid(),"hmVF1lBCzlddOHl6qFeP0t76iMy1"
+                                        , msg, new Date(), sessionID, 1);
+                                setMessageFirebase(message);
+                                //chatbot chat
+                                Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
+                                        fUser.getUid(), "Bệnh của bạn là: ", new Date(), sessionID, 1);
+                                setMessageFirebase(message1);
+                                chat_txt_enter_mess.getText().clear();
+                                System.out.println("check msg" + msg);
+                                List<Result> results = client.classify(msg);
+                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+                                        results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
+                                        sessionID, 1);
                                 setMessageFirebase(message2);
+                                getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
+                                chat_txt_enter_mess.getText().clear();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d(LOG_TAG, "Exception when talking with chatbot ");
                             }
-                            chat_txt_enter_mess.getText().clear();
 
                         }
                     }
@@ -376,6 +396,38 @@ public class Chat extends AppCompatActivity {
     }
 
     /**
+     * get Disease by name
+     *
+     * @param disease
+     */
+    private void getDiseaseByNameFirebase(String disease, String uId) {
+
+        mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
+        Query disQuery = mRef2.orderByChild("name").equalTo(disease);
+        disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                try {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Disease d = sn.getValue(Disease.class);
+                        Prediction pre = new Prediction("0", uId, "Default", "Default",
+                                d.getDiseaseID(), "Default", new Date(), new Date(),
+                                d.getSpecializationID(), 0);
+                        createPrediction(pre);
+                    }
+                } catch (Exception e) {
+                    Log.d(LOG_TAG, "Not found disease in database", e);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    /**
      * Set up element base on Account Type
      */
     private void setUIByAccountType() {
@@ -481,12 +533,17 @@ public class Chat extends AppCompatActivity {
 
 
     private void createPrediction(Prediction pre) {
-        mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef2 = FirebaseDatabase.getInstance().getReference("Prediction");
+        mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                pre.setPredictionID(mRef.push().getKey());
-                mRef.child(pre.getPredictionID()).setValue(pre);
+                try {
+                    pre.setPredictionID(mRef.push().getKey());
+                    mRef.child(pre.getPredictionID()).setValue(pre);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(LOG_TAG, "Not found disease in database", e);
+                }
             }
 
             @Override
