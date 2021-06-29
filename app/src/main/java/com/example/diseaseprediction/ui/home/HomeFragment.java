@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,10 +21,11 @@ import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
-import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.adapter.PredictionAdapter;
 import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
@@ -46,22 +48,23 @@ public class HomeFragment extends Fragment {
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
-    private Account mAccount;
     private DoctorInfo mDoctor;
 
     private String sessionID;
     private final String CHATBOT_ID = "hmVF1lBCzlddOHl6qFeP0t76iMy1";
     private List<ConsultationList> consultationLists;
+    private List<Prediction> mPredictionList;
     private ConsultationAdapter consultationAdapter;
+    private PredictionAdapter doctorPredictionPendingistAdapter;
 
     private ConsultationList consultationList;
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
             home_txt_title, home_doctor_txt_title, home_txt_prediction_title, home_doctor_txt_prediction_title,
             home_txt_consultation_title, home_doctor_txt_consultation_title;
+    private RelativeLayout home_doctor_all_prediction_layout_title;
     private SearchView home_search_view;
     private NavigationView navigationView;
-    private RecyclerView home_recycler_view_consultation;
-    private RecyclerView consultation_list_recycler_view_main;
+    private RecyclerView home_recycler_view_consultation, home_doctor_all_prediction_recycle_view;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -94,7 +97,7 @@ public class HomeFragment extends Fragment {
         home_search_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createSession(fUser.getUid(),CHATBOT_ID);
+                createSession(fUser.getUid(), CHATBOT_ID);
             }
         });
 
@@ -132,6 +135,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Find view by ID
+     *
      * @param view view
      */
     private void findView(View view) {
@@ -146,6 +150,9 @@ public class HomeFragment extends Fragment {
         home_doctor_txt_prediction_title = view.findViewById(R.id.home_doctor_txt_prediction_title);
         home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
         home_doctor_txt_consultation_title = view.findViewById(R.id.home_doctor_txt_consultation_title);
+
+        home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
+        home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
     }
 
     /**
@@ -266,7 +273,6 @@ public class HomeFragment extends Fragment {
      * Load consultation of current account
      */
     private void loadConsultationList() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -275,7 +281,7 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot sh : snapshot.getChildren()) {
                     ConsultationList cls = sh.getValue(ConsultationList.class);
                     assert cls != null;
-                    if (cls.getAccountOne().equals(firebaseUser.getUid()) || cls.getAccountTwo().equals(firebaseUser.getUid())) {
+                    if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
                         consultationLists.add(cls);
                         Collections.reverse(consultationLists);
                     }
@@ -291,6 +297,41 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void loadAllPredictionPending() {
+        mPredictionList = new ArrayList<>();
+        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mDoctor = snapshot.getValue(DoctorInfo.class);
+                mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+                mRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot sh : snapshot.getChildren()) {
+                            Prediction pr = sh.getValue(Prediction.class);
+                            if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                mPredictionList.add(pr);
+                            }
+                        }
+                        doctorPredictionPendingistAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionList);
+                        home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingistAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+
     /**
      * UI of doctor role
      */
@@ -298,6 +339,14 @@ public class HomeFragment extends Fragment {
         home_txt_title.setVisibility(View.GONE);
         home_txt_prediction_title.setVisibility(View.GONE);
         home_txt_consultation_title.setVisibility(View.GONE);
+
+        //All prediction in pending
+        home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
+        home_doctor_all_prediction_recycle_view.setVisibility(View.VISIBLE);
+
+        home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
+        home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        loadAllPredictionPending();
 
         home_doctor_txt_title.setVisibility(View.VISIBLE);
         home_doctor_txt_prediction_title.setVisibility(View.VISIBLE);

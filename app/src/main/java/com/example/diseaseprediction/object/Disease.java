@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Disease {
     private String diseaseID;
+    private String specializationID;
     private String name;
     private String description;
     private Date dateCreate;
@@ -21,15 +22,18 @@ public class Disease {
 
     /**
      * Create disease
-     * @param diseaseID     Disease ID
-     * @param name          Name of disease
-     * @param description   Disease description
-     * @param dateCreate    Date create disease
-     * @param dateUpdate    Date update disease
-     * @param status        0: Deleted | 1: Normal
+     *
+     * @param diseaseID        Disease ID
+     * @param specializationID specialization
+     * @param name             Name of disease
+     * @param description      Disease description
+     * @param dateCreate       Date create disease
+     * @param dateUpdate       Date update disease
+     * @param status           0: Deleted | 1: Normal
      */
-    public Disease(String diseaseID, String name, String description, Date dateCreate, Date dateUpdate, int status) {
+    public Disease(String diseaseID, String specializationID, String name, String description, Date dateCreate, Date dateUpdate, int status) {
         this.diseaseID = diseaseID;
+        this.specializationID = specializationID;
         this.name = name;
         this.description = description;
         this.dateCreate = dateCreate;
@@ -39,6 +43,7 @@ public class Disease {
 
     /**
      * Get Disease ID
+     *
      * @return Disease ID
      */
     public String getDiseaseID() {
@@ -47,6 +52,7 @@ public class Disease {
 
     /**
      * Set Disease ID
+     *
      * @param diseaseID Disease ID
      */
     public void setDiseaseID(String diseaseID) {
@@ -54,7 +60,26 @@ public class Disease {
     }
 
     /**
+     * Get Specialization ID
+     *
+     * @return Specialization ID
+     */
+    public String getSpecializationID() {
+        return specializationID;
+    }
+
+    /**
+     * Set Specialization ID
+     *
+     * @param specializationID Specialization ID
+     */
+    public void setSpecializationID(String specializationID) {
+        this.specializationID = specializationID;
+    }
+
+    /**
      * Get Name
+     *
      * @return Name
      */
     public String getName() {
@@ -63,6 +88,7 @@ public class Disease {
 
     /**
      * Set Name
+     *
      * @param name Name
      */
     public void setName(String name) {
@@ -71,6 +97,7 @@ public class Disease {
 
     /**
      * Get Description
+     *
      * @return Description
      */
     public String getDescription() {
@@ -79,6 +106,7 @@ public class Disease {
 
     /**
      * Set Description
+     *
      * @param description Description
      */
     public void setDescription(String description) {
@@ -87,6 +115,7 @@ public class Disease {
 
     /**
      * Get Date create
+     *
      * @return Date create
      */
     public Date getDateCreate() {
@@ -95,6 +124,7 @@ public class Disease {
 
     /**
      * Set Date create
+     *
      * @param dateCreate Date create
      */
     public void setDateCreate(Date dateCreate) {
@@ -103,6 +133,7 @@ public class Disease {
 
     /**
      * Get Date update
+     *
      * @return Date update
      */
     public Date getDateUpdate() {
@@ -111,6 +142,7 @@ public class Disease {
 
     /**
      * Set Date update
+     *
      * @param dateUpdate Date update
      */
     public void setDateUpdate(Date dateUpdate) {
@@ -119,6 +151,7 @@ public class Disease {
 
     /**
      * Get status
+     *
      * @return 0: Deleted | 1: Normal
      */
     public int getStatus() {
@@ -127,6 +160,7 @@ public class Disease {
 
     /**
      * Set status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {

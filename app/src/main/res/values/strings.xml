@@ -69,6 +69,12 @@
     <string name="prediction_txt_advice_title">Advice</string>
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">Your prediction</string>
+    <string name="prediction_txt_status_correct">Confirmed</string>
+    <string name="prediction_txt_status_incorrect">Some thing wrong.....</string>
+    <string name="prediction_txt_status_pending">Pending</string>
+    <string name="prediction_title_result">Prediction</string>
+    <string name="prediction_btn_contact_doctor">Contact a doctor</string>
+    <string name="prediction_btn_back">Back to previous</string>
 
     <string name="settings_txt_turn_notification">Notification</string>
     <string name="settings_txt_select_language">Language</string>
@@ -149,6 +155,9 @@
     <string name="upload_img_waiting">Uploading...</string>
     <string name="upload_img_done">Uploaded</string>
     <string name="item_chat_checkbox_done">Done</string>
+
+    <string name="home_doctor_all_prediction_txt_title">Prediction</string>
+
 
     <string-array name="spinner_language">
         <item>EN</item>

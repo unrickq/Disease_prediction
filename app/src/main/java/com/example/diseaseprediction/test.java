@@ -26,12 +26,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.adapter.testAdapter;
 import com.example.diseaseprediction.object.Account;
+import com.example.diseaseprediction.object.DoctorInfo;
+import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -39,7 +45,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,6 +56,10 @@ public class test extends AppCompatActivity {
 
     private List<Symptom> mSymptom;
     private ArrayAdapter<Symptom> symptomAdapter;
+
+
+    private DoctorInfo mDoctor;
+    private List<Prediction> mPredictionList;
 
 
     private TextInputLayout testlayout, testlayout2;
@@ -97,41 +106,45 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        btn = findViewById(R.id.button);
-        ListView item_chat_checkbox = findViewById(R.id.item_chat_checkbox);
-        Symptom sm = new Symptom("1", "ho", "ho 123", new Date(), new Date(), 1);
-        Symptom sm2 = new Symptom("2", "hvo", "ho 123", new Date(), new Date(), 1);
-        Symptom sm3 = new Symptom("3", "hxcvo", "ho 123", new Date(), new Date(), 1);
-        mSymptom = new ArrayList<>();
-        mSymptom.add(sm);
-        mSymptom.add(sm2);
-        mSymptom.add(sm3);
-
-        createCheckBox(item_chat_checkbox, mSymptom);
-
-//        btn = findViewById(R.id.btn1);
-//        imageView2 = findViewById(R.id.imageView2);
-//        btn2 = findViewById(R.id.button);
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//            }
-//        });
-//
-//        btn2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                uploadImage();
-//            }
-//        });
-
+        loadAllPredictionPending();
 
 //
+    }
+
+    private void loadAllPredictionPending() {
+        mPredictionList = new ArrayList<>();
+        myRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child("Xhbe67PvUbQfRrikolr9QJGbXpd2");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mDoctor = snapshot.getValue(DoctorInfo.class);
+                myRef = FirebaseDatabase.getInstance().getReference("Prediction");
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot sh : snapshot.getChildren()) {
+                            Prediction pr = sh.getValue(Prediction.class);
+                            if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                mPredictionList.add(pr);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void getTempList(Prediction pr) {
+        mPredictionList.add(pr);
     }
 
     public void createCheckBox(ListView item_chat_checkboxx, List<Symptom> ls) {
@@ -302,17 +315,18 @@ public class test extends AppCompatActivity {
 //        myRef = FirebaseDatabase.getInstance().getReference("Disease");
 //        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                ds.setDiseaseID(myRef.push().getKey());
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                //                ds.setDiseaseID(myRef.push().getKey());
 //                myRef.child(ds.getDiseaseID()).setValue(ds);
 //            }
 //
 //            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 //
 //            }
 //        });
 //    }
+
 //
 //    void addDataSymptom(Symptom sm){
 //        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
@@ -373,17 +387,16 @@ public class test extends AppCompatActivity {
 //        addDataSymptom(new Symptom("19",  "buồn nôn ói mửa",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("20",  "đau tinh hoàn",  "Default", new Date(),  new Date(), 1));
 
-//        addDataDisease(new Disease("1", "Bệnh sốt rét", "Một bệnh truyền nhiễm do ký sinh trùng đơn bào thuộc họ Plasmodium gây ra, có thể lây truyền qua vết đốt của muỗi Anopheles hoặc do kim tiêm bị ô nhiễm hoặc truyền máu. Sốt rét Falciparum là loại gây tử vong cao nhất.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("2", "viêm gan A", "Viêm gan A là một bệnh nhiễm trùng gan rất dễ lây lan do vi rút viêm gan A gây ra. Virus này là một trong số các loại virus viêm gan gây viêm và ảnh hưởng đến khả năng hoạt động của gan.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("3", "Cảm lạnh thông thường", "Cảm lạnh thông thường là một bệnh nhiễm trùng do vi-rút ở mũi và cổ họng (đường hô hấp trên). Nó thường vô hại, mặc dù nó có thể không cảm thấy như vậy. Nhiều loại vi-rút có thể gây ra cảm lạnh thông thường.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("4", "Bệnh viêm gan B", "Viêm gan B là một bệnh nhiễm trùng ở gan của bạn. Nó có thể gây sẹo nội tạng, suy gan và ung thư. Nó có thể gây tử vong nếu không được điều trị. Nó lây lan khi mọi người tiếp xúc với máu, vết loét hở hoặc chất dịch cơ thể của người có vi rút viêm gan B.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("5", "Viêm gan C", "Viêm gan do siêu vi viêm gan C (HCV), thường lây lan qua truyền máu (hiếm gặp), chạy thận nhân tạo và dùng kim tiêm. Những tổn thương mà viêm gan C gây ra cho gan có thể dẫn đến xơ gan và các biến chứng của nó cũng như ung thư.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("6", "Viêm gan E", "Một dạng viêm gan hiếm gặp do nhiễm vi rút viêm gan E (HEV). Nó lây truyền qua thức ăn hoặc đồ uống do người bị nhiễm bệnh cầm nắm hoặc qua nguồn cung cấp nước bị nhiễm bệnh ở những khu vực mà phân có thể ngấm vào nước. Viêm gan E không gây ra bệnh gan mãn tính.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("7", "Viêm gan siêu vi D", "Viêm gan D, còn được gọi là virus viêm gan delta, là một bệnh nhiễm trùng khiến gan bị viêm. Vết sưng này có thể làm suy giảm chức năng gan và gây ra các vấn đề về gan lâu dài, bao gồm cả sẹo gan và ung thư. Tình trạng này do vi rút viêm gan D (HDV) gây ra.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("8", "Viêm phổi", "Viêm phổi là tình trạng nhiễm trùng ở một hoặc cả hai phổi. Vi khuẩn, vi rút và nấm gây ra nó. Nhiễm trùng gây viêm các túi khí trong phổi của bạn, được gọi là phế nang. Các phế nang chứa đầy dịch hoặc mủ, gây khó thở.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("9", "Bệnh lao", "Bệnh lao (TB) là một bệnh truyền nhiễm thường do vi khuẩn Mycobacterium tuberculosis (MTB) gây ra. Bệnh lao thường ảnh hưởng đến phổi, nhưng cũng có thể ảnh hưởng đến các bộ phận khác của cơ thể. Hầu hết các trường hợp nhiễm trùng không có triệu chứng, trong trường hợp đó, nó được gọi là bệnh lao tiềm ẩn.", new Date(), new Date(), 1));
-//        addDataDisease(new Disease("10", "Covid 19", "COVID-19 (từ tiếng Anh: coronavirus disease 2019 nghĩa là bệnh virus corona 2019)là một bệnh đường hô hấp cấp tính truyền nhiễm gây ra bởi chủng virus corona SARS-CoV-2. Bệnh được phát hiện lần đầu tiên trong đại dịch COVID-19 năm 2019–2020.", new Date(), new Date(), 1));
-
+//        addDataDisease(new Disease("1", "-Mct1vQY8dBaxrRr1eog", "Bệnh sốt rét", "Một bệnh truyền nhiễm do ký sinh trùng đơn bào thuộc họ Plasmodium gây ra, có thể lây truyền qua vết đốt của muỗi Anopheles hoặc do kim tiêm bị ô nhiễm hoặc truyền máu. Sốt rét Falciparum là loại gây tử vong cao nhất.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("2", "-Mct1vQWhFAEtX8TjL_D", "viêm gan A", "Viêm gan A là một bệnh nhiễm trùng gan rất dễ lây lan do vi rút viêm gan A gây ra. Virus này là một trong số các loại virus viêm gan gây viêm và ảnh hưởng đến khả năng hoạt động của gan.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("3", "-Mct1vQY8dBaxrRr1eog", "Cảm lạnh thông thường", "Cảm lạnh thông thường là một bệnh nhiễm trùng do vi-rút ở mũi và cổ họng (đường hô hấp trên). Nó thường vô hại, mặc dù nó có thể không cảm thấy như vậy. Nhiều loại vi-rút có thể gây ra cảm lạnh thông thường.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("4", "-Mct1vQWhFAEtX8TjL_D", "Bệnh viêm gan B", "Viêm gan B là một bệnh nhiễm trùng ở gan của bạn. Nó có thể gây sẹo nội tạng, suy gan và ung thư. Nó có thể gây tử vong nếu không được điều trị. Nó lây lan khi mọi người tiếp xúc với máu, vết loét hở hoặc chất dịch cơ thể của người có vi rút viêm gan B.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("5", "-Mct1vQWhFAEtX8TjL_D", "Viêm gan C", "Viêm gan do siêu vi viêm gan C (HCV), thường lây lan qua truyền máu (hiếm gặp), chạy thận nhân tạo và dùng kim tiêm. Những tổn thương mà viêm gan C gây ra cho gan có thể dẫn đến xơ gan và các biến chứng của nó cũng như ung thư.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("6", "-Mct1vQWhFAEtX8TjL_D", "Viêm gan E", "Một dạng viêm gan hiếm gặp do nhiễm vi rút viêm gan E (HEV). Nó lây truyền qua thức ăn hoặc đồ uống do người bị nhiễm bệnh cầm nắm hoặc qua nguồn cung cấp nước bị nhiễm bệnh ở những khu vực mà phân có thể ngấm vào nước. Viêm gan E không gây ra bệnh gan mãn tính.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("7", "-Mct1vQWhFAEtX8TjL_D", "Viêm gan siêu vi D", "Viêm gan D, còn được gọi là virus viêm gan delta, là một bệnh nhiễm trùng khiến gan bị viêm. Vết sưng này có thể làm suy giảm chức năng gan và gây ra các vấn đề về gan lâu dài, bao gồm cả sẹo gan và ung thư. Tình trạng này do vi rút viêm gan D (HDV) gây ra.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("8", "-Mct1vPzocbo9S4P_RZr", "Viêm phổi", "Viêm phổi là tình trạng nhiễm trùng ở một hoặc cả hai phổi. Vi khuẩn, vi rút và nấm gây ra nó. Nhiễm trùng gây viêm các túi khí trong phổi của bạn, được gọi là phế nang. Các phế nang chứa đầy dịch hoặc mủ, gây khó thở.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("9", "-Mct1vPzocbo9S4P_RZr", "Bệnh lao", "Bệnh lao (TB) là một bệnh truyền nhiễm thường do vi khuẩn Mycobacterium tuberculosis (MTB) gây ra. Bệnh lao thường ảnh hưởng đến phổi, nhưng cũng có thể ảnh hưởng đến các bộ phận khác của cơ thể. Hầu hết các trường hợp nhiễm trùng không có triệu chứng, trong trường hợp đó, nó được gọi là bệnh lao tiềm ẩn.", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("10","-Mct1vPzocbo9S4P_RZr", "Covid 19", "COVID-19 (từ tiếng Anh: coronavirus disease 2019 nghĩa là bệnh virus corona 2019)là một bệnh đường hô hấp cấp tính truyền nhiễm gây ra bởi chủng virus corona SARS-CoV-2. Bệnh được phát hiện lần đầu tiên trong đại dịch COVID-19 năm 2019–2020.", new Date(), new Date(), 1));
 
     //adivse of 9 disease
 //        addDataAdvise(new Advise("id", "Tham khảo ý kiến bệnh viện gần nhất", new Date(), new Date(), 1));

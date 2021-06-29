@@ -4,17 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/padding"
-    android:paddingRight="@dimen/padding"
     tools:context=".PredictionResult">
+
+    <RelativeLayout
+        android:id="@+id/prediction_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="@dimen/margin_top"
+        android:paddingRight="@dimen/margin_top"
+        app:layout_anchorGravity="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/prediction_toolbar_img_pre"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back_1" />
+
+        <TextView
+            android:id="@+id/prediction_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="149dp"
+            android:layout_marginLeft="149dp"
+            android:gravity="center_horizontal"
+            android:text="@string/prediction_title_result" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/elevation"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/shadow"
+        app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar" />
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingLeft="@dimen/padding"
+        android:paddingRight="@dimen/padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,67 +63,94 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/prediction_layout_account_information"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_top">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/prediction_img_avatar"
-                    android:layout_width="154dp"
-                    android:layout_height="match_parent"
+                <ImageView
+                    android:id="@+id/prediction_img_status"
+                    android:layout_width="61dp"
+                    android:layout_height="36dp"
                     android:layout_weight="1"
-                    android:src="@drawable/background_avatar" />
+                    android:src="@drawable/ic_prediction_disease" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/prediction_txt_status"
+                    style="@style/subTitle_1_bold"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_marginBottom="@dimen/margin_top"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:text="@string/prediction_txt_disease_title" />
 
-                    <TextView
-                        android:id="@+id/prediction_txt_acc_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_acc_name" />
-
-                    <TextView
-                        android:id="@+id/prediction_txt_acc_gender"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_acc_sex" />
-
-                    <TextView
-                        android:id="@+id/prediction_txt_acc_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_acc_phone" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/prediction_layout_account_information"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/margin_top_home_component"-->
+            <!--                android:background="@drawable/background_list_custom"-->
+            <!--                android:orientation="horizontal">-->
+
+            <!--                <de.hdodenhof.circleimageview.CircleImageView-->
+            <!--                    android:id="@+id/prediction_img_avatar"-->
+            <!--                    android:layout_width="154dp"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:src="@drawable/background_avatar" />-->
+
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:layout_marginLeft="@dimen/margin_top"-->
+            <!--                    android:layout_marginTop="@dimen/margin_top"-->
+            <!--                    android:layout_marginBottom="@dimen/margin_top"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:orientation="vertical">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/prediction_txt_acc_name"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="@string/prediction_txt_acc_name" />-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/prediction_txt_acc_gender"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="@string/prediction_txt_acc_sex" />-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/prediction_txt_acc_phone"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="@string/prediction_txt_acc_phone" />-->
+
+            <!--                </LinearLayout>-->
+
+            <!--            </LinearLayout>-->
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_top">
 
                 <ImageView
                     android:id="@+id/prediction_img_disease"
                     android:layout_width="61dp"
                     android:layout_height="36dp"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:src="@drawable/ic_prediction_disease" />
 
@@ -90,12 +158,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/prediction_txt_disease_title"
+                        style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -103,6 +171,7 @@
 
                     <TextView
                         android:id="@+id/prediction_txt_disease_result"
+                        style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -114,30 +183,29 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_top">
 
                 <ImageView
                     android:id="@+id/prediction_img_description"
                     android:layout_width="61dp"
                     android:layout_height="36dp"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:src="@drawable/ic_prediction_disease_description" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/prediction_txt_disease_description_title"
+                        style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -145,6 +213,7 @@
 
                     <TextView
                         android:id="@+id/prediction_txt_disease_description_result"
+                        style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -154,129 +223,149 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginTop="@dimen/margin_top_home_component"
-                android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/margin_top_home_component"-->
+            <!--                android:padding="@dimen/margin_top"-->
+            <!--                android:background="@drawable/background_list_custom"-->
+            <!--                android:orientation="horizontal">-->
 
-                <ImageView
-                    android:id="@+id/prediction_img_symptom"
-                    android:layout_width="61dp"
-                    android:layout_height="31dp"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_symptom" />
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/prediction_img_symptom"-->
+            <!--                    android:layout_width="61dp"-->
+            <!--                    android:layout_height="31dp"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:src="@drawable/ic_prediction_symptom" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:layout_marginLeft="@dimen/margin_top"-->
+            <!--                    android:orientation="vertical">-->
 
-                    <TextView
-                        android:id="@+id/prediction_txt_symptom_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_symptom_title" />
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/prediction_txt_symptom_title"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="@string/prediction_txt_symptom_title" />-->
 
-                    <TextView
-                        android:id="@+id/prediction_txt_symptom_result"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_symptom_result" />
+            <!--                    <ListView-->
+            <!--                        android:id="@+id/prediction_listview_symptom_result"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:choiceMode="multipleChoice"-->
+            <!--                        tools:ignore="InvalidId" />-->
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
 
-                </LinearLayout>
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/margin_top_home_component"-->
+            <!--                android:padding="@dimen/margin_top"-->
+            <!--                android:background="@drawable/background_list_custom"-->
+            <!--                android:orientation="horizontal">-->
 
-            </LinearLayout>
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/prediction_img_medicine"-->
+            <!--                    android:layout_width="61dp"-->
+            <!--                    android:layout_height="31dp"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:src="@drawable/ic_prediction_medicine" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginTop="@dimen/margin_top_home_component"
-                android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:layout_marginLeft="@dimen/margin_top"-->
+            <!--                    android:orientation="vertical">-->
 
-                <ImageView
-                    android:id="@+id/prediction_img_medicine"
-                    android:layout_width="61dp"
-                    android:layout_height="31dp"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_medicine" />
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/prediction_txt_medicine_title"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="@string/prediction_txt_medicine_title" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <!--                    <ListView-->
+            <!--                        android:id="@+id/prediction_listview_medicine_result"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:choiceMode="multipleChoice"-->
+            <!--                        tools:ignore="InvalidId" />-->
 
-                    <TextView
-                        android:id="@+id/prediction_txt_medicine_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_medicine_title" />
+            <!--                </LinearLayout>-->
 
-                    <TextView
-                        android:id="@+id/prediction_txt_medicine_result"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_medicine_result" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_top">
 
                 <ImageView
                     android:id="@+id/prediction_img_advice"
                     android:layout_width="61dp"
                     android:layout_height="31dp"
-                    android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:src="@drawable/ic_prediction_advice" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_top"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/prediction_txt_advice_title"
+                        style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/prediction_txt_advice_title" />
 
-                    <TextView
-                        android:id="@+id/prediction_txt_advice_result"
+                    <ListView
+                        android:id="@+id/prediction_listview_advice_result"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/prediction_txt_advice_result" />
+                        android:paddingLeft="-15dp"
+                        tools:ignore="InvalidId" />
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_top">
+
+                <Button
+                    android:id="@+id/prediction_btn_contact_doctor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="@string/prediction_btn_contact_doctor"
+                    app:cornerRadius="@dimen/btn_corner_radius" />
+
+                <Button
+                    android:id="@+id/prediction_btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/prediction_btn_back"
+                    app:cornerRadius="@dimen/btn_corner_radius" />
 
             </LinearLayout>
 

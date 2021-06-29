@@ -11,12 +11,10 @@ public class Prediction {
     private String doctorID;
     private String sessionID;
     private String diseaseID;
-    private String symptomsID;
-    private String medicineID;
-    private String adviseID;
     private String notes;
     private Date dateCreate;
     private Date dateUpdate;
+    private String hiddenSpecializationID;
     private int status;
 
     /**
@@ -27,36 +25,35 @@ public class Prediction {
 
     /**
      * Create Prediction
-     * @param predictionID  Prediction ID
-     * @param patientID     Patient ID
-     * @param doctorID      Doctor ID
-     * @param sessionID     Session ID
-     * @param diseaseID     Disease ID
-     * @param symptomsID    Symptoms ID
-     * @param medicineID    Medicine ID
-     * @param adviseID      Advise ID
-     * @param notes         Notes
-     * @param dateCreate    Date create
-     * @param dateUpdate    Date update
-     * @param status        0: Deleted | 1: Normal
+     *
+     * @param predictionID           Prediction ID
+     * @param patientID              Patient ID
+     * @param doctorID               Doctor ID
+     * @param sessionID              Session ID
+     * @param diseaseID              Disease ID
+     * @param notes                  Notes
+     * @param dateCreate             Date create
+     * @param dateUpdate             Date update
+     * @param hiddenSpecializationID Hidden SpecializationID
+     * @param status                 0: Deleted | 1: Normal
      */
-    public Prediction(String predictionID, String patientID, String doctorID, String sessionID, String diseaseID, String symptomsID, String medicineID, String adviseID, String notes, Date dateCreate, Date dateUpdate, int status) {
+    public Prediction(String predictionID, String patientID, String doctorID, String sessionID, String diseaseID,
+                      String notes, Date dateCreate, Date dateUpdate, String hiddenSpecializationID, int status) {
         this.predictionID = predictionID;
         this.patientID = patientID;
         this.doctorID = doctorID;
         this.sessionID = sessionID;
         this.diseaseID = diseaseID;
-        this.symptomsID = symptomsID;
-        this.medicineID = medicineID;
-        this.adviseID = adviseID;
         this.notes = notes;
         this.dateCreate = dateCreate;
         this.dateUpdate = dateUpdate;
+        this.hiddenSpecializationID = hiddenSpecializationID;
         this.status = status;
     }
 
     /**
      * Get Prediction ID
+     *
      * @return Prediction ID
      */
     public String getPredictionID() {
@@ -65,6 +62,7 @@ public class Prediction {
 
     /**
      * Set Prediction ID
+     *
      * @param predictionID Prediction ID
      */
     public void setPredictionID(String predictionID) {
@@ -73,6 +71,7 @@ public class Prediction {
 
     /**
      * Get Patient ID
+     *
      * @return Patient ID
      */
     public String getPatientID() {
@@ -81,6 +80,7 @@ public class Prediction {
 
     /**
      * Set Patient ID
+     *
      * @param patientID Patient ID
      */
     public void setPatientID(String patientID) {
@@ -89,6 +89,7 @@ public class Prediction {
 
     /**
      * Get Doctor ID
+     *
      * @return Doctor ID
      */
     public String getDoctorID() {
@@ -97,6 +98,7 @@ public class Prediction {
 
     /**
      * Set Doctor ID
+     *
      * @param doctorID Doctor ID
      */
     public void setDoctorID(String doctorID) {
@@ -105,6 +107,7 @@ public class Prediction {
 
     /**
      * Get Session ID
+     *
      * @return Session ID
      */
     public String getSessionID() {
@@ -113,6 +116,7 @@ public class Prediction {
 
     /**
      * Set Session ID
+     *
      * @param sessionID Session ID
      */
     public void setSessionID(String sessionID) {
@@ -121,6 +125,7 @@ public class Prediction {
 
     /**
      * Get Disease ID
+     *
      * @return Disease ID
      */
     public String getDiseaseID() {
@@ -129,6 +134,7 @@ public class Prediction {
 
     /**
      * Set Disease ID
+     *
      * @param diseaseID Disease ID
      */
     public void setDiseaseID(String diseaseID) {
@@ -136,55 +142,8 @@ public class Prediction {
     }
 
     /**
-     * Get Symptoms ID
-     * @return Symptoms ID
-     */
-    public String getSymptomsID() {
-        return symptomsID;
-    }
-
-    /**
-     * Set Symptoms ID
-     * @param symptomsID Symptoms ID
-     */
-    public void setSymptomsID(String symptomsID) {
-        this.symptomsID = symptomsID;
-    }
-
-    /**
-     * Get Medicine ID
-     * @return Medicine ID
-     */
-    public String getMedicineID() {
-        return medicineID;
-    }
-
-    /**
-     * Set Medicine ID
-     * @param medicineID Medicine ID
-     */
-    public void setMedicineID(String medicineID) {
-        this.medicineID = medicineID;
-    }
-
-    /**
-     * Get Advise ID
-     * @return Advise ID
-     */
-    public String getAdviseID() {
-        return adviseID;
-    }
-
-    /**
-     * Set Advise ID
-     * @param adviseID Advise ID
-     */
-    public void setAdviseID(String adviseID) {
-        this.adviseID = adviseID;
-    }
-
-    /**
      * Get Notes
+     *
      * @return Notes
      */
     public String getNotes() {
@@ -193,6 +152,7 @@ public class Prediction {
 
     /**
      * Set Notes
+     *
      * @param notes Notes
      */
     public void setNotes(String notes) {
@@ -201,6 +161,7 @@ public class Prediction {
 
     /**
      * Get Date create
+     *
      * @return Date create
      */
     public Date getDateCreate() {
@@ -209,6 +170,7 @@ public class Prediction {
 
     /**
      * Set Date create
+     *
      * @param dateCreate Date create
      */
     public void setDateCreate(Date dateCreate) {
@@ -217,6 +179,7 @@ public class Prediction {
 
     /**
      * Get Date update
+     *
      * @return Date update
      */
     public Date getDateUpdate() {
@@ -225,6 +188,7 @@ public class Prediction {
 
     /**
      * Set Date update
+     *
      * @param dateUpdate Date update
      */
     public void setDateUpdate(Date dateUpdate) {
@@ -232,7 +196,26 @@ public class Prediction {
     }
 
     /**
+     * Get Hidden SpecializationID
+     *
+     * @return Hidden SpecializationID
+     */
+    public String getHiddenSpecializationID() {
+        return hiddenSpecializationID;
+    }
+
+    /**
+     * Set Hidden SpecializationID
+     *
+     * @param hiddenSpecializationID Hidden SpecializationID
+     */
+    public void setHiddenSpecializationID(String hiddenSpecializationID) {
+        this.hiddenSpecializationID = hiddenSpecializationID;
+    }
+
+    /**
      * Get Status
+     *
      * @return 0: Deleted | 1: Normal
      */
     public int getStatus() {
@@ -241,6 +224,7 @@ public class Prediction {
 
     /**
      * Set Status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {

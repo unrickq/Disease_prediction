@@ -67,6 +67,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
     @Override
     public int getItemCount() {
+        System.out.println("size of predict " + mPredictions.size());
         return mPredictions.size();
     }
 
@@ -115,6 +116,8 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                     item_prediction_txt_status.setText(R.string.prediction_adapter_waiting_confirm);
                 } else if (pd.getStatus() == 1) {
                     item_prediction_txt_status.setText(R.string.prediction_adapter_confirmed);
+                } else if (pd.getStatus() == 2) {
+                    item_prediction_txt_status.setText(R.string.prediction_txt_status_incorrect);
                 }
             }
 

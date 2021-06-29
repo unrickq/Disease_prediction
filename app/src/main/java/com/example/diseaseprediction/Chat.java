@@ -33,6 +33,7 @@ import com.chaquo.python.android.AndroidPlatform;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -498,5 +499,21 @@ public class Chat extends AppCompatActivity {
 //        PyObject pyObject2 = pyObject.callAttr("confirmSymtoms",uInput);
 //        //Bạn có những triệu chứng này không? Nếu Có, hãy nhập các chỉ số (được phân tách bằng dấu cách), 'không' để dừng, 'skip' để bỏ qua:\n
 
+    }
+
+    private void createPrediction(Prediction pre) {
+        mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                pre.setPredictionID(mRef.push().getKey());
+                mRef.child(pre.getPredictionID()).setValue(pre);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
