@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.text.Editable;
@@ -27,9 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Message;
@@ -42,8 +40,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+//import tensorflow lite
+import com.google.android.gms.tasks.Continuation;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
+import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
+
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.label.Category;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,15 +80,18 @@ public class Chat extends AppCompatActivity {
 
     private SpeechRecognizer speechRecognizer;
 
+    private TextClassificationClient client;
+    private Handler handler;
+
+    private static final String TAG = "TextClassificationDemo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
+        client = new TextClassificationClient(getApplicationContext());
+        handler = new Handler();
 
         //Find view
         getViews();
@@ -119,56 +131,33 @@ public class Chat extends AppCompatActivity {
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
                     if (!msg.equals("")) {
-//                        //chat voi user
-//                        if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
-//                            Message message = new Message("", fUser.getUid(), receiverID, msg
-//                                    , new Date(), sessionID, 1);
-//                            System.out.println("idla" + fUser.getUid());
-//                            setMessageFirebase(message);
-//                            //
-//                            chat_txt_enter_mess.getText().clear();
-//                        } else {
-//////                            user chat
-//                            Message message = new Message("", fUser.getUid(), receiverID, msg
-//                                    , new Date(), sessionID,ls, 1);
-//                            setMessageFirebase(message);
-//
-//                            // chat bot tra loi
-////                            List<String> symtoms = new ArrayList<>();
-//                            String symtoms = "Triệu chứng của bạn là :";
-//                            int i = 1;
-//                            Python py = Python.getInstance();
-//                            PyObject pyObject = py.getModule("recognition_speech");
-//                            PyObject pyObject1 = pyObject.callAttr("input_rec", msg);
-//                            List<PyObject> pyList = pyObject1.asList();
-//                            System.out.println("list" + pyList);
-//                            for (PyObject var : pyList) {
-//                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-//                                        symtoms
-//                                        , new Date(), sessionID, 1);
-//                                setMessageFirebase(message2);
-//
-//                                symtoms = i + ". " + var.toString();
-//                                i++;
-//                                System.out.println("check sym" + symtoms);
-//                            }
-//                            System.out.println("check sym" + symtoms);
-//                            Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-//                                    symtoms
-//                                    , new Date(), sessionID, 1);
-//                            setMessageFirebase(message2);
+                        // User request
+                        if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
+                            Message message = new Message("", fUser.getUid(), receiverID, msg
+                                    , new Date(), sessionID, 1);
+                            setMessageFirebase(message);
+                            //
+                            chat_txt_enter_mess.getText().clear();
+                        } else {
+//                            user chat
+                            Message message = new Message("", fUser.getUid(), receiverID, msg
+                                    , new Date(), sessionID, 1);
+                            setMessageFirebase(message);
+                            //chatbot chat
+                            Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), "Bệnh của bạn là: "
+                                    , new Date(), sessionID, 1);
+                            setMessageFirebase(message1);
+                            chat_txt_enter_mess.getText().clear();
+                            System.out.println("check msg" + msg);
+                            List<Result> results = client.classify(msg);
+                            for (Result var : results) {
+                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(), var.getTitle()+" "+var.getConfidence()
+                                        , new Date(), sessionID, 1);
+                                setMessageFirebase(message2);
+                            }
+                            chat_txt_enter_mess.getText().clear();
 
-//        PyObject pyObject2 = pyObject.callAttr("confirmSymtoms",uInput);
-//        //Bạn có những triệu chứng này không? Nếu Có, hãy nhập các chỉ số (được phân tách bằng dấu cách), 'không' để dừng, 'skip' để bỏ qua:\n
-
-//                            Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-//                                    symtoms
-//                                    , new Date(), sessionID, 1);
-//                            System.out.println("idla" + fUser.getUid());
-//                            setMessageFirebase(message2);
-//
-//                            chat_txt_enter_mess.getText().clear();
-//                        }
+                        }
                     }
                 }
             });
@@ -480,24 +469,26 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    private void chatbot(String msg) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v(TAG, "onStart");
+        handler.post(
+                () -> {
+                    client.load();
+                });
+    }
 
-        Python py = Python.getInstance();
-        PyObject pyObject = py.getModule("recognition_speech");
-//        PyObject pyObject1 = pyObject.callAttr("input_rec","hôm nay tôi bị nhức đầu sốt ");
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v(TAG, "onStop");
+        handler.post(
+                () -> {
+                    client.unload();
+                });
+    }
 
-        PyObject pyObject1 = pyObject.callAttr("input_rec", msg);
-        System.out.println("check test:" + pyObject1.toString());
-//        String uInput = "";
-//
-//        List<PyObject> pyList = pyObject1.asList();
-//        for (PyObject var : pyList) {
-//
-//            uInput += var.toString()+".";
-//        }
-//        //Xác nhận triệu chứng bạn đang mắc  !
-//        PyObject pyObject2 = pyObject.callAttr("confirmSymtoms",uInput);
-//        //Bạn có những triệu chứng này không? Nếu Có, hãy nhập các chỉ số (được phân tách bằng dấu cách), 'không' để dừng, 'skip' để bỏ qua:\n
 
     }
 
