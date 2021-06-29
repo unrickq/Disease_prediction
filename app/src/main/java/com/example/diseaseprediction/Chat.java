@@ -40,16 +40,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-//import tensorflow lite
-import com.google.android.gms.tasks.Continuation;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
-import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
-
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.label.Category;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -489,8 +479,6 @@ public class Chat extends AppCompatActivity {
                 });
     }
 
-
-    }
 
     private void createPrediction(Prediction pre) {
         mRef = FirebaseDatabase.getInstance().getReference("Prediction");
