@@ -88,7 +88,7 @@ public class Chat extends AppCompatActivity {
     private Handler handler;
 
     private static final String TAG = "TextClassificationDemo";
-
+    private String allMsg = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,14 +136,19 @@ public class Chat extends AppCompatActivity {
                     String msg = chat_txt_enter_mess.getText().toString();
                     if (!msg.equals("")) {
                         // User request
+                        //user chat vs user
                         if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
                             Message message = new Message("", fUser.getUid(), receiverID, msg
                                     , new Date(), sessionID, 1);
                             setMessageFirebase(message);
                             //
                             chat_txt_enter_mess.getText().clear();
+                            //user chat vs chatbot
                         } else {
                             try {
+                                //allMsg +=
+
+
                                 // user chat
                                 System.out.println("check msg"+msg);
                                 Message message = new Message("", fUser.getUid(),"hmVF1lBCzlddOHl6qFeP0t76iMy1"
@@ -155,6 +160,7 @@ public class Chat extends AppCompatActivity {
                                 setMessageFirebase(message1);
                                 chat_txt_enter_mess.getText().clear();
                                 System.out.println("check msg" + msg);
+                                //model xu ly
                                 List<Result> results = client.classify(msg);
                                 Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
                                         results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
@@ -166,7 +172,6 @@ public class Chat extends AppCompatActivity {
                                 e.printStackTrace();
                                 Log.d(LOG_TAG, "Exception when talking with chatbot ");
                             }
-
                         }
                     }
                 }
@@ -531,15 +536,14 @@ public class Chat extends AppCompatActivity {
                 });
     }
 
-
     private void createPrediction(Prediction pre) {
         mRef2 = FirebaseDatabase.getInstance().getReference("Prediction");
         mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
-                    pre.setPredictionID(mRef.push().getKey());
-                    mRef.child(pre.getPredictionID()).setValue(pre);
+                    pre.setPredictionID(mRef2.push().getKey());
+                    mRef2.child(pre.getPredictionID()).setValue(pre);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Not found disease in database", e);
