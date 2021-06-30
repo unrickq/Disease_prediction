@@ -29,6 +29,7 @@ import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
+import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListConfirm;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,7 +61,7 @@ public class HomeFragment extends Fragment {
     private PredictionAdapter patientPredictionAdapter;
 
     private ConsultationList consultationList;
-    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
+    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more, home_doctor_all_prediction_txt_see_more,
             home_txt_title, home_txt_prediction_title, home_txt_consultation_title;
     private RelativeLayout home_doctor_all_prediction_layout_title;
     private SearchView home_search_view;
@@ -102,11 +103,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(2).setChecked(true);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new PredictionListConfirm()).commit();
+            }
+        });
+
         //See more prediction clicked
         home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationView.getMenu().getItem(2).setChecked(true);
+                navigationView.getMenu().getItem(3).setChecked(true);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new PredictionListFragment()).commit();
             }
@@ -116,7 +126,7 @@ public class HomeFragment extends Fragment {
         home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationView.getMenu().getItem(3).setChecked(true);
+                navigationView.getMenu().getItem(4).setChecked(true);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new ConsultationListFragment()).commit();
 
@@ -138,6 +148,7 @@ public class HomeFragment extends Fragment {
         navigationView = getActivity().findViewById(R.id.nav_view);
         home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
         home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
+        home_doctor_all_prediction_txt_see_more = view.findViewById(R.id.home_doctor_all_prediction_txt_see_more);
         home_search_view = view.findViewById(R.id.home_search_view);
 
         home_txt_title = view.findViewById(R.id.home_txt_title);

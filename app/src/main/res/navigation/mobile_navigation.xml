@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_prediction_list" />
 
     <fragment
+        android:id="@+id/nav_predictionListConfirm"
+        android:name="com.example.diseaseprediction.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_prediction_list_confirm" />
+
+    <fragment
         android:id="@+id/nav_consultationList"
         android:name="com.example.diseaseprediction.ui.consultation.ConsultationListFragment"
         android:label="@string/menu_consultationList"

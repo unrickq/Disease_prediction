@@ -10,7 +10,8 @@
 
     <string name="menu_home">Trang chủ</string>
     <string name="menu_account">Tài khoản</string>
-    <string name="menu_predictionList">Chuẩn đoán</string>
+    <string name="menu_predictionList">Chẩn đoán</string>
+    <string name="menu_predictionList_pending">Chẩn đoán cần xác nhận</string>
     <string name="menu_consultationList">Tư vấn</string>
     <string name="menu_settings">Cài đặt</string>
     <string name="menu_about">Thông tin ứng dụng</string>
@@ -51,7 +52,7 @@
     <string name="login_sign_up">Đăng ký</string>
     <string name="login_txt_connect_other">Hoặc đăng nhập bằng</string>
     <string name="login_btn_login">Google</string>
-    <string name="login_started_txt_slogan">Chuẩn đoán bệnh</string>
+    <string name="login_started_txt_slogan">Chẩn đoán bệnh</string>
     <string name="login_started_btn_next">Bắt đầu nào</string>
     <string name="login_txt_by_type">Đăng nhập với tư cách người dùng</string>
     <string name="login_phone_login">Đăng nhập bằng số điện thoại</string>
@@ -69,7 +70,7 @@
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Lời khuyên</string>
     <string name="prediction_txt_advice_result">TextView</string>
-    <string name="prediction_list_txt_title">Chuẩn đoán của bạn</string>
+    <string name="prediction_list_txt_title">Chẩn đoán của bạn</string>
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
     <string name="prediction_txt_status_incorrect">Có lỗi.....</string>
     <string name="prediction_txt_status_pending">Chờ xác nhận</string>

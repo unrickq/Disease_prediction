@@ -27,6 +27,7 @@ import com.example.diseaseprediction.ui.alert.AlertFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
+import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListConfirm;
 import com.example.diseaseprediction.ui.settings.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
     private CircleImageView nav_header_avatar;
     private NavigationView nav_view;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Get current user
         fUser = FirebaseAuth.getInstance().getCurrentUser();
-        //Check data of account
-        checkDataOfAccount(fUser);
         //Set toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
         //Set navigation
         setNavigation();
+
+        //Check data of account
+        checkDataOfAccount(fUser);
 
         //Detect data change
         mRef = FirebaseDatabase.getInstance().getReference();
@@ -92,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
      * Set left navigation
      */
     private void setNavigation() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -132,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
                         drawer.close();
                         break;
                     }
+                    case R.id.nav_predictionListConfirm: {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                new PredictionListConfirm()).commit();
+                        drawer.close();
+                        break;
+                    }
                     case R.id.nav_predictionList: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                                 new PredictionListFragment()).commit();
@@ -154,6 +165,28 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        //Set prediction list confirm visibility depend on type account
+        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Account ac = snapshot.getValue(Account.class);
+                if (ac.getTypeID() == 0) {
+                    Menu mn = navigationView.getMenu();
+                    mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
+                } else if (ac.getTypeID() == 1) {
+                    Menu mn = navigationView.getMenu();
+                    mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     @Override
