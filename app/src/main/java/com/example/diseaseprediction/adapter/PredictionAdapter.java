@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,13 +33,29 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     private Context mContext;
     private List<Prediction> mPredictions;
     private SimpleDateFormat sdf;
-    private int typeAccount;
+    private int goToScreen;
 
-    public PredictionAdapter(Context context, List<Prediction> mPredictions, int typeAccount) {
+    /**
+     * @param context
+     * @param mPredictions
+     * @param goToScreen   0: Screen doctor confirm | 1: Screen prediction result
+     * @param sizeLoad
+     */
+    public PredictionAdapter(Context context, List<Prediction> mPredictions, int goToScreen, int sizeLoad) {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         this.mContext = context;
-        this.mPredictions = mPredictions;
-        this.typeAccount = typeAccount;
+        this.goToScreen = goToScreen;
+
+        //Limit row load
+        this.mPredictions = new ArrayList<>();
+        if (sizeLoad >= mPredictions.size()) {
+            this.mPredictions = mPredictions;
+        } else {
+            for (int i = 0; i < sizeLoad; i++) {
+                this.mPredictions.add(mPredictions.get(i));
+            }
+        }
     }
 
     @NonNull
@@ -57,9 +74,9 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeAccount == 0) {
+                if (goToScreen == 0) {
                     //Doctor confirm prediction
-                } else if (typeAccount == 1) {
+                } else if (goToScreen == 1) {
                     //Patient prediction
                     Intent i = new Intent(mContext, PredictionResult.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

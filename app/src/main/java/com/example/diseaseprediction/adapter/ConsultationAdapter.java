@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,11 +40,21 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     private List<ConsultationList> mConsultationList;
     private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 
-    public ConsultationAdapter(Context context, List<ConsultationList> mConsultationList) {
+    public ConsultationAdapter(Context context, List<ConsultationList> mConsultationList, int sizeLoad) {
         //Get current user
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+
         this.mContext = context;
-        this.mConsultationList = mConsultationList;
+
+        //Limit row load
+        this.mConsultationList = new ArrayList<>();
+        if (sizeLoad >= mConsultationList.size()) {
+            this.mConsultationList = mConsultationList;
+        } else {
+            for (int i = 0; i < sizeLoad; i++) {
+                this.mConsultationList.add(mConsultationList.get(i));
+            }
+        }
     }
 
     //

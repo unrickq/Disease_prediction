@@ -1,15 +1,14 @@
 package com.example.diseaseprediction.ui.consultation;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
@@ -102,7 +101,7 @@ public class ConsultationListFragment extends Fragment {
         consultationLists = new ArrayList<>();
 
         //Load user to recycler
-        ReadUsers();
+        loadListConsultation();
 
         return view;
     }
@@ -110,25 +109,24 @@ public class ConsultationListFragment extends Fragment {
     /**
      * Load all consultation list depend on user ID
      */
-    private void ReadUsers(){
+    private void loadListConsultation() {
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 consultationLists.clear();
-                for (DataSnapshot sh: snapshot.getChildren()){
+                for (DataSnapshot sh : snapshot.getChildren()) {
                     ConsultationList cls = sh.getValue(ConsultationList.class);
-                    assert cls!=null;
+                    assert cls != null;
                     //Get all consultation list depend on user ID 1 or user ID 2
-                    if (cls.getAccountOne().equals(fUser.getUid())||cls.getAccountTwo().equals(fUser.getUid())){
+                    if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
                         consultationLists.add(cls);
-                        //Reverse list index to get latest consultation
-                        Collections.reverse(consultationLists);
                     }
-                    //Set adapter
-                    consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(),consultationLists);
-                    consultation_list_recycler_view_main.setAdapter(consultationAdapter);
                 }
+                //Reverse list index to get latest consultation
+                Collections.reverse(consultationLists);
+                consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(), consultationLists, consultationLists.size());
+                consultation_list_recycler_view_main.setAdapter(consultationAdapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -287,11 +287,12 @@ public class HomeFragment extends Fragment {
                     assert cls != null;
                     if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
                         consultationLists.add(cls);
-                        Collections.reverse(consultationLists);
                     }
-                    consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(), consultationLists);
-                    home_recycler_view_consultation.setAdapter(consultationAdapter);
                 }
+                //Reverse list index to get latest consultation
+                Collections.reverse(consultationLists);
+                consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(), consultationLists, 3);
+                home_recycler_view_consultation.setAdapter(consultationAdapter);
             }
 
             @Override
@@ -332,8 +333,12 @@ public class HomeFragment extends Fragment {
                                 Log.d(TAG, "Home. Patient ID null", e);
                             }
                         }
+                        //Reverse list index to get latest consultation
+//                        Collections.reverse(mPredictionListDoctor);
                         //Create adapter
-                        doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionListDoctor, 0);
+                        //goToScreen 0: doctor confirm screen
+                        doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
+                                mPredictionListDoctor, 0, 3);
                         home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
                     }
 
@@ -351,10 +356,13 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * PATIENT TYPE
-     * Load all prediction of patient
+     * Load prediction by type account
+     * Load list prediction of patient if account type is 1
+     * Load list prediction that confirmed by account doctor if account type is 0
+     *
+     * @param typeAcc type of account. 0: doctor | 1: patient
      */
-    private void loadAllPredictionOfAccount() {
+    private void loadAllPredictionOfAccount(int typeAcc) {
         mPredictionListPatient = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("Prediction");
         mRef.addValueEventListener(new ValueEventListener() {
@@ -365,14 +373,22 @@ public class HomeFragment extends Fragment {
                     Prediction pr = sh.getValue(Prediction.class);
                     //If patientId equal with current accountID
                     try {
-                        if (pr.getPatientID().equals(fUser.getUid())) {
-                            mPredictionListPatient.add(pr);
+                        if (typeAcc == 0) {
+                            if (pr.getDoctorID().equals(fUser.getUid())) {
+                                mPredictionListPatient.add(pr);
+                            }
+                        } else if (typeAcc == 1) {
+                            if (pr.getPatientID().equals(fUser.getUid())) {
+                                mPredictionListPatient.add(pr);
+                            }
                         }
                     } catch (NullPointerException e) {
                         Log.d(TAG, "Home. Patient ID null", e);
                     }
                 }
-                patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(), mPredictionListPatient, 1);
+                //goToScreen 1: prediction result screen
+                patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
+                        mPredictionListPatient, 1, 3);
                 home_recycler_view_disease.setAdapter(patientPredictionAdapter);
             }
 
@@ -398,6 +414,8 @@ public class HomeFragment extends Fragment {
         home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
         home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         loadAllPredictionPending();
+        //type 0: doctor
+        loadAllPredictionOfAccount(0);
     }
 
     /**
@@ -409,10 +427,12 @@ public class HomeFragment extends Fragment {
         home_doctor_all_prediction_recycle_view.setVisibility(View.GONE);
 
         //Patient
-        loadAllPredictionOfAccount();
         home_txt_title.setText(getString(R.string.home_txt_title));
         home_txt_prediction_title.setText(getString(R.string.home_txt_prediction_title));
         home_txt_consultation_title.setText(getString(R.string.home_txt_consultation_title));
+        //type 1: patient
+        loadAllPredictionOfAccount(1);
+
     }
 
     /**
