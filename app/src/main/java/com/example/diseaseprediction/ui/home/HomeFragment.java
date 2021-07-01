@@ -337,10 +337,12 @@ public class HomeFragment extends Fragment {
                             Prediction pr = sh.getValue(Prediction.class);
                             assert pr != null;
                             try {
-                                //Check if specializationID in prediction equal with specializationID in doctor account
-                                if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                                    //Add to prediction list
-                                    mPredictionListDoctor.add(pr);
+                                if (pr.getStatus() == 0) {
+                                    //Check if specializationID in prediction equal with specializationID in doctor account
+                                    if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                        //Add to prediction list
+                                        mPredictionListDoctor.add(pr);
+                                    }
                                 }
                             } catch (NullPointerException e) {
                                 Log.d(TAG, "Home. Patient ID null", e);
