@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         //get user by id
         mAccount = new Account();
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase

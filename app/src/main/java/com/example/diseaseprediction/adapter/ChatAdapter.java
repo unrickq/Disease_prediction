@@ -242,7 +242,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         List<RecommendSymptom> tempRecommend = new ArrayList<>();
         //Go to recommendSymptom
         mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tempSymptom.clear();
@@ -260,7 +260,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                 //Get name of symptom
                 mRef2 = FirebaseDatabase.getInstance().getReference("Symptom");
-                mRef2.addValueEventListener(new ValueEventListener() {
+                mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         mSymptom.clear();

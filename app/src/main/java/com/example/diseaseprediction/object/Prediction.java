@@ -38,7 +38,7 @@ public class Prediction implements Parcelable {
      * @param dateCreate             Date create
      * @param dateUpdate             Date update
      * @param hiddenSpecializationID Hidden SpecializationID
-     * @param status                 0: Deleted | 1: Normal
+     * @param status                 0: Pending | 1: Confirmed | 2: Error
      */
     public Prediction(String predictionID, String patientID, String doctorID, String sessionID, String diseaseID,
                       String notes, Date dateCreate, Date dateUpdate, String hiddenSpecializationID, int status) {
@@ -242,16 +242,16 @@ public class Prediction implements Parcelable {
     /**
      * Get Status
      *
-     * @return 0: Deleted | 1: Normal
+     * @return 0: Pending | 1: Confirmed | 2: Error
      */
     public int getStatus() {
         return status;
     }
 
     /**
-     * Set Status. 0: Deleted | 1: Normal
+     * Set Status. 0: Pending | 1: Confirmed | 2: Error
      *
-     * @param status 0: Deleted | 1: Normal
+     * @param status 0: Pending | 1: Confirmed | 2: Error
      */
     public void setStatus(int status) {
         this.status = status;

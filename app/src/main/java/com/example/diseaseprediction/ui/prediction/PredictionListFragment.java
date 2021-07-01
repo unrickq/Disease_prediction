@@ -150,7 +150,7 @@ public class PredictionListFragment extends Fragment {
     private void loadAllPredictionOfAccount(int typeAcc) {
         mPredictionList = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mPredictionList.clear();

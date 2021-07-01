@@ -209,7 +209,7 @@ public class HomeFragment extends Fragment {
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("receiverID", accountIDTwo);
                             i.putExtra("sessionID", sessionID);
-                            i.putExtra("isChatBot", true);
+//                            i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
 
                             //Send message started
@@ -239,12 +239,14 @@ public class HomeFragment extends Fragment {
                             Session ss = new Session();
                             for (DataSnapshot sn : snapshot.getChildren()) {
                                 ss = sn.getValue(Session.class);
+                                //Get current session of two account
                                 if (ss.getSessionID().equals(consultationList.getSessionID())) {
                                     if (ss.getStatus() == 1) {
                                         sessionID = ss.getSessionID();
                                     }
                                 }
                             }
+                            //If session is null
                             if (sessionID.equals("default")) {
                                 sessionID = mRef.push().getKey();
                                 mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
@@ -265,7 +267,7 @@ public class HomeFragment extends Fragment {
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("receiverID", accountIDTwo);
                             i.putExtra("sessionID", sessionID);
-                            i.putExtra("isChatBot", true);
+//                            i.putExtra("isChatBot", true);
                             getContext().startActivity(i);
                         }
 
@@ -289,7 +291,7 @@ public class HomeFragment extends Fragment {
     private void loadConsultationList() {
         consultationLists = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 consultationLists.clear();
@@ -376,7 +378,7 @@ public class HomeFragment extends Fragment {
     private void loadAllPredictionOfAccount(int typeAcc) {
         mPredictionListPatient = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mPredictionListPatient.clear();

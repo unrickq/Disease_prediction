@@ -45,13 +45,12 @@
         android:background="@drawable/shadow"
         app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar" />
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingLeft="@dimen/padding"
         android:paddingRight="@dimen/padding"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/prediction_btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar">
@@ -75,7 +74,7 @@
                     android:layout_width="61dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_disease" />
+                    android:src="@drawable/ic_edit" />
 
                 <TextView
                     android:id="@+id/prediction_txt_status"
@@ -85,7 +84,7 @@
                     android:layout_marginLeft="@dimen/margin_top"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/prediction_txt_disease_title" />
+                    android:text="@string/prediction_txt_status" />
 
 
             </LinearLayout>
@@ -149,10 +148,10 @@
 
                 <ImageView
                     android:id="@+id/prediction_img_disease"
-                    android:layout_width="61dp"
-                    android:layout_height="36dp"
+                    android:layout_width="59dp"
+                    android:layout_height="34dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_disease" />
+                    android:src="@drawable/ic_prediction_symptom" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -343,33 +342,53 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/prediction_layout_contact_doctor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/margin_top">
+                android:layout_marginTop="@dimen/margin_top"
+                android:visibility="gone">
 
-                <Button
-                    android:id="@+id/prediction_btn_contact_doctor"
+                <TextView
+                    android:id="@+id/prediction_txt_contact_doctor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:enabled="false"
+                    android:text="@string/prediction_txt_contact_doctor"
+                    app:cornerRadius="@dimen/btn_corner_radius" />
+
+                <TextView
+                    android:id="@+id/prediction_txt_contact_doctor_click"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/prediction_btn_contact_doctor"
+                    android:textColor="@color/theme_1_P"
                     app:cornerRadius="@dimen/btn_corner_radius" />
-
-                <Button
-                    android:id="@+id/prediction_btn_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:text="@string/prediction_btn_back"
-                    app:cornerRadius="@dimen/btn_corner_radius" />
+                <!--                <Button-->
+                <!--                    android:id="@+id/prediction_btn_contact_doctor"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginRight="5dp"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    android:enabled="false"-->
+                <!--                    android:text="@string/prediction_btn_contact_doctor"-->
+                <!--                    app:cornerRadius="@dimen/btn_corner_radius" />-->
 
             </LinearLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/prediction_btn_back"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/prediction_btn_back"
+        app:cornerRadius="@dimen/btn_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

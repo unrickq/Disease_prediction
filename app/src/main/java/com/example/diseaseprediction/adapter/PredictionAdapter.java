@@ -124,7 +124,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
         //Get date and status
         mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Prediction pd = snapshot.getValue(Prediction.class);

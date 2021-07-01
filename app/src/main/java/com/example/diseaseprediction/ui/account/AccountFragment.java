@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,7 +73,7 @@ public class AccountFragment extends Fragment {
     private TextInputLayout account_txt_title_name, account_txt_title_gender, account_txt_title_phone, account_txt_title_email, account_txt_title_address,
             account_doctor_txt_title_experience, account_doctor_txt_title_description, account_doctor_txt_title_specialization;
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
-    private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
+//    private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
 
     private LinearLayout account_layout_doctor;
     private Button accout_btn_edit, accout_btn_edit_done;
@@ -455,8 +454,8 @@ public class AccountFragment extends Fragment {
         } else {
             mRef.child(fUser.getUid()).child("name").setValue(account_txt_title_name.getEditText().getText().toString());
             //Set nav bar
-            nav_header_txt_acc_name = getActivity().findViewById(R.id.nav_header_txt_acc_name);
-            nav_header_txt_acc_name.setText(account_txt_title_name.getEditText().getText().toString());
+//            nav_header_txt_acc_name = getActivity().findViewById(R.id.nav_header_txt_acc_name);
+//            nav_header_txt_acc_name.setText(account_txt_title_name.getEditText().getText().toString());
         }
 
         //Gender
@@ -474,8 +473,8 @@ public class AccountFragment extends Fragment {
         } else {
             mRef.child(fUser.getUid()).child("phone").setValue(account_txt_title_phone.getEditText().getText().toString());
             //Set nav bar
-            nav_header_txt_acc_phone = getActivity().findViewById(R.id.nav_header_txt_acc_phone);
-            nav_header_txt_acc_phone.setText(account_txt_title_phone.getEditText().getText().toString());
+//            nav_header_txt_acc_phone = getActivity().findViewById(R.id.nav_header_txt_acc_phone);
+//            nav_header_txt_acc_phone.setText(account_txt_title_phone.getEditText().getText().toString());
         }
 
         //email

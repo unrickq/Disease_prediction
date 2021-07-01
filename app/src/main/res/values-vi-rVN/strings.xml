@@ -74,6 +74,7 @@
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
     <string name="prediction_txt_status_incorrect">Có lỗi.....</string>
     <string name="prediction_txt_status_pending">Chờ xác nhận</string>
+    <string name="prediction_txt_status">Trạng thái</string>
     <string name="prediction_title_result">Chẩn đoán</string>
     <string name="prediction_btn_contact_doctor">Liên hệ với bác sĩ</string>
     <string name="prediction_btn_back">Trở về màn hình trước</string>
@@ -123,6 +124,7 @@
 
     <string name="prediction_adapter_waiting_confirm">Đang chờ xác nhận của bác sĩ</string>
     <string name="prediction_adapter_confirmed">Bác sĩ đã xác nhận</string>
+    <string name="prediction_txt_contact_doctor">Bạn cần tư vấn? </string>
 
     <string name="home_doctor_txt_title">Xin chào bác sĩ !</string>
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>

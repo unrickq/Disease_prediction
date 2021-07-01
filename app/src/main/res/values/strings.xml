@@ -73,6 +73,7 @@
     <string name="prediction_txt_status_correct">Confirmed</string>
     <string name="prediction_txt_status_incorrect">Some thing wrong.....</string>
     <string name="prediction_txt_status_pending">Pending</string>
+    <string name="prediction_txt_status">Status</string>
     <string name="prediction_title_result">Prediction</string>
     <string name="prediction_btn_contact_doctor">Contact a doctor</string>
     <string name="prediction_btn_back">Back to previous</string>
@@ -123,6 +124,7 @@
 
     <string name="prediction_adapter_waiting_confirm">Waiting for doctor\'s confirmation</string>
     <string name="prediction_adapter_confirmed">Doctor confirmed</string>
+    <string name="prediction_txt_contact_doctor">Do you need advice? </string>
 
     <string name="home_doctor_txt_title">Hello doctor !</string>
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
@@ -162,7 +164,5 @@
         <item>EN</item>
         <item>VN</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

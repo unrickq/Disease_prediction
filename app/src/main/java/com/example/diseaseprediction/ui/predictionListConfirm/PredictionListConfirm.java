@@ -115,7 +115,7 @@ public class PredictionListConfirm extends Fragment {
                 mDoctor = snapshot.getValue(DoctorInfo.class);
                 //Go to prediction
                 mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-                mRef.addValueEventListener(new ValueEventListener() {
+                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         mPredictionListDoctor.clear();
