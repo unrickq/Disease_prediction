@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.object.Advise;
 import com.example.diseaseprediction.object.ConsultationList;
+import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.DiseaseAdvise;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
@@ -51,7 +52,7 @@ public class PredictionResult extends AppCompatActivity {
     private String sessionID;
 
     private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
-            prediction_txt_status, prediction_txt_contact_doctor_click;
+        prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title;
     private ImageView prediction_img_status, prediction_toolbar_img_pre;
     private ListView prediction_listview_advice_result;
     private LinearLayout prediction_layout_contact_doctor;
@@ -145,6 +146,7 @@ public class PredictionResult extends AppCompatActivity {
      */
     private void findView() {
         prediction_txt_status = findViewById(R.id.prediction_txt_status);
+        prediction_txt_disease_title = findViewById(R.id.prediction_txt_disease_title);
         prediction_txt_disease_result = findViewById(R.id.prediction_txt_disease_result);
         prediction_txt_disease_description_result = findViewById(R.id.prediction_txt_disease_description_result);
         prediction_listview_advice_result = findViewById(R.id.prediction_listview_advice_result);
@@ -167,7 +169,7 @@ public class PredictionResult extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Prediction pr = snapshot.getValue(Prediction.class);
                 try {
-                    //Load status
+
                     if (pr.getPredictionID().equals(mPrediction.getPredictionID())) {
                         if (pr.getStatus() == 0) {
                             prediction_layout_contact_doctor.setVisibility(View.GONE);
@@ -181,14 +183,41 @@ public class PredictionResult extends AppCompatActivity {
                             prediction_img_status.setImageResource(R.drawable.ic_correct);
                         } else if (pr.getStatus() == 2) {
                             prediction_layout_contact_doctor.setVisibility(View.VISIBLE);
-                            prediction_txt_status.setText(getString(R.string.prediction_txt_status_incorrect));
-                            prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
-                            prediction_img_status.setImageResource(R.drawable.ic_incorrect);
+                            prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
+//                            prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
+                            prediction_txt_status.setTextColor(Color.parseColor("#3bbf45"));
+//                            prediction_img_status.setImageResource(R.drawable.ic_incorrect);
+                            prediction_img_status.setImageResource(R.drawable.ic_correct);
                         }
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, "PredictionResult. getDataToUI", e);
                 }
+
+                //Get disease
+                mRef2 = FirebaseDatabase.getInstance().getReference("Disease").child(mPrediction.getDiseaseID());
+                mRef2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Disease disease = snapshot.getValue(Disease.class);
+                        // prediction correct
+                        prediction_txt_disease_result.setText(disease.getName());
+                        prediction_txt_disease_description_result.setText(disease.getDescription());
+                        // prediction incorrect
+                        if (pr.getStatus() == 2) {
+                            prediction_txt_disease_title.setText(getString(R.string.prediction_txt_disease_title).concat(" (Disease updated)"));
+                            // doctor select unknown disease
+                            if (pr.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+                                String unknownDisease = pr.getNotes();
+                                prediction_txt_disease_result.setText(unknownDisease);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
 
             @Override
@@ -197,19 +226,7 @@ public class PredictionResult extends AppCompatActivity {
             }
         });
 
-        //Get disease
-        mRef = FirebaseDatabase.getInstance().getReference("Disease").child(mPrediction.getDiseaseID());
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                prediction_txt_disease_result.setText(snapshot.child("name").getValue().toString());
-                prediction_txt_disease_description_result.setText(snapshot.child("description").getValue().toString());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
         getAdviseList(mPrediction.getDiseaseID());
     }
 

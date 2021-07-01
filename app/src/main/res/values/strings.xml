@@ -76,8 +76,8 @@
     <string name="prediction_txt_advice_title">Advice</string>
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">Your prediction</string>
-    <string name="prediction_txt_status_correct">Confirmed</string>
-    <string name="prediction_txt_status_incorrect">Some thing wrong.....</string>
+    <string name="prediction_txt_status_correct">Doctor confirmed!</string>
+    <string name="prediction_txt_status_incorrect">Doctor confirmed! Disease updated</string>
     <string name="prediction_txt_status_pending">Pending</string>
     <string name="prediction_txt_status">Status</string>
     <string name="prediction_title_result">Prediction</string>
