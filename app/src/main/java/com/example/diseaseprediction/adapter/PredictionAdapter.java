@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.PredictionConfirm;
 import com.example.diseaseprediction.PredictionResult;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Prediction;
@@ -76,6 +77,10 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
             public void onClick(View v) {
                 if (goToScreen == 0) {
                     //Doctor confirm prediction
+                    Intent i = new Intent(mContext, PredictionConfirm.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("mPrediction", prediction);
+                    mContext.startActivity(i);
                 } else if (goToScreen == 1) {
                     //Patient prediction
                     Intent i = new Intent(mContext, PredictionResult.class);

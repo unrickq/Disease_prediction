@@ -161,5 +161,21 @@
     <string name="upload_img_waiting">Đang tải lên...</string>
     <string name="upload_img_done">Tải lên hoàn tất</string>
     <string name="item_chat_checkbox_done">Hoàn tất</string>
+    <string name="prediction_confirm_btn_incorrect">Không chính xác</string>
+    <string name="prediction_confirm_btn_correct">Chính xác</string>
+    <string name="prediction_confirm_btn_confirm">Xác nhận</string>
+    <string name="prediction_confirm_disease_input_other_disease">Tên bệnh</string>
+    <string name="prediction_confirm_disease_select">Chọn bệnh</string>
+    <string name="prediction_confirm_txt_disease_title">Dự đoán bệnh</string>
+    <string name="prediction_confirm_txt_disease_description_title">Mô tả của bệnh nhân</string>
+    <string name="prediction_confirm_title">Xác nhận dự đoán bệnh</string>
+    <string name="prediction_confirm_dialog_incorrect">Bạn có chắc chắn dự đoán này không chính xác?</string>
+    <string name="prediction_confirm_dialog_correct">Bạn có chắc chắn dự đoán này chính xác</string>
+    <string name="dialog_button_cancel">Huỷ</string>
+    <string name="prediction_confirm_txt_disease_prediction_title">Xin hãy chọn bệnh đúng cho dự đoán này</string>
+    <string name="prediction_confirm_dialog_thankyou">Cảm ơn bạn vì đã xác nhận!</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="prediction_confirm_dialog_prediction_status_invallid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
+    <string name="dialog_button_yes">Đúng</string>
 
 </resources>

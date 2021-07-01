@@ -7,7 +7,7 @@
     tools:context=".PredictionResult">
 
     <RelativeLayout
-        android:id="@+id/prediction_tool_bar"
+        android:id="@+id/prediction_confirm_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="6dp"
         android:background="@drawable/shadow"
-        app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_tool_bar" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toTopOf="@+id/prediction_btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prediction_tool_bar">
+        app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_tool_bar">
 
         <LinearLayout
             android:layout_width="match_parent"

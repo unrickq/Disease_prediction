@@ -1,4 +1,10 @@
 <resources>
+
+    <!--    Dialog-->
+    <string name="dialog_button_yes">Yes</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_ok">OK</string>
+
     <string name="app_name">Pemeprap</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -158,6 +164,20 @@
     <string name="upload_img_waiting">Uploading...</string>
     <string name="upload_img_done">Uploaded</string>
     <string name="item_chat_checkbox_done">Done</string>
+
+    <string name="prediction_confirm_btn_incorrect">Not correct</string>
+    <string name="prediction_confirm_btn_correct">Correct</string>
+    <string name="prediction_confirm_btn_confirm">Confirm</string>
+    <string name="prediction_confirm_disease_input_other_disease">Disease name</string>
+    <string name="prediction_confirm_disease_select">Select Disease</string>
+    <string name="prediction_confirm_txt_disease_title">Disease Prediction</string>
+    <string name="prediction_confirm_txt_disease_description_title">Patient\'s Description</string>
+    <string name="prediction_confirm_title">Prediction Confirm Request</string>
+    <string name="prediction_confirm_dialog_incorrect">Are you sure the prediction is not correct?</string>
+    <string name="prediction_confirm_dialog_correct">Are you sure the prediction is correct?</string>
+    <string name="prediction_confirm_txt_disease_prediction_title">Please select correct disease for this prediction</string>
+    <string name="prediction_confirm_dialog_thankyou">Thank you for your confirmation!</string>
+    <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
 
 
     <string-array name="spinner_language">
