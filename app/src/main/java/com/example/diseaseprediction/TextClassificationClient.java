@@ -9,9 +9,7 @@ import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.metadata.MetadataExtractor;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import com.opencsv.CSVReader;
 
-import java.io.FileReader;
+import com.example.diseaseprediction.tokenize.RDRsegmenter;
+import com.example.diseaseprediction.tokenize.Vocabulary;
 
 public class TextClassificationClient {
   private static final String TAG = "Interpreter";
@@ -55,9 +53,25 @@ public class TextClassificationClient {
   private final Map<String, Integer> dic = new HashMap<>();
   private final List<String> labels = new ArrayList<>();
   private Interpreter tflite;
+  private AssetManager am ;
+  private InputStream is ;
+  private InputStream fis;
+  Vocabulary vocabulary ;
+  RDRsegmenter rdRsegmenter ;
 
   public TextClassificationClient(Context context) {
     this.context = context;
+    try {
+      am = context.getAssets();
+      is = am.open("Model.RDR");
+      fis = am.open("VnVocab.txt");
+      vocabulary = new Vocabulary();
+      vocabulary.test(fis);
+      rdRsegmenter = new RDRsegmenter(is,fis);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
   }
 
   /** Load the TF Lite model and dictionary so that the client can start classifying text. */
@@ -100,7 +114,7 @@ public class TextClassificationClient {
   }
 
   /** Classify an input string and returns the classification results. */
-  public synchronized List<Result> classify(String text) {
+  public synchronized List<Result> classify(String text) throws IOException {
     // Pre-prosessing.
     int[][] input = tokenizeInputText(text);
 
@@ -163,7 +177,10 @@ public class TextClassificationClient {
   }
 
   /** Pre-prosessing: tokenize and map the input words into a float array. */
-  int[][] tokenizeInputText(String text) {
+  int[][] tokenizeInputText(String text) throws IOException {
+
+    text = rdRsegmenter.segmentTokenizedString(text);
+
     int[] tmp = new int[SENTENCE_LEN];
     List<String> array = Arrays.asList(text.split(SIMPLE_SPACE_OR_PUNCTUATION));
     System.out.println("check ");
@@ -186,9 +203,11 @@ public class TextClassificationClient {
     int[][] ans = {tmp};
     return ans;
   }
-  public void loadFileCSV(){
-    HashMap<String, List<String>> symtomsList = new HashMap<String, List<String>>();
-
+  public List<String> tokenize(String text) throws IOException {
+    List<String> token = new ArrayList<>();
+    text = rdRsegmenter.segmentTokenizedString(text);
+    token = Arrays.asList(text.split(" "));
+    return token;
   }
 
   Map<String, Integer> getDic() {
