@@ -329,13 +329,14 @@ public class PredictionResult extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             mRef.push().setValue(new ConsultationList(accountIDOne
                                     , accountIDTwo, sessionID));
+                            //Update doctor session of prediction
+                            updateDoctorSessionInPrediction(mPrediction.getPredictionID(), sessionID);
                             //Send session id
                             Intent i = new Intent(PredictionResult.this, Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("receiverID", accountIDTwo);
                             i.putExtra("sessionID", sessionID);
                             startActivity(i);
-
                             //Send message started
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
                             Message msg = new Message(reference.push().getKey(), accountIDOne
@@ -386,6 +387,8 @@ public class PredictionResult extends AppCompatActivity {
                                         , new Date(), sessionID, 1);
                                 reference.child(msg.getMessageID()).setValue(msg);
                             }
+                            //Update doctor session of prediction
+                            updateDoctorSessionInPrediction(mPrediction.getPredictionID(), sessionID);
                             //Send session id
                             Intent i = new Intent(PredictionResult.this, Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -406,5 +409,11 @@ public class PredictionResult extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void updateDoctorSessionInPrediction(String predictionID, String doctorSession) {
+        mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+        mRef.child(predictionID).child("doctorSessionID").setValue(doctorSession);
     }
 }

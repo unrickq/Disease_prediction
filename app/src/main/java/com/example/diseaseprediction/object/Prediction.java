@@ -13,6 +13,7 @@ public class Prediction implements Parcelable {
     private String patientID;
     private String doctorID;
     private String sessionID;
+    private String doctorSessionID;
     private String diseaseID;
     private String notes;
     private Date dateCreate;
@@ -33,6 +34,7 @@ public class Prediction implements Parcelable {
      * @param patientID              Patient ID
      * @param doctorID               Doctor ID
      * @param sessionID              Session ID
+     * @param doctorSessionID        Doctor Session ID
      * @param diseaseID              Disease ID
      * @param notes                  Notes
      * @param dateCreate             Date create
@@ -40,12 +42,13 @@ public class Prediction implements Parcelable {
      * @param hiddenSpecializationID Hidden SpecializationID
      * @param status                 0: Pending | 1: Confirmed | 2: Error
      */
-    public Prediction(String predictionID, String patientID, String doctorID, String sessionID, String diseaseID,
+    public Prediction(String predictionID, String patientID, String doctorID, String sessionID, String doctorSessionID, String diseaseID,
                       String notes, Date dateCreate, Date dateUpdate, String hiddenSpecializationID, int status) {
         this.predictionID = predictionID;
         this.patientID = patientID;
         this.doctorID = doctorID;
         this.sessionID = sessionID;
+        this.doctorSessionID = doctorSessionID;
         this.diseaseID = diseaseID;
         this.notes = notes;
         this.dateCreate = dateCreate;
@@ -165,6 +168,24 @@ public class Prediction implements Parcelable {
      */
     public void setDiseaseID(String diseaseID) {
         this.diseaseID = diseaseID;
+    }
+
+    /**
+     * Get doctor session ID
+     *
+     * @return Doctor session ID
+     */
+    public String getDoctorSessionID() {
+        return doctorSessionID;
+    }
+
+    /**
+     * Set doctor session ID
+     *
+     * @param doctorSessionID Doctor session ID
+     */
+    public void setDoctorSessionID(String doctorSessionID) {
+        this.doctorSessionID = doctorSessionID;
     }
 
     /**

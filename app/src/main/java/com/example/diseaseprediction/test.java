@@ -112,9 +112,6 @@ public class test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        testData();
-
-        System.out.println("quang " + mDisease);
 
     }
 
@@ -418,8 +415,8 @@ public class test extends AppCompatActivity {
 //        addDataSymptom(new Symptom("18",  "vàng da",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("19",  "buồn nôn ói mửa",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("20",  "đau tinh hoàn",  "Default", new Date(),  new Date(), 1));
-
-//        addDataDisease(new Disease("1", "-Mct1vQY8dBaxrRr1eog", "Bệnh sốt rét", "Một bệnh truyền nhiễm do ký sinh trùng đơn bào thuộc họ Plasmodium gây ra, có thể lây truyền qua vết đốt của muỗi Anopheles hoặc do kim tiêm bị ô nhiễm hoặc truyền máu. Sốt rét Falciparum là loại gây tử vong cao nhất.", new Date(), new Date(), 1));
+//addDataDisease(new Disease("99999", "-Mct1vQY8dBaxrRr1eog", "Default", "Default", new Date(), new Date(), 1));
+//        addDataDisease(new Disease("1", "-Mct1vQY8dBaxrRr1eog", "Bệnh sốt rét", "", new Date(), new Date(), 1));
 //        addDataDisease(new Disease("2", "-Mct1vQWhFAEtX8TjL_D", "viêm gan A", "Viêm gan A là một bệnh nhiễm trùng gan rất dễ lây lan do vi rút viêm gan A gây ra. Virus này là một trong số các loại virus viêm gan gây viêm và ảnh hưởng đến khả năng hoạt động của gan.", new Date(), new Date(), 1));
 //        addDataDisease(new Disease("3", "-Mct1vQY8dBaxrRr1eog", "Cảm lạnh thông thường", "Cảm lạnh thông thường là một bệnh nhiễm trùng do vi-rút ở mũi và cổ họng (đường hô hấp trên). Nó thường vô hại, mặc dù nó có thể không cảm thấy như vậy. Nhiều loại vi-rút có thể gây ra cảm lạnh thông thường.", new Date(), new Date(), 1));
 //        addDataDisease(new Disease("4", "-Mct1vQWhFAEtX8TjL_D", "Bệnh viêm gan B", "Viêm gan B là một bệnh nhiễm trùng ở gan của bạn. Nó có thể gây sẹo nội tạng, suy gan và ung thư. Nó có thể gây tử vong nếu không được điều trị. Nó lây lan khi mọi người tiếp xúc với máu, vết loét hở hoặc chất dịch cơ thể của người có vi rút viêm gan B.", new Date(), new Date(), 1));

@@ -1,6 +1,7 @@
 package com.example.diseaseprediction;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -42,23 +43,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-//import tensorflow lite
-import com.google.android.gms.tasks.Continuation;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
-import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.label.Category;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -415,7 +406,8 @@ public class Chat extends AppCompatActivity {
                 try {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Disease d = sn.getValue(Disease.class);
-                        Prediction pre = new Prediction("0", uId, "Default", "Default",
+                        Prediction pre = new Prediction("0", uId, "Default",
+                                "Default", "Default",
                                 d.getDiseaseID(), "Default", new Date(), new Date(),
                                 d.getSpecializationID(), 0);
                         createPrediction(pre);
@@ -471,8 +463,12 @@ public class Chat extends AppCompatActivity {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi");
-
-            startActivityForResult(intent, REQUEST_CODE_SPEECH);
+            try {
+                startActivityForResult(intent, REQUEST_CODE_SPEECH);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, getString(R.string.default_speech_support_device), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
         } else {
             // ask for the permission.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -544,6 +540,7 @@ public class Chat extends AppCompatActivity {
                 try {
                     pre.setPredictionID(mRef2.push().getKey());
                     mRef2.child(pre.getPredictionID()).setValue(pre);
+                    System.out.println("quang " + pre.getPredictionID());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Not found disease in database", e);

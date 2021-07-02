@@ -177,5 +177,6 @@
     <string name="dialog_button_ok">OK</string>
     <string name="prediction_confirm_dialog_prediction_status_invallid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
     <string name="dialog_button_yes">Đúng</string>
+    <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
 
 </resources>
