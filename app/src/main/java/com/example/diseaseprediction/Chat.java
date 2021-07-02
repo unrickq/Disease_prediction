@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,8 @@ import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
+
+import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,13 +46,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+//import tensorflow lite
+import com.google.android.gms.tasks.Continuation;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
+import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
+import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.label.Category;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
+import java.util.Scanner;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,6 +86,7 @@ public class Chat extends AppCompatActivity {
 
     private ChatAdapter chatAdapter;
     private List<Message> mMessage;
+    private List<Symptom> mSymptom;
     private String receiverID, sessionID;
 
     private RelativeLayout chat_send_message_layout;
@@ -86,6 +108,7 @@ public class Chat extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         client = new TextClassificationClient(getApplicationContext());
+
         handler = new Handler();
 
         //Find view
@@ -99,6 +122,9 @@ public class Chat extends AppCompatActivity {
 
         //Set UI by role
         setUIByAccountType();
+
+        // get symptom
+        getSymptomFirebase();
 
         //Set recycler view
         chat_recycler_view.setHasFixedSize(true);
@@ -137,22 +163,40 @@ public class Chat extends AppCompatActivity {
                             //user chat vs chatbot
                         } else {
                             try {
-                                //allMsg +=
-
-
                                 // user chat
-                                System.out.println("check msg"+msg);
-                                Message message = new Message("", fUser.getUid(),"hmVF1lBCzlddOHl6qFeP0t76iMy1"
+                                System.out.println("check msg" + msg);
+                                Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
                                         , msg, new Date(), sessionID, 1);
                                 setMessageFirebase(message);
                                 //chatbot chat
+                                //model xu ly
+                                List<Result> results = client.classify(msg);
+                                List<String> token = client.tokenize(msg);
+                                //get symptom user input
+                                String result = "Triệu chứng của bạn là: ";
+                                for (Symptom s : mSymptom) {
+                                    for (String tk : token) {
+                                        tk = tk.replace("_", " ");
+                                        if (s.getName().equals(tk)) {
+                                            result += tk + ", ";
+                                        }
+                                    }
+                                }
+                                //print symptom user input
+                                result = result.substring(0, result.length() - 2);
+                                Message mess = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+                                        result, new Date(), sessionID, 1);
+                                setMessageFirebase(mess);
+                                //print ""benh cua ban la"
                                 Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
                                         fUser.getUid(), "Bệnh của bạn là: ", new Date(), sessionID, 1);
                                 setMessageFirebase(message1);
                                 chat_txt_enter_mess.getText().clear();
-                                System.out.println("check msg" + msg);
-                                //model xu ly
-                                List<Result> results = client.classify(msg);
+                                //get disease from model
+                                for (Result var : results) {
+                                    System.out.println(var.getTitle() + " " + var.getConfidence());
+                                }
+                                //print disease
                                 Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
                                         results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
                                         sessionID, 1);
@@ -540,7 +584,6 @@ public class Chat extends AppCompatActivity {
                 try {
                     pre.setPredictionID(mRef2.push().getKey());
                     mRef2.child(pre.getPredictionID()).setValue(pre);
-                    System.out.println("quang " + pre.getPredictionID());
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Not found disease in database", e);
@@ -550,6 +593,61 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+//    /**
+//     * check symptom by name
+//     *
+//     * @param listSymp
+//     * @param myCallback
+//     */
+//    private void checkSymptomByNameFirebase(List<String> listSymp , MyCallback myCallback) {
+//        mRef2 = FirebaseDatabase.getInstance().getReference("Symptom");
+//        Query disQuery = mRef2.orderByChild("name").equalTo(listSymp.get(0));
+//        disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                try {
+//                        if(snapshot.exists()){
+//                            System.out.println("da vao day roi");
+//                            myCallback.onCallback("true");
+//
+//                        }
+//                } catch (Exception e) {
+//                    Log.d(LOG_TAG, "Not found disease in database", e);
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//    public interface MyCallback {
+//        void onCallback(String value);
+//    }
+
+    /**
+     * Get symptom in firebase
+     */
+    private void getSymptomFirebase() {
+        mSymptom = new ArrayList<>();
+        mRef = FirebaseDatabase.getInstance().getReference("Symptom");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mSymptom.clear();
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    Symptom msg = sn.getValue(Symptom.class);
+                    mSymptom.add(msg);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }

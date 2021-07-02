@@ -2,6 +2,7 @@ package com.example.diseaseprediction;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,8 +47,12 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -591,4 +596,44 @@ public class test extends AppCompatActivity {
 
 
 //        addDataMedicine(new Medicine("id", "name",  "description",  "manufacturer",  "content", new Date(), new Date(), 1));
+    /**
+     * set symptom to firebase
+     */
+//    private void setSymptomFirebase() {
+//
+//        try {
+//            List<Symptom> symList = new ArrayList<>();
+//            AssetManager am = getAssets();
+//            InputStream is = am.open("abc.txt");
+//            StringBuilder sb = new StringBuilder();
+//            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//            String line;
+//            System.out.println("check vui ve");
+//            int count = 1;
+//            while ((line = br.readLine()) != null) {
+////                sb.append(line + System.lineSeparator());
+//                symList.add(new Symptom("id", "ngứa", "Default", new Date(), new Date(), 1));
+//            }
+//
+////            symList.add(new Symptom("id",  "ngứa",  "Default", new Date(),  new Date(), 1));
+////            mRef = FirebaseDatabase.getInstance().getReference("Symptom");
+////            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+////                @Override
+////                public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                    for (int i = 1; i < 1 + 1; i++) {
+////                        mRef.child(String.valueOf(i)).setValue("");
+////                    }
+////
+////                }
+////
+////                @Override
+////                public void onCancelled(@NonNull DatabaseError error) {
+////
+////                }
+////            });
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 }
