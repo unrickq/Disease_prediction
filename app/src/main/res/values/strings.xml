@@ -143,13 +143,13 @@
     <string name="home_doctor_all_prediction_txt_title">Prediction in pending</string>
 
     <string name="account_info_btn_done">Done</string>
-    <string name="account_info_txt_title">Personal Infomation</string>
+    <string name="account_info_txt_title">Personal Information</string>
     <string name="account_info_doctor_experience">Experience (Year)</string>
-    <string name="account_info_doctor_experience_format">&lt;b>Experience (Year):&lt;/b>   %1$s</string>
+    <string name="account_info_doctor_experience_format">&lt;b>Experience (year):&lt;/b>   %1$s</string>
     <string name="account_info_doctor_specialization">Specialization</string>
     <string name="account_info_doctor_specialization_format">&lt;b>Specialization:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_description">Short description</string>
-    <string name="account_info_doctor_description_format">&lt;b>Short description:&lt;/b>  %1$s</string>
+    <string name="account_info_doctor_description_format">&lt;b>Short description: &lt;/b>  %1$s</string>
     <string name="account_info_doctor_txt_title">Doctor Information</string>
     <string name="account_info_txt_subtitle">Please fill in your personal information</string>
 
