@@ -142,7 +142,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                 if (pd.getStatus() == 0) {
                     item_prediction_txt_status.setText(R.string.prediction_adapter_waiting_confirm);
                 } else if (pd.getStatus() == 1) {
-                    item_prediction_txt_status.setText(R.string.prediction_adapter_confirmed);
+                    item_prediction_txt_status.setText(R.string.prediction_adapter_confirmed_correct);
                 } else if (pd.getStatus() == 2) {
                     item_prediction_txt_status.setText(R.string.prediction_txt_status_incorrect);
                 }

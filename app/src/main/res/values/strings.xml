@@ -134,7 +134,8 @@
     <string name="exception_chat_load_user">Can\'t load user</string>
 
     <string name="prediction_adapter_waiting_confirm">Waiting for doctor\'s confirmation</string>
-    <string name="prediction_adapter_confirmed">Doctor confirmed</string>
+    <string name="prediction_adapter_confirmed_correct">Doctor confirmed</string>
+    <string name="prediction_adapter_confirmed_incorrect">Doctor confirmed! Disease changed!</string>
     <string name="prediction_txt_contact_doctor">Do you need advice? </string>
 
     <string name="home_doctor_txt_title">Hello doctor !</string>

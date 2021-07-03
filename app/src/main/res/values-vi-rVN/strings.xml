@@ -72,7 +72,7 @@
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">Chẩn đoán của bạn</string>
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
-    <string name="prediction_txt_status_incorrect">Có lỗi.....</string>
+    <string name="prediction_txt_status_incorrect">Đã xác nhận! Bệnh đã được thay đổi</string>
     <string name="prediction_txt_status_pending">Chờ xác nhận</string>
     <string name="prediction_txt_status">Trạng thái</string>
     <string name="prediction_title_result">Chẩn đoán</string>
@@ -123,7 +123,8 @@
     <string name="exception_chat_load_user">Không thể tải người dùng</string>
 
     <string name="prediction_adapter_waiting_confirm">Đang chờ xác nhận của bác sĩ</string>
-    <string name="prediction_adapter_confirmed">Bác sĩ đã xác nhận</string>
+    <string name="prediction_adapter_confirmed_correct">Bác sĩ đã xác nhận</string>
+    <string name="prediction_adapter_confirmed_incorrect">Bác sĩ đã xác nhận! Bệnh đã được thay đổi</string>
     <string name="prediction_txt_contact_doctor">Bạn cần tư vấn? </string>
 
     <string name="home_doctor_txt_title">Xin chào bác sĩ !</string>

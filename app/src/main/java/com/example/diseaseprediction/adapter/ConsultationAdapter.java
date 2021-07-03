@@ -2,6 +2,7 @@ package com.example.diseaseprediction.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,6 +115,8 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
             }
         });
+        // Set BOLD
+        item_consultation_txt_name.setTypeface(null, Typeface.BOLD);
     }
 
     //Get message by session ID
