@@ -151,64 +151,7 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
-                    if (!msg.equals("")) {
-                        // User request
-                        //user chat vs user
-                        if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
-                            Message message = new Message("", fUser.getUid(), receiverID, msg
-                                    , new Date(), sessionID, 1);
-                            setMessageFirebase(message);
-                            //
-                            chat_txt_enter_mess.getText().clear();
-                            //user chat vs chatbot
-                        } else {
-                            try {
-                                // user chat
-                                System.out.println("check msg" + msg);
-                                Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
-                                        , msg, new Date(), sessionID, 1);
-                                setMessageFirebase(message);
-                                //chatbot chat
-                                //model xu ly
-                                List<Result> results = client.classify(msg);
-                                List<String> token = client.tokenize(msg);
-                                //get symptom user input
-                                String result = "Triệu chứng của bạn là: ";
-                                for (Symptom s : mSymptom) {
-                                    for (String tk : token) {
-                                        tk = tk.replace("_", " ");
-                                        if (s.getName().equals(tk)) {
-                                            result += tk + ", ";
-                                        }
-                                    }
-                                }
-                                //print symptom user input
-                                result = result.substring(0, result.length() - 2);
-                                Message mess = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        result, new Date(), sessionID, 1);
-                                setMessageFirebase(mess);
-                                //print ""benh cua ban la"
-                                Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
-                                        fUser.getUid(), "Bệnh của bạn là: ", new Date(), sessionID, 1);
-                                setMessageFirebase(message1);
-                                chat_txt_enter_mess.getText().clear();
-                                //get disease from model
-                                for (Result var : results) {
-                                    System.out.println(var.getTitle() + " " + var.getConfidence());
-                                }
-                                //print disease
-                                Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                                        results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
-                                        sessionID, 1);
-                                setMessageFirebase(message2);
-                                getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
-                                chat_txt_enter_mess.getText().clear();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.d(LOG_TAG, "Exception when talking with chatbot ");
-                            }
-                        }
-                    }
+                    Chatbot(msg);
                 }
             });
 
@@ -227,6 +170,67 @@ public class Chat extends AppCompatActivity {
             toast.show();
         }
 
+    }
+
+    private void Chatbot(String msg) {
+        if (!msg.equals("")) {
+            // User request
+            //user chat vs user
+            if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
+                Message message = new Message("", fUser.getUid(), receiverID, msg
+                        , new Date(), sessionID, 1);
+                setMessageFirebase(message);
+                //
+                chat_txt_enter_mess.getText().clear();
+                //user chat vs chatbot
+            } else {
+                try {
+                    // user chat
+                    System.out.println("check msg" + msg);
+                    Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
+                            , msg, new Date(), sessionID, 1);
+                    setMessageFirebase(message);
+                    //chatbot chat
+                    //model xu ly
+                    List<Result> results = client.classify(msg);
+                    List<String> token = client.tokenize(msg);
+                    //get symptom user input
+                    String result = "Triệu chứng của bạn là: ";
+                    for (Symptom s : mSymptom) {
+                        for (String tk : token) {
+                            tk = tk.replace("_", " ");
+                            if (s.getName().equals(tk)) {
+                                result += tk + ", ";
+                            }
+                        }
+                    }
+                    //print symptom user input
+                    result = result.substring(0, result.length() - 2);
+                    Message mess = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+                            result, new Date(), sessionID, 1);
+                    setMessageFirebase(mess);
+                    //print ""benh cua ban la"
+                    Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
+                            fUser.getUid(), "Bệnh của bạn là: ", new Date(), sessionID, 1);
+                    setMessageFirebase(message1);
+                    chat_txt_enter_mess.getText().clear();
+                    //get disease from model
+                    for (Result var : results) {
+                        System.out.println(var.getTitle() + " " + var.getConfidence());
+                    }
+                    //print disease
+                    Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
+                            results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
+                            sessionID, 1);
+                    setMessageFirebase(message2);
+                    getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
+                    chat_txt_enter_mess.getText().clear();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(LOG_TAG, "Exception when talking with chatbot ");
+                }
+            }
+        }
     }
 
     /**
