@@ -6,12 +6,12 @@
     android:orientation="vertical"
     tools:context=".test">
 
-    <ListView
-        android:id="@+id/item_chat_checkbox"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="multipleChoice"
-        tools:ignore="InvalidId" />
+    <!--    <ListView-->
+    <!--        android:id="@+id/item_chat_checkbox"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:choiceMode="multipleChoice"-->
+    <!--        tools:ignore="InvalidId" />-->
 
     <!--    <androidx.recyclerview.widget.RecyclerView-->
     <!--        android:id="@+id/recycler"-->
@@ -98,5 +98,19 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="156dp"
         android:text="clicked" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 
 </LinearLayout>

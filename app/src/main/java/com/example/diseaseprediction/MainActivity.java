@@ -267,7 +267,8 @@ public class MainActivity extends AppCompatActivity {
                     if (!mAccount.getImage().equals("Default")) {
                         Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
                     } else {
-                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
+                        nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
+//                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
                     }
 
                 } else {

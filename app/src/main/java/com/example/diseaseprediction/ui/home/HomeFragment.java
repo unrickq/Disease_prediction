@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
     private ConsultationList consultationList;
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more, home_doctor_all_prediction_txt_see_more,
             home_txt_title, home_txt_prediction_title, home_txt_consultation_title;
-    private RelativeLayout home_doctor_all_prediction_layout_title;
+    private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
     private SearchView home_search_view;
     private NavigationView navigationView;
     private RecyclerView home_recycler_view_consultation, home_recycler_view_disease, home_doctor_all_prediction_recycle_view;
@@ -168,6 +168,8 @@ public class HomeFragment extends Fragment {
 
         home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
         home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
+
+        home_layout_disease_history = view.findViewById(R.id.home_layout_disease_history);
     }
 
     /**
@@ -215,8 +217,8 @@ public class HomeFragment extends Fragment {
 
                             //Send message started
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                            Message msg = new Message(reference.push().getKey(), accountIDOne
-                                    , accountIDTwo, "Hello all! Let's started!"
+                            Message msg = new Message(reference.push().getKey(), accountIDTwo
+                                    , accountIDOne, getString(R.string.default_chatbot_hello)
                                     , new Date(), sessionID, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                         }
@@ -422,6 +424,10 @@ public class HomeFragment extends Fragment {
         home_txt_title.setText(getString(R.string.home_doctor_txt_title));
         home_txt_prediction_title.setText(getString(R.string.home_doctor_txt_prediction_title));
         home_txt_consultation_title.setText(getString(R.string.home_doctor_txt_consultation_title));
+
+        //List disease history
+        home_layout_disease_history.setVisibility(View.GONE);
+        home_recycler_view_disease.setVisibility(View.GONE);
 
         //All prediction in pending
         home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);

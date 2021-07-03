@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
-        <activity android:name=".PredictionConfirm"></activity>
+        <activity android:name=".PredictionConfirm" />
         <activity android:name=".AccountInfoDoctor" />
         <activity android:name=".CodeVerify" />
         <activity android:name=".test" />

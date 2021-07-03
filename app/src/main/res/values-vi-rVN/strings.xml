@@ -110,6 +110,10 @@
     <string name="default_empty_experience">Vui lòng nhập số năm kinh nghiệm</string>
     <string name="default_empty_description">Vui lòng nhập mô tả ngắn về bạn</string>
     <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
+    <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
+    <string name="default_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
+    <string name="default_chatbot_disease">Bệnh của bạn là:&#160;</string>
+    <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>

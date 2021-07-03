@@ -85,6 +85,7 @@
                 tools:listitem="@layout/item_prediction" />
 
             <RelativeLayout
+                android:id="@+id/home_layout_disease_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
@@ -117,6 +118,7 @@
                 tools:listitem="@layout/item_prediction" />
 
             <RelativeLayout
+                android:id="@+id/home_layout_consultation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

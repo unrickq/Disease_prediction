@@ -501,7 +501,7 @@ public class AccountFragment extends Fragment {
             if (!mAccount.getAddress().equals("Default")) {
               String address = mAccount.getAddress();
               account_txt_address.setText(Html.fromHtml(getString(R.string.account_txt_title_address_format, address),
-                  FROM_HTML_MODE_LEGACY));
+                      FROM_HTML_MODE_LEGACY));
               account_txt_title_address.getEditText().setText(address);
             }
 
@@ -509,7 +509,7 @@ public class AccountFragment extends Fragment {
             if (!mAccount.getImage().equals("Default")) {
               Glide.with(AccountFragment.this).load(mAccount.getImage()).into(account_img_avatar);
             } else {
-              Glide.with(AccountFragment.this).load(R.drawable.background_avatar).into(account_img_avatar);
+              account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
             }
           } catch (NullPointerException e) {
             Log.d(TAG, "Account. Account ID null", e);

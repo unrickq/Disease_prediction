@@ -43,7 +43,7 @@
                 android:layout_height="141dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_top"
-                android:src="@drawable/background_avatar" />
+                android:src="@mipmap/ic_default_avatar_round" />
 
             <TextView
                 android:id="@+id/account_img_upload"
