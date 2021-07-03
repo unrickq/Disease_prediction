@@ -1,21 +1,21 @@
 package com.example.diseaseprediction;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +37,6 @@ import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
-
 import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,36 +46,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-//import tensorflow lite
-import com.google.android.gms.tasks.Continuation;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
-import com.google.firebase.ml.custom.FirebaseCustomRemoteModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.label.Category;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
-import java.util.Scanner;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chat extends AppCompatActivity {
-
     private static final String LOG_TAG = "Chat Activity";
     private static final int REQUEST_CODE_SPEECH = 10;
 
@@ -96,12 +77,28 @@ public class Chat extends AppCompatActivity {
     private CircleImageView chat_toolbar_img_avatar;
     private EditText chat_txt_enter_mess;
 
-    private SpeechRecognizer speechRecognizer;
     private TextClassificationClient client;
     private Handler handler;
 
     private static final String TAG = "TextClassificationDemo";
-    private String allMsg = "";
+
+    /**
+     * Hide keyboard
+     *
+     * @param activity Current activity
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isAcceptingText()) {
+            inputMethodManager.hideSoftInputFromWindow(
+                    activity.getCurrentFocus().getWindowToken(),
+                    0
+            );
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,17 +138,15 @@ public class Chat extends AppCompatActivity {
         //Then load all message
         if (receiverID != null && sessionID != null) {
             getUserChatData();
-            //Edit text input
+            //Set icon mic visibility when empty edit text
             chat_txt_enter_mess.addTextChangedListener(updateIconOnWriteWatcher());
-            if (receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
-                System.out.println("lachatbot");
-            }
+
             //send message
             chat_img_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
-                    Chatbot(msg);
+                    chatWithChatbot(msg);
                 }
             });
 
@@ -172,67 +167,6 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    private void Chatbot(String msg) {
-        if (!msg.equals("")) {
-            // User request
-            //user chat vs user
-            if (!receiverID.equals("hmVF1lBCzlddOHl6qFeP0t76iMy1")) {
-                Message message = new Message("", fUser.getUid(), receiverID, msg
-                        , new Date(), sessionID, 1);
-                setMessageFirebase(message);
-                //
-                chat_txt_enter_mess.getText().clear();
-                //user chat vs chatbot
-            } else {
-                try {
-                    // user chat
-                    System.out.println("check msg" + msg);
-                    Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
-                            , msg, new Date(), sessionID, 1);
-                    setMessageFirebase(message);
-                    //chatbot chat
-                    //model xu ly
-                    List<Result> results = client.classify(msg);
-                    List<String> token = client.tokenize(msg);
-                    //get symptom user input
-                    String result = "Triệu chứng của bạn là: ";
-                    for (Symptom s : mSymptom) {
-                        for (String tk : token) {
-                            tk = tk.replace("_", " ");
-                            if (s.getName().equals(tk)) {
-                                result += tk + ", ";
-                            }
-                        }
-                    }
-                    //print symptom user input
-                    result = result.substring(0, result.length() - 2);
-                    Message mess = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                            result, new Date(), sessionID, 1);
-                    setMessageFirebase(mess);
-                    //print ""benh cua ban la"
-                    Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
-                            fUser.getUid(), "Bệnh của bạn là: ", new Date(), sessionID, 1);
-                    setMessageFirebase(message1);
-                    chat_txt_enter_mess.getText().clear();
-                    //get disease from model
-                    for (Result var : results) {
-                        System.out.println(var.getTitle() + " " + var.getConfidence());
-                    }
-                    //print disease
-                    Message message2 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1", fUser.getUid(),
-                            results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
-                            sessionID, 1);
-                    setMessageFirebase(message2);
-                    getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
-                    chat_txt_enter_mess.getText().clear();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(LOG_TAG, "Exception when talking with chatbot ");
-                }
-            }
-        }
-    }
-
     /**
      * Get all views in layout
      */
@@ -244,50 +178,68 @@ public class Chat extends AppCompatActivity {
     }
 
     /**
-     * Set up chat toolbar
+     * Chat with chat bot
+     * Then create new prediction
+     *
+     * @param msg message
      */
-    private void setToolbarChat() {
-        chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
-        chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
-        chat_toolbar_img_pre = findViewById(R.id.chat_toolbar_img_pre);
-        chat_toolbar_img_hamburger = findViewById(R.id.chat_toolbar_img_hamburger);
-
-        //Back button
-        chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        //Create popup menu
-        pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
-        pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
-        pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.chat_menu_view_info:
-                        System.out.println("chat_menu_view_info");
-                        return true;
-                    case R.id.chat_menu_end_session:
-                        System.out.println("chat_menu_end_session");
-                        endSession();
-                        checkSessionStatus();
-                        return true;
+    private void chatWithChatbot(String msg) {
+        if (!msg.equals("")) {
+            // User request
+            //user chat vs user
+            if (!receiverID.equals(Constants.CHATBOT_ID)) {
+                Message message = new Message("", fUser.getUid(), receiverID, msg
+                        , new Date(), sessionID, 1);
+                setMessageFirebase(message);
+                chat_txt_enter_mess.getText().clear();
+                //user chat vs chatbot
+            } else {
+                try {
+                    // user chat
+                    Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
+                            , msg, new Date(), sessionID, 1);
+                    setMessageFirebase(message);
+                    //chatbot chat
+                    //model xu ly
+                    List<Result> results = client.classify(msg);
+                    List<String> token = client.tokenize(msg);
+                    //get symptom user input
+                    String result = getString(R.string.default_chatbot_symptom);
+                    for (Symptom s : mSymptom) {
+                        for (String tk : token) {
+                            tk = tk.replace("_", " ");
+                            if (s.getName().equals(tk)) {
+                                result += tk + ", ";
+                            }
+                        }
+                    }
+                    //print symptom user input
+                    result = result.substring(0, result.length() - 2);
+                    Message mess = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                            result, new Date(), sessionID, 1);
+                    setMessageFirebase(mess);
+                    //print ""benh cua ban la"
+                    Message message1 = new Message("", Constants.CHATBOT_ID,
+                            fUser.getUid(), getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
+                    setMessageFirebase(message1);
+                    chat_txt_enter_mess.getText().clear();
+                    //get disease from model
+                    for (Result var : results) {
+                        System.out.println(var.getTitle() + " " + var.getConfidence());
+                    }
+                    //print disease
+                    Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                            results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
+                            sessionID, 1);
+                    setMessageFirebase(message2);
+                    getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
+                    chat_txt_enter_mess.getText().clear();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(LOG_TAG, "Exception when talking with chatbot ");
                 }
-                return true;
             }
-        });
-
-        //Show popup menu when clicked on img_hamburger
-        chat_toolbar_img_hamburger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Set popup menu
-                pm.show();
-            }
-        });
+        }
     }
 
     /**
@@ -348,11 +300,57 @@ public class Chat extends AppCompatActivity {
         };
     }
 
+    /**
+     * Set up chat toolbar
+     */
+    private void setToolbarChat() {
+        chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
+        chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
+        chat_toolbar_img_pre = findViewById(R.id.chat_toolbar_img_pre);
+        chat_toolbar_img_hamburger = findViewById(R.id.chat_toolbar_img_hamburger);
+
+        //Back button
+        chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        //Create popup menu
+        pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
+        pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
+        pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.chat_menu_view_info:
+                        System.out.println("chat_menu_view_info");
+                        return true;
+                    case R.id.chat_menu_end_session:
+                        System.out.println("chat_menu_end_session");
+                        endSession(sessionID);
+                        checkSessionStatus();
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        //Show popup menu when clicked on img_hamburger
+        chat_toolbar_img_hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Set popup menu
+                pm.show();
+            }
+        });
+    }
 
     /**
      * Set new message to Firebase
      *
-     * @param msg massage to set
+     * @param msg massage that added to firebase
      */
     private void setMessageFirebase(Message msg) {
         mRef = FirebaseDatabase.getInstance().getReference("Message");
@@ -370,13 +368,19 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    private void endSession() {
-        mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
+    /**
+     * End current session
+     *
+     * @param currentSession Current session
+     */
+    private void endSession(String currentSession) {
+        mRef = FirebaseDatabase.getInstance().getReference("Session").child(currentSession);
         mRef.child("status").setValue(0);
     }
 
     /**
      * Check if the chat session has ended
+     * Then set chat input layout GONE
      */
     private void checkSessionStatus() {
         mRef = FirebaseDatabase.getInstance().getReference("Session");
@@ -400,6 +404,8 @@ public class Chat extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+        //Hide keyboard
+        hideSoftKeyboard(Chat.this);
     }
 
     /**
@@ -440,12 +446,13 @@ public class Chat extends AppCompatActivity {
     }
 
     /**
-     * get Disease by name
+     * Get diseaseID by name
+     * And create prediction
      *
-     * @param disease
+     * @param disease Disease Name
+     * @param uId     Current user ID
      */
     private void getDiseaseByNameFirebase(String disease, String uId) {
-
         mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
         Query disQuery = mRef2.orderByChild("name").equalTo(disease);
         disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -580,6 +587,12 @@ public class Chat extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Create new prediction
+     * And end session
+     *
+     * @param pre Prediction object
+     */
     private void createPrediction(Prediction pre) {
         mRef2 = FirebaseDatabase.getInstance().getReference("Prediction");
         mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -587,7 +600,15 @@ public class Chat extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     pre.setPredictionID(mRef2.push().getKey());
-                    mRef2.child(pre.getPredictionID()).setValue(pre);
+                    mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
+                        @Override
+                        //If new prediction are created
+                        //Then end the current session of chat
+                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                            endSession(sessionID);
+                            checkSessionStatus();
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Not found disease in database", e);

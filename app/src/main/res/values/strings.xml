@@ -121,6 +121,10 @@
     <string name="default_empty_experience">Please enter your year experience</string>
     <string name="default_empty_description">Please enter some description about you</string>
     <string name="default_empty_specialization">Please select specialization</string>
+    <string name="default_speech_support_device">Your Device Don\'t Support Speech Input</string>
+    <string name="default_chatbot_symptom">Your symptoms:</string>
+    <string name="default_chatbot_disease">Your disease:</string>
+    <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -187,7 +191,6 @@
     <string name="prediction_confirm_txt_disease_prediction_title">Please select correct disease for this prediction</string>
     <string name="prediction_confirm_dialog_thankyou">Thank you for your confirmation!</string>
     <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
-    <string name="default_speech_support_device">Your Device Don\'t Support Speech Input</string>
 
 
     <string-array name="spinner_language">
