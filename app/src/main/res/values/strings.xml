@@ -28,14 +28,19 @@
     <string name="about_txt_slogan">Slogan</string>
     <string name="about_txt_company">NEON COMPANY</string>
     <string name="account_txt_title_name">Name</string>
+    <string name="account_txt_title_name_format">&lt;b>Name:&lt;/b>     %1$s</string>
     <string name="account_txt_name">TextView</string>
     <string name="account_txt_title_address">Address</string>
+    <string name="account_txt_title_address_format">&lt;b>Address:&lt;/b>   %1$s</string>
     <string name="account_txt_address">TextView</string>
     <string name="account_txt_title_gender">Gender</string>
+    <string name="account_txt_title_gender_format">&lt;b>Gender:&lt;/b>  %1$s</string>
     <string name="account_txt_gender">TextView</string>
     <string name="account_txt_title_phone">Phone</string>
+    <string name="account_txt_title_phone_format">&lt;b>Phone:&lt;/b>  %1$s</string>
     <string name="account_txt_phone">TextView</string>
     <string name="account_txt_title_email">Email</string>
+    <string name="account_txt_title_email_format">&lt;b>Email:&lt;/b>  %1$s</string>
     <string name="account_txt_email">TextView</string>
     <string name="account_btn_edit">Edit</string>
     <string name="account_btn_edit_done">Done</string>
@@ -140,8 +145,11 @@
     <string name="account_info_btn_done">Done</string>
     <string name="account_info_txt_title">Personal Infomation</string>
     <string name="account_info_doctor_experience">Experience (Year)</string>
+    <string name="account_info_doctor_experience_format">&lt;b>Experience (Year):&lt;/b>   %1$s</string>
     <string name="account_info_doctor_specialization">Specialization</string>
+    <string name="account_info_doctor_specialization_format">&lt;b>Specialization:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_description">Short description</string>
+    <string name="account_info_doctor_description_format">&lt;b>Short description:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_txt_title">Doctor Information</string>
     <string name="account_info_txt_subtitle">Please fill in your personal information</string>
 

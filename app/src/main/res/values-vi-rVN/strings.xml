@@ -177,6 +177,14 @@
     <string name="dialog_button_ok">OK</string>
     <string name="prediction_confirm_dialog_prediction_status_invallid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
     <string name="dialog_button_yes">Đúng</string>
+    <string name="account_txt_title_phone_format"><b>Số điện</b>  %1$s</string>
+    <string name="account_txt_title_email_format"><b>Email</b>  %1$s</string>
+    <string name="account_txt_title_gender_format"><b>Giới tính</b>  %1$s</string>
+    <string name="account_txt_title_address_format"><b>Địa chỉ</b>   %1$s</string>
+    <string name="account_txt_title_name_format"><b>Tên</b>  %1$s</string>
+    <string name="account_info_doctor_experience_format"><b>Kinh nghiệm (Năm)</b>   %1$s</string>
+    <string name="account_info_doctor_specialization_format"><b>Chuyên khoa</b>  %1$s</string>
+    <string name="account_info_doctor_description_format"><b>Mô tả ngắn về bạn</b>  %1$s</string>
     <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
 
 </resources>
