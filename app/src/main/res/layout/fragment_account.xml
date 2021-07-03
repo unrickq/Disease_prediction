@@ -29,7 +29,7 @@
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="12dp"
                 android:gravity="center"
                 android:text="@string/account_info_txt_title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
                 android:id="@+id/account_txt_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
                 android:layout_marginTop="24dp" />
 
@@ -85,10 +85,10 @@
             <TextView
                 android:id="@+id/account_txt_gender"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top" />
+                android:layout_marginTop="12dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_txt_title_gender"
@@ -112,9 +112,9 @@
                 android:id="@+id/account_txt_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
-                android:layout_marginTop="@dimen/margin_top" />
+                android:layout_marginTop="12dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_txt_title_phone"
@@ -138,10 +138,10 @@
             <TextView
                 android:id="@+id/account_txt_email"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top" />
+                android:layout_marginTop="12dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_txt_title_email"
@@ -166,9 +166,9 @@
                 android:id="@+id/account_txt_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
-                android:layout_marginTop="@dimen/margin_top" />
+                android:layout_marginTop="12dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_txt_title_address"
@@ -212,10 +212,10 @@
                 <TextView
                     android:id="@+id/account_doctor_txt_specialization"
                     android:layout_width="match_parent"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textColor="@color/black"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top" />
+                    android:layout_marginTop="12dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_doctor_txt_title_specialization"
@@ -239,9 +239,9 @@
                     android:id="@+id/account_doctor_txt_experience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="@dimen/margin_top" />
+                    android:layout_marginTop="12dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_doctor_txt_title_experience"
@@ -266,9 +266,9 @@
                     android:id="@+id/account_doctor_txt_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="@dimen/margin_top" />
+                    android:layout_marginTop="12dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_doctor_txt_title_description"
