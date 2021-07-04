@@ -4,38 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="2dp"
-    android:layout_marginEnd="2dp">
+    android:layout_marginEnd="2dp"
+    android:layout_marginBottom="12dp">
 
-    <LinearLayout
-        android:id="@+id/item_prediction_img_main"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+    <TextView
+        android:id="@+id/item_prediction_txt_month_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_commercial"
         android:gravity="center"
-        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:text="@string/item_prediction_txt_month"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/item_prediction_txt_month"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/item_prediction_txt_month"
-            android:textColor="@color/text_T1_darkMode"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/item_prediction_txt_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/item_prediction_txt_day"
-            android:textColor="@color/text_T1_darkMode"
-            android:textSize="16dp" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/item_prediction_txt_disease"
@@ -43,22 +27,29 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="15dp"
         android:text="@string/item_prediction_txt_disease"
-        app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_prediction_txt_month_day" />
 
     <TextView
         android:id="@+id/item_prediction_txt_status"
         style="@style/subTitle_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
         android:text="@string/item_prediction_txt_status"
-        app:layout_constraintStart_toEndOf="@+id/item_prediction_img_main"
+        app:layout_constraintStart_toStartOf="@+id/item_prediction_txt_disease"
         app:layout_constraintTop_toBottomOf="@+id/item_prediction_txt_disease" />
+
+    <View
+        android:id="@+id/prediction_item_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:background="#E2E2E2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/item_prediction_txt_disease"
+        app:layout_constraintTop_toBottomOf="@id/item_prediction_txt_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

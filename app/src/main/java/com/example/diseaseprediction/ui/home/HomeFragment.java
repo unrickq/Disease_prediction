@@ -38,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -331,8 +332,9 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mDoctor = snapshot.getValue(DoctorInfo.class);
                 //Go to prediction
-                mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-                mRef.addValueEventListener(new ValueEventListener() {
+                Query predictionByDateCreate =
+                    FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
+                predictionByDateCreate.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         mPredictionListDoctor.clear();
@@ -341,14 +343,15 @@ public class HomeFragment extends Fragment {
                             assert pr != null;
                             try {
                                 if (pr.getStatus() == 0) {
-                                    //Check if specializationID in prediction equal with specializationID in doctor account
+                                    //Check if specializationID in prediction equal with specializationID in doctor
+                                    // account
                                     if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
                                         //Add to prediction list
                                         mPredictionListDoctor.add(pr);
                                     }
                                 }
                             } catch (NullPointerException e) {
-                                Log.d(TAG, "Home. Patient ID null", e);
+                                Log.e(TAG, "Home. Patient ID null", e);
                             }
                         }
                         //Reverse list index to get latest consultation

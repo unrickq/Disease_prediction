@@ -3,24 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin_top"
     android:orientation="vertical"
     android:paddingLeft="@dimen/padding"
     android:paddingRight="@dimen/padding"
     tools:context=".ui.prediction.PredictionListFragment">
 
-    <TextView
-        android:id="@+id/prediction_list_confirm_txt_title"
-        style="@style/heading_6_bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/home_doctor_all_prediction_txt_title" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/prediction_list_confirm_txt_title"-->
+    <!--        style="@style/heading_6_bold"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/prediction_list_confirm_txt_title" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prediction_list_confirm_recycler_view_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_top"
+        android:paddingBottom="12dp"
         tools:listitem="@layout/item_prediction" />
 </LinearLayout>

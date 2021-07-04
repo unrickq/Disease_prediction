@@ -20,8 +20,9 @@
 
         <ImageView
             android:id="@+id/prediction_confirm_toolbar_img_pre"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="2dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back_1" />
 
@@ -75,7 +76,7 @@
                     android:layout_width="61dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_disease_description" />
+                    android:src="@drawable/ic_menu_consult" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -123,7 +124,7 @@
                     android:layout_width="61dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_disease_description" />
+                    android:src="@drawable/ic_prediction_disease" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

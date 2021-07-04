@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:paddingRight="@dimen/padding"
     android:paddingLeft="@dimen/padding"
+    android:paddingBottom="@dimen/padding"
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 

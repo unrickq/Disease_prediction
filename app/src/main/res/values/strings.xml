@@ -83,7 +83,7 @@
     <string name="prediction_list_txt_title">Your prediction</string>
     <string name="prediction_txt_status_correct">Doctor confirmed!</string>
     <string name="prediction_txt_status_incorrect">Doctor confirmed! Disease updated</string>
-    <string name="prediction_txt_status_pending">Pending</string>
+    <string name="prediction_txt_status_pending">Waiting for doctor confirmation… </string>
     <string name="prediction_txt_status">Status</string>
     <string name="prediction_title_result">Prediction</string>
     <string name="prediction_btn_contact_doctor">Contact a doctor</string>
@@ -142,10 +142,11 @@
     <string name="prediction_adapter_confirmed_incorrect">Doctor confirmed! Disease changed!</string>
     <string name="prediction_txt_contact_doctor">Do you need advice? </string>
 
-    <string name="home_doctor_txt_title">Hello doctor !</string>
+    <string name="home_doctor_txt_title">Hello doctor!</string>
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
-    <string name="home_doctor_all_prediction_txt_title">Prediction in pending</string>
+    <string name="home_doctor_all_prediction_txt_title">Pending Prediction</string>
+    <string name="prediction_list_confirm_txt_title">Prediction in pending</string>
 
     <string name="account_info_btn_done">Done</string>
     <string name="account_info_txt_title">Personal Information</string>
@@ -174,7 +175,7 @@
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="error_unknown_contactDev">An error happened. Please contact the developer for assistance!</string>
 
-    <string name="upload_img_waiting">Uploading...</string>
+    <string name="upload_img_waiting">Uploading…</string>
     <string name="upload_img_done">Uploaded</string>
     <string name="item_chat_checkbox_done">Done</string>
 
@@ -191,6 +192,7 @@
     <string name="prediction_confirm_txt_disease_prediction_title">Please select correct disease for this prediction</string>
     <string name="prediction_confirm_dialog_thankyou">Thank you for your confirmation!</string>
     <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
+    <string name="prediction_txt_today">Today</string>
 
 
     <string-array name="spinner_language">

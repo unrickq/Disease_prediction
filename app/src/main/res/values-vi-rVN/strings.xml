@@ -73,7 +73,7 @@
     <string name="prediction_list_txt_title">Chẩn đoán của bạn</string>
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
     <string name="prediction_txt_status_incorrect">Đã xác nhận! Bệnh đã được thay đổi</string>
-    <string name="prediction_txt_status_pending">Chờ xác nhận</string>
+    <string name="prediction_txt_status_pending">Đang chờ xác nhận từ bác sĩ…</string>
     <string name="prediction_txt_status">Trạng thái</string>
     <string name="prediction_title_result">Chẩn đoán</string>
     <string name="prediction_btn_contact_doctor">Liên hệ với bác sĩ</string>
@@ -135,6 +135,7 @@
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
     <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
     <string name="home_doctor_all_prediction_txt_title">Chẩn đoán cần xác nhận</string>
+    <string name="prediction_list_confirm_txt_title">Chuẩn đoán đang chờ xác nhận</string>
 
     <string name="nav_header_txt_acc_name">" Sample"</string>
 
@@ -163,7 +164,7 @@
     <string name="error_txt">Lỗi!</string>
     <string name="login_txt_by_type_doctor">Đăng nhập bằng tài khoản Bác sĩ</string>
 
-    <string name="upload_img_waiting">Đang tải lên...</string>
+    <string name="upload_img_waiting">Đang tải lên…</string>
     <string name="upload_img_done">Tải lên hoàn tất</string>
     <string name="item_chat_checkbox_done">Hoàn tất</string>
     <string name="prediction_confirm_btn_incorrect">Không chính xác</string>
@@ -190,6 +191,7 @@
     <string name="account_info_doctor_experience_format">&lt;b>Kinh nghiệm (năm):&lt;/b>   %1$s</string>
     <string name="account_info_doctor_specialization_format">&lt;b>Chuyên khoa:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_description_format">&lt;b>Mô tả ngắn về bạn: &lt;/b>  %1$s</string>
-    <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
+    <string name="prediction_txt_today">Hôm nay</string>
+
 
 </resources>

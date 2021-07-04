@@ -11,5 +11,6 @@
         android:icon="@drawable/ic_noti"
         android:orderInCategory="2"
         app:showAsAction="ifRoom|collapseActionView"
+        android:visible="false"
         android:title="" />
 </menu>

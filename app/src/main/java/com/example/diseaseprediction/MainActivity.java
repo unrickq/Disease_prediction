@@ -1,12 +1,14 @@
 package com.example.diseaseprediction;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -172,13 +174,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Account ac = snapshot.getValue(Account.class);
+              try {
                 if (ac.getTypeID() == 0) {
-                    Menu mn = navigationView.getMenu();
-                    mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
+                  Menu mn = navigationView.getMenu();
+                  mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
                 } else if (ac.getTypeID() == 1) {
-                    Menu mn = navigationView.getMenu();
-                    mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
+                  Menu mn = navigationView.getMenu();
+                  mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
                 }
+
+              } catch (NullPointerException e) {
+                Log.e(TAG, "setNavigation: TypeID null", e);
+                Toast.makeText(MainActivity.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
+              }
             }
 
             @Override
@@ -219,17 +227,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Set title of toolbar
-     *
-     * @param title
-     */
+  /**
+   * Set title of toolbar
+   *
+   * @param title Title of toolbar
+   */
     public void setActionBarTitle(String title) {
         TextView t = (TextView) findViewById(R.id.toolbar_title);
         t.setText(title);
+      t.setTypeface(null, Typeface.BOLD);
     }
 
-    /**
+  /**
      * Set toolbar icon
      */
     public void setIconToolbar() {

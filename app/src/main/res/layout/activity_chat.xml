@@ -21,8 +21,9 @@
 
         <ImageView
             android:id="@+id/chat_toolbar_img_pre"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="2dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back_1" />
 

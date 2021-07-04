@@ -8,17 +8,16 @@
     android:paddingLeft="@dimen/padding"
     tools:context=".ui.consultation.ConsultationListFragment">
 
-    <TextView
-        android:id="@+id/consultation_list_txt_title"
-        style="@style/heading_6_bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top"
-        android:text="@string/consultation_list_txt_title" />
+    <!--    <TextView-->
+    <!--        android:id="@+id/consultation_list_txt_title"-->
+    <!--        style="@style/heading_6_bold"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="@dimen/margin_top"-->
+    <!--        android:text="@string/consultation_list_txt_title" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/consultation_list_recycler_view_main"
-        android:layout_marginTop="@dimen/margin_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

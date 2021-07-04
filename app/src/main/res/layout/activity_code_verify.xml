@@ -20,8 +20,9 @@
 
         <ImageView
             android:id="@+id/code_verify_img_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="2dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back_1" />
     </RelativeLayout>

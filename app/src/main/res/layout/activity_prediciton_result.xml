@@ -20,8 +20,9 @@
 
         <ImageView
             android:id="@+id/prediction_toolbar_img_pre"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="2dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back_1" />
 
@@ -151,7 +152,7 @@
                     android:layout_width="59dp"
                     android:layout_height="34dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_symptom" />
+                    android:src="@drawable/ic_prediction_disease" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -387,6 +388,7 @@
         android:layout_marginBottom="4dp"
         android:text="@string/prediction_btn_back"
         app:cornerRadius="@dimen/btn_corner_radius"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
