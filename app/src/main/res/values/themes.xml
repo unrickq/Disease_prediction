@@ -47,6 +47,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="heading_7_bold">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="subTitle_1_bold">
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">16sp</item>

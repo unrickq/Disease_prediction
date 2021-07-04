@@ -28,7 +28,8 @@
 
         <TextView
             android:id="@+id/prediction_confirm_title"
-            style="@style/heading_6_bold"
+            style="@style/heading_7_bold"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

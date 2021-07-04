@@ -32,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="149dp"
-            android:layout_marginLeft="149dp"
             android:gravity="center_horizontal"
+            style="@style/heading_7_bold"
+
             android:text="@string/prediction_title_result" />
 
     </RelativeLayout>

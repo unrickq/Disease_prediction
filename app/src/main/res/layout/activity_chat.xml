@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_top"
+            style="@style/subTitle_1_bold"
             android:layout_toEndOf="@+id/chat_toolbar_img_avatar"
             android:layout_toRightOf="@+id/chat_toolbar_img_avatar"
             android:text="TextView" />
@@ -74,7 +75,7 @@
         app:layout_constraintBottom_toTopOf="@+id/chat_send_message_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/elevation">
+        app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar">
 
     </androidx.recyclerview.widget.RecyclerView>
 
