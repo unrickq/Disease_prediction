@@ -126,7 +126,7 @@
     <string name="default_chatbot_disease">Your disease:</string>
     <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
     <string name="default_chatbot_continue_symptom">Please enter continue symptom or predict disease</string>
-
+    <string name="default_dialog_end_session_prediction">The prediction will be over if you go back </string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -196,6 +196,7 @@
     <string name="prediction_confirm_dialog_thankyou">Thank you for your confirmation!</string>
     <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
     <string name="prediction_txt_today">Today</string>
+
 
 
     <string-array name="spinner_language">

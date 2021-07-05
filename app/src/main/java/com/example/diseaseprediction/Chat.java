@@ -2,7 +2,9 @@ package com.example.diseaseprediction;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -38,6 +40,7 @@ import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
+import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -316,7 +319,29 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                if (receiverID.equals(Constants.CHATBOT_ID)) {
+                    System.out.println("session la"+sessionID);
+                    mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Session ss = snapshot.getValue(Session.class);
+                            System.out.println("check vl"+ss.getStatus());
+                            System.out.println();
+                            if (ss.getStatus() != 0) {
+                                dialogConfirm(sessionID);
+                            }else{
+                                onBackPressed();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }else{
+                    onBackPressed();
+                }
+
             }
         });
 
@@ -426,6 +451,7 @@ public class Chat extends AppCompatActivity {
                 mMessage.clear();
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     Message msg = sn.getValue(Message.class);
+
                     if (msg != null && msg.getReceiverID() != null) {
                         if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
                                 && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
@@ -433,12 +459,12 @@ public class Chat extends AppCompatActivity {
                                 && msg.getSessionID().equals(sessionID)) {
                             mMessage.add(msg);
                         }
-                        if(msg.getStatus() == 3){
-                            if(checkStartMessage){
+                        if (msg.getStatus() == 3) {
+                            if (checkStartMessage) {
                                 mRef2 = FirebaseDatabase.getInstance().getReference("Message");
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
-                            if(checkClickPredict){
+                            if (checkClickPredict) {
                                 mRef2 = FirebaseDatabase.getInstance().getReference("Message");
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
@@ -461,6 +487,7 @@ public class Chat extends AppCompatActivity {
                 checkStartMessage = false;
                 checkClickPredict = false;
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -700,7 +727,32 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    public void nextChat(String msg){
+
+    /**
+     * Create dialog confirm
+     */
+    private void dialogConfirm(String IDsession) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.default_dialog_end_session_prediction);
+        builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onBackPressed();
+                endSession(IDsession);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Do nothing
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+
+    public void nextChat(String msg) {
         try {
 //            String msg = chat_txt_enter_mess.getText().toString();
             // user chat
@@ -722,5 +774,17 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println("dang Pause");
+        endSession(sessionID);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("dang Destroy");
+        endSession(sessionID);
+    }
 }
