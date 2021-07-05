@@ -150,13 +150,13 @@
     <string name="error_field_empty">Không được để trống</string>
     <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
     <string name="error_unknown_contactDev">Đã có lỗi xảy ra. Vui lòng liên hệ nhà phát triển để được hỗ trợ</string>
-    <string name="error_login_phone_too_long">Độ dài số điện thoại phải là 10!</string>
+    <string name="error_login_phone_too_long">Số điện thoại không hợp lệ</string>
 
     <string name="code_verify_txt_title">Nhập mã xác nhận</string>
     <string name="code_verify_edit_txt_code">Mã xác nhận</string>
     <string name="code_verify_re_send">Gửi lại mã xác nhận</string>
     <string name="code_verify_error_code_invalid">Mã xác nhận không chính xác!</string>
-    <string name="code_verify_exception_phone_invalid">Đã có lỗi xảy ra trong quá trình xử lý số điện thoại! \nXin hãy liên hệ đội ngũ phát triển để được trợ giúp!</string>
+    <string name="code_verify_exception_phone_invalid">Số điện thoại không hợp lệ! Xin hãy trở lại màn hình trước và nhập lại số điện thoại</string>
     <string name="code_verify_exception_device_blocked">Thiết bị của bạn bị chặn do đã cố gắng đăng nhập quá nhiều lần! \nXin hãy liên hệ nhà phát triển để được hỗ trợ!</string>
     <string name="code_verify_exception_verification_failed_unknown">Đã có lỗi trong quá trình xác thực! \nXin hãy nhấn nút \'Gửi lại\' hoặc liên hệ nhà phát triển để được giúp đỡ!</string>
     <string name="code_verify_txt_note">Xin hãy kiểm tra mã xác nhận trong ứng dụng Nhắn tin của bạn</string>

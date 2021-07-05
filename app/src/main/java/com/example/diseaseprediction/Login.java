@@ -293,7 +293,10 @@ public class Login extends AppCompatActivity {
     if (phoneNumber.isEmpty()) {
       phoneInputLayout.setError(getString(R.string.error_field_empty));
       return false;
-    } else if (phoneNumber.length() != 10) { // phone number length greater than 10
+    } else if ((phoneNumber.startsWith("0") && phoneNumber.length() != 10) || // phone length must equal to 10 when
+        // start with '0'
+        (!phoneNumber.startsWith("0") && phoneNumber.length() != 9)) { // phone number length must equal to 9 when
+      // not start with '0'
       phoneInputLayout.setError(getString(R.string.error_login_phone_too_long));
       return false;
     } else {
