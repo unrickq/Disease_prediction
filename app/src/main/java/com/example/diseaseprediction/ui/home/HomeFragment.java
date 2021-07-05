@@ -431,6 +431,7 @@ public class HomeFragment extends Fragment {
         //List disease history
         home_layout_disease_history.setVisibility(View.GONE);
         home_recycler_view_disease.setVisibility(View.GONE);
+        home_search_view.setVisibility(View.GONE);
 
         //All prediction in pending
         home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
