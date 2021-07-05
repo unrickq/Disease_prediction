@@ -198,5 +198,7 @@
     <string name="account_info_doctor_description_format">&lt;b>Mô tả ngắn về bạn: &lt;/b>  %1$s</string>
     <string name="prediction_txt_today">Hôm nay</string>
 
+    <string name="chatbox_button_predict">Đưa ra dự đoán</string>
+
 
 </resources>

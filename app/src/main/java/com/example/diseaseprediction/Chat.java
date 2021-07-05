@@ -206,7 +206,7 @@ public class Chat extends AppCompatActivity {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
-                            , msg, new Date(), sessionID, 1);
+                            , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     //chatbot chat
                     //model xu ly

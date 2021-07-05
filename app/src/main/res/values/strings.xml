@@ -198,6 +198,8 @@
     <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
     <string name="prediction_txt_today">Today</string>
 
+    <string name="chatbox_button_predict">Predict disease</string>
+
 
 
     <string-array name="spinner_language">
