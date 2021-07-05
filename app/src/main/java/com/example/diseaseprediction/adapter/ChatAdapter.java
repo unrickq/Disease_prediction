@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.R;
+import com.example.diseaseprediction.Result;
+import com.example.diseaseprediction.listener.MyClickListener;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.RecommendSymptom;
 import com.example.diseaseprediction.object.Symptom;
@@ -46,13 +48,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayAdapter<Symptom> symptomAdapter;
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
+    public static final int MSG_TYPE_LEFT_BOX = 2;
     private String imgURL;
+    private String keyShowButtonChat = "Nhập tiếp thông tin bệnh";
+    MyClickListener listener;
 
 
     public ChatAdapter(@NonNull Context context, List<Message> mMessage) {
         this.mContext = context;
         this.mMessage = mMessage;
     }
+
+    public ChatAdapter(@NonNull Context context, List<Message> mMessage, MyClickListener listener) {
+        this.mContext = context;
+        this.mMessage = mMessage;
+        this.listener = listener;
+    }
+
+
 
     @NotNull
     @Override
@@ -61,6 +74,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         if (viewType == MSG_TYPE_RIGHT) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_right, parent, false);
             return new ChatAdapter.ViewHolder(view);
+        }
+        if (viewType == MSG_TYPE_LEFT_BOX) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_left_box, parent, false);
+            return new ChatAdapter.ViewHolder(view, listener);
         } else {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_left, parent, false);
             return new ChatAdapter.ViewHolder(view);
@@ -122,6 +139,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
 
+        if(holder.item_chat_box_button_predict != null){
+            if(msg.getStatus() == 4)
+                holder.item_chat_box_button_predict.setEnabled(false);
+        }
+
 
     }
 
@@ -137,6 +159,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mMessage.get(position).getSenderID().equals(fUser.getUid())) {
             return MSG_TYPE_RIGHT;
+        } else if (mMessage.get(position).getMessage().equals(mContext.getString(R.string.default_chatbot_continue_symptom))) {
+            return MSG_TYPE_LEFT_BOX;
         } else {
             return MSG_TYPE_LEFT;
         }
@@ -319,11 +343,38 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         });
     }
 
+    //setter button predict
+    public void setPredictButtonListener(MyClickListener myClickListener) {
+        this.listener = myClickListener;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_chat_show_message, item_chat_time;
         public LinearLayout item_chat_layout_show_message, item_chat_layout_checkbox;
         public ListView item_chat_checkbox;
         public Button item_chat_checkbox_done;
+        public Button item_chat_box_button_predict;
+        MyClickListener myClickListener;
+
+        //constructor use for message button predict
+        public ViewHolder(@NonNull View itemView, MyClickListener listener) {
+            super(itemView);
+            //Find view
+            item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
+            item_chat_time = itemView.findViewById(R.id.item_chat_time);
+            item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
+            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
+            item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
+            item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
+            item_chat_box_button_predict = (Button) itemView.findViewById(R.id.item_chat_box_button_predict);
+            this.myClickListener = listener;
+            item_chat_box_button_predict.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onPredict(v, getAdapterPosition());
+                }
+            });
+        }
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
