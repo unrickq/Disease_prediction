@@ -162,8 +162,6 @@ public class Chat extends AppCompatActivity {
                         e.printStackTrace();
                         Log.d(LOG_TAG, "Exception when talking with chatbot ");
                     }
-
-
                 }
             });
 
@@ -793,13 +791,17 @@ public class Chat extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         System.out.println("dang Pause");
-        endSession(sessionID);
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("dang Destroy");
-        endSession(sessionID);
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
+        }
     }
 }
