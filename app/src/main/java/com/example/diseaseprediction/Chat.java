@@ -731,14 +731,14 @@ public class Chat extends AppCompatActivity {
     /**
      * Create dialog confirm
      */
-    private void dialogConfirm(String IDsession) {
+    private void dialogConfirm(String sessionID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.default_dialog_end_session_prediction);
         builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 onBackPressed();
-                endSession(IDsession);
+                endSession(sessionID);
             }
         });
         builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
