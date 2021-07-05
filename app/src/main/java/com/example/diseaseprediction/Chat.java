@@ -802,6 +802,7 @@ public class Chat extends AppCompatActivity {
         System.out.println("dang Destroy");
         if (receiverID.equals(Constants.CHATBOT_ID)) {
             endSession(sessionID);
+
         }
     }
 }
