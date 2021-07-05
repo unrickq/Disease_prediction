@@ -152,7 +152,16 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
-                    nextChat(msg);
+                    try{
+                        if (!receiverID.equals(Constants.CHATBOT_ID)) {
+                            chatWithDoctor(msg);
+                        }else {
+                            nextChat(msg);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "Exception when talking with chatbot ");
+                    }
                 }
             });
 
@@ -193,13 +202,7 @@ public class Chat extends AppCompatActivity {
         if (!msg.equals("")) {
             // User request
             //user chat vs user
-            if (!receiverID.equals(Constants.CHATBOT_ID)) {
-                Message message = new Message("", fUser.getUid(), receiverID, msg
-                        , new Date(), sessionID, 1);
-                setMessageFirebase(message);
-                chat_txt_enter_mess.getText().clear();
-                //user chat vs chatbot
-            } else {
+            if (receiverID.equals(Constants.CHATBOT_ID)) {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
@@ -245,6 +248,16 @@ public class Chat extends AppCompatActivity {
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
                 }
             }
+        }
+    }
+
+    public void chatWithDoctor(String msg){
+        if (!msg.equals("")) {
+            //user chat vs user
+                Message message = new Message("", fUser.getUid(), receiverID, msg
+                        , new Date(), sessionID, 1);
+                setMessageFirebase(message);
+                chat_txt_enter_mess.getText().clear();
         }
     }
 
@@ -471,17 +484,20 @@ public class Chat extends AppCompatActivity {
                         }
                         chatAdapter = new ChatAdapter(Chat.this, mMessage);
                         chat_recycler_view.setAdapter(chatAdapter);
-                        chatAdapter.setPredictButtonListener(new MyClickListener() {
-                            @Override
-                            public void onPredict(View button, int position) {
-                                chatWithChatbot(allMess);
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message");
-                                mRef2.child(msg.getMessageID()).child("status").setValue(4);
-                                checkClickPredict = true;
+
+                            chatAdapter.setPredictButtonListener(new MyClickListener() {
+                                @Override
+                                public void onPredict(View button, int position) {
+                                    chatWithChatbot(allMess);
+                                    mRef2 = FirebaseDatabase.getInstance().getReference("Message");
+                                    mRef2.child(msg.getMessageID()).child("status").setValue(4);
+                                    checkClickPredict = true;
 //                                getPredict();
 
-                            }
-                        });
+                                }
+                            });
+
+
                     }
                 }
                 checkStartMessage = false;
@@ -753,38 +769,40 @@ public class Chat extends AppCompatActivity {
 
 
     public void nextChat(String msg) {
-        try {
-//            String msg = chat_txt_enter_mess.getText().toString();
-            // user chat
-            Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
-                    , msg, new Date(), sessionID, 1);
-            setMessageFirebase(message);
+            if (!msg.equals("")) {
+                // User request
+                //user chat vs user
+                    // user chat
+                    Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
+                            , msg, new Date(), sessionID, 1);
+                    setMessageFirebase(message);
+                    //chatbot chat
+                    Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
+                            fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
+                    setMessageFirebase(message1);
+                    System.out.println("MS1" + message1.getMessageID());
+                    chat_txt_enter_mess.getText().clear();
+                    allMess += msg + " ";
+            }
 
-            //chatbot chat
-            Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
-                    fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
-            setMessageFirebase(message1);
-            System.out.println("MS1" + message1.getMessageID());
-            chat_txt_enter_mess.getText().clear();
-            allMess += msg + " ";
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(LOG_TAG, "Exception when talking with chatbot ");
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         System.out.println("dang Pause");
-        endSession(sessionID);
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("dang Destroy");
-        endSession(sessionID);
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
+
+        }
     }
 }
