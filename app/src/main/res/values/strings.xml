@@ -125,6 +125,7 @@
     <string name="default_chatbot_symptom">Your symptoms:</string>
     <string name="default_chatbot_disease">Your disease:</string>
     <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
+    <string name="default_email_regex">Please enter the correct email</string>
     <string name="default_chatbot_continue_symptom">Please enter continue symptom or predict disease</string>
     <string name="default_dialog_end_session_prediction">The prediction will be over if you go back </string>
 

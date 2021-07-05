@@ -114,6 +114,7 @@
     <string name="default_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
     <string name="default_chatbot_disease">Bệnh của bạn là:&#160;</string>
     <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
+    <string name="default_email_regex">Vui lòng nhập đúng địa chỉ email</string>
     <string name="default_chatbot_continue_symptom">Nhập tiếp thông tin bệnh hoặc đưa ra dự đoán</string>
     <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn quay trở lại</string>
 

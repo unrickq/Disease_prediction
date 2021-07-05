@@ -512,7 +512,7 @@ public class Chat extends AppCompatActivity {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Disease d = sn.getValue(Disease.class);
                         Prediction pre = new Prediction("0", uId, "Default",
-                                "Default", "Default",
+                                sessionID, "Default",
                                 d.getDiseaseID(), "Default", new Date(), new Date(),
                                 d.getSpecializationID(), 0);
                         createPrediction(pre);

@@ -188,10 +188,26 @@ public class AccountInfo extends AppCompatActivity {
             if (account_info_txt_title_phone.getEditText().getText().toString().trim().isEmpty()) {
                 account_info_txt_title_phone.setError(getString(R.string.default_empty_phone));
                 isValid = false;
+            } else {
+                String phone = account_info_txt_title_phone.getEditText().getText().toString().trim();
+                if ((phone.startsWith("0") && phone.length() != 10) || // phone length must equal to 10 when
+                        // start with '0'
+                        (!phone.startsWith("0") && phone.length() != 9)) { // phone number length must equal to 9 when
+                    // not start with '0'
+                    account_info_txt_title_phone.setError(getString(R.string.error_login_phone_too_long));
+                    isValid = false;
+                }
             }
+
             if (account_info_txt_title_email.getEditText().getText().toString().trim().isEmpty()) {
                 account_info_txt_title_email.setError(getString(R.string.default_empty_email));
                 isValid = false;
+            } else {
+                if (!account_info_txt_title_email.getEditText().getText().toString().trim()
+                        .matches(Constants.EMAIL_PATTERN)) {
+                    account_info_txt_title_email.setError(getString(R.string.default_email_regex));
+                    isValid = false;
+                }
             }
             if (account_info_txt_title_address.getEditText().getText().toString().trim().isEmpty()) {
                 account_info_txt_title_address.setError(getString(R.string.default_empty_address));
