@@ -150,6 +150,7 @@
     <string name="error_field_empty">Không được để trống</string>
     <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
     <string name="error_unknown_contactDev">Đã có lỗi xảy ra. Vui lòng liên hệ nhà phát triển để được hỗ trợ</string>
+    <string name="error_login_phone_too_long">Độ dài số điện thoại phải là 10!</string>
 
     <string name="code_verify_txt_title">Nhập mã xác nhận</string>
     <string name="code_verify_edit_txt_code">Mã xác nhận</string>

@@ -52,17 +52,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class test extends AppCompatActivity {
+public class testActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_SPEECH = 10;
-    FirebaseUser firebaseUser;
-    DatabaseReference myRef;
+  private static final int REQUEST_CODE_SPEECH = 10;
+  FirebaseUser firebaseUser;
+  DatabaseReference myRef;
 
-    private List<Symptom> mSymptom;
-    private ArrayAdapter<Symptom> symptomAdapter;
+  private List<Symptom> mSymptom;
+  private ArrayAdapter<Symptom> symptomAdapter;
 
 
-    private DoctorInfo mDoctor;
+  private DoctorInfo mDoctor;
     private List<Prediction> mPredictionList;
 
 
@@ -188,8 +188,9 @@ public class test extends AppCompatActivity {
 
     public void createCheckBox(ListView item_chat_checkboxx, List<Symptom> ls) {
         //Create new adapter
-        symptomAdapter = new ArrayAdapter<Symptom>(test.this, android.R.layout.simple_list_item_multiple_choice, ls);
-        symptomAdapter.toString();
+      symptomAdapter = new ArrayAdapter<Symptom>(testActivity.this, android.R.layout.simple_list_item_multiple_choice
+          , ls);
+      symptomAdapter.toString();
         item_chat_checkboxx.setAdapter(symptomAdapter);
         //Set height of checkbox
         setListViewHeightBasedOnChildren(item_chat_checkboxx);
@@ -216,7 +217,7 @@ public class test extends AppCompatActivity {
                         itemsSelected += item_chat_checkboxx.getItemAtPosition(i).toString();
                     }
                 }
-                Toast.makeText(test.this, itemsSelected, Toast.LENGTH_SHORT).show();
+              Toast.makeText(testActivity.this, itemsSelected, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -248,21 +249,21 @@ public class test extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(test.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Toast.makeText(test.this, uri.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                          progressDialog.dismiss();
+                          Toast.makeText(testActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                          sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                              Toast.makeText(testActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                          });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(test.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                          progressDialog.dismiss();
+                          Toast.makeText(testActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {

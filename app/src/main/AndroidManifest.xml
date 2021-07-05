@@ -18,7 +18,7 @@
         <activity android:name=".PredictionConfirm" />
         <activity android:name=".AccountInfoDoctor" />
         <activity android:name=".CodeVerify" />
-        <activity android:name=".test" />
+        <activity android:name=".testActivity" />
         <activity android:name=".PredictionResult" />
         <activity android:name=".Chat" />
         <activity android:name=".AccountInfo" />
