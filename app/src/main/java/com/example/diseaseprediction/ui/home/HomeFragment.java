@@ -295,7 +295,7 @@ public class HomeFragment extends Fragment {
     private void loadConsultationList() {
         consultationLists = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 consultationLists.clear();
@@ -327,13 +327,13 @@ public class HomeFragment extends Fragment {
         mPredictionListDoctor = new ArrayList<>();
         //Find specialization id of doctor account
         mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mDoctor = snapshot.getValue(DoctorInfo.class);
                 //Go to prediction
                 Query predictionByDateCreate =
-                    FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
+                        FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
                 predictionByDateCreate.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -386,7 +386,7 @@ public class HomeFragment extends Fragment {
     private void loadAllPredictionOfAccount(int typeAcc) {
         mPredictionListPatient = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mPredictionListPatient.clear();
