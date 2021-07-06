@@ -203,7 +203,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/prediction_confirm_prediction_wrong_btn"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="150dp"
+                    android:layout_width="175dp"
                     android:layout_height="55dp"
                     android:layout_columnWeight="1"
                     android:layout_gravity="center_horizontal"
@@ -214,7 +214,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/prediction_confirm_prediction_correct_btn"
-                    android:layout_width="150dp"
+                    android:layout_width="175dp"
                     android:layout_height="55dp"
                     android:layout_columnWeight="1"
                     android:layout_gravity="center_horizontal"

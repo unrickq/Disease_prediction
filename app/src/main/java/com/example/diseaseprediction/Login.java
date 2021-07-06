@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
     loginButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (checkPhoneNumberInput()) {
+        if (checkPhoneNumberInput(phoneInputLayout.getEditText().getText().toString())) {
           signInWithPhone();
         }
       }
@@ -285,10 +285,11 @@ public class Login extends AppCompatActivity {
 
   /**
    * Check phone number input
+   *
+   * @param phoneNumber phone number
+   * @return true if phone number valid, else false
    */
-  private boolean checkPhoneNumberInput() {
-    // Input empty
-    String phoneNumber = phoneInputLayout.getEditText().getText().toString();
+  private boolean checkPhoneNumberInput(String phoneNumber) {
     // input field empty
     if (phoneNumber.isEmpty()) {
       phoneInputLayout.setError(getString(R.string.error_field_empty));
@@ -297,7 +298,9 @@ public class Login extends AppCompatActivity {
         // start with '0'
         (!phoneNumber.startsWith("0") && phoneNumber.length() != 9)) { // phone number length must equal to 9 when
       // not start with '0'
-      phoneInputLayout.setError(getString(R.string.error_login_phone_too_long));
+      phoneInputLayout.setError(
+          getResources().getString(R.string.error_login_phone_too_long)
+      );
       return false;
     } else {
       return true;
@@ -330,8 +333,8 @@ public class Login extends AppCompatActivity {
 
   private void signInWithPhone() {
     // Check input
-    if (checkPhoneNumberInput()) {
-      String phone = phoneInputLayout.getEditText().getText().toString();
+    String phone = phoneInputLayout.getEditText().getText().toString();
+    if (checkPhoneNumberInput(phone)) {
       Intent intent = new Intent(Login.this, CodeVerify.class);
       intent.putExtra(INTENT_MOBILE, addCountryCode(phone));
       intent.putExtra("type", type);
