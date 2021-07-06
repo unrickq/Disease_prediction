@@ -8,12 +8,14 @@
     android:paddingRight="@dimen/padding"
     tools:context=".ui.prediction.PredictionListFragment">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/prediction_list_confirm_txt_title"-->
-    <!--        style="@style/heading_6_bold"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="@string/prediction_list_confirm_txt_title" />-->
+    <TextView
+        android:id="@+id/prediction_list_confirm_txt_title"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:text="@string/prediction_list_confirm_txt_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prediction_list_confirm_recycler_view_main"

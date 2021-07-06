@@ -8,12 +8,14 @@
     android:paddingRight="@dimen/padding"
     android:paddingLeft="@dimen/padding">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/prediction_list_txt_title"-->
-    <!--        style="@style/heading_6_bold"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="@string/prediction_list_txt_title" />-->
+    <TextView
+        android:id="@+id/prediction_list_txt_title"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:text="@string/prediction_list_txt_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prediction_list_recycler_view_main"

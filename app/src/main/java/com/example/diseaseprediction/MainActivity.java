@@ -47,7 +47,9 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "MainActivity";
+    public static final String FRAGMENT = "fragment";
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Set left navigation
      */
@@ -123,37 +126,37 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_home: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new HomeFragment()).commit();
+                            new HomeFragment()).commit();
                         drawer.close();
                         break;
                     }
                     case R.id.nav_account: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new AccountFragment()).commit();
+                            new AccountFragment()).commit();
                         drawer.close();
                         break;
                     }
                     case R.id.nav_consultationList: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new ConsultationListFragment()).commit();
+                            new ConsultationListFragment()).commit();
                         drawer.close();
                         break;
                     }
                     case R.id.nav_predictionListConfirm: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new PredictionListConfirm()).commit();
+                            new PredictionListConfirm()).commit();
                         drawer.close();
                         break;
                     }
                     case R.id.nav_predictionList: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new PredictionListFragment()).commit();
+                            new PredictionListFragment()).commit();
                         drawer.close();
                         break;
                     }
                     case R.id.nav_settings: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new SettingsFragment()).commit();
+                            new SettingsFragment()).commit();
                         drawer.close();
                         break;
                     }
