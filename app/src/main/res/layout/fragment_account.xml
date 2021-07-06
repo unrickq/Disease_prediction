@@ -65,24 +65,6 @@
                 android:layout_marginTop="24dp"
                 android:textColor="@color/black" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/account_txt_title_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:visibility="gone"
-                app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/account_edit_txt_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/account_txt_title_name"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/account_txt_gender"
@@ -97,8 +79,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
                 android:visibility="gone"
+                android:layout_marginTop="@dimen/margin_top"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
                 <AutoCompleteTextView
@@ -110,6 +92,7 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <TextView
                 android:id="@+id/account_txt_phone"
                 android:layout_width="match_parent"
@@ -118,24 +101,6 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="12dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/account_txt_title_phone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:visibility="gone"
-                app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/account_edit_txt_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/account_txt_title_phone"
-                    android:inputType="phone" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/account_txt_email"
@@ -145,25 +110,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/account_txt_title_email"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:visibility="gone"
-                app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/account_edit_txt_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/account_txt_title_email"
-                    android:inputType="textEmailAddress" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/account_txt_address"
                 android:layout_width="match_parent"
@@ -172,24 +118,6 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="12dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/account_txt_title_address"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:visibility="gone"
-                app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/account_edit_txt_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/account_txt_title_address"
-                    android:inputType="textPersonName" />
-            </com.google.android.material.textfield.TextInputLayout>
 
 
             <LinearLayout
@@ -226,8 +154,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
                     android:visibility="gone"
+                    android:layout_marginTop="@dimen/margin_top"
                     app:boxBackgroundColor="@color/background_B1_lightMode">
 
                     <AutoCompleteTextView
@@ -239,6 +167,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
                 <TextView
                     android:id="@+id/account_doctor_txt_experience"
                     android:layout_width="match_parent"
@@ -247,24 +176,6 @@
                     android:textColor="@color/black"
                     android:layout_marginTop="12dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_doctor_txt_title_experience"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/account_doctor_edit_txt_experience"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/account_info_doctor_experience"
-                        android:inputType="number" />
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/account_doctor_txt_description"
@@ -274,25 +185,6 @@
                     android:textColor="@color/black"
                     android:layout_marginTop="12dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/account_doctor_txt_title_description"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_top"
-                    android:visibility="gone"
-                    app:boxBackgroundColor="@color/background_B1_lightMode">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/account_doctor_edit_txt_title_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/account_info_doctor_description"
-                        android:inputType="textMultiLine"
-                        android:overScrollMode="always" />
-                </com.google.android.material.textfield.TextInputLayout>
 
 
             </LinearLayout>
@@ -306,18 +198,6 @@
                 android:backgroundTint="@color/theme_1_P"
                 android:text="@string/account_btn_edit"
                 android:textColor="@color/background_B1_lightMode" />
-
-            <Button
-                android:id="@+id/account_btn_edit_done"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_top"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/theme_1_P"
-                android:text="@string/account_btn_edit_done"
-                android:textColor="@color/background_B1_lightMode"
-                android:visibility="gone"
-                app:cornerRadius="@dimen/btn_corner_radius" />
 
         </LinearLayout>
 

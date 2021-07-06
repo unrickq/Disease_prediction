@@ -8,13 +8,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo2_round"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DiseasePrediction">
+        <activity android:name=".AccountEdit"></activity>
         <activity android:name=".PredictionConfirm" />
         <activity android:name=".AccountInfoDoctor" />
         <activity android:name=".CodeVerify" />

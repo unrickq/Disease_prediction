@@ -36,7 +36,7 @@
     <string name="account_btn_edit">Chỉnh sửa</string>
     <string name="account_btn_edit_done">Lưu lại</string>
 
-    <string name="consultation_list_txt_title">Tư vấn của bạn</string>
+    <string name="consultation_list_txt_title">Bạn chưa có tư vấn nào</string>
 
     <string name="home_txt_title">Triệu chứng của bạn là gì ?</string>
     <string name="home_txt_prediction_title">Bệnh của bạn</string>
@@ -70,7 +70,7 @@
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Lời khuyên</string>
     <string name="prediction_txt_advice_result">TextView</string>
-    <string name="prediction_list_txt_title">Chẩn đoán của bạn</string>
+    <string name="prediction_list_txt_title">Chưa có chẩn đoán của bạn</string>
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
     <string name="prediction_txt_status_incorrect">Đã xác nhận! Bệnh đã được thay đổi</string>
     <string name="prediction_txt_status_pending">Đang chờ xác nhận từ bác sĩ…</string>
@@ -139,7 +139,7 @@
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
     <string name="home_doctor_txt_consultation_title">Tư vấn của bệnh nhân</string>
     <string name="home_doctor_all_prediction_txt_title">Chẩn đoán cần xác nhận</string>
-    <string name="prediction_list_confirm_txt_title">Chuẩn đoán đang chờ xác nhận</string>
+    <string name="prediction_list_confirm_txt_title">Chưa có chẩn đoán cần xác nhận</string>
 
     <string name="nav_header_txt_acc_name">" Sample"</string>
 
@@ -199,6 +199,7 @@
     <string name="prediction_txt_today">Hôm nay</string>
 
     <string name="chatbox_button_predict">Đưa ra dự đoán</string>
+    <string name="account_edit_txt_img_upload">Tải lên</string>
 
 
 </resources>
