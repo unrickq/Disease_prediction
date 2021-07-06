@@ -33,7 +33,7 @@ public class TextClassificationClient {
   private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
   // Simple delimiter to split words.
   private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
-  private static final String MODEL_PATH = "model-088-metadata.tflite";
+  private static final String MODEL_PATH = "model-088-v1.0.1-metadata.tflite";
   private static final String VOCAL_PATH = "model-088_vocab.txt";
   private static final String LABEL_PATH = "labels.txt";
   /*
@@ -91,7 +91,7 @@ public class TextClassificationClient {
       MetadataExtractor metadataExtractor = new MetadataExtractor(buffer);
 
       // Extract and load the dictionary file.
-      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("model-088-vocab.txt");
+      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("model-088-v1.0-vocab.txt");
       System.out.println("check dic :"+ dictionaryFile);
       loadDictionaryFile(dictionaryFile);
       Log.v(TAG, "Dictionary loaded.");

@@ -2,7 +2,9 @@ package com.example.diseaseprediction;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -38,6 +40,7 @@ import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.RecommendSymptom;
+import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -149,7 +152,16 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
-                    nextChat(msg);
+                    try {
+                        if (!receiverID.equals(Constants.CHATBOT_ID)) {
+                            chatWithDoctor(msg);
+                        } else {
+                            nextChat(msg);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "Exception when talking with chatbot ");
+                    }
                 }
             });
 
@@ -190,17 +202,11 @@ public class Chat extends AppCompatActivity {
         if (!msg.equals("")) {
             // User request
             //user chat vs user
-            if (!receiverID.equals(Constants.CHATBOT_ID)) {
-                Message message = new Message("", fUser.getUid(), receiverID, msg
-                        , new Date(), sessionID, 1);
-                setMessageFirebase(message);
-                chat_txt_enter_mess.getText().clear();
-                //user chat vs chatbot
-            } else {
+            if (receiverID.equals(Constants.CHATBOT_ID)) {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
-                            , msg, new Date(), sessionID, 1);
+                            , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     //chatbot chat
                     //model xu ly
@@ -242,6 +248,16 @@ public class Chat extends AppCompatActivity {
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
                 }
             }
+        }
+    }
+
+    public void chatWithDoctor(String msg) {
+        if (!msg.equals("")) {
+            //user chat vs user
+            Message message = new Message("", fUser.getUid(), receiverID, msg
+                    , new Date(), sessionID, 1);
+            setMessageFirebase(message);
+            chat_txt_enter_mess.getText().clear();
         }
     }
 
@@ -316,7 +332,30 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                if (receiverID.equals(Constants.CHATBOT_ID)) {
+                    System.out.println("session la" + sessionID);
+                    mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Session ss = snapshot.getValue(Session.class);
+                            System.out.println("check vl" + ss.getStatus());
+                            System.out.println();
+                            if (ss.getStatus() != 0) {
+                                dialogConfirm(sessionID);
+                            } else {
+                                onBackPressed();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                } else {
+                    onBackPressed();
+                }
+
             }
         });
 
@@ -426,6 +465,7 @@ public class Chat extends AppCompatActivity {
                 mMessage.clear();
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     Message msg = sn.getValue(Message.class);
+
                     if (msg != null && msg.getReceiverID() != null) {
                         if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
                                 && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
@@ -433,18 +473,19 @@ public class Chat extends AppCompatActivity {
                                 && msg.getSessionID().equals(sessionID)) {
                             mMessage.add(msg);
                         }
-                        if(msg.getStatus() == 3){
-                            if(checkStartMessage){
+                        if (msg.getStatus() == 3) {
+                            if (checkStartMessage) {
                                 mRef2 = FirebaseDatabase.getInstance().getReference("Message");
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
-                            if(checkClickPredict){
+                            if (checkClickPredict) {
                                 mRef2 = FirebaseDatabase.getInstance().getReference("Message");
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
                         }
                         chatAdapter = new ChatAdapter(Chat.this, mMessage);
                         chat_recycler_view.setAdapter(chatAdapter);
+
                         chatAdapter.setPredictButtonListener(new MyClickListener() {
                             @Override
                             public void onPredict(View button, int position) {
@@ -456,11 +497,14 @@ public class Chat extends AppCompatActivity {
 
                             }
                         });
+
+
                     }
                 }
                 checkStartMessage = false;
                 checkClickPredict = false;
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -485,7 +529,7 @@ public class Chat extends AppCompatActivity {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Disease d = sn.getValue(Disease.class);
                         Prediction pre = new Prediction("0", uId, "Default",
-                                "Default", "Default",
+                                sessionID, "Default",
                                 d.getDiseaseID(), "Default", new Date(), new Date(),
                                 d.getSpecializationID(), 0);
                         createPrediction(pre);
@@ -700,27 +744,64 @@ public class Chat extends AppCompatActivity {
         });
     }
 
-    public void nextChat(String msg){
-        try {
-//            String msg = chat_txt_enter_mess.getText().toString();
+
+    /**
+     * Create dialog confirm
+     */
+    private void dialogConfirm(String sessionID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.default_dialog_end_session_prediction);
+        builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onBackPressed();
+                endSession(sessionID);
+            }
+        });
+        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Do nothing
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
+
+    public void nextChat(String msg) {
+        if (!msg.equals("")) {
+            // User request
+            //user chat vs user
             // user chat
-            Message message = new Message("", fUser.getUid(), "hmVF1lBCzlddOHl6qFeP0t76iMy1"
+            Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
                     , msg, new Date(), sessionID, 1);
             setMessageFirebase(message);
-
             //chatbot chat
-            Message message1 = new Message("", "hmVF1lBCzlddOHl6qFeP0t76iMy1",
+            Message message1 = new Message("", Constants.CHATBOT_ID,
                     fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
             setMessageFirebase(message1);
             System.out.println("MS1" + message1.getMessageID());
             chat_txt_enter_mess.getText().clear();
             allMess += msg + " ";
+        }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(LOG_TAG, "Exception when talking with chatbot ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
 
+        }
+    }
 }

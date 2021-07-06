@@ -365,9 +365,9 @@ public class PredictionResult extends AppCompatActivity {
               startActivity(i);
               //Send message started
               DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-              Message msg = new Message(reference.push().getKey(), accountIDOne
-                  , accountIDTwo, "Hello all! Let's started!"
-                  , new Date(), sessionID, 1);
+              Message msg = new Message(reference.push().getKey(), accountIDTwo
+                      , accountIDOne, getString(R.string.default_chatbot_hello)
+                      , new Date(), sessionID, 1);
               reference.child(msg.getMessageID()).setValue(msg);
             }
 
@@ -404,13 +404,13 @@ public class PredictionResult extends AppCompatActivity {
                 //Create new consultation list
                 mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                 mRef.push().setValue(new ConsultationList(accountIDOne
-                    , accountIDTwo, sessionID));
+                        , accountIDTwo, sessionID));
 
                 //Send message started
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
-                Message msg = new Message(reference.push().getKey(), accountIDOne
-                    , accountIDTwo, "Hello all! Let's started!"
-                    , new Date(), sessionID, 1);
+                Message msg = new Message(reference.push().getKey(), accountIDTwo
+                        , accountIDOne, getString(R.string.default_chatbot_hello)
+                        , new Date(), sessionID, 1);
                 reference.child(msg.getMessageID()).setValue(msg);
               }
               //Update doctor session of prediction
