@@ -115,8 +115,8 @@
     <string name="default_chatbot_disease">Bệnh của bạn là:&#160;</string>
     <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
     <string name="default_email_regex">Vui lòng nhập đúng địa chỉ email</string>
-    <string name="default_chatbot_continue_symptom">Nhập tiếp thông tin bệnh hoặc đưa ra dự đoán</string>
-    <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn quay trở lại</string>
+    <string name="default_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
+    <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
 
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
@@ -186,7 +186,7 @@
     <string name="prediction_confirm_txt_disease_prediction_title">Xin hãy chọn bệnh đúng cho dự đoán này</string>
     <string name="prediction_confirm_dialog_thankyou">Cảm ơn bạn vì đã xác nhận!</string>
     <string name="dialog_button_ok">OK</string>
-    <string name="prediction_confirm_dialog_prediction_status_invallid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
+    <string name="prediction_confirm_dialog_prediction_status_invalid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
     <string name="dialog_button_yes">Đúng</string>
     <string name="account_txt_title_phone_format">&lt;b>Số điện thoại:&lt;/b>  %1$s</string>
     <string name="account_txt_title_email_format">&lt;b>Email:&lt;/b>  %1$s</string>

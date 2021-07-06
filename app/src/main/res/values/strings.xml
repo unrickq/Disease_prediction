@@ -126,8 +126,8 @@
     <string name="default_chatbot_disease">Your disease:</string>
     <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
     <string name="default_email_regex">Please enter the correct email</string>
-    <string name="default_chatbot_continue_symptom">Please enter continue symptom or predict disease</string>
-    <string name="default_dialog_end_session_prediction">The prediction will be over if you go back </string>
+    <string name="default_chatbot_continue_symptom">Do you have any other symptoms?</string>
+    <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -195,10 +195,10 @@
     <string name="prediction_confirm_dialog_correct">Are you sure the prediction is correct?</string>
     <string name="prediction_confirm_txt_disease_prediction_title">Please select correct disease for this prediction</string>
     <string name="prediction_confirm_dialog_thankyou">Thank you for your confirmation!</string>
-    <string name="prediction_confirm_dialog_prediction_status_invallid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
+    <string name="prediction_confirm_dialog_prediction_status_invalid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
     <string name="prediction_txt_today">Today</string>
 
-    <string name="chatbox_button_predict">Predict disease</string>
+    <string name="chatbox_button_predict">Give prediction</string>
     <string name="account_edit_txt_img_upload">Upload</string>
     <string name="dialog_confirm_discard_changes">Discard changes?</string>
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>

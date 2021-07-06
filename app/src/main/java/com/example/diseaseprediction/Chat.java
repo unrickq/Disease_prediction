@@ -261,7 +261,7 @@ public class Chat extends AppCompatActivity {
                     chat_txt_enter_mess.getText().clear();
                     //get disease from model
                     for (Result var : results) {
-                        System.out.println(var.getTitle() + " " + var.getConfidence());
+                        System.out.println(var.getTitle() + " " + var.getConfidence() * 100 + "%");
                     }
                     //print disease
                     Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
@@ -426,7 +426,7 @@ public class Chat extends AppCompatActivity {
 
     /**
      * Check if the chat session has ended
-     * Then set chat input layout GONE
+     * If not, then set chat input layout VISIBLE
      */
     private void checkSessionStatus() {
         mRef = FirebaseDatabase.getInstance().getReference("Session");
@@ -437,9 +437,9 @@ public class Chat extends AppCompatActivity {
                     String sessionStatus =
                             Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
                     int status = Integer.parseInt(sessionStatus);
-                    if (status == 0) {
+                    if (status == 1) {
                         chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
-                        chat_send_message_layout.setVisibility(View.GONE);
+                        chat_send_message_layout.setVisibility(View.VISIBLE);
                     }
                 } catch (NullPointerException e) {
                     Log.d(LOG_TAG, "Session status null");
@@ -451,7 +451,7 @@ public class Chat extends AppCompatActivity {
             }
         });
         //Hide keyboard
-        hideSoftKeyboard(Chat.this);
+//        hideSoftKeyboard(Chat.this);
     }
 
     /**

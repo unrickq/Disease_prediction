@@ -23,6 +23,7 @@
     <color name="background_B2_lightMode">#F8F8F8</color>
     <color name="background_B3_lightMode">#80F5F5F5</color>
     <color name="background_search">#26767680</color>
+    <color name="background_chat">#E4E6EA</color>
 
     <color name="text_T1_lightMode">#000000</color>
     <color name="text_T2_lightMode">#666666</color>
