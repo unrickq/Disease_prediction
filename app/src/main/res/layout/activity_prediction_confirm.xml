@@ -206,7 +206,7 @@
                     android:layout_width="175dp"
                     android:layout_height="55dp"
                     android:layout_columnWeight="1"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal|top"
                     android:text="@string/prediction_confirm_btn_incorrect"
                     app:cornerRadius="@dimen/btn_corner_radius"
                     app:layout_constraintStart_toStartOf="parent"

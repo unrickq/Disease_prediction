@@ -169,7 +169,7 @@
     <string name="upload_img_waiting">Đang tải lên…</string>
     <string name="upload_img_done">Tải lên hoàn tất</string>
     <string name="item_chat_checkbox_done">Hoàn tất</string>
-    <string name="prediction_confirm_btn_incorrect">Không chính xác</string>
+    <string name="prediction_confirm_btn_incorrect">Chưa chính xác</string>
     <string name="prediction_confirm_btn_correct">Chính xác</string>
     <string name="prediction_confirm_btn_confirm">Xác nhận</string>
     <string name="prediction_confirm_disease_input_other_disease">Tên bệnh</string>
