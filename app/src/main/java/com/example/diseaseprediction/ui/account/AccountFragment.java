@@ -187,13 +187,15 @@ public class AccountFragment extends Fragment {
                 account_txt_title_phone.setError(getString(R.string.default_empty_phone));
                 isValid = false;
             } else {
-                String phone = account_txt_title_phone.getEditText().getText().toString().trim();
-                if ((phone.startsWith("0") && phone.length() != 10) || // phone length must equal to 10 when
-                        // start with '0'
-                        (!phone.startsWith("0") && phone.length() != 9)) { // phone number length must equal to 9 when
-                    // not start with '0'
-                    account_txt_title_phone.setError(getString(R.string.error_login_phone_too_long));
-                    isValid = false;
+                if (account_txt_title_phone.isEnabled()) {
+                    String phone = account_txt_title_phone.getEditText().getText().toString().trim();
+                    if ((phone.startsWith("0") && phone.length() != 10) || // phone length must equal to 10 when
+                            // start with '0'
+                            (!phone.startsWith("0") && phone.length() != 9)) { // phone number length must equal to 9 when
+                        // not start with '0'
+                        account_txt_title_phone.setError(getString(R.string.error_login_phone_too_long));
+                        isValid = false;
+                    }
                 }
             }
             if (account_txt_title_email.getEditText().getText().toString().trim().isEmpty()) {
@@ -455,7 +457,7 @@ public class AccountFragment extends Fragment {
         //get user by id
         mAccount = new Account();
         mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase
@@ -483,15 +485,6 @@ public class AccountFragment extends Fragment {
                         account_txt_gender.setText(Html.fromHtml(getString(R.string.account_txt_title_gender_format, genderStr)));
                         account_spinner_gender.setText(genderStr);
                         genderAdapter.getFilter().filter(null);
-
-//            if (mAccount.getGender() == 0) {
-//              account_txt_gender.setText(account_spinner_gender.getAdapter().getItem(0).toString());
-//              account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(0).toString());
-//              genderAdapter.getFilter().filter(null);
-//            } else if (mAccount.getGender() == 1) {
-//              account_spinner_gender.setText(account_spinner_gender.getAdapter().getItem(1).toString());
-//              genderAdapter.getFilter().filter(null);
-//            }
 
                         //Set phone
                         if (!mAccount.getPhone().equals("Default")) {
@@ -572,9 +565,6 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("name").setValue("Default");
         } else {
             mRef.child(fUser.getUid()).child("name").setValue(account_txt_title_name.getEditText().getText().toString());
-            //Set nav bar
-//            nav_header_txt_acc_name = getActivity().findViewById(R.id.nav_header_txt_acc_name);
-//            nav_header_txt_acc_name.setText(account_txt_title_name.getEditText().getText().toString());
         }
 
         //Gender
@@ -591,9 +581,6 @@ public class AccountFragment extends Fragment {
             mRef.child(fUser.getUid()).child("phone").setValue("Default");
         } else {
             mRef.child(fUser.getUid()).child("phone").setValue(account_txt_title_phone.getEditText().getText().toString());
-            //Set nav bar
-//            nav_header_txt_acc_phone = getActivity().findViewById(R.id.nav_header_txt_acc_phone);
-//            nav_header_txt_acc_phone.setText(account_txt_title_phone.getEditText().getText().toString());
         }
 
         //email
