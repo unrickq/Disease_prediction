@@ -406,7 +406,7 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
           if (prediction.getStatus() != 0 && !prediction.getDoctorID().equals(fUser.getUid())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(PredictionConfirm.this);
-            builder.setMessage(R.string.prediction_confirm_dialog_prediction_status_invallid);
+            builder.setMessage(R.string.prediction_confirm_dialog_prediction_status_invalid);
             builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {

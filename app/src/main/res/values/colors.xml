@@ -24,12 +24,16 @@
     <color name="background_B3_lightMode">#80F5F5F5</color>
     <color name="background_search">#26767680</color>
     <color name="background_chat">#E4E6EA</color>
+    <color name="background_home_list">#F5F5F5</color>
 
     <color name="text_T1_lightMode">#000000</color>
     <color name="text_T2_lightMode">#666666</color>
     <color name="text_T1_darkMode">#FFFFFF</color>
     <color name="text_T2_darkMode">#CCCCCC</color>
     <color name="text_search">#993C3C43</color>
+    <color name="text_warning">#ff9931</color>
+    <color name="text_success">#3bbf45</color>
+    <color name="text_error">#ff2b55</color>
 
 
 </resources>

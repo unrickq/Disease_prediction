@@ -86,6 +86,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
     // Display Date
     for (Integer i : indexList) {
+      // Set Date label or prediction
       if (position == i) {
         holder.item_prediction_txt_month_day.setVisibility(View.VISIBLE);
         // if prediction was created today
@@ -100,11 +101,16 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
         }
         break;
       }
-      // if this prediction is the last item of the day or of the list -> remove divider
-      else if (position == i - 1 || position == mPredictions.size() - 1) {
+      // if this prediction is the last item of the day -> remove divider
+      if (position == i - 1) {
         holder.prediction_item_divider.setVisibility(View.GONE);
       }
     }
+    // if this prediction is the last item of the list -> remove divider
+    if (position == mPredictions.size() - 1) {
+      holder.prediction_item_divider.setVisibility(View.GONE);
+    }
+
 
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -179,10 +185,13 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
         if (pd.getStatus() == 0) {
           item_prediction_txt_status.setText(R.string.prediction_adapter_waiting_confirm);
+          item_prediction_txt_status.setTextColor(mContext.getResources().getColor(R.color.text_warning));
         } else if (pd.getStatus() == 1) {
           item_prediction_txt_status.setText(R.string.prediction_adapter_confirmed_correct);
+          item_prediction_txt_status.setTextColor(mContext.getResources().getColor(R.color.text_success));
         } else if (pd.getStatus() == 2) {
           item_prediction_txt_status.setText(R.string.prediction_txt_status_incorrect);
+          item_prediction_txt_status.setTextColor(mContext.getResources().getColor(R.color.text_success));
         }
       }
 
@@ -201,7 +210,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
    */
   private ArrayList<Integer> findIndex(List<Prediction> mPredictions) {
     ArrayList<Integer> result = new ArrayList<>();
-    Date currentDate = new Date();
+    Date currentDate = new Date(2000, 2, 11);
     for (int i = 0; i < mPredictions.size(); i++) {
       Prediction prediction = mPredictions.get(i);
       // Date not the same

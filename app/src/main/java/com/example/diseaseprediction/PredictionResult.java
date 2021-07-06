@@ -1,7 +1,6 @@
 package com.example.diseaseprediction;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -175,18 +174,18 @@ public class PredictionResult extends AppCompatActivity {
             if (pr.getStatus() == 0) {
               prediction_layout_contact_doctor.setVisibility(View.GONE);
               prediction_txt_status.setText(getString(R.string.prediction_txt_status_pending));
-              prediction_txt_status.setTextColor(Color.parseColor("#ff9931"));
+              prediction_txt_status.setTextColor(getResources().getColor(R.color.text_warning));
               prediction_img_status.setImageResource(R.drawable.ic_prediction_status_pending);
             } else if (pr.getStatus() == 1) {
               prediction_layout_contact_doctor.setVisibility(View.VISIBLE);
               prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
-              prediction_txt_status.setTextColor(Color.parseColor("#3bbf45"));
+              prediction_txt_status.setTextColor(getResources().getColor(R.color.text_success));
               prediction_img_status.setImageResource(R.drawable.ic_correct);
             } else if (pr.getStatus() == 2) {
               prediction_layout_contact_doctor.setVisibility(View.VISIBLE);
               prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
 //                            prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
-              prediction_txt_status.setTextColor(Color.parseColor("#3bbf45"));
+              prediction_txt_status.setTextColor(getResources().getColor(R.color.text_success));
 //                            prediction_img_status.setImageResource(R.drawable.ic_incorrect);
               prediction_img_status.setImageResource(R.drawable.ic_correct);
             }
