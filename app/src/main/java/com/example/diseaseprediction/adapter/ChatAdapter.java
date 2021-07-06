@@ -50,7 +50,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static final int MSG_TYPE_RIGHT = 1;
     public static final int MSG_TYPE_LEFT_BOX = 2;
     private String imgURL;
-    private String keyShowButtonChat = "Nhập tiếp thông tin bệnh";
     MyClickListener listener;
 
 
@@ -159,7 +158,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         if (mMessage.get(position).getSenderID().equals(fUser.getUid())) {
             return MSG_TYPE_RIGHT;
-        } else if (mMessage.get(position).getMessage().equals(mContext.getString(R.string.default_chatbot_continue_symptom))) {
+        } else if (mMessage.get(position).getStatus() == 3 || mMessage.get(position).getStatus() == 4) {
             return MSG_TYPE_LEFT_BOX;
         } else {
             return MSG_TYPE_LEFT;
