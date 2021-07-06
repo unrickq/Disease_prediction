@@ -299,7 +299,7 @@ public class AccountEdit extends AppCompatActivity {
           });
 
     } else if (type == 1) { // discard changes dialog
-      builder.setMessage("Discard changes?");
+      builder.setMessage(R.string.dialog_confirm_discard_changes);
       builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
           new DialogInterface.OnClickListener() {
             @Override
@@ -411,7 +411,7 @@ public class AccountEdit extends AppCompatActivity {
               account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
             }
           } catch (NullPointerException e) {
-            Log.d(TAG, "Account. Account ID null", e);
+            Log.d(TAG, "getDataForUI: Account ID null", e);
           }
 
         }
@@ -438,7 +438,6 @@ public class AccountEdit extends AppCompatActivity {
 
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
-        Log.d(TAG, "textChanged");
         isModified = true;
         layout.setError(null);
       }

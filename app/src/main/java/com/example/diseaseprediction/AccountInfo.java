@@ -79,7 +79,7 @@ public class AccountInfo extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Please fill in the required information!");
+        builder.setMessage(R.string.dialog_account_info_fill_required);
         builder.setPositiveButton(getString(R.string.dialog_button_ok),
             new DialogInterface.OnClickListener() {
                 @Override
