@@ -182,6 +182,33 @@ public class Chat extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            System.out.println("session la" + sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Session ss = snapshot.getValue(Session.class);
+                    System.out.println("check vl" + ss.getStatus());
+                    System.out.println();
+                    if (ss.getStatus() != 0) {
+                        dialogConfirm(sessionID);
+                    } else {
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } else {
+            finish();
+        }
+    }
+
     /**
      * Get all views in layout
      */
@@ -332,30 +359,7 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (receiverID.equals(Constants.CHATBOT_ID)) {
-                    System.out.println("session la" + sessionID);
-                    mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
-                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Session ss = snapshot.getValue(Session.class);
-                            System.out.println("check vl" + ss.getStatus());
-                            System.out.println();
-                            if (ss.getStatus() != 0) {
-                                dialogConfirm(sessionID);
-                            } else {
-                                onBackPressed();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
-                } else {
-                    onBackPressed();
-                }
-
+               onBackPressed();
             }
         });
 

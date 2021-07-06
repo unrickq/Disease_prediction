@@ -76,6 +76,20 @@ public class AccountInfo extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please fill in the required information!");
+        builder.setPositiveButton(getString(R.string.dialog_button_ok),
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+
+        builder.create().show();
+    }
+
     /**
      * Get view
      */
