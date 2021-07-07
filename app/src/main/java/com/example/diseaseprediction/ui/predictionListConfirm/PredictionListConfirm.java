@@ -142,12 +142,12 @@ public class PredictionListConfirm extends Fragment {
                                 Log.d(TAG, "Home. Patient ID null", e);
                             }
                         }
-                        //Reverse list index to get latest prediction
-                        Collections.reverse(mPredictionListDoctor);
                         //Create adapter
                         //goToScreen 0: doctor confirm screen
                         if (mPredictionListDoctor.size() > 0) {
                             prediction_list_confirm_txt_title.setVisibility(View.GONE);
+                            //Reverse list index to get latest prediction
+                            Collections.reverse(mPredictionListDoctor);
                             doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
                                     mPredictionListDoctor, 0, mPredictionListDoctor.size());
                             prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);

@@ -258,7 +258,7 @@ public class Chat extends AppCompatActivity {
                     Message message1 = new Message("", Constants.CHATBOT_ID,
                             fUser.getUid(), getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
                     setMessageFirebase(message1);
-                    chat_txt_enter_mess.getText().clear();
+                    chat_txt_enter_mess.setText("");
                     //get disease from model
                     for (Result var : results) {
                         System.out.println(var.getTitle() + " " + var.getConfidence());
@@ -269,7 +269,7 @@ public class Chat extends AppCompatActivity {
                         sessionID, 1);
                     setMessageFirebase(message2);
                     getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
-                    chat_txt_enter_mess.getText().clear();
+                    chat_txt_enter_mess.setText("");
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
@@ -284,7 +284,7 @@ public class Chat extends AppCompatActivity {
             Message message = new Message("", fUser.getUid(), receiverID, msg
                     , new Date(), sessionID, 1);
             setMessageFirebase(message);
-            chat_txt_enter_mess.getText().clear();
+            chat_txt_enter_mess.setText("");
         }
     }
 
@@ -437,7 +437,10 @@ public class Chat extends AppCompatActivity {
                     String sessionStatus =
                             Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
                     int status = Integer.parseInt(sessionStatus);
-                    if (status == 1) {
+                    if (status == 0) {
+                        chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
+                        chat_send_message_layout.setVisibility(View.GONE);
+                    } else if (status == 1) {
                         chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                         chat_send_message_layout.setVisibility(View.VISIBLE);
                     }
@@ -451,7 +454,7 @@ public class Chat extends AppCompatActivity {
             }
         });
         //Hide keyboard
-//        hideSoftKeyboard(Chat.this);
+        hideSoftKeyboard(Chat.this);
     }
 
     /**
@@ -775,9 +778,6 @@ public class Chat extends AppCompatActivity {
 
     public void nextChat(String msg) {
         if (!msg.equals("")) {
-            // User request
-            // User chat vs user
-            // User chat
             Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
                     , msg, new Date(), sessionID, 1);
             setMessageFirebase(message);
@@ -785,7 +785,7 @@ public class Chat extends AppCompatActivity {
             Message message1 = new Message("", Constants.CHATBOT_ID,
                     fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
             setMessageFirebase(message1);
-            chat_txt_enter_mess.getText().clear();
+            chat_txt_enter_mess.setText("");
             allMess += msg + " ";
         }
 
