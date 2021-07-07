@@ -52,10 +52,9 @@ public class PredictionResult extends AppCompatActivity {
   private ConsultationList consultationList;
   private String sessionID;
 
-  private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
-      prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title;
+  private TextView prediction_txt_disease_result, prediction_txt_disease_description_result, prediction_listview_advice_result,
+          prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title;
   private ImageView prediction_img_status, prediction_toolbar_img_pre;
-  private ListView prediction_listview_advice_result;
   private LinearLayout prediction_layout_contact_doctor;
   private Button prediction_btn_contact_doctor, prediction_btn_back;
 
@@ -297,10 +296,13 @@ public class PredictionResult extends AppCompatActivity {
                 }
               }
             }
-            setListViewHeightBasedOnChildren(prediction_listview_advice_result);
-            adviseAdapter = new ArrayAdapter<String>(PredictionResult.this, android.R.layout.simple_list_item_1,
-                mAdvise);
-            prediction_listview_advice_result.setAdapter(adviseAdapter);
+
+            String finalText = "";
+            // iterate and concatenate string, then displays advise from adviseList to TextView
+            for (int i = 0; i < mAdvise.size(); i++) {
+              finalText = finalText.concat("- " + mAdvise.get(i) + "\n");
+            }
+            prediction_listview_advice_result.setText(finalText);
           }
 
           @Override

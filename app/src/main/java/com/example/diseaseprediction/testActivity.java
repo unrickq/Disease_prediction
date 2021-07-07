@@ -1,314 +1,24 @@
 package com.example.diseaseprediction;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.SparseBooleanArray;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diseaseprediction.adapter.testAdapter;
-import com.example.diseaseprediction.object.Account;
-import com.example.diseaseprediction.object.Disease;
-import com.example.diseaseprediction.object.DoctorInfo;
-import com.example.diseaseprediction.object.Prediction;
-import com.example.diseaseprediction.object.Symptom;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 public class testActivity extends AppCompatActivity {
 
-  private static final int REQUEST_CODE_SPEECH = 10;
-  FirebaseUser firebaseUser;
-  DatabaseReference myRef;
-
-  private List<Symptom> mSymptom;
-  private ArrayAdapter<Symptom> symptomAdapter;
-
-
-  private DoctorInfo mDoctor;
-    private List<Prediction> mPredictionList;
-
-
-    private TextInputLayout testlayout, testlayout2;
-    private AutoCompleteTextView spinnerr;
-    EditText editText;
-    private RecyclerView recyclerView;
-    private testAdapter userAdapter;
-    private List<Account> mUser;
-    ArrayList<Disease> list;
-    boolean isLoaded = false;
-    Button btn, btn2;
-    TextView txt;
-    ImageView imageView2;
-    private Disease mDisease;
-
-    private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 71;
-    //Firebase
-    StorageReference sRef;
-
-    public static void setListViewHeightBasedOnChildren(final ListView listView) {
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                ListAdapter listAdapter = listView.getAdapter();
-                if (listAdapter == null) {
-                    return;
-                }
-                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-                int listWidth = listView.getMeasuredWidth();
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    View listItem = listAdapter.getView(i, null, listView);
-                    listItem.measure(
-                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-                ViewGroup.LayoutParams params = listView.getLayoutParams();
-                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
-                listView.setLayoutParams(params);
-                listView.requestLayout();
-            }
-        });
-    }
+    private static final int REQUEST_CODE_SPEECH = 10;
+    FirebaseUser firebaseUser;
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        AssetManager am = this.getAssets();
-        try {
-            InputStream fis = am.open("abc.txt");
-            StringBuilder sb = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            int count = 1;
-            while ((line = br.readLine()) != null) {
-                addDataSymptom(new Symptom(String.valueOf(count),  line,  "Default", new Date(),  new Date(), 1));
-                count++;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Button btn = findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
-        });
-
     }
-
-    private void printData() {
-        System.out.println("quang " + list.get(0).getName());
-    }
-
-    private void testData() {
-        list = new ArrayList<>();
-        myRef = FirebaseDatabase.getInstance().getReference("Disease");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Disease dsc = ds.getValue(Disease.class);
-                    mDisease = dsc;
-                    list.add(dsc);
-                    //printData();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void loadAllPredictionPending() {
-        mPredictionList = new ArrayList<>();
-        myRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child("Xhbe67PvUbQfRrikolr9QJGbXpd2");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mDoctor = snapshot.getValue(DoctorInfo.class);
-                myRef = FirebaseDatabase.getInstance().getReference("Prediction");
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot sh : snapshot.getChildren()) {
-                            Prediction pr = sh.getValue(Prediction.class);
-                            if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                                mPredictionList.add(pr);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
-    private void getTempList(Prediction pr) {
-        mPredictionList.add(pr);
-    }
-
-    public void createCheckBox(ListView item_chat_checkboxx, List<Symptom> ls) {
-        //Create new adapter
-      symptomAdapter = new ArrayAdapter<Symptom>(testActivity.this, android.R.layout.simple_list_item_multiple_choice
-          , ls);
-      symptomAdapter.toString();
-        item_chat_checkboxx.setAdapter(symptomAdapter);
-        //Set height of checkbox
-        setListViewHeightBasedOnChildren(item_chat_checkboxx);
-
-        //Set onclick in item
-        item_chat_checkboxx.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Get item value checked
-                Symptom value = (Symptom) item_chat_checkboxx.getItemAtPosition(i);
-                System.out.println("quangfgfgfd" + value.getName());
-            }
-        });
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SparseBooleanArray sparseBooleanArray = item_chat_checkboxx.getCheckedItemPositions();
-                String itemsSelected = "";
-
-                for (int i = 0; i < sparseBooleanArray.size(); i++) {
-                    int position = sparseBooleanArray.keyAt(i);
-                    if (sparseBooleanArray.get(position)) {
-                        itemsSelected += item_chat_checkboxx.getItemAtPosition(i).toString();
-                    }
-                }
-              Toast.makeText(testActivity.this, itemsSelected, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView2.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void uploadImage() {
-        if (filePath != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            sRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
-            sRef.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                          progressDialog.dismiss();
-                          Toast.makeText(testActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                          sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                              Toast.makeText(testActivity.this, uri.toString(), Toast.LENGTH_SHORT).show();
-                            }
-                          });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                          progressDialog.dismiss();
-                          Toast.makeText(testActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
-                    });
-        }
-    }
-//    public void getSpeechInput(View view) {
-//
-//        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-//
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            startActivityForResult(intent, REQUEST_CODE_SPEECH);
-//        } else {
-//            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -335,6 +45,20 @@ public class testActivity extends AppCompatActivity {
 //
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//        void addDataDiseaseAdvise(DiseaseAdvise da){
+//        myRef = FirebaseDatabase.getInstance().getReference("DiseaseAdvise");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                myRef.child(myRef.push().getKey()).setValue(da);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 //
 //            }
 //        });
@@ -389,21 +113,68 @@ public class testActivity extends AppCompatActivity {
 //    }
 
 //
-    void addDataSymptom(Symptom sm){
-        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                sm.setSymptomsID(myRef.push().getKey());
-                myRef.child(sm.getSymptomsID()).setValue(sm);
-            }
+//    void addDataSymptom(Symptom sm){
+//        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                sm.setSymptomsID(myRef.push().getKey());
+//                myRef.child(sm.getSymptomsID()).setValue(sm);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    addDataDiseaseAdvise(new DiseaseAdvise("1",  "1", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("1",  "2", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("1",  "3", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("1",  "4", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("2",  "12", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("2",  "14", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("2",  "20", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("3",  "14", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("3",  "17", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("3",  "20", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("4",  "3", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("4",  "4", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("4",  "13", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("4",  "19", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("5",  "13", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("5",  "18", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("5",  "2", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("5",  "3", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("6",  "3", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("6",  "5", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("6",  "2", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("6",  "20", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("7",  "3", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("7",  "12", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("7",  "16", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("7",  "20", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("8",  "4", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("8",  "3", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("8",  "5", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("8",  "7", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("9",  "13", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("9",  "18", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("9",  "2", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("9",  "3", 1));
+//
+//    addDataDiseaseAdvise(new DiseaseAdvise("10",  "10", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("10",  "7", 1));
+//    addDataDiseaseAdvise(new DiseaseAdvise("10",  "3", 1));
 
 //        addDataAdvise(new Advise("1", "che miệng trong lúc ho", new Date(), new Date(), 1));
 //        addDataAdvise(new Advise("2", "tham khảo ý kiến bác sĩ", new Date(), new Date(), 1));
@@ -623,44 +394,4 @@ public class testActivity extends AppCompatActivity {
 
 
 //        addDataMedicine(new Medicine("id", "name",  "description",  "manufacturer",  "content", new Date(), new Date(), 1));
-    /**
-     * set symptom to firebase
-     */
-//    private void setSymptomFirebase() {
-//
-//        try {
-//            List<Symptom> symList = new ArrayList<>();
-//            AssetManager am = getAssets();
-//            InputStream is = am.open("abc.txt");
-//            StringBuilder sb = new StringBuilder();
-//            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-//            String line;
-//            System.out.println("check vui ve");
-//            int count = 1;
-//            while ((line = br.readLine()) != null) {
-////                sb.append(line + System.lineSeparator());
-//                symList.add(new Symptom("id", "ngứa", "Default", new Date(), new Date(), 1));
-//            }
-//
-////            symList.add(new Symptom("id",  "ngứa",  "Default", new Date(),  new Date(), 1));
-////            mRef = FirebaseDatabase.getInstance().getReference("Symptom");
-////            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-////                @Override
-////                public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                    for (int i = 1; i < 1 + 1; i++) {
-////                        mRef.child(String.valueOf(i)).setValue("");
-////                    }
-////
-////                }
-////
-////                @Override
-////                public void onCancelled(@NonNull DatabaseError error) {
-////
-////                }
-////            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 }
