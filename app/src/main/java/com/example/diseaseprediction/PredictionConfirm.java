@@ -374,7 +374,7 @@ public class PredictionConfirm extends AppCompatActivity {
       if (!prediction.getDiseaseID().equals(selectedDisease.getDiseaseID())) {
         mRef.child("diseaseID").setValue(selectedDisease.getDiseaseID()); //set correct disease ID
         if (!diseaseName.isEmpty()) {
-          mRef.child("note").setValue(diseaseName);
+          mRef.child("notes").setValue(diseaseName);
           mRef.child("status").setValue(2); // prediction incorrect
         }
       } else {

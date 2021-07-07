@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.Constants;
 import com.example.diseaseprediction.PredictionConfirm;
 import com.example.diseaseprediction.PredictionResult;
 import com.example.diseaseprediction.R;
@@ -167,7 +168,12 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        item_prediction_txt_disease.setText(snapshot.child("name").getValue().toString());
+        if (prediction.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+          String unknownDisease = prediction.getNotes();
+          item_prediction_txt_disease.setText(unknownDisease);
+        } else {
+          item_prediction_txt_disease.setText(snapshot.child("name").getValue().toString());
+        }
       }
 
       @Override

@@ -17,6 +17,8 @@ public class testActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+//        addDataDiseaseAdvise(new DiseaseAdvise("99999",  "99999", 1));
+//        addDataAdvise(new Advise("99999", "Chưa có lời khuyên cho bệnh này", new Date(), new Date(), 1));
 
     }
 
@@ -63,18 +65,18 @@ public class testActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-//
+////
 //    void addDataAdvise(Advise ad){
 //        myRef = FirebaseDatabase.getInstance().getReference("Advise");
 //        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 ////                ad.setAdviseID(myRef.push().getKey());
 //                myRef.child(ad.getAdviseID()).setValue(ad);
 //            }
 //
 //            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 //
 //            }
 //        });
