@@ -1,26 +1,18 @@
 nôn mửa
 khó tiêu
-sốt cao
-chóng mặt
-đau đầu
-mệt mỏi
 khó chịu
 phát ban da
 nổi nốt trên da
 hắt hơi liên tục
 rùng mình
-ớn lạnh
 đau khớp
-đau bụng
 acid dạ dày
 vết loét trên lưỡi
 mỏi cơ
 nôn mửa
 tiểu rát
 đi tiểu nhỏ giọt
-mệt mỏi
 tăng cân
-thở nhanh
 bàn tay và bàn chân lạnh
 nhanh chóng thay đổi tâm trạng
 giảm cân
@@ -29,22 +21,17 @@ mơ màng và buồn ngủ
 đàm trong cổ họng
 tăng đường huyết
 ho
-sốt cao
 mắt trũng sâu
-khó thở
 đổ mồ hôi
 mất nước
 khó tiêu
-đau đầu
 da hơi vàng
 Nước tiểu đậm
 buồn nôn
 ăn mất ngon
 đau sau mắt
 đau lưng
-táo bón
 bệnh tiêu chảy
-sốt nhẹ
 nước tiểu vàng
 vàng mắt
 suy gan cấp tính
@@ -61,13 +48,10 @@ sổ mũi
 tắc nghẽn
 tức ngực
 yếu tay chân
-nhịp tim nhanh
 đau khi đi tiểu
 đau ở vùng hậu môn
-phân có máu
 kích ứng ở hậu môn
 đau cổ
-chóng mặt
 chuột rút
 bầm tím
 béo phì
@@ -100,7 +84,6 @@ ngứa nội tạng
 toxic look (typhos)
 Phiền muộn
 cáu gắt
-đau cơ
 altered sensorium
 đốm đỏ trên cơ thể
 kinh nguyệt bất thường
@@ -122,7 +105,6 @@ từng uống rượu
 fluid overload
 đờm trong máu
 tĩnh mạch nổi rõ trên bắp chân
-đau ngực
 đau khi đi bộ
 mụn đầy mủ
 mụn đầu đen
@@ -182,7 +164,6 @@ ho nặng kéo dài
 đau ở ngực
 ho ra máu
 giảm cân
-chán ăn
 ho dài ngày
 ho kéo dài
 ho lâu ngày
@@ -291,9 +272,7 @@ da nổi mẩn hay ngón tay hoặc ngón chân bị tấy đỏ hoặc tím tá
 mất khả năng nói hoặc cử động
 cảm thấy khó thở
 sốt cao
-đau cơ
 mất vị giác
-đau đầu
 sốt nhẹ
 mất khứu giác
 rối loạn vị giác
@@ -352,8 +331,6 @@ táo bón
 khó ngủ
 phân đen
 đau vùng trước tim
-khó thở
-mệt mỏi
 chóng mặt
 khả năng gắng sức giảm
 lo lắng
@@ -364,16 +341,12 @@ tê hàm
 nhịp tim nhanh
 khó thở
 mệt mỏi
-khó nuốt
-khàn giọng
 miệng tiết ra nhiều nước bọt
 chán ăn
 ợ hơi
-khàn giọng
 khó nuốt
-miệng tiết ra nhiều nước bọt
 tức ngực
 đắng miệng
 ợ chua
-tức ngực
 ợ nóng
+khả năng gắng sức giảm
