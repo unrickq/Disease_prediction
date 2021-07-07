@@ -47,90 +47,94 @@ import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    private static final String TAG = "HomeFragment";
+  private static final String TAG = "HomeFragment";
 
-    private DatabaseReference mRef;
-    private FirebaseUser fUser;
-    private DoctorInfo mDoctor;
+  private DatabaseReference mRef;
+  private FirebaseUser fUser;
+  private DoctorInfo mDoctor;
 
-    private String sessionID;
+  private String sessionID;
 
-    private List<ConsultationList> consultationLists;
-    private List<Prediction> mPredictionListDoctor;
-    private List<Prediction> mPredictionListPatient;
-    private ConsultationAdapter consultationAdapter;
-    private PredictionAdapter doctorPredictionPendingListAdapter;
-    private PredictionAdapter patientPredictionAdapter;
+  private List<ConsultationList> consultationLists;
+  private List<Prediction> mPredictionListDoctor;
+  private List<Prediction> mPredictionListPatient;
+  private ConsultationAdapter consultationAdapter;
+  private PredictionAdapter doctorPredictionPendingListAdapter;
+  private PredictionAdapter patientPredictionAdapter;
 
-    private ConsultationList consultationList;
-    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more, home_doctor_all_prediction_txt_see_more,
-            home_txt_title, home_txt_prediction_title, home_txt_consultation_title;
-    private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
-    private SearchView home_search_view;
-    private NavigationView navigationView;
-    private RecyclerView home_recycler_view_consultation, home_recycler_view_disease, home_doctor_all_prediction_recycle_view;
+  private ConsultationList consultationList;
+  private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
+      home_doctor_all_prediction_txt_see_more,
+      home_txt_title, home_txt_prediction_title, home_txt_consultation_title,
+      home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
+      home_consultation_no_consultation_title;
+  private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
+  private SearchView home_search_view;
+  private NavigationView navigationView;
+  private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
+      home_doctor_all_prediction_recycle_view;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+  public HomeFragment() {
+    // Required empty public constructor
+  }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        //Get current user
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater,
+                           ViewGroup container, Bundle savedInstanceState) {
+    View view = inflater.inflate(R.layout.fragment_home, container, false);
+    //Get current user
+    fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //set toolbar
-        ((MainActivity) getActivity()).setActionBarTitle("");
-        ((MainActivity) getActivity()).setIconToolbar();
-        container.removeAllViews();
+    //set toolbar
+    ((MainActivity) getActivity()).setActionBarTitle("");
+    ((MainActivity) getActivity()).setIconToolbar();
+    container.removeAllViews();
 
-        //find view
-        findView(view);
+    //find view
+    findView(view);
 
-        //Set UI by role
-        setUIByAccountType();
+    //Set UI by role
+    setUIByAccountType();
 
-        //Search clicked
-        home_search_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createSession(fUser.getUid(), Constants.CHATBOT_ID);
-            }
-        });
+    //Search clicked
+    home_search_view.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        createSession(fUser.getUid(), Constants.CHATBOT_ID);
+      }
+    });
 
-        home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigationView.getMenu().getItem(2).setChecked(true);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new PredictionListConfirm()).commit();
-            }
-        });
+    home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        navigationView.getMenu().getItem(2).setChecked(true);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+            new PredictionListConfirm()).commit();
+      }
+    });
 
-        //See more prediction clicked
-        home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigationView.getMenu().getItem(3).setChecked(true);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new PredictionListFragment()).commit();
-            }
-        });
+    //See more prediction clicked
+    home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        navigationView.getMenu().getItem(3).setChecked(true);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+            new PredictionListFragment()).commit();
+      }
+    });
 
-        //See more consultation clicked
-        home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigationView.getMenu().getItem(4).setChecked(true);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ConsultationListFragment()).commit();
+    //See more consultation clicked
+    home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        navigationView.getMenu().getItem(4).setChecked(true);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+            new ConsultationListFragment()).commit();
 
             }
         });
@@ -319,101 +323,122 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    /**
-     * DOCTOR TYPE
-     * Load all prediction pending
-     */
-    private void loadAllPredictionPending() {
-        mPredictionListDoctor = new ArrayList<>();
-        //Find specialization id of doctor account
-        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mDoctor = snapshot.getValue(DoctorInfo.class);
-                //Go to prediction
-                Query predictionByDateCreate =
-                        FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
-                predictionByDateCreate.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        mPredictionListDoctor.clear();
-                        for (DataSnapshot sh : snapshot.getChildren()) {
-                            Prediction pr = sh.getValue(Prediction.class);
-                            assert pr != null;
-                            try {
-                                if (pr.getStatus() == 0) {
-                                    //Check if specializationID in prediction equal with specializationID in doctor
-                                    // account
-                                    if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                                        //Add to prediction list
-                                        mPredictionListDoctor.add(pr);
-                                    }
-                                }
-                            } catch (NullPointerException e) {
-                                Log.e(TAG, "Home. Patient ID null", e);
-                            }
-                        }
-                        //Reverse list index to get latest consultation
-                        Collections.reverse(mPredictionListDoctor);
-                        //Create adapter
-                        //goToScreen 0: doctor confirm screen
-                        doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                                mPredictionListDoctor, 0, 3);
-                        home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
-    /**
-     * Load prediction by type account
-     * Load list prediction of patient if account type is 1
-     * Load list prediction that confirmed by account doctor if account type is 0
-     *
-     * @param typeAcc type of account. 0: doctor | 1: patient
-     */
-    private void loadAllPredictionOfAccount(int typeAcc) {
-        mPredictionListPatient = new ArrayList<>();
-        mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mPredictionListPatient.clear();
-                for (DataSnapshot sh : snapshot.getChildren()) {
-                    Prediction pr = sh.getValue(Prediction.class);
-                    //If patientId equal with current accountID
-                    try {
-                        if (typeAcc == 0) {
-                            if (pr.getDoctorID().equals(fUser.getUid())) {
-                                mPredictionListPatient.add(pr);
-                            }
-                        } else if (typeAcc == 1) {
-                            if (pr.getPatientID().equals(fUser.getUid())) {
-                                mPredictionListPatient.add(pr);
-                            }
-                        }
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "Home. Patient ID null", e);
-                    }
+  /**
+   * DOCTOR TYPE
+   * Load all prediction pending
+   */
+  private void loadAllPredictionPending() {
+    mPredictionListDoctor = new ArrayList<>();
+    //Find specialization id of doctor account
+    mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
+    mRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        mDoctor = snapshot.getValue(DoctorInfo.class);
+        //Go to prediction
+        Query predictionByDateCreate =
+            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
+        predictionByDateCreate.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot snapshot) {
+            mPredictionListDoctor.clear();
+            for (DataSnapshot sh : snapshot.getChildren()) {
+              Prediction pr = sh.getValue(Prediction.class);
+              assert pr != null;
+              try {
+                if (pr.getStatus() == 0) {
+                  //Check if specializationID in prediction equal with specializationID in doctor
+                  // account
+                  if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                    //Add to prediction list
+                    mPredictionListDoctor.add(pr);
+                  }
                 }
-                //goToScreen 1: prediction result screen
-                //Reverse list index to get latest prediction
-                Collections.reverse(mPredictionListPatient);
-                patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                        mPredictionListPatient, 1, 3);
-                home_recycler_view_disease.setAdapter(patientPredictionAdapter);
+              } catch (NullPointerException e) {
+                Log.e(TAG, "Home. Patient ID null", e);
+              }
             }
+            //Reverse list index to get latest consultation
+//                        Collections.reverse(mPredictionListDoctor);
+            //Create adapter
+            //goToScreen 0: doctor confirm screen
+            if (mPredictionListDoctor.size() > 0) {
+              // Update UI
+              home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
+              home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
+                //Reverse list index to get latest consultation
+                Collections.reverse(mPredictionListDoctor);
+              // Load list to adapter
+              doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
+                  mPredictionListDoctor, 0, 3);
+              home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
+            } else {
+              home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
+              home_doctor_all_prediction_txt_see_more.setVisibility(View.GONE);
+            }
+          }
+
+          @Override
+          public void onCancelled(@NonNull DatabaseError error) {
+
+          }
+        });
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+      }
+    });
+  }
+
+  /**
+   * Load prediction by type account
+   * Load list prediction of patient if account type is 1
+   * Load list prediction that confirmed by account doctor if account type is 0
+   *
+   * @param typeAcc type of account. 0: doctor | 1: patient
+   */
+  private void loadAllPredictionOfAccount(int typeAcc) {
+    mPredictionListPatient = new ArrayList<>();
+    mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+    mRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        mPredictionListPatient.clear();
+        for (DataSnapshot sh : snapshot.getChildren()) {
+          Prediction pr = sh.getValue(Prediction.class);
+          //If patientId equal with current accountID
+          try {
+            if (typeAcc == 0) {
+              if (pr.getDoctorID().equals(fUser.getUid())) {
+                mPredictionListPatient.add(pr);
+              }
+            } else if (typeAcc == 1) {
+              if (pr.getPatientID().equals(fUser.getUid())) {
+                mPredictionListPatient.add(pr);
+              }
+            }
+          } catch (NullPointerException e) {
+            Log.d(TAG, "Home. Patient ID null", e);
+          }
+        }
+        //goToScreen 1: prediction result screen
+        // Only load prediction list when current account is patient
+        if (mPredictionListPatient.size() > 0) {
+          //Update UI
+          home_prediction_no_prediction_title.setVisibility(View.GONE);
+          home_txt_prediction_see_more.setVisibility(View.VISIBLE);
+            //Reverse list index to get latest prediction
+            Collections.reverse(mPredictionListPatient);
+          // Load list to adapter
+          patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
+              mPredictionListPatient, 1, 3);
+          home_recycler_view_disease.setAdapter(patientPredictionAdapter);
+        } else if (typeAcc == 1) {
+          home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
+          home_txt_prediction_see_more.setVisibility(View.GONE);
+        }
+      }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -48,9 +48,9 @@
     <string name="consultation_list_txt_title">No consultation</string>
 
     <string name="home_txt_title">What is your disease ?</string>
-    <string name="home_txt_prediction_title">Your disease</string>
+    <string name="home_txt_prediction_title">Recent predictions</string>
     <string name="home_txt_prediction_see_more">See more</string>
-    <string name="home_txt_consultation_title">Your consultation</string>
+    <string name="home_txt_consultation_title">Recent consultations</string>
     <string name="home_txt_consultation_see_more">See more</string>
     <string name="home_search_view">Enter your symptoms</string>
 
@@ -148,7 +148,7 @@
     <string name="home_doctor_txt_title">Hello doctor!</string>
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
-    <string name="home_doctor_all_prediction_txt_title">Pending Prediction</string>
+    <string name="home_doctor_all_prediction_txt_title">Pending Predictions</string>
     <string name="prediction_list_confirm_txt_title">No pending prediction</string>
 
     <string name="account_info_btn_done">Done</string>
@@ -171,7 +171,7 @@
     <string name="code_verify_exception_phone_invalid">Phone number format incorrect! Please return and re-enter your phone number</string>
     <string name="code_verify_exception_device_blocked">Your device has been blocked due to too much log in attempt! \nPlease contact the developer for assistance!</string>
     <string name="code_verify_exception_verification_failed_unknown">Error in verification processing! \nPlease click \'Resend\' button or contact the developer for assistance!</string>
-    <string name="code_verify_txt_note">Please check for the verification code in your Mesaging app</string>
+    <string name="code_verify_txt_note">Please check for the verification code in your Messaging app</string>
 
     <string name="error_txt">Error!</string>
     <string name="error_field_empty">Field can\'t be empty!</string>
