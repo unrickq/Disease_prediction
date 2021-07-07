@@ -115,12 +115,12 @@ public class PredictionConfirm extends AppCompatActivity {
           note = prediction_confirm_disease_other.getText().toString();
           // check if disease name empty
           if (!note.trim().isEmpty()) {
-            savePrediction(fUser.getUid(), note);
+            savePrediction(fUser.getUid(), 1);
           } else {
             prediction_confirm_disease_other_layout.setError(getString(R.string.error_field_empty));
           }
         } else { // doctor select known diseases
-          savePrediction(fUser.getUid(), selectedDisease.getName());
+          savePrediction(fUser.getUid(), 1);
         }
       }
     });
@@ -286,7 +286,7 @@ public class PredictionConfirm extends AppCompatActivity {
    * Display confirm dialog when user click on buttons.<br/>  If user select positive button, depend on the dialog
    * type, the following action will be made:
    * <ol>
-   * <li>Type 0: The method will be called </li>
+   * <li>Type 0: The method  {@link PredictionConfirm#changeUIIncorrect()} will be called </li>
    * <li>Type 1: the method {@link PredictionConfirm#savePrediction} will be called</li>
    * </ol>
    *
@@ -325,7 +325,7 @@ public class PredictionConfirm extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int which) {
           // Save prediction with new doctorID and updated status
           String doctorID = fUser.getUid();
-          savePrediction(doctorID);
+          savePrediction(doctorID, 0);
         }
       });
 
@@ -362,37 +362,34 @@ public class PredictionConfirm extends AppCompatActivity {
    * Save prediction data. When prediction successfully saved, a {@link PredictionConfirm#displayThanksDialog()} will
    * be called
    *
-   * @param doctorID    doctor ID
-   * @param diseaseName disease name
+   * @param doctorID doctor ID
+   * @param type     type to save. <ul>
+   *                 <li>0: correct</li>
+   *                 <li>1: incorrect</li>
+   *                 </ul>
    */
-  private void savePrediction(String doctorID, String diseaseName) {
+  private void savePrediction(String doctorID, int type) {
     // check if prediction status still equal to 0 i.e "waiting for confirmation"
     if (predictionStatus == 0) {
       mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
       mRef.child("doctorID").setValue(doctorID);
-      // if prediction incorrect
-      if (!prediction.getDiseaseID().equals(selectedDisease.getDiseaseID())) {
+      // if prediction correct
+      if (type == 0) {
+        mRef.child("status").setValue(1); // prediction correct
+      } else if (type == 1) { // prediction incorrect
+        String diseaseName = prediction_confirm_disease_other.getText().toString();
         mRef.child("diseaseID").setValue(selectedDisease.getDiseaseID()); //set correct disease ID
+        // if doctor select unknown disease -> disease name not empty
         if (!diseaseName.isEmpty()) {
           mRef.child("notes").setValue(diseaseName);
-          mRef.child("status").setValue(2); // prediction incorrect
         }
-      } else {
-        mRef.child("status").setValue(1); // prediction correct
+        mRef.child("status").setValue(2); // prediction incorrect
       }
-      mRef.child("dateUpdate").setValue(new Date());
-
-      displayThanksDialog();
     }
-  }
 
-  /**
-   * Save prediction (for correct case)
-   *
-   * @param doctorID doctor ID
-   */
-  private void savePrediction(String doctorID) {
-    savePrediction(doctorID, "");
+    mRef.child("dateUpdate").setValue(new Date());
+
+    displayThanksDialog();
   }
 
   /**
