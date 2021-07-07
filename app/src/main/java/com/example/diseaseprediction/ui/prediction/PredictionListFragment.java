@@ -154,9 +154,9 @@ public class PredictionListFragment extends Fragment {
    */
   private void loadAllPredictionOfAccount(int typeAcc) {
     mPredictionList = new ArrayList<>();
-    Query predictionByDateCreate = FirebaseDatabase.getInstance().getReference("Prediction").orderByChild(
-        "dateCreate");
-    predictionByDateCreate.addListenerForSingleValueEvent(new ValueEventListener() {
+    Query predictionByDateUpdate = FirebaseDatabase.getInstance().getReference("Prediction").orderByChild(
+        "dateUpdate/time");
+    predictionByDateUpdate.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
         mPredictionList.clear();

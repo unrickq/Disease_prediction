@@ -121,7 +121,7 @@ public class PredictionListConfirm extends Fragment {
                 mDoctor = snapshot.getValue(DoctorInfo.class);
                 //Go to prediction
                 Query predictionByDateCreate =
-                        FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
+                    FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
                 predictionByDateCreate.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

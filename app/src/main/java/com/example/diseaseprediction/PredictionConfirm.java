@@ -83,9 +83,7 @@ public class PredictionConfirm extends AppCompatActivity {
   private void setUpUI() {
     getViews();
 
-    getDiseasesList();
-
-    loadDiseaseData();
+    getDiseasesListAndLoadUI();
 
     loadPatientDescription();
 
@@ -157,9 +155,11 @@ public class PredictionConfirm extends AppCompatActivity {
   }
 
   /**
-   * Get disease list from Firebase and load it into the hidden {@link AutoCompleteTextView}
+   * Get disease list from Firebase and create adapter for {@link AutoCompleteTextView}. Then, load diseases name
+   * into the Prediction Result Textview from Firebase and set default selection of hidden
+   * {@link AutoCompleteTextView}
    */
-  private void getDiseasesList() {
+  private void getDiseasesListAndLoadUI() {
     mRef = FirebaseDatabase.getInstance().getReference("Disease");
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -167,6 +167,9 @@ public class PredictionConfirm extends AppCompatActivity {
         // Get diseases and add to list
         for (DataSnapshot sn : snapshot.getChildren()) {
           Disease disease = sn.getValue(Disease.class);
+          if (disease.getDiseaseID().equals(prediction.getDiseaseID())) {
+            selectedDisease = disease;
+          }
           diseasesList.add(disease);
         }
 
@@ -188,39 +191,12 @@ public class PredictionConfirm extends AppCompatActivity {
             }
           }
         });
-      }
 
-      @Override
-      public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-      }
-    });
-
-
-  }
-
-  /**
-   * Load diseases name in to the Prediction Result Textview from Firebase and set default selection of hidden
-   * {@link AutoCompleteTextView}
-   */
-  private void loadDiseaseData() {
-    String diseaseID = prediction.getDiseaseID();
-
-    mRef = FirebaseDatabase.getInstance().getReference("Disease").child(diseaseID);
-    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-        Disease disease = snapshot.getValue(Disease.class);
         // Set disease name
-        prediction_confirm_txt_disease_prediction_result.setText(disease.getName());
-        // Iterate through disease list and set default disease
-        for (int i = 0; i < diseasesList.size(); i++) {
-          Disease item = diseasesList.get(i);
-          if (disease.getName().equals(item.getName())) {
-            prediction_confirm_disease_select.setListSelection(i);
-            diseaseAdapter.getFilter().filter(null);
-          }
-        }
+        prediction_confirm_txt_disease_prediction_result.setText(selectedDisease.getName());
+        prediction_confirm_disease_select.setText(selectedDisease.getName());
+        diseaseAdapter.getFilter().filter(null);
+
       }
 
       @Override
@@ -228,6 +204,8 @@ public class PredictionConfirm extends AppCompatActivity {
 
       }
     });
+
+
   }
 
   /**
