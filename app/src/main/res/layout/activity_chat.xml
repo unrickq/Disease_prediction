@@ -46,7 +46,7 @@
             style="@style/subTitle_1_bold"
             android:layout_toEndOf="@+id/chat_toolbar_img_avatar"
             android:layout_toRightOf="@+id/chat_toolbar_img_avatar"
-            android:text="TextView" />
+            />
 
         <ImageView
             android:id="@+id/chat_toolbar_img_hamburger"

@@ -58,7 +58,7 @@ public class PredictionConfirm extends AppCompatActivity {
   ArrayList<Disease> diseasesList = new ArrayList<>();
   private Prediction prediction;
   private int predictionStatus;
-  private Disease selectedDisease;
+  private Disease selectedDisease; // currently selected disease in combo box
 
 
   @Override
@@ -371,9 +371,12 @@ public class PredictionConfirm extends AppCompatActivity {
       mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
       mRef.child("doctorID").setValue(doctorID);
       // if prediction incorrect
-      if (!diseaseName.isEmpty()) {
-        mRef.child("note").setValue(diseaseName);
-        mRef.child("status").setValue(2); // prediction incorrect
+      if (!prediction.getDiseaseID().equals(selectedDisease.getDiseaseID())) {
+        mRef.child("diseaseID").setValue(selectedDisease.getDiseaseID()); //set correct disease ID
+        if (!diseaseName.isEmpty()) {
+          mRef.child("note").setValue(diseaseName);
+          mRef.child("status").setValue(2); // prediction incorrect
+        }
       } else {
         mRef.child("status").setValue(1); // prediction correct
       }
