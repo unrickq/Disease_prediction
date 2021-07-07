@@ -47,7 +47,7 @@ public class TextClassificationClient {
   private static final String UNKNOWN = "<OOV>";
 
   /** Number of results to show in the UI. */
-  private static final int MAX_RESULTS = 6;
+  private static final int MAX_RESULTS = 10;
 
   private final Context context;
   private final Map<String, Integer> dic = new HashMap<>();
@@ -91,7 +91,8 @@ public class TextClassificationClient {
       MetadataExtractor metadataExtractor = new MetadataExtractor(buffer);
 
       // Extract and load the dictionary file.
-      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("model-088-v1.0-vocab.txt");
+//      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("model-088-v1.0-vocab.txt");
+      InputStream dictionaryFile = am.open("vocab.txt");
       System.out.println("check dic :"+ dictionaryFile);
       loadDictionaryFile(dictionaryFile);
       Log.v(TAG, "Dictionary loaded.");
@@ -117,7 +118,6 @@ public class TextClassificationClient {
   public synchronized List<Result> classify(String text) throws IOException {
     // Pre-prosessing.
     int[][] input = tokenizeInputText(text);
-
     // Run inference.
     Log.v(TAG, "Classifying text with TF Lite...");
     float[][] output = new float[1][labels.size()];
@@ -179,13 +179,8 @@ public class TextClassificationClient {
   /** Pre-prosessing: tokenize and map the input words into a float array. */
   int[][] tokenizeInputText(String text) throws IOException {
 
-    text = rdRsegmenter.segmentTokenizedString(text);
-
     int[] tmp = new int[SENTENCE_LEN];
     List<String> array = Arrays.asList(text.split(SIMPLE_SPACE_OR_PUNCTUATION));
-    System.out.println("check ");
-    System.out.println(array);
-    System.out.println(labels);
     int index = 0;
     // Prepend <START> if it is in vocabulary file.
     if (dic.containsKey(START)) {

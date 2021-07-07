@@ -237,10 +237,8 @@ public class Chat extends AppCompatActivity {
                             , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     //chatbot chat
-                    //model xu ly
                     String token = client.tokenize1(msg);
-                    System.out.println("check token "+token);
-                    List<Result> results = client.classify(msg);
+                    List<Result> results = client.classify(token);
                     //get symptom user input
                     String result = getString(R.string.default_chatbot_symptom);
                     List<String> tokenList = Arrays.asList(token.split(" "));
