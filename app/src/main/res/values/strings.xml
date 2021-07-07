@@ -122,12 +122,14 @@
     <string name="default_empty_description">Please enter some description about you</string>
     <string name="default_empty_specialization">Please select specialization</string>
     <string name="default_speech_support_device">Your Device Don\'t Support Speech Input</string>
-    <string name="default_chatbot_symptom">Your symptoms:</string>
-    <string name="default_chatbot_disease">Your disease:</string>
+    <string name="default_chatbot_symptom">Your symptoms: &#160;</string>
+    <string name="default_chatbot_disease">So we make predictions is</string>
     <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
     <string name="default_email_regex">Please enter the correct email</string>
     <string name="default_chatbot_continue_symptom">Do you have any other symptoms?</string>
     <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
+    <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
+
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>

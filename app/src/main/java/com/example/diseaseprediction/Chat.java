@@ -56,6 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -237,32 +238,45 @@ public class Chat extends AppCompatActivity {
                     setMessageFirebase(message);
                     //chatbot chat
                     //model xu ly
+                    String token = client.tokenize1(msg);
+                    System.out.println("check token "+token);
                     List<Result> results = client.classify(msg);
-                    List<String> token = client.tokenize(msg);
                     //get symptom user input
                     String result = getString(R.string.default_chatbot_symptom);
-                    for (Symptom s : mSymptom) {
-                        for (String tk : token) {
+                    List<String> tokenList = Arrays.asList(token.split(" "));
+                    for (String tk : tokenList) {
+                        for (Symptom s : mSymptom) {
                             tk = tk.replace("_", " ");
                             if (s.getName().equals(tk)) {
                                 result += tk + ", ";
                             }
                         }
                     }
+                    System.out.println("check token List "+result);
                     //print symptom user input
                     result = result.substring(0, result.length() - 2);
                     Message mess = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
                             result, new Date(), sessionID, 1);
                     setMessageFirebase(mess);
+                    //get disease from model
+                    String temp = getString(R.string.default_chatbot_disease_list);
+                    for (int i = 0; i < 4; i++) {
+                        if(i==3){
+                            temp+= results.get(i).getTitle() +" "+String.format("%.2f", results.get(i).getConfidence()* 100) + "%";
+                        }else{
+                            temp+= results.get(i).getTitle() +" "+String.format("%.2f", results.get(i).getConfidence()* 100) + "%" +"\n";
+                        }
+                     }
+                    //print disease list
+                    Message diseaseList = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                            temp, new Date(),
+                            sessionID, 1);
+                    setMessageFirebase(diseaseList);
                     //print ""benh cua ban la"
                     Message message1 = new Message("", Constants.CHATBOT_ID,
                             fUser.getUid(), getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
                     setMessageFirebase(message1);
                     chat_txt_enter_mess.setText("");
-                    //get disease from model
-                    for (Result var : results) {
-                        System.out.println(var.getTitle() + " " + var.getConfidence());
-                    }
                     //print disease
                     Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
                         results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),

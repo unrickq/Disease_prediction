@@ -33,8 +33,8 @@ public class TextClassificationClient {
   private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
   // Simple delimiter to split words.
   private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
-  private static final String MODEL_PATH = "model-088-v1.0.1-metadata.tflite";
-  private static final String VOCAL_PATH = "model-088_vocab.txt";
+  private static final String MODEL_PATH = "model.tflite";
+  private static final String VOCAL_PATH = "model-088-v1.0-vocab.txt";
   private static final String LABEL_PATH = "labels.txt";
   /*
    * Reserved values in ImdbDataSet dic:
@@ -208,6 +208,12 @@ public class TextClassificationClient {
     text = rdRsegmenter.segmentTokenizedString(text);
     token = Arrays.asList(text.split(" "));
     return token;
+  }
+  public String tokenize1(String text) throws IOException {
+    List<String> token = new ArrayList<>();
+    text = rdRsegmenter.segmentTokenizedString(text);
+    //token = Arrays.asList(text.split(" "));
+    return text;
   }
 
   Map<String, Integer> getDic() {

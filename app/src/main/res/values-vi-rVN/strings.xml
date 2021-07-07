@@ -112,11 +112,12 @@
     <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
     <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
     <string name="default_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
-    <string name="default_chatbot_disease">Bệnh của bạn là:&#160;</string>
+    <string name="default_chatbot_disease">Nên chúng tôi đưa ra dự đoán là&#160;</string>
     <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
     <string name="default_email_regex">Vui lòng nhập đúng địa chỉ email</string>
     <string name="default_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
     <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
+    <string name="default_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
 
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
