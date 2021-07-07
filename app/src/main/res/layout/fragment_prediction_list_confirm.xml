@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingBottom="12dp"
+        android:overScrollMode="never"
         tools:listitem="@layout/item_prediction" />
 </LinearLayout>

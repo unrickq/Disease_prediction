@@ -39,10 +39,10 @@
     <string name="consultation_list_txt_title">Bạn chưa có tư vấn nào</string>
 
     <string name="home_txt_title">Triệu chứng của bạn là gì ?</string>
-    <string name="home_txt_prediction_title">Bệnh của bạn</string>
+    <string name="home_txt_prediction_title">Các chẩn đoán gần đây</string>
     <string name="home_txt_prediction_see_more">Xem thêm</string>
     <string name="home_txt_consultation_see_more">Xem thêm</string>
-    <string name="home_txt_consultation_title">Tư vấn của bạn</string>
+    <string name="home_txt_consultation_title">Các tư vấn gần đây</string>
     <string name="home_search_view">Hãy nhập triệu chứng của bạn</string>
 
     <string name="login_txt_title">Đăng nhập</string>
