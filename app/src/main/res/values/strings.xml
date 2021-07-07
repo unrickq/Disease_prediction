@@ -209,4 +209,22 @@
         <item>VN</item>
     </string-array>
 
+    <string-array name="disease_name">
+        <item>tuberculosis</item>
+        <item>malaria</item>
+        <item>dengue</item>
+        <item>pneumonia</item>
+        <item>COVID-19</item>
+        <item>acute diarrhea</item>
+        <item>sore throat</item>
+        <item>gastritis, duodenal ulcer</item>
+        <item>heart attack</item>
+        <item>Gastroesophageal reflux</item>
+    </string-array>
+
+    <string-array name="doctor_specialization">
+        <item>EN</item>
+        <item>VN</item>
+    </string-array>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.example.diseaseprediction;
+package com.example.diseaseprediction.model;
 
 /** An immutable result returned by a TextClassifier describing what was classified. */
 public class Result implements Comparable<Result> {

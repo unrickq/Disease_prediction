@@ -1,9 +1,12 @@
-package com.example.diseaseprediction;
+package com.example.diseaseprediction.model;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.Log;
+
+import com.example.diseaseprediction.tokenize.RDRsegmenter;
+import com.example.diseaseprediction.tokenize.Vocabulary;
 
 import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.support.metadata.MetadataExtractor;
@@ -23,9 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-
-import com.example.diseaseprediction.tokenize.RDRsegmenter;
-import com.example.diseaseprediction.tokenize.Vocabulary;
 
 public class TextClassificationClient {
   private static final String TAG = "Interpreter";

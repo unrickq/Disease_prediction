@@ -137,7 +137,7 @@ public class AccountEdit extends AppCompatActivity {
     if (isModified) {
       dialogConfirm(1);
     } else {
-      finish();
+      super.onBackPressed();
     }
 
   }
@@ -477,9 +477,6 @@ public class AccountEdit extends AppCompatActivity {
       mRef.child(fUser.getUid()).child("phone").setValue("Default");
     } else {
       mRef.child(fUser.getUid()).child("phone").setValue(account_edit_txt_title_phone.getEditText().getText().toString());
-      //Set nav bar
-//            nav_header_txt_acc_phone = getActivity().findViewById(R.id.nav_header_txt_acc_phone);
-//            nav_header_txt_acc_phone.setText(account_edit_txt_title_phone.getEditText().getText().toString());
     }
 
     //email
@@ -648,9 +645,6 @@ public class AccountEdit extends AppCompatActivity {
                   mRef = FirebaseDatabase.getInstance().getReference("Accounts");
                   mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
                   Glide.with(AccountEdit.this).load(uri.toString()).into(account_img_avatar);
-                  //Set nav bar
-                  nav_header_avatar = AccountEdit.this.findViewById(R.id.nav_header_avatar);
-                  Glide.with(AccountEdit.this).load(uri.toString()).into(nav_header_avatar);
                 }
               });
             }

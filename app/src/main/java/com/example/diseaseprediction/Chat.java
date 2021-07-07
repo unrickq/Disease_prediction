@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.listener.MyClickListener;
+import com.example.diseaseprediction.model.Result;
+import com.example.diseaseprediction.model.TextClassificationClient;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
@@ -196,7 +198,7 @@ public class Chat extends AppCompatActivity {
                     if (ss.getStatus() != 0) {
                         dialogConfirm(sessionID);
                     } else {
-                        finish();
+                        Chat.super.onBackPressed();
                     }
                 }
 
@@ -205,7 +207,7 @@ public class Chat extends AppCompatActivity {
                 }
             });
         } else {
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -261,12 +263,12 @@ public class Chat extends AppCompatActivity {
                     chat_txt_enter_mess.getText().clear();
                     //get disease from model
                     for (Result var : results) {
-                        System.out.println(var.getTitle() + " " + var.getConfidence() * 100 + "%");
+                        System.out.println(var.getTitle() + " " + var.getConfidence());
                     }
                     //print disease
                     Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
-                            results.get(0).getTitle() + " " + results.get(0).getConfidence(), new Date(),
-                            sessionID, 1);
+                        results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
+                        sessionID, 1);
                     setMessageFirebase(message2);
                     getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
                     chat_txt_enter_mess.getText().clear();

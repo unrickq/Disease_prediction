@@ -28,15 +28,6 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back_1" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/chat_toolbar_img_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:layout_toEndOf="@+id/chat_toolbar_img_pre"
-            android:layout_toRightOf="@+id/chat_toolbar_img_pre"
-            android:src="@drawable/background_avatar" />
 
         <TextView
             android:id="@+id/chat_toolbar_txt_name"
