@@ -23,16 +23,18 @@ public class Medicine {
 
     /**
      * Create new medicine
-     * @param medicineID    Medicine ID
-     * @param name          Name of medicine
-     * @param description   Description
-     * @param manufacturer  Manufacturer
-     * @param content       Content of medicine
-     * @param dateCreate    Date create
-     * @param dateUpdate    Date update
-     * @param status        0: Deleted | 1: Normal
+     *
+     * @param medicineID   Medicine ID
+     * @param name         Name of medicine
+     * @param description  Description
+     * @param manufacturer Manufacturer
+     * @param content      Content of medicine
+     * @param dateCreate   Date create
+     * @param dateUpdate   Date update
+     * @param status       0: Deleted | 1: Normal
      */
-    public Medicine(String medicineID, String name, String description, String manufacturer, String content, Date dateCreate, Date dateUpdate, int status) {
+    public Medicine(String medicineID, String name, String description, String manufacturer,
+                    String content, Date dateCreate, Date dateUpdate, int status) {
         this.medicineID = medicineID;
         this.name = name;
         this.description = description;
@@ -45,6 +47,7 @@ public class Medicine {
 
     /**
      * Get Medicine ID
+     *
      * @return Medicine ID
      */
     public String getMedicineID() {
@@ -53,6 +56,7 @@ public class Medicine {
 
     /**
      * Set Medicine ID
+     *
      * @param medicineID Medicine ID
      */
     public void setMedicineID(String medicineID) {
@@ -61,6 +65,7 @@ public class Medicine {
 
     /**
      * Get Name
+     *
      * @return Name
      */
     public String getName() {
@@ -69,6 +74,7 @@ public class Medicine {
 
     /**
      * Set Name
+     *
      * @param name Name
      */
     public void setName(String name) {
@@ -77,6 +83,7 @@ public class Medicine {
 
     /**
      * Get Description
+     *
      * @return Description
      */
     public String getDescription() {
@@ -85,6 +92,7 @@ public class Medicine {
 
     /**
      * Set Description
+     *
      * @param description Description
      */
     public void setDescription(String description) {
@@ -93,6 +101,7 @@ public class Medicine {
 
     /**
      * Get Manufacturer
+     *
      * @return Manufacturer
      */
     public String getManufacturer() {
@@ -101,6 +110,7 @@ public class Medicine {
 
     /**
      * Set Manufacturer
+     *
      * @param manufacturer Manufacturer
      */
     public void setManufacturer(String manufacturer) {
@@ -109,6 +119,7 @@ public class Medicine {
 
     /**
      * Get Content
+     *
      * @return Content
      */
     public String getContent() {
@@ -117,6 +128,7 @@ public class Medicine {
 
     /**
      * Get Content
+     *
      * @param content Content
      */
     public void setContent(String content) {
@@ -125,6 +137,7 @@ public class Medicine {
 
     /**
      * Get Date create
+     *
      * @return Date create
      */
     public Date getDateCreate() {
@@ -133,6 +146,7 @@ public class Medicine {
 
     /**
      * Set Date create
+     *
      * @param dateCreate Date create
      */
     public void setDateCreate(Date dateCreate) {
@@ -141,6 +155,7 @@ public class Medicine {
 
     /**
      * Get Date update
+     *
      * @return Date update
      */
     public Date getDateUpdate() {
@@ -149,6 +164,7 @@ public class Medicine {
 
     /**
      * Set Date update
+     *
      * @param dateUpdate Date update
      */
     public void setDateUpdate(Date dateUpdate) {
@@ -157,6 +173,7 @@ public class Medicine {
 
     /**
      * Get status
+     *
      * @return 0: Deleted | 1: Normal
      */
     public int getStatus() {
@@ -165,6 +182,7 @@ public class Medicine {
 
     /**
      * Set status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {

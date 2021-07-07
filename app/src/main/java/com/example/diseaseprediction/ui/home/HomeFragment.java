@@ -355,7 +355,7 @@ public class HomeFragment extends Fragment {
                             }
                         }
                         //Reverse list index to get latest consultation
-//                        Collections.reverse(mPredictionListDoctor);
+                        Collections.reverse(mPredictionListDoctor);
                         //Create adapter
                         //goToScreen 0: doctor confirm screen
                         doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
@@ -408,6 +408,8 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 //goToScreen 1: prediction result screen
+                //Reverse list index to get latest prediction
+                Collections.reverse(mPredictionListPatient);
                 patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
                         mPredictionListPatient, 1, 3);
                 home_recycler_view_disease.setAdapter(patientPredictionAdapter);

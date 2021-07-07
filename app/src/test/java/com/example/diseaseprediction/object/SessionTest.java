@@ -8,37 +8,53 @@ import static org.junit.Assert.assertEquals;
 
 public class SessionTest {
 
-//    @Test
-//    public void getDateCreate() {
-//    }
-//
-//    @Test
-//    public void setDateCreate() {
-//    }
-//
-//    @Test
-//    public void getDateUpdate() {
-//    }
-//
-//    @Test
-//    public void setDateUpdate() {
-//    }
+    Session getSessionTest = new Session("SessionID1", new Date(), new Date(), 1);
+
+    @Test
+    public void getDateCreate() {
+        assertEquals(new Date(), getSessionTest.getDateCreate());
+    }
+
+    @Test
+    public void setDateCreate() {
+        Session setSessionTest = new Session("SessionID1", new Date(), new Date(), 1);
+        setSessionTest.setDateCreate(new Date());
+        assertEquals(new Date(), setSessionTest.getDateCreate());
+    }
+
+    @Test
+    public void getDateUpdate() {
+        assertEquals(new Date(), getSessionTest.getDateUpdate());
+    }
+
+    @Test
+    public void setDateUpdate() {
+        Session setSessionTest = new Session("SessionID1", new Date(), new Date(), 1);
+        setSessionTest.setDateCreate(new Date());
+        assertEquals(new Date(), setSessionTest.getDateCreate());
+    }
 
     @Test
     public void getSessionID() {
-        Session ss = new Session("SessionID1", new Date(), new Date(), 1);
-        assertEquals("SessionID1", ss.getSessionID());
+        assertEquals("SessionID1", getSessionTest.getSessionID());
     }
 
-//    @Test
-//    public void setSessionID() {
-//    }
-//
-//    @Test
-//    public void getStatus() {
-//    }
-//
-//    @Test
-//    public void setStatus() {
-//    }
+    @Test
+    public void setSessionID() {
+        Session setSessionTest = new Session("SessionID1", new Date(), new Date(), 1);
+        setSessionTest.setSessionID("sessionTest");
+        assertEquals("sessionTest", setSessionTest.getSessionID());
+    }
+
+    @Test
+    public void getStatus() {
+        assertEquals(1, getSessionTest.getStatus());
+    }
+
+    @Test
+    public void setStatus() {
+        Session setSessionTest = new Session("SessionID1", new Date(), new Date(), 1);
+        setSessionTest.setStatus(0);
+        assertEquals(0, setSessionTest.getStatus());
+    }
 }

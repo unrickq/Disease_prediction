@@ -19,10 +19,11 @@ public class Session {
 
     /**
      * Create new session
-     * @param sessionID     Session ID
-     * @param dateCreate    Date create
-     * @param dateUpdate    Date update
-     * @param status        0: End session | 1: In session
+     *
+     * @param sessionID  Session ID
+     * @param dateCreate Date create
+     * @param dateUpdate Date update
+     * @param status     0: End session | 1: In session
      */
     public Session(String sessionID, Date dateCreate, Date dateUpdate, int status) {
         this.sessionID = sessionID;
@@ -33,6 +34,7 @@ public class Session {
 
     /**
      * Get Date create
+     *
      * @return date create
      */
     public Date getDateCreate() {
@@ -41,6 +43,7 @@ public class Session {
 
     /**
      * Set Date create
+     *
      * @param dateCreate date create
      */
     public void setDateCreate(Date dateCreate) {
@@ -49,6 +52,7 @@ public class Session {
 
     /**
      * Get Date update
+     *
      * @return Date update
      */
     public Date getDateUpdate() {
@@ -57,6 +61,7 @@ public class Session {
 
     /**
      * Set Date update
+     *
      * @param dateUpdate Date update
      */
     public void setDateUpdate(Date dateUpdate) {
@@ -65,6 +70,7 @@ public class Session {
 
     /**
      * Get Session ID
+     *
      * @return Session ID
      */
     public String getSessionID() {
@@ -73,6 +79,7 @@ public class Session {
 
     /**
      * Set Session ID
+     *
      * @param sessionID Session ID
      */
     public void setSessionID(String sessionID) {
@@ -81,6 +88,7 @@ public class Session {
 
     /**
      * Get Status
+     *
      * @return 0: End session | 1: In session
      */
     public int getStatus() {
@@ -89,6 +97,7 @@ public class Session {
 
     /**
      * Set Status. 0: End session | 1: In session
+     *
      * @param status 0: End session | 1: In session
      */
     public void setStatus(int status) {

@@ -23,13 +23,13 @@ public class DoctorInfo {
     /**
      * Create doctor information
      *
-     * @param accountID         Account ID
-     * @param specializationID  Specialization ID
-     * @param shortDescription  Short description
-     * @param experience        Experience
-     * @param dateCreate        Date create
-     * @param dateUpdate        Date update
-     * @param status            0: Deleted | 1: Normal
+     * @param accountID        Account ID
+     * @param specializationID Specialization ID
+     * @param shortDescription Short description
+     * @param experience       Experience
+     * @param dateCreate       Date create
+     * @param dateUpdate       Date update
+     * @param status           0: Deleted | 1: Normal
      */
     public DoctorInfo(String accountID, String specializationID, String shortDescription, double experience, Date dateCreate, Date dateUpdate, int status) {
         this.accountID = accountID;

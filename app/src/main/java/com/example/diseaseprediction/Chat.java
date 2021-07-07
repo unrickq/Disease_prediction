@@ -193,8 +193,6 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Session ss = snapshot.getValue(Session.class);
-                    System.out.println("check vl" + ss.getStatus());
-                    System.out.println();
                     if (ss.getStatus() != 0) {
                         dialogConfirm(sessionID);
                     } else {
@@ -361,7 +359,7 @@ public class Chat extends AppCompatActivity {
         chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               onBackPressed();
+                onBackPressed();
             }
         });
 
@@ -778,16 +776,15 @@ public class Chat extends AppCompatActivity {
     public void nextChat(String msg) {
         if (!msg.equals("")) {
             // User request
-            //user chat vs user
-            // user chat
+            // User chat vs user
+            // User chat
             Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
                     , msg, new Date(), sessionID, 1);
             setMessageFirebase(message);
-            //chatbot chat
+            //Chatbot chat
             Message message1 = new Message("", Constants.CHATBOT_ID,
                     fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
             setMessageFirebase(message1);
-            System.out.println("MS1" + message1.getMessageID());
             chat_txt_enter_mess.getText().clear();
             allMess += msg + " ";
         }

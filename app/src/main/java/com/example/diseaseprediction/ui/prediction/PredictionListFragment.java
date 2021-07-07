@@ -29,6 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -182,8 +183,10 @@ public class PredictionListFragment extends Fragment {
         //goToScreen 1: prediction result screen
         if (mPredictionList.size() > 0) {
           prediction_list_txt_title.setVisibility(View.GONE);
+          //Reverse list index to get latest prediction
+          Collections.reverse(mPredictionList);
           patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-              mPredictionList, 1, mPredictionList.size());
+                  mPredictionList, 1, mPredictionList.size());
           prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
         } else {
           prediction_list_txt_title.setVisibility(View.VISIBLE);

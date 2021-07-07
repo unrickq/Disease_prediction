@@ -37,6 +37,7 @@ public class Advise {
 
     /**
      * Get Advise ID
+     *
      * @return Advise ID
      */
     public String getAdviseID() {
@@ -45,6 +46,7 @@ public class Advise {
 
     /**
      * Set Advise ID
+     *
      * @param adviseID Advise ID
      */
     public void setAdviseID(String adviseID) {
@@ -53,6 +55,7 @@ public class Advise {
 
     /**
      * Get Description
+     *
      * @return Description
      */
     public String getDescription() {
@@ -61,6 +64,7 @@ public class Advise {
 
     /**
      * Set Description
+     *
      * @param description Description
      */
     public void setDescription(String description) {
@@ -69,6 +73,7 @@ public class Advise {
 
     /**
      * Get Date create
+     *
      * @return Date create
      */
     public Date getDateCreate() {
@@ -77,6 +82,7 @@ public class Advise {
 
     /**
      * Set Date create
+     *
      * @param dateCreate Date create
      */
     public void setDateCreate(Date dateCreate) {
@@ -85,6 +91,7 @@ public class Advise {
 
     /**
      * Get Date update
+     *
      * @return Date update
      */
     public Date getDateUpdate() {
@@ -93,6 +100,7 @@ public class Advise {
 
     /**
      * Set Date update
+     *
      * @param dateUpdate Date update
      */
     public void setDateUpdate(Date dateUpdate) {
@@ -101,6 +109,7 @@ public class Advise {
 
     /**
      * Get Status
+     *
      * @return 0: Deleted | 1: Normal
      */
     public int getStatus() {
@@ -109,6 +118,7 @@ public class Advise {
 
     /**
      * Set Status. 0: Deleted | 1: Normal
+     *
      * @param status 0: Deleted | 1: Normal
      */
     public void setStatus(int status) {

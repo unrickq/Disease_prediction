@@ -16,6 +16,7 @@ public class ConsultationList {
 
     /**
      * Create consultation list
+     *
      * @param accountOne Account ID one in chat session
      * @param accountTwo Account ID two in chat session
      * @param sessionID  Chat session ID
@@ -28,6 +29,7 @@ public class ConsultationList {
 
     /**
      * Get Account ID one
+     *
      * @return Account ID one
      */
     public String getAccountOne() {
@@ -36,6 +38,7 @@ public class ConsultationList {
 
     /**
      * Set Account ID one
+     *
      * @param accountOne Account ID one
      */
     public void setAccountOne(String accountOne) {
@@ -44,6 +47,7 @@ public class ConsultationList {
 
     /**
      * Get Account ID two
+     *
      * @return Account ID two
      */
     public String getAccountTwo() {
@@ -52,6 +56,7 @@ public class ConsultationList {
 
     /**
      * Set Account ID two
+     *
      * @param accountTwo Account ID two
      */
     public void setAccountTwo(String accountTwo) {
@@ -60,6 +65,7 @@ public class ConsultationList {
 
     /**
      * Get Session ID
+     *
      * @return Session ID
      */
     public String getSessionID() {
@@ -68,6 +74,7 @@ public class ConsultationList {
 
     /**
      * Set Session ID
+     *
      * @param sessionID Session ID
      */
     public void setSessionID(String sessionID) {

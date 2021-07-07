@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
     public void setActionBarTitle(String title) {
         TextView t = (TextView) findViewById(R.id.toolbar_title);
         t.setText(title);
-      t.setTypeface(null, Typeface.BOLD);
+        t.setTypeface(null, Typeface.BOLD);
     }
 
   /**

@@ -179,7 +179,6 @@ public class AccountInfoDoctor extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase
                 //if exist then set UI
-                System.out.println(fUser.getUid());
                 if (snapshot.hasChild(fUser.getUid())) {
                     mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
                     try {
