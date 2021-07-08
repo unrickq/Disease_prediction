@@ -287,7 +287,9 @@ public class AccountEdit extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
               updateValue();
-              finish();
+              // set no modified
+              isModified = false;
+              onBackPressed();
             }
           });
       builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),

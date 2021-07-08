@@ -1,5 +1,6 @@
 package com.example.diseaseprediction.ui.account;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -53,7 +55,6 @@ public class AccountFragment extends Fragment {
     private DoctorSpecialization ds;
     private ArrayAdapter<DoctorSpecialization> specializationAdapter;
     private ArrayList<DoctorSpecialization> specialization;
-    private ArrayAdapter genderAdapter;
 
     private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email,
         account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
@@ -64,6 +65,8 @@ public class AccountFragment extends Fragment {
     private LinearLayout account_layout_doctor;
     private Button accout_btn_edit;
     private CircleImageView account_img_avatar;
+
+    private Context context;
 
 
     public AccountFragment() {
@@ -81,6 +84,35 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull @NotNull View view,
+                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        context = getActivity().getApplicationContext();
+
+
+        //Set data for spinner
+        ArrayList<String> gender = new ArrayList<>();
+        gender.add(context.getString(R.string.default_gender_male));
+        gender.add(context.getString(R.string.default_gender_female));
+        ArrayAdapter genderAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, gender);
+        account_spinner_gender.setAdapter(genderAdapter);
+
+        //Click button edit
+        accout_btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AccountEdit.class);
+                startActivity(intent);
+
+            }
+        });
+
+        //get data and load it to UI
+        getDataForUI();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -91,18 +123,7 @@ public class AccountFragment extends Fragment {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
         //Find view by id
         findViews(view);
-        //get data and load it to UI
-        getDataForUI();
 
-        //Click button edit
-        accout_btn_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AccountEdit.class);
-                startActivity(intent);
-
-            }
-        });
         return view;
     }
 
@@ -140,13 +161,6 @@ public class AccountFragment extends Fragment {
 
         //Spinner
         account_spinner_gender = view.findViewById(R.id.account_spinner_gender);
-        //Set data for spinner
-        ArrayList<String> gender = new ArrayList<String>();
-        gender.add(getString(R.string.default_gender_male));
-        gender.add(getString(R.string.default_gender_female));
-        genderAdapter = new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, gender);
-        account_spinner_gender.setAdapter(genderAdapter);
-
     }
 
     /**
@@ -174,30 +188,30 @@ public class AccountFragment extends Fragment {
                         //Set name
                         if (!mAccount.getName().equals("Default")) {
                             String name = mAccount.getName();
-                            account_txt_name.setText(Html.fromHtml(getString(R.string.account_txt_title_name_format, name)));
+                            account_txt_name.setText(Html.fromHtml(context.getString(R.string.account_txt_title_name_format, name)));
                         }
 
                         //Set gender
                         int gender = mAccount.getGender();
                         String genderStr = account_spinner_gender.getAdapter().getItem(gender).toString();
-                        account_txt_gender.setText(Html.fromHtml(getString(R.string.account_txt_title_gender_format, genderStr)));
+                        account_txt_gender.setText(Html.fromHtml(context.getString(R.string.account_txt_title_gender_format, genderStr)));
 
                         //Set phone
                         if (!mAccount.getPhone().equals("Default")) {
                             String phone = mAccount.getPhone();
-                            account_txt_phone.setText(Html.fromHtml(getString(R.string.account_txt_title_phone_format, phone)));
+                            account_txt_phone.setText(Html.fromHtml(context.getString(R.string.account_txt_title_phone_format, phone)));
                         }
 
                         //Set email
                         if (!mAccount.getEmail().equals("Default")) {
                             String email = mAccount.getEmail();
-                            account_txt_email.setText(Html.fromHtml(getString(R.string.account_txt_title_email_format, email)));
+                            account_txt_email.setText(Html.fromHtml(context.getString(R.string.account_txt_title_email_format, email)));
                         }
 
                         //Set address
                         if (!mAccount.getAddress().equals("Default")) {
                             String address = mAccount.getAddress();
-                            account_txt_address.setText(Html.fromHtml(getString(R.string.account_txt_title_address_format, address)));
+                            account_txt_address.setText(Html.fromHtml(context.getString(R.string.account_txt_title_address_format, address)));
                         }
 
                         //Set image
@@ -237,7 +251,7 @@ public class AccountFragment extends Fragment {
                     mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
                     try {
                         //Set spinner
-                        specialization = new ArrayList<DoctorSpecialization>();
+                        specialization = new ArrayList<>();
                         mRef = FirebaseDatabase.getInstance().getReference("Specialization");
                         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -248,7 +262,7 @@ public class AccountFragment extends Fragment {
                                         assert ds != null;
                                         if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
                                             String specialization = ds.getName();
-                                            account_doctor_txt_specialization.setText(Html.fromHtml(getString(R.string.account_info_doctor_specialization_format, specialization)));
+                                            account_doctor_txt_specialization.setText(Html.fromHtml(context.getString(R.string.account_info_doctor_specialization_format, specialization)));
                                             account_doctor_spinner_specialization.setText(specialization);
                                         }
                                         specialization.add(ds);
@@ -257,8 +271,8 @@ public class AccountFragment extends Fragment {
                                     }
                                 }
                                 //Set spinner
-                                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(getContext(),
-                                        R.layout.support_simple_spinner_dropdown_item, specialization);
+                                specializationAdapter = new ArrayAdapter<>(context,
+                                    R.layout.support_simple_spinner_dropdown_item, specialization);
                                 account_doctor_spinner_specialization.setAdapter(specializationAdapter);
                             }
 
@@ -272,19 +286,17 @@ public class AccountFragment extends Fragment {
 
                         if (mDoctor.getExperience() != -1) {
                             String experience = String.valueOf(mDoctor.getExperience());
-                            account_doctor_txt_experience.setText(Html.fromHtml(getString(R.string.account_info_doctor_experience_format, experience)));
+                            account_doctor_txt_experience.setText(Html.fromHtml(context.getString(R.string.account_info_doctor_experience_format, experience)));
                         }
 
                         if (!mDoctor.getShortDescription().equals("Default")) {
                             String description = mDoctor.getShortDescription();
-                            account_doctor_txt_description.setText(Html.fromHtml(getString(R.string.account_info_doctor_description_format, description)));
+                            account_doctor_txt_description.setText(Html.fromHtml(context.getString(R.string.account_info_doctor_description_format, description)));
                         }
                     } catch (NullPointerException e) {
                         Log.d(TAG, "Account. loadDataOfDoctor", e);
                     }
 
-                } else {
-                    //IF can't find any data
                 }
             }
 

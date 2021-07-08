@@ -88,25 +88,6 @@ public class Chat extends AppCompatActivity {
     private boolean checkClickPredict = false;
     private boolean checkStartMessage = true;
 
-    private static final String TAG = "TextClassificationDemo";
-
-    /**
-     * Hide keyboard
-     *
-     * @param activity Current activity
-     */
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager.isAcceptingText()) {
-            inputMethodManager.hideSoftInputFromWindow(
-                    activity.getCurrentFocus().getWindowToken(),
-                    0
-            );
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,6 +187,23 @@ public class Chat extends AppCompatActivity {
             });
         } else {
             super.onBackPressed();
+        }
+    }
+
+    /**
+     * Hide keyboard
+     *
+     * @param activity Current activity
+     */
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+            (InputMethodManager) activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isAcceptingText()) {
+            inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(),
+                0
+            );
         }
     }
 
@@ -650,21 +648,21 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.v(TAG, "onStart");
+        Log.v(LOG_TAG, "onStart");
         handler.post(
-                () -> {
-                    client.load();
-                });
+            () -> {
+                client.load();
+            });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.v(TAG, "onStop");
+        Log.v(LOG_TAG, "onStop");
         handler.post(
-                () -> {
-                    client.unload();
-                });
+            () -> {
+                client.unload();
+            });
     }
 
     /**

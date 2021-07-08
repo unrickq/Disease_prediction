@@ -1,5 +1,6 @@
 package com.example.diseaseprediction.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +42,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,8 +78,37 @@ public class HomeFragment extends Fragment {
   private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
       home_doctor_all_prediction_recycle_view;
 
+  private Context context;
+
   public HomeFragment() {
     // Required empty public constructor
+  }
+
+  /**
+   * IMPORTANT: all Context-related methods must be placed in here
+   */
+  @Override
+  public void onViewCreated(@NonNull @NotNull View view,
+                            @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    context = getActivity().getApplicationContext();
+    home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(context));
+    home_recycler_view_disease.setLayoutManager(new LinearLayoutManager(context));
+    //Search clicked
+    home_search_view.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        createSession(fUser.getUid(), Constants.CHATBOT_ID);
+      }
+    });
+
+
+    //Set UI by role
+    setUIByAccountType();
+
+    //Load list consultation to recycler
+    loadConsultationList();
   }
 
   @Override
@@ -98,16 +131,6 @@ public class HomeFragment extends Fragment {
     //find view
     findView(view);
 
-    //Set UI by role
-    setUIByAccountType();
-
-    //Search clicked
-    home_search_view.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        createSession(fUser.getUid(), Constants.CHATBOT_ID);
-      }
-    });
 
     home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -139,8 +162,7 @@ public class HomeFragment extends Fragment {
       }
     });
 
-    //Load list consultation to recycler
-    loadConsultationList();
+
 
     return view;
   }
@@ -169,12 +191,12 @@ public class HomeFragment extends Fragment {
     //Create consultation recycle
     home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
     home_recycler_view_consultation.setHasFixedSize(true);
-    home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
 
     //Create disease recycle
     home_recycler_view_disease = view.findViewById(R.id.home_recycler_view_disease);
     home_recycler_view_disease.setHasFixedSize(true);
-    home_recycler_view_disease.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
 
     // Create pending prediction
     home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
@@ -224,13 +246,13 @@ public class HomeFragment extends Fragment {
               i.putExtra("receiverID", accountIDTwo);
               i.putExtra("sessionID", sessionID);
 //                            i.putExtra("isChatBot", true);
-              getContext().startActivity(i);
+              context.startActivity(i);
 
               //Send message started
               DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
               Message msg = new Message(reference.push().getKey(), accountIDTwo
-                      , accountIDOne, getString(R.string.default_chatbot_hello)
-                      , new Date(), sessionID, 1);
+                  , accountIDOne, context.getString(R.string.default_chatbot_hello)
+                  , new Date(), sessionID, 1);
               reference.child(msg.getMessageID()).setValue(msg);
             }
 
@@ -272,8 +294,8 @@ public class HomeFragment extends Fragment {
                 //Send message started
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
                 Message msg = new Message(reference.push().getKey(), accountIDTwo
-                        , accountIDOne, getString(R.string.default_chatbot_hello)
-                        , new Date(), sessionID, 1);
+                    , accountIDOne, context.getString(R.string.default_chatbot_hello)
+                    , new Date(), sessionID, 1);
                 reference.child(msg.getMessageID()).setValue(msg);
               }
               //Send session id
@@ -282,7 +304,7 @@ public class HomeFragment extends Fragment {
               i.putExtra("receiverID", accountIDTwo);
               i.putExtra("sessionID", sessionID);
 //                            i.putExtra("isChatBot", true);
-              getContext().startActivity(i);
+              context.startActivity(i);
             }
 
             @Override
@@ -322,7 +344,7 @@ public class HomeFragment extends Fragment {
           home_txt_consultation_see_more.setVisibility(View.VISIBLE);
           //Reverse list index to get latest consultation
           Collections.reverse(consultationLists);
-          consultationAdapter = new ConsultationAdapter(getActivity().getApplicationContext(), consultationLists, 3);
+          consultationAdapter = new ConsultationAdapter(context, consultationLists, 3);
           home_recycler_view_consultation.setAdapter(consultationAdapter);
 
         } else {
@@ -384,8 +406,8 @@ public class HomeFragment extends Fragment {
               //Reverse list index to get latest consultation
 //              Collections.reverse(mPredictionListDoctor);
               // Load list to adapter
-              doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                      mPredictionListDoctor, 0, 3);
+              doctorPredictionPendingListAdapter = new PredictionAdapter(context,
+                  mPredictionListDoctor, 0, 3);
               home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
             } else {
               home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
@@ -446,8 +468,8 @@ public class HomeFragment extends Fragment {
           //Reverse list index to get latest prediction
           Collections.reverse(mPredictionListPatient);
           // Load list to adapter
-          patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                  mPredictionListPatient, 1, 3);
+          patientPredictionAdapter = new PredictionAdapter(context,
+              mPredictionListPatient, 1, 3);
           home_recycler_view_disease.setAdapter(patientPredictionAdapter);
         } else if (typeAcc == 1) {
           home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
@@ -466,9 +488,9 @@ public class HomeFragment extends Fragment {
    * UI of doctor role
    */
   private void setUIDoctor() {
-    home_txt_title.setText(getString(R.string.home_doctor_txt_title));
-    home_txt_prediction_title.setText(getString(R.string.home_doctor_txt_prediction_title));
-    home_txt_consultation_title.setText(getString(R.string.home_doctor_txt_consultation_title));
+    home_txt_title.setText(context.getString(R.string.home_doctor_txt_title));
+    home_txt_prediction_title.setText(context.getString(R.string.home_doctor_txt_prediction_title));
+    home_txt_consultation_title.setText(context.getString(R.string.home_doctor_txt_consultation_title));
 
     //List disease history
     home_layout_disease_history.setVisibility(View.GONE);
@@ -480,7 +502,7 @@ public class HomeFragment extends Fragment {
     home_doctor_all_prediction_recycle_view.setVisibility(View.VISIBLE);
 
     home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
-    home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+    home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(context));
     loadAllPredictionPending();
     //type 0: doctor
     loadAllPredictionOfAccount(0);
@@ -495,9 +517,9 @@ public class HomeFragment extends Fragment {
     home_doctor_all_prediction_recycle_view.setVisibility(View.GONE);
 
     //Patient
-    home_txt_title.setText(getString(R.string.home_txt_title));
-    home_txt_prediction_title.setText(getString(R.string.home_txt_prediction_title));
-    home_txt_consultation_title.setText(getString(R.string.home_txt_consultation_title));
+    home_txt_title.setText(context.getString(R.string.home_txt_title));
+    home_txt_prediction_title.setText(context.getString(R.string.home_txt_prediction_title));
+    home_txt_consultation_title.setText(context.getString(R.string.home_txt_consultation_title));
     //type 1: patient
     loadAllPredictionOfAccount(1);
 
@@ -522,9 +544,9 @@ public class HomeFragment extends Fragment {
 
           } catch (NullPointerException e) {
             Log.e(TAG, "setUIByAccountType: TypeID Null", e);
-            Toast.makeText(getContext(), getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
             FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(getContext(), Login.class);
+            Intent i = new Intent(context, Login.class);
             startActivity(i);
           }
         }

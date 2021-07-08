@@ -25,8 +25,8 @@
 
     <fragment
         android:id="@+id/nav_predictionListConfirm"
-        android:name="com.example.diseaseprediction.ui.settings.SettingsFragment"
-        android:label="@string/menu_settings"
+        android:name="com.example.diseaseprediction.ui.predictionListConfirm.PredictionListPending"
+        android:label="@string/menu_predictionList_pending"
         tools:layout="@layout/fragment_prediction_list_confirm" />
 
     <fragment

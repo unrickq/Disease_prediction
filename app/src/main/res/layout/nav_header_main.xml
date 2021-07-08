@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background_B1_lightMode"
@@ -61,7 +62,7 @@
         android:fadeScrollbars="false"
         android:requiresFadingEdge="horizontal"
         android:singleLine="true"
-        android:text="@string/nav_header_txt_acc_name"
+        tools:text="@string/nav_header_txt_acc_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/text_T1_lightMode"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/nav_header_txt_acc_phone"
+        tools:text="@string/nav_header_txt_acc_phone"
         android:textColor="@color/text_T1_lightMode"
         app:layout_constraintStart_toEndOf="@+id/nav_header_avatar"
         app:layout_constraintTop_toBottomOf="@+id/nav_header_txt_acc_name" />
