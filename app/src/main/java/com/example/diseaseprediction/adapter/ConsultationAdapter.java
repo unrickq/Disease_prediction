@@ -121,7 +121,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
     //Get message by session ID
     public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time) {
-        latestMessage = "";
+        Message latestMessage = new Message();
         mRef = FirebaseDatabase.getInstance().getReference("Message");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -130,15 +130,24 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
                     Message msg = sn.getValue(Message.class);
                     try {
                         if (msg.getSessionID().equals(sessionID)) {
-                            latestMessage = msg.getMessage();
+                            latestMessage.setMessage(msg.getMessage());
+                            latestMessage.setSenderID(msg.getSenderID());
                             latestTime = sdf.format(msg.getDateSend().getTime());
                         }
-                        item_consultation_txt_message.setText(latestMessage);
-                        item_consultation_txt_time.setText(latestTime);
+
                     } catch (NullPointerException e) {
                         Log.d(LOG_TAG, "Consultation. Session ID null", e);
                     }
                 }
+                // if current user is sender => add 'You: ' before message
+                if (latestMessage.getSenderID().equals(fUser.getUid())) {
+                    item_consultation_txt_message.setText(mContext.getString(R.string.consultation_preview_message,
+                        latestMessage.getMessage()));
+                } else {
+                    item_consultation_txt_message.setText(latestMessage.getMessage());
+                }
+
+                item_consultation_txt_time.setText(latestTime);
             }
 
             @Override

@@ -204,6 +204,7 @@
     <string name="account_edit_txt_img_upload">Upload</string>
     <string name="dialog_confirm_discard_changes">Discard changes?</string>
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>
+    <string name="consultation_preview_message">You: %1$s</string>
 
 
     <string-array name="spinner_language">

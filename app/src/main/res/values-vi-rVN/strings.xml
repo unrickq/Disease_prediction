@@ -203,6 +203,7 @@
     <string name="account_edit_txt_img_upload">Tải lên</string>
     <string name="dialog_confirm_discard_changes">Bỏ thay đổi?</string>
     <string name="dialog_account_info_fill_required">Xin hãy điền đầy đủ thông tin yêu cầu!</string>
+    <string name="consultation_preview_message">Bạn: %1$s</string>
 
 
 </resources>
