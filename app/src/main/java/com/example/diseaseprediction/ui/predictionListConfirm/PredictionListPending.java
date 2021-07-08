@@ -83,6 +83,7 @@ public class PredictionListPending extends Fragment {
         prediction_list_confirm_recycler_view_main.setHasFixedSize(true);
 
 
+
         return view;
     }
 

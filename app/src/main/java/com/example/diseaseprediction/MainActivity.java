@@ -17,7 +17,7 @@ import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nav_view;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private NavHostFragment navHostFragment;
 
 
     @Override
@@ -107,16 +108,19 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,
-                R.id.nav_account,
-                R.id.nav_consultationList,
-                R.id.nav_predictionList,
-                R.id.nav_settings
+            R.id.nav_home,
+            R.id.nav_account,
+            R.id.nav_consultationList,
+            R.id.nav_predictionList,
+            R.id.nav_settings
         )
-                .setDrawerLayout(drawer)
-                .build();
+            .setDrawerLayout(drawer)
+            .build();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navHostFragment =
+            (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         //set item click on navigation
@@ -210,9 +214,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+            || super.onSupportNavigateUp();
     }
 
     @Override
