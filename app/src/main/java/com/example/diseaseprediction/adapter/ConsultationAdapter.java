@@ -122,7 +122,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     //Get message by session ID
     public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time) {
         Message latestMessage = new Message();
-        mRef = FirebaseDatabase.getInstance().getReference("Message");
+        mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
