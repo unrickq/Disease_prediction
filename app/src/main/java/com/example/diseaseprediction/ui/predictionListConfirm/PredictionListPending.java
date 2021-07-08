@@ -1,5 +1,6 @@
 package com.example.diseaseprediction.ui.predictionListConfirm;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +48,23 @@ public class PredictionListPending extends Fragment {
     private PredictionAdapter doctorPredictionPendingListAdapter;
     private DoctorInfo mDoctor;
 
+    private Context context;
+
     public PredictionListPending() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view,
+                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        context = getActivity().getApplicationContext();
+
+        prediction_list_confirm_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
+        //Load UI
+        loadAllPredictionPending();
     }
 
     @Override
@@ -62,10 +81,8 @@ public class PredictionListPending extends Fragment {
 
         prediction_list_confirm_recycler_view_main = view.findViewById(R.id.prediction_list_confirm_recycler_view_main);
         prediction_list_confirm_recycler_view_main.setHasFixedSize(true);
-        prediction_list_confirm_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
-        //Load UI
-        loadAllPredictionPending();
+
         return view;
     }
 
@@ -110,8 +127,8 @@ public class PredictionListPending extends Fragment {
                             prediction_list_confirm_txt_title.setVisibility(View.GONE);
                             //Reverse list index to get latest prediction
 //                            Collections.reverse(mPredictionListDoctor);
-                            doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                                    mPredictionListDoctor, 0, mPredictionListDoctor.size());
+                            doctorPredictionPendingListAdapter = new PredictionAdapter(context,
+                                mPredictionListDoctor, 0, mPredictionListDoctor.size());
                             prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
                         } else {
                             prediction_list_confirm_txt_title.setVisibility(View.VISIBLE);

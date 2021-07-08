@@ -1,5 +1,6 @@
 package com.example.diseaseprediction.ui.prediction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,13 +30,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PredictionListFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class PredictionListFragment extends Fragment {
@@ -48,49 +52,34 @@ public class PredictionListFragment extends Fragment {
   private PredictionAdapter patientPredictionAdapter;
   private TextView prediction_list_txt_title;
 
+  private Context context;
 
-  // TODO: Rename parameter arguments, choose names that match
-  // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-  private static final String ARG_PARAM1 = "param1";
-  private static final String ARG_PARAM2 = "param2";
-
-  // TODO: Rename and change types of parameters
-  private String mParam1;
-  private String mParam2;
 
   public PredictionListFragment() {
     // Required empty public constructor
   }
 
-  /**
-   * Use this factory method to create a new instance of
-   * this fragment using the provided parameters.
-   *
-   * @param param1 Parameter 1.
-   * @param param2 Parameter 2.
-   * @return A new instance of fragment PredictionListFragment.
-   */
-  // TODO: Rename and change types and number of parameters
-  public static PredictionListFragment newInstance(String param1, String param2) {
-    PredictionListFragment fragment = new PredictionListFragment();
-    Bundle args = new Bundle();
-    args.putString(ARG_PARAM1, param1);
-    args.putString(ARG_PARAM2, param2);
-    fragment.setArguments(args);
-    return fragment;
-  }
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-      mParam1 = getArguments().getString(ARG_PARAM1);
-      mParam2 = getArguments().getString(ARG_PARAM2);
-    }
+
     //Set toolbar
     ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList));
     ((MainActivity) getActivity()).setIconToolbar();
 
+  }
+
+  @Override
+  public void onViewCreated(@NonNull @NotNull View view,
+                            @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    context = getActivity().getApplicationContext();
+
+    prediction_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
+    //Load UI
+    loadUIByType();
   }
 
   @Override
@@ -106,10 +95,7 @@ public class PredictionListFragment extends Fragment {
     prediction_list_txt_title = view.findViewById(R.id.prediction_list_txt_title);
     prediction_list_recycler_view_main = view.findViewById(R.id.prediction_list_recycler_view_main);
     prediction_list_recycler_view_main.setHasFixedSize(true);
-    prediction_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
-    //Load UI
-    loadUIByType();
 
     return view;
   }
@@ -131,9 +117,9 @@ public class PredictionListFragment extends Fragment {
 
         } catch (NullPointerException e) {
           Log.e(TAG, "setUIByAccountType: TypeID Null", e);
-          Toast.makeText(getContext(), getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+          Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
           FirebaseAuth.getInstance().signOut();
-          Intent i = new Intent(getContext(), Login.class);
+          Intent i = new Intent(context, Login.class);
           startActivity(i);
         }
       }
@@ -185,8 +171,8 @@ public class PredictionListFragment extends Fragment {
           prediction_list_txt_title.setVisibility(View.GONE);
           //Reverse list index to get latest prediction
           Collections.reverse(mPredictionList);
-          patientPredictionAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
-                  mPredictionList, 1, mPredictionList.size());
+          patientPredictionAdapter = new PredictionAdapter(context,
+              mPredictionList, 1, mPredictionList.size());
           prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
         } else {
           prediction_list_txt_title.setVisibility(View.VISIBLE);
