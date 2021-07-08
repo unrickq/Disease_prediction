@@ -323,7 +323,6 @@ public class Chat extends AppCompatActivity {
                 if (receiver != null) {
                     chat_toolbar_txt_name.setText(receiver.getName());
                     Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
-
                     getMessagesFirebase(fUser.getUid(), receiverID);
                 } else {
                     Log.d(LOG_TAG, "Cannot get account info");
@@ -418,7 +417,7 @@ public class Chat extends AppCompatActivity {
      * @param msg massage that added to firebase
      */
     private void setMessageFirebase(Message msg) {
-        mRef = FirebaseDatabase.getInstance().getReference("Message");
+        mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -485,7 +484,7 @@ public class Chat extends AppCompatActivity {
      */
     private void getMessagesFirebase(String currentUserID, String receiverID) {
         mMessage = new ArrayList<>();
-        mRef = FirebaseDatabase.getInstance().getReference("Message");
+        mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -494,19 +493,20 @@ public class Chat extends AppCompatActivity {
                     Message msg = sn.getValue(Message.class);
 
                     if (msg != null && msg.getReceiverID() != null) {
-                        if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
-                                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
-                                && msg.getSenderID().equals(currentUserID)
-                                && msg.getSessionID().equals(sessionID)) {
-                            mMessage.add(msg);
-                        }
+//                        if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
+//                                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
+//                                && msg.getSenderID().equals(currentUserID)
+//                                && msg.getSessionID().equals(sessionID)) {
+//
+//                        }
+                        mMessage.add(msg);
                         if (msg.getStatus() == 3) {
                             if (checkStartMessage) {
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message");
+                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
                             if (checkClickPredict) {
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message");
+                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                             }
                         }
@@ -517,7 +517,7 @@ public class Chat extends AppCompatActivity {
                             @Override
                             public void onPredict(View button, int position) {
                                 chatWithChatbot(allMess);
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message");
+                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
                                 mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                 checkClickPredict = true;
 //                                getPredict();
