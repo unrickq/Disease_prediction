@@ -385,10 +385,11 @@ public class PredictionResult extends AppCompatActivity {
                                 i.putExtra("sessionID", sessionID);
                                 startActivity(i);
                                 //Send message started
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(
+                                    "Message/" + sessionID);
                                 Message msg = new Message(reference.push().getKey(), accountIDTwo
-                                        , accountIDOne, getString(R.string.default_chatbot_hello)
-                                        , new Date(), sessionID, 1);
+                                    , accountIDOne, getString(R.string.default_chatbot_hello)
+                                    , new Date(), sessionID, 1);
                                 reference.child(msg.getMessageID()).setValue(msg);
                             }
 
@@ -428,10 +429,11 @@ public class PredictionResult extends AppCompatActivity {
                                             , accountIDTwo, sessionID));
 
                                     //Send message started
-                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
+                                    DatabaseReference reference =
+                                        FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
                                     Message msg = new Message(reference.push().getKey(), accountIDTwo
-                                            , accountIDOne, getString(R.string.default_chatbot_hello)
-                                            , new Date(), sessionID, 1);
+                                        , accountIDOne, getString(R.string.default_chatbot_hello)
+                                        , new Date(), sessionID, 1);
                                     reference.child(msg.getMessageID()).setValue(msg);
                                 }
                                 //Update doctor session of prediction

@@ -139,7 +139,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
         try {
             Message latestMessage = new Message();
             mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
