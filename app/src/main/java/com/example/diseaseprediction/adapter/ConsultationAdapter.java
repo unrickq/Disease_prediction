@@ -42,19 +42,24 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 
     public ConsultationAdapter(Context context, List<ConsultationList> mConsultationList, int sizeLoad) {
-        //Get current user
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        try {
+            //Get current user
+            fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        this.mContext = context;
+            this.mContext = context;
 
-        //Limit row load
-        this.mConsultationList = new ArrayList<>();
-        if (sizeLoad >= mConsultationList.size()) {
-            this.mConsultationList = mConsultationList;
-        } else {
-            for (int i = 0; i < sizeLoad; i++) {
-                this.mConsultationList.add(mConsultationList.get(i));
+            //Limit row load
+            this.mConsultationList = new ArrayList<>();
+            if (sizeLoad >= mConsultationList.size()) {
+                this.mConsultationList = mConsultationList;
+            } else {
+                for (int i = 0; i < sizeLoad; i++) {
+                    this.mConsultationList.add(mConsultationList.get(i));
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "ConsultationAdapter()");
         }
     }
 
@@ -67,32 +72,37 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
     @Override
     public void onBindViewHolder(final ConsultationAdapter.ViewHolder holder, int position) {
-        //Collections.reverse(mConsultationList);
-        ConsultationList consultation = mConsultationList.get(position);
-        //Get username depend on current account
-        if (consultation.getAccountOne().equals(fUser.getUid())) {
-            getUserName(consultation.getAccountTwo(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
-        } else {
-            getUserName(consultation.getAccountOne(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
-        }
-        //Get messeage
-        getLatestMessageAndTime(consultation.getSessionID(), holder.item_consultation_txt_message, holder.item_consultation_txt_time);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(mContext, Chat.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //Open chat depend on current account
-                if (consultation.getAccountOne().equals(fUser.getUid())) {
-                    i.putExtra("receiverID", consultation.getAccountTwo());
-                } else {
-                    i.putExtra("receiverID", consultation.getAccountOne());
-                }
-                i.putExtra("sessionID", consultation.getSessionID());
-                i.putExtra("isChatBot", false);
-                mContext.startActivity(i);
+        try {
+            //Collections.reverse(mConsultationList);
+            ConsultationList consultation = mConsultationList.get(position);
+            //Get username depend on current account
+            if (consultation.getAccountOne().equals(fUser.getUid())) {
+                getUserName(consultation.getAccountTwo(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
+            } else {
+                getUserName(consultation.getAccountOne(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
             }
-        });
+            //Get messeage
+            getLatestMessageAndTime(consultation.getSessionID(), holder.item_consultation_txt_message, holder.item_consultation_txt_time);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mContext, Chat.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //Open chat depend on current account
+                    if (consultation.getAccountOne().equals(fUser.getUid())) {
+                        i.putExtra("receiverID", consultation.getAccountTwo());
+                    } else {
+                        i.putExtra("receiverID", consultation.getAccountOne());
+                    }
+                    i.putExtra("sessionID", consultation.getSessionID());
+                    i.putExtra("isChatBot", false);
+                    mContext.startActivity(i);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "onBindViewHolder()");
+        }
     }
 
     @Override
@@ -102,59 +112,73 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
 
     //Get user by user ID
     public void getUserName(String userId, TextView item_consultation_txt_name, CircleImageView item_consultation_img_main) {
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(userId);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                item_consultation_txt_name.setText(snapshot.child("name").getValue().toString());
-                Glide.with(mContext).load(snapshot.child("image").getValue().toString()).into(item_consultation_img_main);
-            }
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(userId);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    item_consultation_txt_name.setText(snapshot.child("name").getValue().toString());
+                    Glide.with(mContext).load(snapshot.child("image").getValue().toString()).into(item_consultation_img_main);
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-        // Set BOLD
-        item_consultation_txt_name.setTypeface(null, Typeface.BOLD);
+                }
+            });
+            // Set BOLD
+            item_consultation_txt_name.setTypeface(null, Typeface.BOLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getUserName()");
+        }
     }
 
     //Get message by session ID
     public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time) {
-        Message latestMessage = new Message();
-        mRef = FirebaseDatabase.getInstance().getReference("Message");
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    Message msg = sn.getValue(Message.class);
+        try {
+            Message latestMessage = new Message();
+            mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Message msg = sn.getValue(Message.class);
+                        try {
+                            if (msg.getSessionID().equals(sessionID)) {
+                                latestMessage.setMessage(msg.getMessage());
+                                latestMessage.setSenderID(msg.getSenderID());
+                                latestTime = sdf.format(msg.getDateSend().getTime());
+                            }
+
+                        } catch (NullPointerException e) {
+                            Log.d(LOG_TAG, "Consultation. Session ID null", e);
+                        }
+                    }
                     try {
-                        if (msg.getSessionID().equals(sessionID)) {
-                            latestMessage.setMessage(msg.getMessage());
-                            latestMessage.setSenderID(msg.getSenderID());
-                            latestTime = sdf.format(msg.getDateSend().getTime());
+                        // if current user is sender => add 'You: ' before message
+                        if (latestMessage.getSenderID().equals(fUser.getUid())) {
+                            item_consultation_txt_message.setText(mContext.getString(R.string.consultation_preview_message,
+                                    latestMessage.getMessage()));
+                        } else {
+                            item_consultation_txt_message.setText(latestMessage.getMessage());
                         }
 
+                        item_consultation_txt_time.setText(latestTime);
                     } catch (NullPointerException e) {
                         Log.d(LOG_TAG, "Consultation. Session ID null", e);
                     }
                 }
-                // if current user is sender => add 'You: ' before message
-                if (latestMessage.getSenderID().equals(fUser.getUid())) {
-                    item_consultation_txt_message.setText(mContext.getString(R.string.consultation_preview_message,
-                        latestMessage.getMessage()));
-                } else {
-                    item_consultation_txt_message.setText(latestMessage.getMessage());
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
-
-                item_consultation_txt_time.setText(latestTime);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getLatestMessageAndTime()");
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

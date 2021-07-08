@@ -1,6 +1,7 @@
 package com.example.diseaseprediction.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,16 +44,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
 
     public ChatAdapter(@NonNull Context context, List<Message> mMessage) {
-        this.mContext = context;
-        this.mMessage = mMessage;
+        try {
+            this.mContext = context;
+            this.mMessage = mMessage;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "ChatAdapter()");
+        }
     }
 
     public ChatAdapter(@NonNull Context context, List<Message> mMessage, MyClickListener listener) {
-        this.mContext = context;
-        this.mMessage = mMessage;
-        this.listener = listener;
+        try {
+            this.mContext = context;
+            this.mMessage = mMessage;
+            this.listener = listener;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "ChatAdapter()");
+        }
     }
-
 
 
     @NotNull
@@ -70,6 +80,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_chat_left, parent, false);
             return new ChatAdapter.ViewHolder(view);
         }
+
     }
 
 //    /**
@@ -104,35 +115,38 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
-        //Get message
-        Message msg = mMessage.get(position);
-        holder.item_chat_show_message.setText(msg.getMessage());
-        //Get checkbox if message have a suggestion
+        try {
+            //Get message
+            Message msg = mMessage.get(position);
+            holder.item_chat_show_message.setText(msg.getMessage());
+            //Get checkbox if message have a suggestion
 //        getCheckBox(msg, holder);
 
-        //Custom date under message
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
-        String shortTimeStr = sdf.format(msg.getDateSend().getTime());
-        holder.item_chat_time.setText(shortTimeStr);
+            //Custom date under message
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+            String shortTimeStr = sdf.format(msg.getDateSend().getTime());
+            holder.item_chat_time.setText(shortTimeStr);
 
-        //On clicked in message then show time send
-        holder.item_chat_layout_show_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.item_chat_time.getVisibility() == View.VISIBLE) {
-                    holder.item_chat_time.setVisibility(View.GONE);
-                } else {
-                    holder.item_chat_time.setVisibility(View.VISIBLE);
+            //On clicked in message then show time send
+            holder.item_chat_layout_show_message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (holder.item_chat_time.getVisibility() == View.VISIBLE) {
+                        holder.item_chat_time.setVisibility(View.GONE);
+                    } else {
+                        holder.item_chat_time.setVisibility(View.VISIBLE);
+                    }
                 }
+            });
+
+            if (holder.item_chat_box_button_predict != null) {
+                if (msg.getStatus() == 4)
+                    holder.item_chat_box_button_predict.setEnabled(false);
             }
-        });
-
-        if(holder.item_chat_box_button_predict != null){
-            if(msg.getStatus() == 4)
-                holder.item_chat_box_button_predict.setEnabled(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "onBindViewHolder()");
         }
-
-
     }
 
     @Override
@@ -150,16 +164,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } else if (mMessage.get(position).getStatus() == 3 || mMessage.get(position).getStatus() == 4) {
             return MSG_TYPE_LEFT_BOX;
         } else {
-          return MSG_TYPE_LEFT;
+            return MSG_TYPE_LEFT;
         }
     }
 
-  /**
-   * Create checkbox
-   *
-   * @param holder View holder
-   * @param ls     List<Symptom>()
-   */
 //    public void createCheckBox(ChatAdapter.ViewHolder holder, List<Symptom> ls, List<RecommendSymptom> rc, Message
 //    msg) {
 //        if (holder.item_chat_layout_checkbox != null) {
@@ -242,12 +250,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //        }
 //    }
 
-  /**
-   * Get Checkbox if message have a suggestion
-   *
-   * @param msg    Message
-   * @param holder ViewHolder
-   */
 //    public void getCheckBox(Message msg, ChatAdapter.ViewHolder holder) {
 //        //List symptom
 //        mSymptom = new ArrayList<>();
@@ -333,48 +335,48 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //        });
 //    }
 
-  //setter button predict
-  public void setPredictButtonListener(MyClickListener myClickListener) {
-      this.listener = myClickListener;
-  }
+    //setter button predict
+    public void setPredictButtonListener(MyClickListener myClickListener) {
+        this.listener = myClickListener;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_chat_show_message, item_chat_time;
         public LinearLayout item_chat_layout_show_message, item_chat_layout_checkbox;
-      //        public ListView item_chat_checkbox;
+        //        public ListView item_chat_checkbox;
 //        public Button item_chat_checkbox_done;
-      public Button item_chat_box_button_predict;
-      MyClickListener myClickListener;
+        public Button item_chat_box_button_predict;
+        MyClickListener myClickListener;
 
-      //constructor use for message button predict
+        //constructor use for message button predict
         public ViewHolder(@NonNull View itemView, MyClickListener listener) {
-          super(itemView);
-          //Find view
-          item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
-          item_chat_time = itemView.findViewById(R.id.item_chat_time);
-          item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
+            super(itemView);
+            //Find view
+            item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
+            item_chat_time = itemView.findViewById(R.id.item_chat_time);
+            item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
 //            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
 //            item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
 //            item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
-          item_chat_box_button_predict = (Button) itemView.findViewById(R.id.item_chat_box_button_predict);
-          this.myClickListener = listener;
-          item_chat_box_button_predict.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              listener.onPredict(v, getAdapterPosition());
-            }
-          });
+            item_chat_box_button_predict = (Button) itemView.findViewById(R.id.item_chat_box_button_predict);
+            this.myClickListener = listener;
+            item_chat_box_button_predict.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onPredict(v, getAdapterPosition());
+                }
+            });
         }
 
-      public ViewHolder(@NonNull View itemView) {
-        super(itemView);
-        //Find view
-        item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
-        item_chat_time = itemView.findViewById(R.id.item_chat_time);
-        item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            //Find view
+            item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
+            item_chat_time = itemView.findViewById(R.id.item_chat_time);
+            item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
 //            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
 //            item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
 //            item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
-      }
+        }
     }
 }

@@ -196,14 +196,19 @@ public class Chat extends AppCompatActivity {
      * @param activity Current activity
      */
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-            (InputMethodManager) activity.getSystemService(
-                Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager.isAcceptingText()) {
-            inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(),
-                0
-            );
+        try {
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) activity.getSystemService(
+                            Activity.INPUT_METHOD_SERVICE);
+            if (inputMethodManager.isAcceptingText()) {
+                inputMethodManager.hideSoftInputFromWindow(
+                        activity.getCurrentFocus().getWindowToken(),
+                        0
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "hideSoftKeyboard()");
         }
     }
 
@@ -211,10 +216,15 @@ public class Chat extends AppCompatActivity {
      * Get all views in layout
      */
     private void getViews() {
-        chat_txt_enter_mess = findViewById(R.id.chat_txt_enter_mess);
-        chat_img_send = findViewById(R.id.chat_img_send);
-        chat_img_mic = findViewById(R.id.chat_img_mic);
-        chat_recycler_view = findViewById(R.id.chat_recycler_view);
+        try {
+            chat_txt_enter_mess = findViewById(R.id.chat_txt_enter_mess);
+            chat_img_send = findViewById(R.id.chat_img_send);
+            chat_img_mic = findViewById(R.id.chat_img_mic);
+            chat_recycler_view = findViewById(R.id.chat_recycler_view);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getViews()");
+        }
     }
 
     /**
@@ -302,12 +312,17 @@ public class Chat extends AppCompatActivity {
     }
 
     public void chatWithDoctor(String msg) {
-        if (!msg.equals("")) {
-            //user chat vs user
-            Message message = new Message("", fUser.getUid(), receiverID, msg
-                    , new Date(), sessionID, 1);
-            setMessageFirebase(message);
-            chat_txt_enter_mess.setText("");
+        try {
+            if (!msg.equals("")) {
+                //user chat vs user
+                Message message = new Message("", fUser.getUid(), receiverID, msg
+                        , new Date(), sessionID, 1);
+                setMessageFirebase(message);
+                chat_txt_enter_mess.setText("");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "chatWithDoctor()");
         }
     }
 
@@ -315,25 +330,30 @@ public class Chat extends AppCompatActivity {
      * Get user name, avatar and chat messages of user
      */
     public void getUserChatData() {
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Account receiver = snapshot.getValue(Account.class);
-                if (receiver != null) {
-                    chat_toolbar_txt_name.setText(receiver.getName());
-                    Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
-                    getMessagesFirebase(fUser.getUid(), receiverID);
-                } else {
-                    Log.d(LOG_TAG, "Cannot get account info");
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Account receiver = snapshot.getValue(Account.class);
+                    if (receiver != null) {
+                        chat_toolbar_txt_name.setText(receiver.getName());
+                        Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
+                        getMessagesFirebase(fUser.getUid(), receiverID);
+                    } else {
+                        Log.d(LOG_TAG, "Cannot get account info");
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getUserChatData()");
+        }
     }
 
     /**
@@ -351,13 +371,18 @@ public class Chat extends AppCompatActivity {
             //Show icon mic or send depend on edit text
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // If input empty
-                if (chat_txt_enter_mess.getText().toString().equals("")) {
-                    chat_img_send.setVisibility(View.GONE);
-                    chat_img_mic.setVisibility(View.VISIBLE);
-                } else {
-                    chat_img_send.setVisibility(View.VISIBLE);
-                    chat_img_mic.setVisibility(View.GONE);
+                try {
+                    // If input empty
+                    if (chat_txt_enter_mess.getText().toString().equals("")) {
+                        chat_img_send.setVisibility(View.GONE);
+                        chat_img_mic.setVisibility(View.VISIBLE);
+                    } else {
+                        chat_img_send.setVisibility(View.VISIBLE);
+                        chat_img_mic.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(LOG_TAG, "updateIconOnWriteWatcher()");
                 }
             }
 
@@ -372,43 +397,48 @@ public class Chat extends AppCompatActivity {
      * Set up chat toolbar
      */
     private void setToolbarChat() {
-        chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
-        chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
-        chat_toolbar_img_pre = findViewById(R.id.chat_toolbar_img_pre);
-        chat_toolbar_img_hamburger = findViewById(R.id.chat_toolbar_img_hamburger);
+        try {
+            chat_toolbar_img_avatar = findViewById(R.id.chat_toolbar_img_avatar);
+            chat_toolbar_txt_name = findViewById(R.id.chat_toolbar_txt_name);
+            chat_toolbar_img_pre = findViewById(R.id.chat_toolbar_img_pre);
+            chat_toolbar_img_hamburger = findViewById(R.id.chat_toolbar_img_hamburger);
 
-        //Back button
-        chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        //Create popup menu
-        pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
-        pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
-        pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.chat_menu_end_session:
-                        endSession(sessionID);
-                        checkSessionStatus();
-                        return true;
+            //Back button
+            chat_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
                 }
-                return true;
-            }
-        });
+            });
 
-        //Show popup menu when clicked on img_hamburger
-        chat_toolbar_img_hamburger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Set popup menu
-                pm.show();
-            }
-        });
+            //Create popup menu
+            pm = new PopupMenu(Chat.this, chat_toolbar_img_hamburger);
+            pm.getMenuInflater().inflate(R.menu.chat_menu, pm.getMenu());
+            pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.chat_menu_end_session:
+                            endSession(sessionID);
+                            checkSessionStatus();
+                            return true;
+                    }
+                    return true;
+                }
+            });
+
+            //Show popup menu when clicked on img_hamburger
+            chat_toolbar_img_hamburger.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Set popup menu
+                    pm.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "setToolbarChat()");
+        }
     }
 
     /**
@@ -417,19 +447,24 @@ public class Chat extends AppCompatActivity {
      * @param msg massage that added to firebase
      */
     private void setMessageFirebase(Message msg) {
-        mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                msg.setMessageID(mRef.push().getKey());
-                mRef.child(msg.getMessageID()).setValue(msg);
-            }
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    msg.setMessageID(mRef.push().getKey());
+                    mRef.child(msg.getMessageID()).setValue(msg);
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "setMessageFirebase()");
+        }
     }
 
     /**
@@ -438,8 +473,13 @@ public class Chat extends AppCompatActivity {
      * @param currentSession Current session
      */
     private void endSession(String currentSession) {
-        mRef = FirebaseDatabase.getInstance().getReference("Session").child(currentSession);
-        mRef.child("status").setValue(0);
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Session").child(currentSession);
+            mRef.child("status").setValue(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "endSession()");
+        }
     }
 
     /**
@@ -447,33 +487,38 @@ public class Chat extends AppCompatActivity {
      * If not, then set chat input layout VISIBLE
      */
     private void checkSessionStatus() {
-        mRef = FirebaseDatabase.getInstance().getReference("Session");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    String sessionStatus =
-                            Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
-                    int status = Integer.parseInt(sessionStatus);
-                    if (status == 0) {
-                        chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
-                        chat_send_message_layout.setVisibility(View.GONE);
-                        Toast.makeText(Chat.this, getString(R.string.defaut_session_ended), Toast.LENGTH_SHORT).show();
-                    } else if (status == 1) {
-                        chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
-                        chat_send_message_layout.setVisibility(View.VISIBLE);
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        String sessionStatus =
+                                Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
+                        int status = Integer.parseInt(sessionStatus);
+                        if (status == 0) {
+                            chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
+                            chat_send_message_layout.setVisibility(View.GONE);
+                            Toast.makeText(Chat.this, getString(R.string.defaut_session_ended), Toast.LENGTH_SHORT).show();
+                        } else if (status == 1) {
+                            chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
+                            chat_send_message_layout.setVisibility(View.VISIBLE);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(LOG_TAG, "Session status null");
                     }
-                } catch (NullPointerException e) {
-                    Log.d(LOG_TAG, "Session status null");
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        //Hide keyboard
-        hideSoftKeyboard(Chat.this);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+            //Hide keyboard
+            hideSoftKeyboard(Chat.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "checkSessionStatus()");
+        }
     }
 
     /**
@@ -483,58 +528,63 @@ public class Chat extends AppCompatActivity {
      * @param receiverID    ID of receiver user
      */
     private void getMessagesFirebase(String currentUserID, String receiverID) {
-        mMessage = new ArrayList<>();
-        mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mMessage.clear();
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    Message msg = sn.getValue(Message.class);
+        try {
+            mMessage = new ArrayList<>();
+            mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mMessage.clear();
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Message msg = sn.getValue(Message.class);
 
-                    if (msg != null && msg.getReceiverID() != null) {
+                        if (msg != null && msg.getReceiverID() != null) {
 //                        if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
 //                                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
 //                                && msg.getSenderID().equals(currentUserID)
 //                                && msg.getSessionID().equals(sessionID)) {
 //
 //                        }
-                        mMessage.add(msg);
-                        if (msg.getStatus() == 3) {
-                            if (checkStartMessage) {
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-                                mRef2.child(msg.getMessageID()).child("status").setValue(4);
+                            mMessage.add(msg);
+                            if (msg.getStatus() == 3) {
+                                if (checkStartMessage) {
+                                    mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+                                    mRef2.child(msg.getMessageID()).child("status").setValue(4);
+                                }
+                                if (checkClickPredict) {
+                                    mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+                                    mRef2.child(msg.getMessageID()).child("status").setValue(4);
+                                }
                             }
-                            if (checkClickPredict) {
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-                                mRef2.child(msg.getMessageID()).child("status").setValue(4);
-                            }
-                        }
-                        chatAdapter = new ChatAdapter(Chat.this, mMessage);
-                        chat_recycler_view.setAdapter(chatAdapter);
+                            chatAdapter = new ChatAdapter(Chat.this, mMessage);
+                            chat_recycler_view.setAdapter(chatAdapter);
 
-                        chatAdapter.setPredictButtonListener(new MyClickListener() {
-                            @Override
-                            public void onPredict(View button, int position) {
-                                chatWithChatbot(allMess);
-                                mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-                                mRef2.child(msg.getMessageID()).child("status").setValue(4);
-                                checkClickPredict = true;
+                            chatAdapter.setPredictButtonListener(new MyClickListener() {
+                                @Override
+                                public void onPredict(View button, int position) {
+                                    chatWithChatbot(allMess);
+                                    mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+                                    mRef2.child(msg.getMessageID()).child("status").setValue(4);
+                                    checkClickPredict = true;
 //                                getPredict();
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
+                    checkStartMessage = false;
+                    checkClickPredict = false;
                 }
-                checkStartMessage = false;
-                checkClickPredict = false;
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getMessagesFirebase()");
+        }
     }
 
     /**
@@ -545,83 +595,98 @@ public class Chat extends AppCompatActivity {
      * @param uId     Current user ID
      */
     private void getDiseaseByNameFirebase(String disease, String uId) {
-        mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
-        Query disQuery = mRef2.orderByChild("name").equalTo(disease);
-        disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                try {
-                    for (DataSnapshot sn : snapshot.getChildren()) {
-                        Disease d = sn.getValue(Disease.class);
-                        Prediction pre = new Prediction("0", uId, "Default",
-                                sessionID, "Default",
-                                d.getDiseaseID(), "Default", new Date(), new Date(),
-                                d.getSpecializationID(), 0);
-                        createPrediction(pre);
+        try {
+            mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
+            Query disQuery = mRef2.orderByChild("name").equalTo(disease);
+            disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    try {
+                        for (DataSnapshot sn : snapshot.getChildren()) {
+                            Disease d = sn.getValue(Disease.class);
+                            Prediction pre = new Prediction("0", uId, "Default",
+                                    sessionID, "Default",
+                                    d.getDiseaseID(), "Default", new Date(), new Date(),
+                                    d.getSpecializationID(), 0);
+                            createPrediction(pre);
+                        }
+                    } catch (Exception e) {
+                        Log.d(LOG_TAG, "Not found disease in database", e);
                     }
-                } catch (Exception e) {
-                    Log.d(LOG_TAG, "Not found disease in database", e);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getDiseaseByNameFirebase()");
+        }
     }
 
     /**
      * Set up element base on Account Type
      */
     private void setUIByAccountType() {
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    String accountType = Objects.requireNonNull(snapshot.child("typeID").getValue()).toString();
-                    if (accountType.equals("0")) {
-                        chat_toolbar_img_hamburger.setVisibility(View.VISIBLE);
-                    } else {
-                        chat_toolbar_img_hamburger.setVisibility(View.GONE);
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        String accountType = Objects.requireNonNull(snapshot.child("typeID").getValue()).toString();
+                        if (accountType.equals("0")) {
+                            chat_toolbar_img_hamburger.setVisibility(View.VISIBLE);
+                        } else {
+                            chat_toolbar_img_hamburger.setVisibility(View.GONE);
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(LOG_TAG, "Account type null", e);
                     }
-                } catch (NullPointerException e) {
-                    Log.d(LOG_TAG, "Account type null", e);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "setUIByAccountType()");
+        }
     }
 
     /**
      * Call default Speech-to-text handler of the phone. Permission checking is included
      */
     public void getSpeechInput() {
-        // Check microphone access permission
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            // Call Voice input
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi");
-            try {
-                startActivityForResult(intent, REQUEST_CODE_SPEECH);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, getString(R.string.default_speech_support_device), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+        try {
+            // Check microphone access permission
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                // Call Voice input
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi");
+                try {
+                    startActivityForResult(intent, REQUEST_CODE_SPEECH);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(this, getString(R.string.default_speech_support_device), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            } else {
+                // ask for the permission.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.RECORD_AUDIO},
+                            REQUEST_CODE_SPEECH);
+                }
             }
-        } else {
-            // ask for the permission.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(
-                        new String[]{Manifest.permission.RECORD_AUDIO},
-                        REQUEST_CODE_SPEECH);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getSpeechInput()");
         }
     }
 
@@ -663,9 +728,9 @@ public class Chat extends AppCompatActivity {
         super.onStart();
         Log.v(LOG_TAG, "onStart");
         handler.post(
-            () -> {
-                client.load();
-            });
+                () -> {
+                    client.load();
+                });
     }
 
     @Override
@@ -673,9 +738,9 @@ public class Chat extends AppCompatActivity {
         super.onStop();
         Log.v(LOG_TAG, "onStop");
         handler.post(
-            () -> {
-                client.unload();
-            });
+                () -> {
+                    client.unload();
+                });
     }
 
     /**
@@ -685,32 +750,37 @@ public class Chat extends AppCompatActivity {
      * @param pre Prediction object
      */
     private void createPrediction(Prediction pre) {
-        mRef2 = FirebaseDatabase.getInstance().getReference("Prediction");
-        mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    pre.setPredictionID(mRef2.push().getKey());
-                    mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
-                        @Override
-                        //If new prediction are created
-                        //Then end the current session of chat
-                        public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                            endSession(sessionID);
-                            checkSessionStatus();
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d(LOG_TAG, "Not found disease in database", e);
+        try {
+            mRef2 = FirebaseDatabase.getInstance().getReference("Prediction");
+            mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        pre.setPredictionID(mRef2.push().getKey());
+                        mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
+                            @Override
+                            //If new prediction are created
+                            //Then end the current session of chat
+                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                endSession(sessionID);
+                                checkSessionStatus();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "Not found disease in database", e);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "createPrediction()");
+        }
     }
 //    /**
 //     * check symptom by name
@@ -750,22 +820,27 @@ public class Chat extends AppCompatActivity {
      * Get symptom in firebase
      */
     private void getSymptomFirebase() {
-        mSymptom = new ArrayList<>();
-        mRef = FirebaseDatabase.getInstance().getReference("Symptom");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mSymptom.clear();
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    Symptom msg = sn.getValue(Symptom.class);
-                    mSymptom.add(msg);
+        try {
+            mSymptom = new ArrayList<>();
+            mRef = FirebaseDatabase.getInstance().getReference("Symptom");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mSymptom.clear();
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Symptom msg = sn.getValue(Symptom.class);
+                        mSymptom.add(msg);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getSymptomFirebase()");
+        }
     }
 
 
@@ -773,37 +848,50 @@ public class Chat extends AppCompatActivity {
      * Create dialog confirm
      */
     private void dialogConfirm(String sessionID) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.default_dialog_end_session_prediction);
-        builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                onBackPressed();
-                endSession(sessionID);
-            }
-        });
-        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //Do nothing
-            }
-        });
-        builder.create();
-        builder.show();
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.default_dialog_end_session_prediction);
+            builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onBackPressed();
+                    endSession(sessionID);
+                }
+            });
+            builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Do nothing
+                }
+            });
+            builder.create();
+            builder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "dialogConfirm()");
+        }
     }
 
 
+    /**
+     * @param msg
+     */
     public void nextChat(String msg) {
-        if (!msg.equals("")) {
-            Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
-                    , msg, new Date(), sessionID, 1);
-            setMessageFirebase(message);
-            //Chatbot chat
-            Message message1 = new Message("", Constants.CHATBOT_ID,
-                    fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
-            setMessageFirebase(message1);
-            chat_txt_enter_mess.setText("");
-            allMess += msg + " ";
+        try {
+            if (!msg.equals("")) {
+                Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
+                        , msg, new Date(), sessionID, 1);
+                setMessageFirebase(message);
+                //Chatbot chat
+                Message message1 = new Message("", Constants.CHATBOT_ID,
+                        fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
+                setMessageFirebase(message1);
+                chat_txt_enter_mess.setText("");
+                allMess += msg + " ";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "nextChat()");
         }
 
     }

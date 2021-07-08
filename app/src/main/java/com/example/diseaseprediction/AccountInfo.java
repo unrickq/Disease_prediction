@@ -42,7 +42,7 @@ public class AccountInfo extends AppCompatActivity {
     private String phoneNumber;
 
     private TextInputLayout account_info_txt_title_name, account_info_txt_title_gender, account_info_txt_title_phone,
-        account_info_txt_title_email, account_info_txt_title_address;
+            account_info_txt_title_email, account_info_txt_title_address;
     private Button account_info_btn_edit_done;
     private AutoCompleteTextView account_info_spinner_gender;
 
@@ -81,11 +81,11 @@ public class AccountInfo extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.dialog_account_info_fill_required);
         builder.setPositiveButton(getString(R.string.dialog_button_ok),
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            });
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
 
         builder.create().show();
     }
@@ -94,34 +94,39 @@ public class AccountInfo extends AppCompatActivity {
      * Get view
      */
     private void setView() {
-        //Button
-        account_info_btn_edit_done = findViewById(R.id.account_info_btn_edit_done);
+        try {
+            //Button
+            account_info_btn_edit_done = findViewById(R.id.account_info_btn_edit_done);
 
-        //Find view
-        account_info_txt_title_name = findViewById(R.id.account_info_txt_title_name);
-        account_info_txt_title_gender = findViewById(R.id.account_info_txt_title_gender);
-        account_info_txt_title_phone = findViewById(R.id.account_info_txt_title_phone);
-        account_info_txt_title_email = findViewById(R.id.account_info_txt_title_email);
-        account_info_txt_title_address = findViewById(R.id.account_info_txt_title_address);
+            //Find view
+            account_info_txt_title_name = findViewById(R.id.account_info_txt_title_name);
+            account_info_txt_title_gender = findViewById(R.id.account_info_txt_title_gender);
+            account_info_txt_title_phone = findViewById(R.id.account_info_txt_title_phone);
+            account_info_txt_title_email = findViewById(R.id.account_info_txt_title_email);
+            account_info_txt_title_address = findViewById(R.id.account_info_txt_title_address);
 
-        //Add event to clear error message
-        account_info_txt_title_name.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_name));
-        account_info_txt_title_gender.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_gender));
-        account_info_txt_title_phone.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_phone));
-        account_info_txt_title_email.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_email));
-        account_info_txt_title_address.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_address));
+            //Add event to clear error message
+            account_info_txt_title_name.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_name));
+            account_info_txt_title_gender.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_gender));
+            account_info_txt_title_phone.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_phone));
+            account_info_txt_title_email.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_email));
+            account_info_txt_title_address.getEditText().addTextChangedListener(clearErrorOnTyping(account_info_txt_title_address));
 
-        //Spinner
-        account_info_spinner_gender = findViewById(R.id.account_info_spinner_gender);
-        ArrayList<String> gender = new ArrayList<String>();
-        gender.add(getString(R.string.default_gender_male));
-        gender.add(getString(R.string.default_gender_female));
-        genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
-        account_info_spinner_gender.setAdapter(genderAdapter);
+            //Spinner
+            account_info_spinner_gender = findViewById(R.id.account_info_spinner_gender);
+            ArrayList<String> gender = new ArrayList<String>();
+            gender.add(getString(R.string.default_gender_male));
+            gender.add(getString(R.string.default_gender_female));
+            genderAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, gender);
+            account_info_spinner_gender.setAdapter(genderAdapter);
 
-        // If previous activity send phone number => display on edit text
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            account_info_txt_title_phone.getEditText().setText(phoneNumber);
+            // If previous activity send phone number => display on edit text
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                account_info_txt_title_phone.getEditText().setText(phoneNumber);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setView()");
         }
     }
 
@@ -129,58 +134,64 @@ public class AccountInfo extends AppCompatActivity {
      * Load all data of current account
      */
     private void loadData() {
-        //get user by id
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                //if exist then set UI
-                if (snapshot.hasChild(fUser.getUid())) {
-                    mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
-                    //Set name
-                    if (!mAccount.getName().equals("Default")) {
-                        account_info_txt_title_name.getEditText().setText(mAccount.getName());
-                    }
-
-                    //Set gender
-                    if (mAccount.getGender() == 0) {
-                        account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(0).toString());
-                        genderAdapter.getFilter().filter(null);
-                    } else if (mAccount.getGender() == 1) {
-                        account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(1).toString());
-                        genderAdapter.getFilter().filter(null);
-                    }
-
-                    //Set phone
-                    if (!mAccount.getPhone().equals("Default")) {
-                        account_info_txt_title_phone.getEditText().setText(mAccount.getPhone());
-                        if (mAccount.getTypeLogin()==0){
-                            account_info_txt_title_phone.setEnabled(false);
+        try {
+            //get user by id
+            mAccount = new Account();
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //check user exist in firebase
+                    //if exist then set UI
+                    if (snapshot.hasChild(fUser.getUid())) {
+                        mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
+                        //Set name
+                        if (!mAccount.getName().equals("Default")) {
+                            account_info_txt_title_name.getEditText().setText(mAccount.getName());
                         }
-                    }
 
-                    //Set email
-                    if (!mAccount.getEmail().equals("Default")) {
-                        account_info_txt_title_email.getEditText().setText(mAccount.getEmail());
-                        if (mAccount.getTypeLogin()==1){
-                            account_info_txt_title_email.setEnabled(false);
+                        //Set gender
+                        if (mAccount.getGender() == 0) {
+                            account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(0).toString());
+                            genderAdapter.getFilter().filter(null);
+                        } else if (mAccount.getGender() == 1) {
+                            account_info_spinner_gender.setText(account_info_spinner_gender.getAdapter().getItem(1).toString());
+                            genderAdapter.getFilter().filter(null);
                         }
-                    }
 
-                    //Set address
-                    if (!mAccount.getAddress().equals("Default")) {
-                        account_info_txt_title_address.getEditText().setText(mAccount.getAddress());
+                        //Set phone
+                        if (!mAccount.getPhone().equals("Default")) {
+                            account_info_txt_title_phone.getEditText().setText(mAccount.getPhone());
+                            if (mAccount.getTypeLogin() == 0) {
+                                account_info_txt_title_phone.setEnabled(false);
+                            }
+                        }
+
+                        //Set email
+                        if (!mAccount.getEmail().equals("Default")) {
+                            account_info_txt_title_email.getEditText().setText(mAccount.getEmail());
+                            if (mAccount.getTypeLogin() == 1) {
+                                account_info_txt_title_email.setEnabled(false);
+                            }
+                        }
+
+                        //Set address
+                        if (!mAccount.getAddress().equals("Default")) {
+                            account_info_txt_title_address.getEditText().setText(mAccount.getAddress());
+                        }
+                    } else {
+                        //IF can't find any data
                     }
-                } else {
-                    //IF can't find any data
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
-        });
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadData()");
+        }
     }
 
     /**
@@ -240,52 +251,57 @@ public class AccountInfo extends AppCompatActivity {
      * Create dialog confirm
      */
     private void dialogConfirm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.dialog_confirm_change_account));
-        builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                saveData();
-                mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        try {
-                            if (snapshot.child("typeID").getValue().toString().equals("0")) {
-                                Intent intent = new Intent(AccountInfo.this, AccountInfoDoctor.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent intent = new Intent(AccountInfo.this, MainActivity.class);
-                                startActivity(intent);
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.dialog_confirm_change_account));
+            builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    saveData();
+                    mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            try {
+                                if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                                    Intent intent = new Intent(AccountInfo.this, AccountInfoDoctor.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(AccountInfo.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                            } catch (NullPointerException e) {
+                                Log.e(TAG, "Move to doctor information: TypeID Null", e);
+                                Toast.makeText(AccountInfo.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                                FirebaseAuth.getInstance().signOut();
+                                Intent i = new Intent(AccountInfo.this, Login.class);
+                                startActivity(i);
                                 finish();
                             }
-
-                        } catch (NullPointerException e) {
-                            Log.e(TAG, "Move to doctor information: TypeID Null", e);
-                            Toast.makeText(AccountInfo.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
-                            FirebaseAuth.getInstance().signOut();
-                            Intent i = new Intent(AccountInfo.this, Login.class);
-                            startActivity(i);
-                            finish();
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            //Do nothing
-            }
-        });
-        builder.create();
-        builder.show();
+                        }
+                    });
+                }
+            });
+            builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Do nothing
+                }
+            });
+            builder.create();
+            builder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "dialogConfirm()");
+        }
     }
 
     /**
@@ -302,7 +318,12 @@ public class AccountInfo extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                layout.setError(null);
+                try {
+                    layout.setError(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "clearErrorOnTyping()");
+                }
             }
 
             @Override
@@ -316,42 +337,47 @@ public class AccountInfo extends AppCompatActivity {
      * Save data to firebase
      */
     private void saveData() {
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        //Name
-        if (account_info_txt_title_name.getEditText().getText().toString().equals("")) {
-            mRef.child(fUser.getUid()).child("name").setValue("Default");
-        } else {
-            mRef.child(fUser.getUid()).child("name").setValue(account_info_txt_title_name.getEditText().getText().toString());
-        }
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            //Name
+            if (account_info_txt_title_name.getEditText().getText().toString().equals("")) {
+                mRef.child(fUser.getUid()).child("name").setValue("Default");
+            } else {
+                mRef.child(fUser.getUid()).child("name").setValue(account_info_txt_title_name.getEditText().getText().toString());
+            }
 
-        //Gender
-        if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(0).toString())) {
-            mRef.child(fUser.getUid()).child("gender").setValue(0);
-        } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(1).toString())) {
-            mRef.child(fUser.getUid()).child("gender").setValue(1);
-        } else {
-            mRef.child(fUser.getUid()).child("gender").setValue(-1);
-        }
+            //Gender
+            if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(0).toString())) {
+                mRef.child(fUser.getUid()).child("gender").setValue(0);
+            } else if (account_info_spinner_gender.getText().toString().equals(account_info_spinner_gender.getAdapter().getItem(1).toString())) {
+                mRef.child(fUser.getUid()).child("gender").setValue(1);
+            } else {
+                mRef.child(fUser.getUid()).child("gender").setValue(-1);
+            }
 
-        //Phone
-        if (account_info_txt_title_phone.getEditText().getText().toString().equals("")) {
-            mRef.child(fUser.getUid()).child("phone").setValue("Default");
-        } else {
-            mRef.child(fUser.getUid()).child("phone").setValue(account_info_txt_title_phone.getEditText().getText().toString());
-        }
+            //Phone
+            if (account_info_txt_title_phone.getEditText().getText().toString().equals("")) {
+                mRef.child(fUser.getUid()).child("phone").setValue("Default");
+            } else {
+                mRef.child(fUser.getUid()).child("phone").setValue(account_info_txt_title_phone.getEditText().getText().toString());
+            }
 
-        //email
-        if (account_info_txt_title_email.getEditText().getText().toString().equals("")) {
-            mRef.child(fUser.getUid()).child("email").setValue("Default");
-        } else {
-            mRef.child(fUser.getUid()).child("email").setValue(account_info_txt_title_email.getEditText().getText().toString());
-        }
+            //email
+            if (account_info_txt_title_email.getEditText().getText().toString().equals("")) {
+                mRef.child(fUser.getUid()).child("email").setValue("Default");
+            } else {
+                mRef.child(fUser.getUid()).child("email").setValue(account_info_txt_title_email.getEditText().getText().toString());
+            }
 
-        //address
-        if (account_info_txt_title_address.getEditText().getText().toString().equals("")) {
-            mRef.child(fUser.getUid()).child("address").setValue("Default");
-        } else {
-            mRef.child(fUser.getUid()).child("address").setValue(account_info_txt_title_address.getEditText().getText().toString());
+            //address
+            if (account_info_txt_title_address.getEditText().getText().toString().equals("")) {
+                mRef.child(fUser.getUid()).child("address").setValue("Default");
+            } else {
+                mRef.child(fUser.getUid()).child("address").setValue(account_info_txt_title_address.getEditText().getText().toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "saveData()");
         }
     }
 }

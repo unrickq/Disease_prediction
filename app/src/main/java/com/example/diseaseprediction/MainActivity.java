@@ -103,105 +103,109 @@ public class MainActivity extends AppCompatActivity {
      * Set left navigation
      */
     private void setNavigation() {
-        drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-            R.id.nav_home,
-            R.id.nav_account,
-            R.id.nav_consultationList,
-            R.id.nav_predictionList,
-            R.id.nav_settings
-        )
-            .setDrawerLayout(drawer)
-            .build();
+        try {
+            drawer = findViewById(R.id.drawer_layout);
+            navigationView = findViewById(R.id.nav_view);
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home,
+                    R.id.nav_account,
+                    R.id.nav_consultationList,
+                    R.id.nav_predictionList,
+                    R.id.nav_settings
+            )
+                    .setDrawerLayout(drawer)
+                    .build();
 
-        navHostFragment =
-            (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
+            navHostFragment =
+                    (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            NavController navController = navHostFragment.getNavController();
 
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-        //set item click on navigation
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_home: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new HomeFragment()).commit();
-                        drawer.close();
-                        break;
+            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+            NavigationUI.setupWithNavController(navigationView, navController);
+            //set item click on navigation
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_home: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new HomeFragment()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_account: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new AccountFragment()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_consultationList: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new ConsultationListFragment()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_predictionListConfirm: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new PredictionListPending()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_predictionList: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new PredictionListFragment()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_settings: {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                                    new SettingsFragment()).commit();
+                            drawer.close();
+                            break;
+                        }
+                        case R.id.nav_out: {
+                            FirebaseAuth.getInstance().signOut();
+                            Intent i = new Intent(MainActivity.this, Login.class);
+                            startActivity(i);
+                            break;
+                        }
                     }
-                    case R.id.nav_account: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new AccountFragment()).commit();
-                        drawer.close();
-                        break;
-                    }
-                    case R.id.nav_consultationList: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new ConsultationListFragment()).commit();
-                        drawer.close();
-                        break;
-                    }
-                    case R.id.nav_predictionListConfirm: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new PredictionListPending()).commit();
-                        drawer.close();
-                        break;
-                    }
-                    case R.id.nav_predictionList: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new PredictionListFragment()).commit();
-                        drawer.close();
-                        break;
-                    }
-                    case R.id.nav_settings: {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new SettingsFragment()).commit();
-                        drawer.close();
-                        break;
-                    }
-                    case R.id.nav_out: {
-                        FirebaseAuth.getInstance().signOut();
-                        Intent i = new Intent(MainActivity.this, Login.class);
-                        startActivity(i);
-                        break;
+                    return true;
+                }
+            });
+
+            //Set prediction list confirm visibility depend on type account
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Account ac = snapshot.getValue(Account.class);
+                    try {
+                        if (ac.getTypeID() == 0) {
+                            Menu mn = navigationView.getMenu();
+                            mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
+                        } else if (ac.getTypeID() == 1) {
+                            Menu mn = navigationView.getMenu();
+                            mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
+                        }
+
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "setNavigation: TypeID null", e);
+                        Toast.makeText(MainActivity.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
                     }
                 }
-                return true;
-            }
-        });
 
-        //Set prediction list confirm visibility depend on type account
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Account ac = snapshot.getValue(Account.class);
-              try {
-                if (ac.getTypeID() == 0) {
-                  Menu mn = navigationView.getMenu();
-                  mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
-                } else if (ac.getTypeID() == 1) {
-                  Menu mn = navigationView.getMenu();
-                  mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
                 }
-
-              } catch (NullPointerException e) {
-                Log.e(TAG, "setNavigation: TypeID null", e);
-                Toast.makeText(MainActivity.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
-              }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setNavigation()");
+        }
     }
 
     @Override
@@ -217,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-            || super.onSupportNavigateUp();
+                || super.onSupportNavigateUp();
     }
 
     @Override
@@ -235,11 +239,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-  /**
-   * Set title of toolbar
-   *
-   * @param title Title of toolbar
-   */
+    /**
+     * Set title of toolbar
+     *
+     * @param title Title of toolbar
+     */
     public void setActionBarTitle(String title) {
         try {
             TextView t = (TextView) findViewById(R.id.toolbar_title);
@@ -250,58 +254,68 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-  /**
+    /**
      * Set toolbar icon
      */
     public void setIconToolbar() {
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+        try {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setIconToolbar()");
+        }
     }
 
     /**
      * Get data for navigation header
      */
     private void getUIofNavHeader() {
-        //get user by id
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                //if exist then set UI
-                if (snapshot.hasChild(fUser.getUid())) {
-                    mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
-                    //Set text navigation header
-                    nav_view = findViewById(R.id.nav_view);
-                    View headerView = nav_view.getHeaderView(0);
-                    nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
-                    nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
-                    nav_header_txt_acc_name.setText(mAccount.getName());
-                    if (mAccount.getPhone().equals("Default")) {
-                        nav_header_txt_acc_phone.setText("");
-                    } else {
-                        nav_header_txt_acc_phone.setText(mAccount.getPhone());
-                    }
+        try {
+            //get user by id
+            mAccount = new Account();
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //check user exist in firebase
+                    //if exist then set UI
+                    if (snapshot.hasChild(fUser.getUid())) {
+                        mAccount = snapshot.child(fUser.getUid()).getValue(Account.class);
+                        //Set text navigation header
+                        nav_view = findViewById(R.id.nav_view);
+                        View headerView = nav_view.getHeaderView(0);
+                        nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
+                        nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
+                        nav_header_txt_acc_name.setText(mAccount.getName());
+                        if (mAccount.getPhone().equals("Default")) {
+                            nav_header_txt_acc_phone.setText("");
+                        } else {
+                            nav_header_txt_acc_phone.setText(mAccount.getPhone());
+                        }
 
-                    //set image
-                    nav_header_avatar = findViewById(R.id.nav_header_avatar);
-                    if (!mAccount.getImage().equals("Default")) {
-                        Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
-                    } else {
-                        nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
+                        //set image
+                        nav_header_avatar = findViewById(R.id.nav_header_avatar);
+                        if (!mAccount.getImage().equals("Default")) {
+                            Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+                        } else {
+                            nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
 //                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
+                        }
+
+                    } else {
+                        //Can't find any data
                     }
-
-                } else {
-                    //Can't find any data
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "getUIofNavHeader()");
+        }
     }
 
     /**
@@ -312,41 +326,46 @@ public class MainActivity extends AppCompatActivity {
      * @param user current user
      */
     private void checkDataOfAccount(FirebaseUser user) {
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                if (snapshot.hasChild(user.getUid())) {
-                    mAccount = snapshot.child(user.getUid()).getValue(Account.class);
-                    try {
-                        //Get data
-                        //Go to info activity if data is default
-                        if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
-                                mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
-                                mAccount.getAddress().equals("Default")) {
-                            Intent intent = new Intent(MainActivity.this, AccountInfo.class);
-                            startActivity(intent);
-                        } else {
-                            //Check data if account type is doctor
-                            if (mAccount.getTypeID() == 0) {
-                                checkDataOfAccountDoctor(user);
+        try {
+            mAccount = new Account();
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //check user exist in firebase
+                    if (snapshot.hasChild(user.getUid())) {
+                        mAccount = snapshot.child(user.getUid()).getValue(Account.class);
+                        try {
+                            //Get data
+                            //Go to info activity if data is default
+                            if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
+                                    mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
+                                    mAccount.getAddress().equals("Default")) {
+                                Intent intent = new Intent(MainActivity.this, AccountInfo.class);
+                                startActivity(intent);
+                            } else {
+                                //Check data if account type is doctor
+                                if (mAccount.getTypeID() == 0) {
+                                    checkDataOfAccountDoctor(user);
+                                }
                             }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "Home. Patient ID null", e);
                         }
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "Home. Patient ID null", e);
+                    } else {
+                        //IF can't find any data
                     }
-                } else {
-                    //IF can't find any data
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "checkDataOfAccount()");
+        }
     }
 
     /**
@@ -357,35 +376,40 @@ public class MainActivity extends AppCompatActivity {
      * @param user current user
      */
     private void checkDataOfAccountDoctor(FirebaseUser user) {
-        mAccount = new Account();
-        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //check user exist in firebase
-                if (snapshot.hasChild(user.getUid())) {
-                    mDoctor = snapshot.child(user.getUid()).getValue(DoctorInfo.class);
-                    try {
-                        //Get data
-                        //Go to info activity if data is default
-                        if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
-                                mDoctor.getSpecializationID().equals("Default")) {
-                            Intent intent = new Intent(MainActivity.this, AccountInfoDoctor.class);
-                            startActivity(intent);
+        try {
+            mAccount = new Account();
+            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    //check user exist in firebase
+                    if (snapshot.hasChild(user.getUid())) {
+                        mDoctor = snapshot.child(user.getUid()).getValue(DoctorInfo.class);
+                        try {
+                            //Get data
+                            //Go to info activity if data is default
+                            if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
+                                    mDoctor.getSpecializationID().equals("Default")) {
+                                Intent intent = new Intent(MainActivity.this, AccountInfoDoctor.class);
+                                startActivity(intent);
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "Main. checkDataOfAccountDoctor", e);
                         }
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "Main. checkDataOfAccountDoctor", e);
+                    } else {
+                        DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(), new Date(), 1);
+                        mRef.child(user.getUid()).setValue(doctorInfo);
                     }
-                } else {
-                    DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(), new Date(), 1);
-                    mRef.child(user.getUid()).setValue(doctorInfo);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "checkDataOfAccountDoctor()");
+        }
     }
 }

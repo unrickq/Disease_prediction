@@ -2,6 +2,7 @@ package com.example.diseaseprediction.ui.consultation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,101 +38,110 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class ConsultationListFragment extends Fragment {
+    private static final String TAG = "ConsultationFragment";
+    FirebaseUser fUser;
+    DatabaseReference mRef;
 
-  FirebaseUser fUser;
-  DatabaseReference mRef;
+    private RecyclerView consultation_list_recycler_view_main;
+    private ConsultationAdapter consultationAdapter;
+    private List<ConsultationList> consultationLists;
+    private TextView consultation_list_txt_title;
 
-  private RecyclerView consultation_list_recycler_view_main;
-  private ConsultationAdapter consultationAdapter;
-  private List<ConsultationList> consultationLists;
-  private TextView consultation_list_txt_title;
+    private Context context;
 
-  private Context context;
-
-  public ConsultationListFragment() {
-    // Required empty public constructor
-  }
-
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    //Set toolbar
-    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_consultationList));
-    ((MainActivity) getActivity()).setIconToolbar();
-  }
-
-  @Override
-  public void onViewCreated(@NonNull @NotNull View view,
-                            @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    context = getActivity().getApplicationContext();
+    public ConsultationListFragment() {
+        // Required empty public constructor
+    }
 
 
-    consultation_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(context));
-    //Load user to recycler
-    loadListConsultation();
-
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    // Remove all view current in activity
-    container.removeAllViews();
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_consultation_list, container, false);
-
-    //Get current user
-    fUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    consultation_list_txt_title = view.findViewById(R.id.consultation_list_txt_title);
-
-    //Create recycler
-    consultation_list_recycler_view_main = view.findViewById(R.id.consultation_list_recycler_view_main);
-    consultation_list_recycler_view_main.setHasFixedSize(true);
-    consultationLists = new ArrayList<>();
-
-
-    return view;
-  }
-
-  /**
-   * Load all consultation list depend on user ID
-   */
-  private void loadListConsultation() {
-    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-    mRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        consultationLists.clear();
-        for (DataSnapshot sh : snapshot.getChildren()) {
-          ConsultationList cls = sh.getValue(ConsultationList.class);
-          assert cls != null;
-          //Get all consultation list depend on user ID 1 or user ID 2
-          if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
-            consultationLists.add(cls);
-          }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        try {
+            super.onCreate(savedInstanceState);
+            //Set toolbar
+            ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_consultationList));
+            ((MainActivity) getActivity()).setIconToolbar();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "getMessagesFirebase()");
         }
-        //Reverse list index to get latest consultation
-        if (consultationLists.size() > 0) {
-          consultation_list_txt_title.setVisibility(View.GONE);
-          Collections.reverse(consultationLists);
-          consultationAdapter = new ConsultationAdapter(context, consultationLists,
-              consultationLists.size());
-          consultation_list_recycler_view_main.setAdapter(consultationAdapter);
-        } else {
-          consultation_list_txt_title.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view,
+                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        context = getActivity().getApplicationContext();
+
+
+        consultation_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(context));
+        //Load user to recycler
+        loadListConsultation();
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Remove all view current in activity
+        container.removeAllViews();
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_consultation_list, container, false);
+
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        consultation_list_txt_title = view.findViewById(R.id.consultation_list_txt_title);
+
+        //Create recycler
+        consultation_list_recycler_view_main = view.findViewById(R.id.consultation_list_recycler_view_main);
+        consultation_list_recycler_view_main.setHasFixedSize(true);
+        consultationLists = new ArrayList<>();
+
+
+        return view;
+    }
+
+    /**
+     * Load all consultation list depend on user ID
+     */
+    private void loadListConsultation() {
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    consultationLists.clear();
+                    for (DataSnapshot sh : snapshot.getChildren()) {
+                        ConsultationList cls = sh.getValue(ConsultationList.class);
+                        assert cls != null;
+                        //Get all consultation list depend on user ID 1 or user ID 2
+                        if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
+                            consultationLists.add(cls);
+                        }
+                    }
+                    //Reverse list index to get latest consultation
+                    if (consultationLists.size() > 0) {
+                        consultation_list_txt_title.setVisibility(View.GONE);
+                        Collections.reverse(consultationLists);
+                        consultationAdapter = new ConsultationAdapter(context, consultationLists,
+                                consultationLists.size());
+                        consultation_list_recycler_view_main.setAdapter(consultationAdapter);
+                    } else {
+                        consultation_list_txt_title.setVisibility(View.VISIBLE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadListConsultation()");
         }
-
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
-  }
+    }
 }

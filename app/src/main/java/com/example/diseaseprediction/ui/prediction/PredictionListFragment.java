@@ -42,148 +42,158 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class PredictionListFragment extends Fragment {
-  private static final String TAG = "PredictionListFragment";
+    private static final String TAG = "PredictionListFragment";
 
-  FirebaseUser fUser;
-  DatabaseReference mRef;
+    FirebaseUser fUser;
+    DatabaseReference mRef;
 
-  private RecyclerView prediction_list_recycler_view_main;
-  private List<Prediction> mPredictionList;
-  private PredictionAdapter patientPredictionAdapter;
-  private TextView prediction_list_txt_title;
+    private RecyclerView prediction_list_recycler_view_main;
+    private List<Prediction> mPredictionList;
+    private PredictionAdapter patientPredictionAdapter;
+    private TextView prediction_list_txt_title;
 
-  private Context context;
-
-
-  public PredictionListFragment() {
-    // Required empty public constructor
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    //Set toolbar
-    ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList));
-    ((MainActivity) getActivity()).setIconToolbar();
-
-  }
-
-  @Override
-  public void onViewCreated(@NonNull @NotNull View view,
-                            @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    context = getActivity().getApplicationContext();
-
-    prediction_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-
-    //Load UI
-    loadUIByType();
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    container.removeAllViews();
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_prediction_list, container, false);
-
-    //Get current user
-    fUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    prediction_list_txt_title = view.findViewById(R.id.prediction_list_txt_title);
-    prediction_list_recycler_view_main = view.findViewById(R.id.prediction_list_recycler_view_main);
-    prediction_list_recycler_view_main.setHasFixedSize(true);
+    private Context context;
 
 
-    return view;
-  }
+    public PredictionListFragment() {
+        // Required empty public constructor
+    }
 
-  /**
-   * Load UI by account type
-   */
-  private void loadUIByType() {
-    mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Set toolbar
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList));
+        ((MainActivity) getActivity()).setIconToolbar();
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view,
+                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        context = getActivity().getApplicationContext();
+
+        prediction_list_recycler_view_main.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
+        //Load UI
+        loadUIByType();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        container.removeAllViews();
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_prediction_list, container, false);
+
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        prediction_list_txt_title = view.findViewById(R.id.prediction_list_txt_title);
+        prediction_list_recycler_view_main = view.findViewById(R.id.prediction_list_recycler_view_main);
+        prediction_list_recycler_view_main.setHasFixedSize(true);
+
+
+        return view;
+    }
+
+    /**
+     * Load UI by account type
+     */
+    private void loadUIByType() {
         try {
-          if (snapshot.child("typeID").getValue().toString().equals("0")) {
-            loadAllPredictionOfAccount(0);
-          } else {
-            loadAllPredictionOfAccount(1);
-          }
+            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                            loadAllPredictionOfAccount(0);
+                        } else {
+                            loadAllPredictionOfAccount(1);
+                        }
 
-        } catch (NullPointerException e) {
-          Log.e(TAG, "setUIByAccountType: TypeID Null", e);
-          Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
-          FirebaseAuth.getInstance().signOut();
-          Intent i = new Intent(context, Login.class);
-          startActivity(i);
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "setUIByAccountType: TypeID Null", e);
+                        Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(context, Login.class);
+                        startActivity(i);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadUIByType()");
         }
-      }
+    }
 
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
+    /**
+     * Load prediction by type account
+     * Load list prediction of patient if account type is 1
+     * Load list prediction that confirmed by account doctor if account type is 0
+     *
+     * @param typeAcc type of account. 0: doctor | 1: patient
+     */
+    private void loadAllPredictionOfAccount(int typeAcc) {
+        try {
+            mPredictionList = new ArrayList<>();
+            Query predictionByDateUpdate = FirebaseDatabase.getInstance().getReference("Prediction").orderByChild(
+                    "dateUpdate/time");
+            predictionByDateUpdate.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mPredictionList.clear();
+                    for (DataSnapshot sh : snapshot.getChildren()) {
+                        Prediction pr = sh.getValue(Prediction.class);
+                        //If patientId equal with current accountID
+                        try {
+                            //Doctor type
+                            if (typeAcc == 0) {
+                                if (pr.getDoctorID().equals(fUser.getUid())) {
+                                    mPredictionList.add(pr);
+                                }
+                            }
+                            //Patient type
+                            else if (typeAcc == 1) {
+                                if (pr.getPatientID().equals(fUser.getUid())) {
+                                    mPredictionList.add(pr);
+                                }
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "PredictionListFragment. ID null", e);
+                        }
+                    }
+                    //goToScreen 1: prediction result screen
+                    if (mPredictionList.size() > 0) {
+                        prediction_list_txt_title.setVisibility(View.GONE);
+                        //Reverse list index to get latest prediction
+                        Collections.reverse(mPredictionList);
+                        patientPredictionAdapter = new PredictionAdapter(context,
+                                mPredictionList, 1, mPredictionList.size());
+                        prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
+                    } else {
+                        prediction_list_txt_title.setVisibility(View.VISIBLE);
+                    }
 
-      }
-    });
-  }
+                }
 
-  /**
-   * Load prediction by type account
-   * Load list prediction of patient if account type is 1
-   * Load list prediction that confirmed by account doctor if account type is 0
-   *
-   * @param typeAcc type of account. 0: doctor | 1: patient
-   */
-  private void loadAllPredictionOfAccount(int typeAcc) {
-    mPredictionList = new ArrayList<>();
-    Query predictionByDateUpdate = FirebaseDatabase.getInstance().getReference("Prediction").orderByChild(
-        "dateUpdate/time");
-    predictionByDateUpdate.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        mPredictionList.clear();
-        for (DataSnapshot sh : snapshot.getChildren()) {
-          Prediction pr = sh.getValue(Prediction.class);
-          //If patientId equal with current accountID
-          try {
-            //Doctor type
-            if (typeAcc == 0) {
-              if (pr.getDoctorID().equals(fUser.getUid())) {
-                mPredictionList.add(pr);
-              }
-            }
-            //Patient type
-            else if (typeAcc == 1) {
-              if (pr.getPatientID().equals(fUser.getUid())) {
-                mPredictionList.add(pr);
-              }
-            }
-          } catch (NullPointerException e) {
-            Log.d(TAG, "PredictionListFragment. ID null", e);
-          }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadAllPredictionOfAccount()");
         }
-        //goToScreen 1: prediction result screen
-        if (mPredictionList.size() > 0) {
-          prediction_list_txt_title.setVisibility(View.GONE);
-          //Reverse list index to get latest prediction
-          Collections.reverse(mPredictionList);
-          patientPredictionAdapter = new PredictionAdapter(context,
-              mPredictionList, 1, mPredictionList.size());
-          prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
-        } else {
-          prediction_list_txt_title.setVisibility(View.VISIBLE);
-        }
-
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
-  }
+    }
 }

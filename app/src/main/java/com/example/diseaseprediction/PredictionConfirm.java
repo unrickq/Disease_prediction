@@ -38,11 +38,11 @@ import java.util.Date;
 public class PredictionConfirm extends AppCompatActivity {
 
   private static final String LOG_TAG = "Prediction Confirm";
-
+  //
+  ArrayList<Disease> diseasesList = new ArrayList<>();
   // Firebase
   private DatabaseReference mRef;
   private FirebaseUser fUser;
-
   // Layout
   private ImageView prediction_confirm_toolbar_img_pre;
   private TextView prediction_confirm_txt_disease_description_result;
@@ -51,11 +51,8 @@ public class PredictionConfirm extends AppCompatActivity {
   private AutoCompleteTextView prediction_confirm_disease_select;
   private EditText prediction_confirm_disease_other;
   private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
-      prediction_confirm_prediction_confirm_btn;
+          prediction_confirm_prediction_confirm_btn;
   private ArrayAdapter diseaseAdapter;
-
-  //
-  ArrayList<Disease> diseasesList = new ArrayList<>();
   private Prediction prediction;
   private int predictionStatus;
   private Disease selectedDisease; // currently selected disease in combo box
@@ -81,77 +78,88 @@ public class PredictionConfirm extends AppCompatActivity {
    * Set up necessary elements for the UI
    */
   private void setUpUI() {
-    getViews();
+    try {
+      getViews();
 
-    getDiseasesListAndLoadUI();
+      getDiseasesListAndLoadUI();
 
-    loadPatientDescription();
+      loadPatientDescription();
 
-    // Event for Incorrect button
-    prediction_confirm_prediction_wrong_btn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        displayConfirmDialog(0);
-      }
-    });
-    // Event for correct button
-    prediction_confirm_prediction_correct_btn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        displayConfirmDialog(1);
-      }
-    });
-    // Event for confirm button
-    prediction_confirm_prediction_confirm_btn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        String note = "";
-        String diseaseID = selectedDisease.getDiseaseID();
-        // Check if doctor select other disease option
-        if (diseaseID.equals(Constants.DISEASE_OTHER_ID)) {
-          // get disease name
-          note = prediction_confirm_disease_other.getText().toString();
-          // check if disease name empty
-          if (!note.trim().isEmpty()) {
-            savePrediction(fUser.getUid(), 1);
-          } else {
-            prediction_confirm_disease_other_layout.setError(getString(R.string.error_field_empty));
-          }
-        } else { // doctor select known diseases
-          savePrediction(fUser.getUid(), 1);
+      // Event for Incorrect button
+      prediction_confirm_prediction_wrong_btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          displayConfirmDialog(0);
         }
-      }
-    });
-    // Event for back button
-    prediction_confirm_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        onBackPressed();
-      }
-    });
+      });
+      // Event for correct button
+      prediction_confirm_prediction_correct_btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          displayConfirmDialog(1);
+        }
+      });
+      // Event for confirm button
+      prediction_confirm_prediction_confirm_btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          String note = "";
+          String diseaseID = selectedDisease.getDiseaseID();
+          // Check if doctor select other disease option
+          if (diseaseID.equals(Constants.DISEASE_OTHER_ID)) {
+            // get disease name
+            note = prediction_confirm_disease_other.getText().toString();
+            // check if disease name empty
+            if (!note.trim().isEmpty()) {
+              savePrediction(fUser.getUid(), 1);
+            } else {
+              prediction_confirm_disease_other_layout.setError(getString(R.string.error_field_empty));
+            }
+          } else { // doctor select known diseases
+            savePrediction(fUser.getUid(), 1);
+          }
+        }
+      });
+      // Event for back button
+      prediction_confirm_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          onBackPressed();
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "setUpUI()");
+    }
+
   }
 
   /**
    * Get UI elements on View
    */
   private void getViews() {
+    try {
+      prediction_confirm_toolbar_img_pre = findViewById(R.id.prediction_confirm_toolbar_img_pre);
 
-    prediction_confirm_toolbar_img_pre = findViewById(R.id.prediction_confirm_toolbar_img_pre);
+      prediction_confirm_txt_disease_description_result =
+              findViewById(R.id.prediction_confirm_txt_disease_description_result);
+      prediction_confirm_txt_disease_prediction_result =
+              findViewById(R.id.prediction_confirm_txt_disease_prediction_result);
 
-    prediction_confirm_txt_disease_description_result =
-        findViewById(R.id.prediction_confirm_txt_disease_description_result);
-    prediction_confirm_txt_disease_prediction_result =
-        findViewById(R.id.prediction_confirm_txt_disease_prediction_result);
+      prediction_confirm_disease_select_layout = findViewById(R.id.prediction_confirm_disease_select_layout);
+      prediction_confirm_disease_select = findViewById(R.id.prediction_confirm_disease_select);
 
-    prediction_confirm_disease_select_layout = findViewById(R.id.prediction_confirm_disease_select_layout);
-    prediction_confirm_disease_select = findViewById(R.id.prediction_confirm_disease_select);
+      prediction_confirm_disease_other_layout = findViewById(R.id.prediction_confirm_disease_other_layout);
+      prediction_confirm_disease_other = findViewById(R.id.prediction_confirm_disease_other);
 
-    prediction_confirm_disease_other_layout = findViewById(R.id.prediction_confirm_disease_other_layout);
-    prediction_confirm_disease_other = findViewById(R.id.prediction_confirm_disease_other);
+      prediction_confirm_prediction_wrong_btn = findViewById(R.id.prediction_confirm_prediction_wrong_btn);
+      prediction_confirm_prediction_correct_btn = findViewById(R.id.prediction_confirm_prediction_correct_btn);
+      prediction_confirm_prediction_confirm_btn = findViewById(R.id.prediction_confirm_prediction_confirm_btn);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "getViews()");
+    }
 
-    prediction_confirm_prediction_wrong_btn = findViewById(R.id.prediction_confirm_prediction_wrong_btn);
-    prediction_confirm_prediction_correct_btn = findViewById(R.id.prediction_confirm_prediction_correct_btn);
-    prediction_confirm_prediction_confirm_btn = findViewById(R.id.prediction_confirm_prediction_confirm_btn);
   }
 
   /**
@@ -160,52 +168,55 @@ public class PredictionConfirm extends AppCompatActivity {
    * {@link AutoCompleteTextView}
    */
   private void getDiseasesListAndLoadUI() {
-    mRef = FirebaseDatabase.getInstance().getReference("Disease");
-    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-        // Get diseases and add to list
-        for (DataSnapshot sn : snapshot.getChildren()) {
-          Disease disease = sn.getValue(Disease.class);
-          if (disease.getDiseaseID().equals(prediction.getDiseaseID())) {
-            selectedDisease = disease;
+    try {
+      mRef = FirebaseDatabase.getInstance().getReference("Disease");
+      mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+          // Get diseases and add to list
+          for (DataSnapshot sn : snapshot.getChildren()) {
+            Disease disease = sn.getValue(Disease.class);
+            if (disease.getDiseaseID().equals(prediction.getDiseaseID())) {
+              selectedDisease = disease;
+            }
+            diseasesList.add(disease);
           }
-          diseasesList.add(disease);
+
+          // create new ArrayAdapter
+          diseaseAdapter = new ArrayAdapter(PredictionConfirm.this, R.layout.support_simple_spinner_dropdown_item,
+                  diseasesList);
+          prediction_confirm_disease_select.setAdapter(diseaseAdapter);
+
+          // Set onItemClickListener to check for 'other disease', then set visibility of input layout
+          prediction_confirm_disease_select.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              selectedDisease = (Disease) parent.getItemAtPosition(position);
+              // selected disease is 'Other disease'
+              if (selectedDisease.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+                prediction_confirm_disease_other_layout.setVisibility(View.VISIBLE);
+              } else {
+                prediction_confirm_disease_other_layout.setVisibility(View.GONE);
+              }
+            }
+          });
+
+          // Set disease name
+          prediction_confirm_txt_disease_prediction_result.setText(selectedDisease.getName());
+          prediction_confirm_disease_select.setText(selectedDisease.getName());
+          diseaseAdapter.getFilter().filter(null);
+
         }
 
-        // create new ArrayAdapter
-        diseaseAdapter = new ArrayAdapter(PredictionConfirm.this, R.layout.support_simple_spinner_dropdown_item,
-            diseasesList);
-        prediction_confirm_disease_select.setAdapter(diseaseAdapter);
+        @Override
+        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-        // Set onItemClickListener to check for 'other disease', then set visibility of input layout
-        prediction_confirm_disease_select.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectedDisease = (Disease) parent.getItemAtPosition(position);
-            // selected disease is 'Other disease'
-            if (selectedDisease.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
-              prediction_confirm_disease_other_layout.setVisibility(View.VISIBLE);
-            } else {
-              prediction_confirm_disease_other_layout.setVisibility(View.GONE);
-            }
-          }
-        });
-
-        // Set disease name
-        prediction_confirm_txt_disease_prediction_result.setText(selectedDisease.getName());
-        prediction_confirm_disease_select.setText(selectedDisease.getName());
-        diseaseAdapter.getFilter().filter(null);
-
-      }
-
-      @Override
-      public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-      }
-    });
-
-
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "getDiseasesListAndLoadUI()");
+    }
   }
 
   /**
@@ -213,17 +224,18 @@ public class PredictionConfirm extends AppCompatActivity {
    * After successfully loaded, these symptoms will be loaded on the TextView
    */
   private void loadPatientDescription() {
-    ArrayList<Message> messagesList = new ArrayList<>();
+    try {
+      ArrayList<Message> messagesList = new ArrayList<>();
 
-    String sessionID = prediction.getSessionID();
-    // get messages in session between user and chat bot
-    mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
-    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+      String sessionID = prediction.getSessionID();
+      // get messages in session between user and chat bot
+      mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+      mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
-        for (DataSnapshot sn : snapshot.getChildren()) {
-          Message message = sn.getValue(Message.class);
+          for (DataSnapshot sn : snapshot.getChildren()) {
+            Message message = sn.getValue(Message.class);
           try {
             // Get messages that was sent to chat bot i.e sender is patient
             if (message.getReceiverID().equals(Constants.CHATBOT_ID)) {
@@ -233,15 +245,19 @@ public class PredictionConfirm extends AppCompatActivity {
             Log.e(LOG_TAG, "loadPatientDescription: Null pointer", e);
             Toast.makeText(PredictionConfirm.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
           }
+          }
+          displayMessagesList(messagesList);
         }
-        displayMessagesList(messagesList);
-      }
 
-      @Override
-      public void onCancelled(@NonNull @NotNull DatabaseError error) {
+        @Override
+        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-      }
-    });
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "loadPatientDescription()");
+    }
   }
 
   /**
@@ -250,14 +266,19 @@ public class PredictionConfirm extends AppCompatActivity {
    * @param messagesList an {@link ArrayList} that store {@link Message}
    */
   private void displayMessagesList(ArrayList<Message> messagesList) {
-    String finalText = "";
+    try {
+      String finalText = "";
 
-    // iterate and concatenate string, then displays messages from messagesList to TextView
-    for (Message message : messagesList) {
-      finalText = finalText.concat("- " + message.getMessage() + "\n");
+      // iterate and concatenate string, then displays messages from messagesList to TextView
+      for (Message message : messagesList) {
+        finalText = finalText.concat("- " + message.getMessage() + "\n");
+      }
+
+      prediction_confirm_txt_disease_description_result.setText(finalText);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "displayMessagesList()");
     }
-
-    prediction_confirm_txt_disease_description_result.setText(finalText);
   }
 
   /**
@@ -271,68 +292,77 @@ public class PredictionConfirm extends AppCompatActivity {
    * @param type type of dialog. 0 is for incorrect prediction, 1 is correct prediction
    */
   private void displayConfirmDialog(int type) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    try {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-    // User select Incorrect btn
-    if (type == 0) {
-      // Set content
-      builder.setMessage(R.string.prediction_confirm_dialog_incorrect);
+      // User select Incorrect btn
+      if (type == 0) {
+        // Set content
+        builder.setMessage(R.string.prediction_confirm_dialog_incorrect);
 
-      // Set button
-      builder.setPositiveButton(R.string.dialog_button_yes, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          changeUIIncorrect();
-        }
-      });
+        // Set button
+        builder.setPositiveButton(R.string.dialog_button_yes, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            changeUIIncorrect();
+          }
+        });
 
-      builder.setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          // do nothing
-        }
-      });
-      builder.create().show();
-    } else if (type == 1) { // User select Correct btn
-      // Set content
-      builder.setMessage(R.string.prediction_confirm_dialog_correct);
+        builder.setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            // do nothing
+          }
+        });
+        builder.create().show();
+      } else if (type == 1) { // User select Correct btn
+        // Set content
+        builder.setMessage(R.string.prediction_confirm_dialog_correct);
 
-      // Set button
-      builder.setPositiveButton(R.string.dialog_button_yes, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          // Save prediction with new doctorID and updated status
-          String doctorID = fUser.getUid();
-          savePrediction(doctorID, 0);
-        }
-      });
+        // Set button
+        builder.setPositiveButton(R.string.dialog_button_yes, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            // Save prediction with new doctorID and updated status
+            String doctorID = fUser.getUid();
+            savePrediction(doctorID, 0);
+          }
+        });
 
-      builder.setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          // do nothing
-        }
-      });
+        builder.setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            // do nothing
+          }
+        });
 
-      builder.create().show();
-    } else { // Wrong argument pass in
-      Log.w(LOG_TAG, "displayConfirmDialog: invalid 'type' argument!");
+        builder.create().show();
+      } else { // Wrong argument pass in
+        Log.w(LOG_TAG, "displayConfirmDialog: invalid 'type' argument!");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "displayConfirmDialog()");
     }
-
   }
 
   /**
    * Change UI elements for Incorrect mode
    */
   private void changeUIIncorrect() {
-    // display
-    prediction_confirm_disease_select_layout.setVisibility(View.VISIBLE);
-    prediction_confirm_prediction_confirm_btn.setVisibility(View.VISIBLE);
-    // hide
-    prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
-    prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
-    // set text
-    prediction_confirm_txt_disease_prediction_result.setText(R.string.prediction_confirm_txt_disease_prediction_title);
+    try {
+      // display
+      prediction_confirm_disease_select_layout.setVisibility(View.VISIBLE);
+      prediction_confirm_prediction_confirm_btn.setVisibility(View.VISIBLE);
+      // hide
+      prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
+      prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
+      // set text
+      prediction_confirm_txt_disease_prediction_result.setText(R.string.prediction_confirm_txt_disease_prediction_title);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "changeUIIncorrect()");
+    }
   }
 
 
@@ -347,27 +377,33 @@ public class PredictionConfirm extends AppCompatActivity {
    *                 </ul>
    */
   private void savePrediction(String doctorID, int type) {
-    // check if prediction status still equal to 0 i.e "waiting for confirmation"
-    if (predictionStatus == 0) {
-      mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
-      mRef.child("doctorID").setValue(doctorID);
-      // if prediction correct
-      if (type == 0) {
-        mRef.child("status").setValue(1); // prediction correct
-      } else if (type == 1) { // prediction incorrect
-        String diseaseName = prediction_confirm_disease_other.getText().toString();
-        mRef.child("diseaseID").setValue(selectedDisease.getDiseaseID()); //set correct disease ID
-        // if doctor select unknown disease -> disease name not empty
-        if (!diseaseName.isEmpty()) {
-          mRef.child("notes").setValue(diseaseName);
+    try {
+      // check if prediction status still equal to 0 i.e "waiting for confirmation"
+      if (predictionStatus == 0) {
+        mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
+        mRef.child("doctorID").setValue(doctorID);
+        // if prediction correct
+        if (type == 0) {
+          mRef.child("status").setValue(1); // prediction correct
+        } else if (type == 1) { // prediction incorrect
+          String diseaseName = prediction_confirm_disease_other.getText().toString();
+          mRef.child("diseaseID").setValue(selectedDisease.getDiseaseID()); //set correct disease ID
+          // if doctor select unknown disease -> disease name not empty
+          if (!diseaseName.isEmpty()) {
+            mRef.child("notes").setValue(diseaseName);
+          }
+          mRef.child("status").setValue(2); // prediction incorrect
         }
-        mRef.child("status").setValue(2); // prediction incorrect
       }
+
+      mRef.child("dateUpdate").setValue(new Date());
+
+      displayThanksDialog();
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "savePrediction()");
     }
 
-    mRef.child("dateUpdate").setValue(new Date());
-
-    displayThanksDialog();
   }
 
   /**
@@ -375,37 +411,42 @@ public class PredictionConfirm extends AppCompatActivity {
    * user, display a dialog and send user back to Home
    */
   private void checkPredictionStatus() {
-    mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
-    mRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-        Prediction prediction = snapshot.getValue(Prediction.class);
-        // if prediction is confirmed but not by current doctor
-        try {
-          if (prediction.getStatus() != 0 && !prediction.getDoctorID().equals(fUser.getUid())) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(PredictionConfirm.this);
-            builder.setMessage(R.string.prediction_confirm_dialog_prediction_status_invalid);
-            builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                // redirect to Home
-                Intent intent = new Intent(PredictionConfirm.this, MainActivity.class);
-                startActivity(intent);
-              }
-            });
-            builder.create().show();
+    try {
+      mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
+      mRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+          Prediction prediction = snapshot.getValue(Prediction.class);
+          // if prediction is confirmed but not by current doctor
+          try {
+            if (prediction.getStatus() != 0 && !prediction.getDoctorID().equals(fUser.getUid())) {
+              AlertDialog.Builder builder = new AlertDialog.Builder(PredictionConfirm.this);
+              builder.setMessage(R.string.prediction_confirm_dialog_prediction_status_invalid);
+              builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  // redirect to Home
+                  Intent intent = new Intent(PredictionConfirm.this, MainActivity.class);
+                  startActivity(intent);
+                }
+              });
+              builder.create().show();
+            }
+          } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "checkPredictionStatus: Param null", e);
+            Toast.makeText(PredictionConfirm.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_LONG).show();
           }
-        } catch (NullPointerException e) {
-          Log.e(LOG_TAG, "checkPredictionStatus: Param null", e);
-          Toast.makeText(PredictionConfirm.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_LONG).show();
         }
-      }
 
-      @Override
-      public void onCancelled(@NonNull @NotNull DatabaseError error) {
+        @Override
+        public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-      }
-    });
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "checkPredictionStatus()");
+    }
   }
 
   /**
@@ -413,19 +454,24 @@ public class PredictionConfirm extends AppCompatActivity {
    * will be navigate to Home
    */
   private void displayThanksDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(R.string.prediction_confirm_dialog_thankyou);
+    try {
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage(R.string.prediction_confirm_dialog_thankyou);
 
-    builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        // Navigation to Home
-        Intent intent = new Intent(PredictionConfirm.this, MainActivity.class);
-        startActivity(intent);
-      }
-    });
+      builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          // Navigation to Home
+          Intent intent = new Intent(PredictionConfirm.this, MainActivity.class);
+          startActivity(intent);
+        }
+      });
 
-    builder.create().show();
+      builder.create().show();
+    } catch (Exception e) {
+      e.printStackTrace();
+      Log.d(LOG_TAG, "displayThanksDialog()");
+    }
   }
 
 }

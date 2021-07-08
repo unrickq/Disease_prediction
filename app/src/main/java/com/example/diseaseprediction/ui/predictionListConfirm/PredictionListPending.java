@@ -92,61 +92,66 @@ public class PredictionListPending extends Fragment {
      * Load all prediction pending
      */
     private void loadAllPredictionPending() {
-        mPredictionListDoctor = new ArrayList<>();
-        //Find specialization id of doctor account
-        mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mDoctor = snapshot.getValue(DoctorInfo.class);
-                //Go to prediction
-                Query predictionByDateCreate =
-                    FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
-                predictionByDateCreate.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        mPredictionListDoctor.clear();
-                        for (DataSnapshot sh : snapshot.getChildren()) {
-                            Prediction pr = sh.getValue(Prediction.class);
-                            assert pr != null;
-                            try {
-                                if (pr.getStatus() == 0) {
-                                    //Check if specializationID in prediction equal with specializationID in doctor
-                                    // account
-                                    if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                                        //Add to prediction list
-                                        mPredictionListDoctor.add(pr);
+        try {
+            mPredictionListDoctor = new ArrayList<>();
+            //Find specialization id of doctor account
+            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mDoctor = snapshot.getValue(DoctorInfo.class);
+                    //Go to prediction
+                    Query predictionByDateCreate =
+                            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
+                    predictionByDateCreate.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            mPredictionListDoctor.clear();
+                            for (DataSnapshot sh : snapshot.getChildren()) {
+                                Prediction pr = sh.getValue(Prediction.class);
+                                assert pr != null;
+                                try {
+                                    if (pr.getStatus() == 0) {
+                                        //Check if specializationID in prediction equal with specializationID in doctor
+                                        // account
+                                        if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                            //Add to prediction list
+                                            mPredictionListDoctor.add(pr);
+                                        }
                                     }
+                                } catch (NullPointerException e) {
+                                    Log.d(TAG, "Home. Patient ID null", e);
                                 }
-                            } catch (NullPointerException e) {
-                                Log.d(TAG, "Home. Patient ID null", e);
                             }
-                        }
-                        //Create adapter
-                        //goToScreen 0: doctor confirm screen
-                        if (mPredictionListDoctor.size() > 0) {
-                            prediction_list_confirm_txt_title.setVisibility(View.GONE);
-                            //Reverse list index to get latest prediction
+                            //Create adapter
+                            //goToScreen 0: doctor confirm screen
+                            if (mPredictionListDoctor.size() > 0) {
+                                prediction_list_confirm_txt_title.setVisibility(View.GONE);
+                                //Reverse list index to get latest prediction
 //                            Collections.reverse(mPredictionListDoctor);
-                            doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                                mPredictionListDoctor, 0, mPredictionListDoctor.size());
-                            prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
-                        } else {
-                            prediction_list_confirm_txt_title.setVisibility(View.VISIBLE);
+                                doctorPredictionPendingListAdapter = new PredictionAdapter(context,
+                                        mPredictionListDoctor, 0, mPredictionListDoctor.size());
+                                prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
+                            } else {
+                                prediction_list_confirm_txt_title.setVisibility(View.VISIBLE);
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
 
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadAllPredictionPending()");
+        }
     }
 }
