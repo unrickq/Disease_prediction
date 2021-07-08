@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".Chat">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chat_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,39 +24,48 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:padding="2dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_back_1" />
+            android:src="@drawable/ic_back_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/chat_toolbar_img_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:layout_toEndOf="@+id/chat_toolbar_img_pre"
-            android:layout_toRightOf="@+id/chat_toolbar_img_pre"
-            android:src="@drawable/background_avatar" />
+            android:layout_marginStart="25dp"
+            android:src="@drawable/background_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chat_toolbar_img_pre"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/chat_toolbar_txt_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/margin_top"
             style="@style/subTitle_1_bold"
-            android:layout_toEndOf="@+id/chat_toolbar_img_avatar"
-            android:layout_toRightOf="@+id/chat_toolbar_img_avatar"
-            />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_top"
+            android:layout_marginEnd="@dimen/margin_top"
+            android:ellipsize="end"
+            android:fadeScrollbars="false"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/chat_toolbar_img_hamburger"
+            app:layout_constraintStart_toEndOf="@+id/chat_toolbar_img_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Account" />
 
         <ImageView
             android:id="@+id/chat_toolbar_img_hamburger"
             android:layout_width="25dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:rotationY="180"
-            android:src="@drawable/ic_more" />
-    </RelativeLayout>
+            android:src="@drawable/ic_more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/elevation"
@@ -85,8 +94,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
