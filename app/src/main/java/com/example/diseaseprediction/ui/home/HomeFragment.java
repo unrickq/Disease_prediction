@@ -30,7 +30,7 @@ import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
-import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListConfirm;
+import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListPending;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
       public void onClick(View view) {
         navigationView.getMenu().getItem(2).setChecked(true);
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-            new PredictionListConfirm()).commit();
+            new PredictionListPending()).commit();
       }
     });
 
@@ -352,7 +352,7 @@ public class HomeFragment extends Fragment {
         mDoctor = snapshot.getValue(DoctorInfo.class);
         //Go to prediction
         Query predictionByDateCreate =
-            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate");
+            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
         predictionByDateCreate.addValueEventListener(new ValueEventListener() {
           @Override
           public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -382,7 +382,7 @@ public class HomeFragment extends Fragment {
               home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
               home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
               //Reverse list index to get latest consultation
-              Collections.reverse(mPredictionListDoctor);
+//              Collections.reverse(mPredictionListDoctor);
               // Load list to adapter
               doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
                       mPredictionListDoctor, 0, 3);

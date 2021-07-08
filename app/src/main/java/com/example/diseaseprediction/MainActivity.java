@@ -29,7 +29,7 @@ import com.example.diseaseprediction.ui.alert.AlertFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
-import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListConfirm;
+import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListPending;
 import com.example.diseaseprediction.ui.settings.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     case R.id.nav_predictionListConfirm: {
                         getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                            new PredictionListConfirm()).commit();
+                            new PredictionListPending()).commit();
                         drawer.close();
                         break;
                     }

@@ -27,15 +27,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PredictionListConfirm#newInstance} factory method to
+ * Use the {@link PredictionListPending#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PredictionListConfirm extends Fragment {
+public class PredictionListPending extends Fragment {
     private static final String TAG = "PredictionListConfirm";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,7 +51,7 @@ public class PredictionListConfirm extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public PredictionListConfirm() {
+    public PredictionListPending() {
         // Required empty public constructor
     }
 
@@ -65,8 +64,8 @@ public class PredictionListConfirm extends Fragment {
      * @return A new instance of fragment predictionListConfirm.
      */
     // TODO: Rename and change types and number of parameters
-    public static PredictionListConfirm newInstance(String param1, String param2) {
-        PredictionListConfirm fragment = new PredictionListConfirm();
+    public static PredictionListPending newInstance(String param1, String param2) {
+        PredictionListPending fragment = new PredictionListPending();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -147,7 +146,7 @@ public class PredictionListConfirm extends Fragment {
                         if (mPredictionListDoctor.size() > 0) {
                             prediction_list_confirm_txt_title.setVisibility(View.GONE);
                             //Reverse list index to get latest prediction
-                            Collections.reverse(mPredictionListDoctor);
+//                            Collections.reverse(mPredictionListDoctor);
                             doctorPredictionPendingListAdapter = new PredictionAdapter(getActivity().getApplicationContext(),
                                     mPredictionListDoctor, 0, mPredictionListDoctor.size());
                             prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
