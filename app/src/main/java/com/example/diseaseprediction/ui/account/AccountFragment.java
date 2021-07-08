@@ -257,8 +257,8 @@ public class AccountFragment extends Fragment {
                                     }
                                 }
                                 //Set spinner
-                                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(getContext(),
-                                        R.layout.support_simple_spinner_dropdown_item, specialization);
+                                specializationAdapter = new ArrayAdapter<DoctorSpecialization>(requireContext(),
+                                    R.layout.support_simple_spinner_dropdown_item, specialization);
                                 account_doctor_spinner_specialization.setAdapter(specializationAdapter);
                             }
 
