@@ -241,7 +241,7 @@ public class AccountFragment extends Fragment {
         //get user by id
         mDoctor = new DoctorInfo();
         mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //check user exist in firebase

@@ -129,7 +129,7 @@
     <string name="default_chatbot_continue_symptom">Do you have any other symptoms?</string>
     <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
     <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
-
+    <string name="defaut_session_ended">Session ended</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -205,7 +205,6 @@
     <string name="dialog_confirm_discard_changes">Discard changes?</string>
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>
     <string name="consultation_preview_message">You: %1$s</string>
-
 
     <string-array name="spinner_language">
         <item>EN</item>
