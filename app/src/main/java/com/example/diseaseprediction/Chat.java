@@ -240,15 +240,29 @@ public class Chat extends AppCompatActivity {
                     //get symptom user input
                     String result = getString(R.string.default_chatbot_symptom);
                     List<String> tokenList = Arrays.asList(token.split(" "));
+                    //search binary symptom
+                    int mid = mSymptom.size()/2;
                     for (String tk : tokenList) {
-                        for (Symptom s : mSymptom) {
-                            tk = tk.replace("_", " ");
-                            if (s.getName().equals(tk)) {
-                                result += tk + ", ";
+                        tk = tk.replace("_", " ");
+                        boolean check = false;
+                        if(mSymptom.get(mid).getName().equals(tk)){
+                            result += tk + ", ";
+                        }else{
+                            for (int i = 0; i < mid; i++) {
+                                if(mSymptom.get(i).getName().equals(tk)){
+                                    result += tk + ", ";
+                                    check = true;
+                                }
+                            }
+                            if(check == false){
+                                for (int i = mid + 1; i < mSymptom.size(); i++) {
+                                    if(mSymptom.get(i).getName().equals(tk)){
+                                        result += tk + ", ";
+                                    }
+                                }
                             }
                         }
                     }
-                    System.out.println("check token List "+result);
                     //print symptom user input
                     result = result.substring(0, result.length() - 2);
                     Message mess = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
@@ -514,8 +528,6 @@ public class Chat extends AppCompatActivity {
 
                             }
                         });
-
-
                     }
                 }
                 checkStartMessage = false;
