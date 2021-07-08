@@ -18,7 +18,7 @@ public class ConsultationListTest {
         ConsultationList setConsultationListTest = new ConsultationList("accountTest1",
                 "accountTest2", "sessionTest1");
         setConsultationListTest.setAccountOne("accountTest3");
-        assertEquals("accountTest3", getConsultationListTest.getAccountOne());
+        assertEquals("accountTest3", setConsultationListTest.getAccountOne());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class ConsultationListTest {
         ConsultationList setConsultationListTest = new ConsultationList("accountTest1",
                 "accountTest2", "sessionTest1");
         setConsultationListTest.setAccountTwo("accountTest4");
-        assertEquals("accountTest4", getConsultationListTest.getAccountTwo());
+        assertEquals("accountTest4", setConsultationListTest.getAccountTwo());
     }
 
     @Test
@@ -44,6 +44,6 @@ public class ConsultationListTest {
         ConsultationList setConsultationListTest = new ConsultationList("accountTest1",
                 "accountTest2", "sessionTest1");
         setConsultationListTest.setSessionID("sessionTest2");
-        assertEquals("sessionTest2", getConsultationListTest.getSessionID());
+        assertEquals("sessionTest2", setConsultationListTest.getSessionID());
     }
 }

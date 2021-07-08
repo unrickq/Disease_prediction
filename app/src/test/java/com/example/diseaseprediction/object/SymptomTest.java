@@ -7,8 +7,10 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class SymptomTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     Symptom getSymptomTest = new Symptom("symptomsIDTest", "nameTest",
-            "descriptionTest", new Date(), new Date(), 1);
+            "descriptionTest", d1, d1, 1);
 
     @Test
     public void getSymptomsID() {
@@ -51,28 +53,28 @@ public class SymptomTest {
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getSymptomTest.getDateCreate());
+        assertEquals(d1, getSymptomTest.getDateCreate());
     }
 
     @Test
     public void setDateCreate() {
         Symptom setSymptomTest = new Symptom("symptomsIDTest", "nameTest",
                 "descriptionTest", new Date(), new Date(), 1);
-        setSymptomTest.setDateCreate(new Date());
-        assertEquals(new Date(), setSymptomTest.getDateCreate());
+        setSymptomTest.setDateCreate(d2);
+        assertEquals(d2, setSymptomTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getSymptomTest.getDateUpdate());
+        assertEquals(d1, getSymptomTest.getDateUpdate());
     }
 
     @Test
     public void setDateUpdate() {
         Symptom setSymptomTest = new Symptom("symptomsIDTest", "nameTest",
                 "descriptionTest", new Date(), new Date(), 1);
-        setSymptomTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setSymptomTest.getDateUpdate());
+        setSymptomTest.setDateUpdate(d2);
+        assertEquals(d2, setSymptomTest.getDateUpdate());
     }
 
     @Test

@@ -7,9 +7,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class DoctorInfoTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     DoctorInfo getDoctorInfoTest = new DoctorInfo("accountIDTest", "specializationIDTest",
-            "shortDescriptionTest", 1, new Date(),
-            new Date(), 1);
+            "shortDescriptionTest", 1.5, d1,
+            d1, 1);
 
     @Test
     public void getAccountID() {
@@ -55,7 +57,7 @@ public class DoctorInfoTest {
 
     @Test
     public void getExperience() {
-        assertEquals(1, getDoctorInfoTest.getExperience());
+        assertEquals(1, getDoctorInfoTest.getExperience(), 0.5);
     }
 
     @Test
@@ -63,13 +65,13 @@ public class DoctorInfoTest {
         DoctorInfo setDoctorInfoTest = new DoctorInfo("accountIDTest", "specializationIDTest",
                 "shortDescriptionTest", 1, new Date(),
                 new Date(), 1);
-        setDoctorInfoTest.setExperience(2);
-        assertEquals(2, setDoctorInfoTest.getExperience());
+        setDoctorInfoTest.setExperience(2.2);
+        assertEquals(2.2, setDoctorInfoTest.getExperience(), 0.2);
     }
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getDoctorInfoTest.getDateCreate());
+        assertEquals(d1, getDoctorInfoTest.getDateCreate());
     }
 
     @Test
@@ -77,13 +79,13 @@ public class DoctorInfoTest {
         DoctorInfo setDoctorInfoTest = new DoctorInfo("accountIDTest", "specializationIDTest",
                 "shortDescriptionTest", 1, new Date(),
                 new Date(), 1);
-        setDoctorInfoTest.setDateCreate(new Date());
-        assertEquals(new Date(), setDoctorInfoTest.getDateCreate());
+        setDoctorInfoTest.setDateCreate(d2);
+        assertEquals(d2, setDoctorInfoTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getDoctorInfoTest.getDateUpdate());
+        assertEquals(d1, getDoctorInfoTest.getDateUpdate());
     }
 
     @Test
@@ -91,8 +93,8 @@ public class DoctorInfoTest {
         DoctorInfo setDoctorInfoTest = new DoctorInfo("accountIDTest", "specializationIDTest",
                 "shortDescriptionTest", 1, new Date(),
                 new Date(), 1);
-        setDoctorInfoTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setDoctorInfoTest.getDateUpdate());
+        setDoctorInfoTest.setDateUpdate(d2);
+        assertEquals(d2, setDoctorInfoTest.getDateUpdate());
     }
 
     @Test

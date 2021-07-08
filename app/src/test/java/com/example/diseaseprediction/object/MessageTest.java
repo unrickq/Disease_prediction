@@ -7,8 +7,10 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class MessageTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     Message getMessageTest = new Message("messageIDTest", "senderIDTest",
-            "receiverIDTest", "messageTest", new Date(),
+            "receiverIDTest", "messageTest", d1,
             "sessionIDTest", 1);
 
     @Test
@@ -69,7 +71,7 @@ public class MessageTest {
 
     @Test
     public void getDateSend() {
-        assertEquals(new Date(), getMessageTest.getDateSend());
+        assertEquals(d1, getMessageTest.getDateSend());
     }
 
     @Test
@@ -77,8 +79,8 @@ public class MessageTest {
         Message setMessageTest = new Message("messageIDTest", "senderIDTest",
                 "receiverIDTest", "messageTest", new Date(),
                 "sessionIDTest", 1);
-        setMessageTest.setDateSend(new Date());
-        assertEquals(new Date(), setMessageTest.getDateSend());
+        setMessageTest.setDateSend(d2);
+        assertEquals(d2, setMessageTest.getDateSend());
     }
 
     @Test

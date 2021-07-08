@@ -103,7 +103,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     //Get user by user ID
     public void getUserName(String userId, TextView item_consultation_txt_name, CircleImageView item_consultation_img_main) {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(userId);
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 item_consultation_txt_name.setText(snapshot.child("name").getValue().toString());

@@ -236,9 +236,13 @@ public class MainActivity extends AppCompatActivity {
    * @param title Title of toolbar
    */
     public void setActionBarTitle(String title) {
-        TextView t = (TextView) findViewById(R.id.toolbar_title);
-        t.setText(title);
-        t.setTypeface(null, Typeface.BOLD);
+        try {
+            TextView t = (TextView) findViewById(R.id.toolbar_title);
+            t.setText(title);
+            t.setTypeface(null, Typeface.BOLD);
+        } catch (NullPointerException e) {
+            Log.d(TAG, "Main. View null", e);
+        }
     }
 
   /**

@@ -7,9 +7,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class PredictionTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     Prediction getPredictionTest = new Prediction("predictionIDTest", "patientIDTest",
             "doctorIDTest", "sessionIDTest", "doctorSessionIDTest",
-            "diseaseIDTest", "notesTest", new Date(), new Date(),
+            "diseaseIDTest", "notesTest", d1, d1,
             "hiddenSpecializationIDTest", 1);
 
     @Test
@@ -119,7 +121,7 @@ public class PredictionTest {
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getPredictionTest.getDateCreate());
+        assertEquals(d1, getPredictionTest.getDateCreate());
     }
 
     @Test
@@ -128,13 +130,13 @@ public class PredictionTest {
                 "doctorIDTest", "sessionIDTest", "doctorSessionIDTest",
                 "diseaseIDTest", "notesTest", new Date(), new Date(),
                 "hiddenSpecializationIDTest", 1);
-        setPredictionTest.setDateCreate(new Date());
-        assertEquals(new Date(), setPredictionTest.getDateCreate());
+        setPredictionTest.setDateCreate(d2);
+        assertEquals(d2, setPredictionTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getPredictionTest.getDateUpdate());
+        assertEquals(d1, getPredictionTest.getDateUpdate());
     }
 
     @Test
@@ -143,8 +145,8 @@ public class PredictionTest {
                 "doctorIDTest", "sessionIDTest", "doctorSessionIDTest",
                 "diseaseIDTest", "notesTest", new Date(), new Date(),
                 "hiddenSpecializationIDTest", 1);
-        setPredictionTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setPredictionTest.getDateUpdate());
+        setPredictionTest.setDateUpdate(d2);
+        assertEquals(d2, setPredictionTest.getDateUpdate());
     }
 
     @Test

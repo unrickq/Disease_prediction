@@ -7,8 +7,10 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class AdviseTest {
-    Advise getAdviseTest = new Advise("adviseIDTest", "descriptionTest", new Date()
-            , new Date(), 1);
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
+    Advise getAdviseTest = new Advise("adviseIDTest", "descriptionTest", d1
+            , d1, 1);
 
     @Test
     public void getAdviseID() {
@@ -33,33 +35,33 @@ public class AdviseTest {
         Advise setAdviseTest = new Advise("adviseIDTest", "descriptionTest", new Date()
                 , new Date(), 1);
         setAdviseTest.setDescription("descriptionTest2");
-        assertEquals("descriptionTest", setAdviseTest.getDescription());
+        assertEquals("descriptionTest2", setAdviseTest.getDescription());
     }
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getAdviseTest.getDateCreate());
+        assertEquals(d1, getAdviseTest.getDateCreate());
     }
 
     @Test
     public void setDateCreate() {
         Advise setAdviseTest = new Advise("adviseIDTest", "descriptionTest", new Date()
                 , new Date(), 1);
-        setAdviseTest.setDateCreate(new Date());
-        assertEquals(new Date(), setAdviseTest.getDateCreate());
+        setAdviseTest.setDateCreate(d2);
+        assertEquals(d2, setAdviseTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getAdviseTest.getDateUpdate());
+        assertEquals(d1, getAdviseTest.getDateUpdate());
     }
 
     @Test
     public void setDateUpdate() {
         Advise setAdviseTest = new Advise("adviseIDTest", "descriptionTest", new Date()
                 , new Date(), 1);
-        setAdviseTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setAdviseTest.getDateUpdate());
+        setAdviseTest.setDateUpdate(d2);
+        assertEquals(d2, setAdviseTest.getDateUpdate());
     }
 
     @Test

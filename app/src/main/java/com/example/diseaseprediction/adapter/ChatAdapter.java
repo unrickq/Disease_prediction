@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,15 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.listener.MyClickListener;
 import com.example.diseaseprediction.object.Message;
-import com.example.diseaseprediction.object.RecommendSymptom;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,35 +72,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-    /**
-     * Set height of listview manual
-     *
-     * @param listView ListView
-     */
-    public static void setListViewHeightBasedOnChildren(final ListView listView) {
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                ListAdapter listAdapter = listView.getAdapter();
-                if (listAdapter == null) {
-                    return;
-                }
-                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-                int listWidth = listView.getMeasuredWidth();
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    View listItem = listAdapter.getView(i, null, listView);
-                    listItem.measure(
-                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-                ViewGroup.LayoutParams params = listView.getLayoutParams();
-                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
-                listView.setLayoutParams(params);
-                listView.requestLayout();
-            }
-        });
-    }
+//    /**
+//     * Set height of listview manual
+//     *
+//     * @param listView ListView
+//     */
+//    public static void setListViewHeightBasedOnChildren(final ListView listView) {
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ListAdapter listAdapter = listView.getAdapter();
+//                if (listAdapter == null) {
+//                    return;
+//                }
+//                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+//                int listWidth = listView.getMeasuredWidth();
+//                for (int i = 0; i < listAdapter.getCount(); i++) {
+//                    View listItem = listAdapter.getView(i, null, listView);
+//                    listItem.measure(
+//                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+//                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//                    totalHeight += listItem.getMeasuredHeight();
+//                }
+//                ViewGroup.LayoutParams params = listView.getLayoutParams();
+//                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
+//                listView.setLayoutParams(params);
+//                listView.requestLayout();
+//            }
+//        });
+//    }
 
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
@@ -312,38 +305,38 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //        });
 //    }
 
-  /**
-   * Update recommendSymptom status to firebase
-   *
-   * @param messageID Message ID
-   * @param symptomID Symptom ID
-   * @param status    Status (0: Unchecked | 1: Checked)
-   */
-  private void updateRecommendValue(String messageID, String symptomID, int status) {
-    mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //Loop and get all value that equal to message ID
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    RecommendSymptom rcs = sn.getValue(RecommendSymptom.class);
-                    if (rcs.getMessageID().equals(messageID) && rcs.getSymptomsID().equals(symptomID)) {
-                        mRef.child(sn.getKey()).child("status").setValue(status);
-                    }
-                }
-            }
+//  /**
+//   * Update recommendSymptom status to firebase
+//   *
+//   * @param messageID Message ID
+//   * @param symptomID Symptom ID
+//   * @param status    Status (0: Unchecked | 1: Checked)
+//   */
+//  private void updateRecommendValue(String messageID, String symptomID, int status) {
+//    mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
+//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                //Loop and get all value that equal to message ID
+//                for (DataSnapshot sn : snapshot.getChildren()) {
+//                    RecommendSymptom rcs = sn.getValue(RecommendSymptom.class);
+//                    if (rcs.getMessageID().equals(messageID) && rcs.getSymptomsID().equals(symptomID)) {
+//                        mRef.child(sn.getKey()).child("status").setValue(status);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    //setter button predict
-    public void setPredictButtonListener(MyClickListener myClickListener) {
-        this.listener = myClickListener;
-    }
+  //setter button predict
+  public void setPredictButtonListener(MyClickListener myClickListener) {
+      this.listener = myClickListener;
+  }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_chat_show_message, item_chat_time;

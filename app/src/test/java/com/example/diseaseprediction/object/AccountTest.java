@@ -7,9 +7,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class AccountTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     Account getAccountTest = new Account("accountID1", 0, 0, "0694003303", "nameTest"
             , 1, "addressTest", "emailTest",
-            "imageTest", new Date(), new Date(), 1);
+            "imageTest", d1, d1, 1);
 
     @Test
     public void getAccountId() {
@@ -139,7 +141,7 @@ public class AccountTest {
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getAccountTest.getDateCreate());
+        assertEquals(d1, getAccountTest.getDateCreate());
     }
 
     @Test
@@ -147,13 +149,13 @@ public class AccountTest {
         Account setAccountTest = new Account("accountID1", 0, 0, "0694003303", "nameTest"
                 , 1, "addressTest", "emailTest",
                 "imageTest", new Date(), new Date(), 1);
-        setAccountTest.setDateCreate(new Date());
-        assertEquals(new Date(), setAccountTest.getDateCreate());
+        setAccountTest.setDateCreate(d2);
+        assertEquals(d2, setAccountTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getAccountTest.getDateUpdate());
+        assertEquals(d1, getAccountTest.getDateUpdate());
     }
 
     @Test
@@ -161,8 +163,8 @@ public class AccountTest {
         Account setAccountTest = new Account("accountID1", 0, 0, "0694003303", "nameTest"
                 , 1, "addressTest", "emailTest",
                 "imageTest", new Date(), new Date(), 1);
-        setAccountTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setAccountTest.getDateUpdate());
+        setAccountTest.setDateUpdate(d2);
+        assertEquals(d2, setAccountTest.getDateUpdate());
     }
 
     @Test

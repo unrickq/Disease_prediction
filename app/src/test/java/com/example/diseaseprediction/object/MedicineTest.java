@@ -7,9 +7,11 @@ import java.util.Date;
 import static org.junit.Assert.assertEquals;
 
 public class MedicineTest {
+    Date d1 = new Date(2000, 11, 21);
+    Date d2 = new Date(1999, 2, 12);
     Medicine getMedicineTest = new Medicine("medicineIDTest", "nameTest",
             "descriptionTest", "manufacturerTest",
-            "contentTest", new Date(), new Date(), 1);
+            "contentTest", d1, d1, 1);
 
     @Test
     public void getMedicineID() {
@@ -83,7 +85,7 @@ public class MedicineTest {
 
     @Test
     public void getDateCreate() {
-        assertEquals(new Date(), getMedicineTest.getDateCreate());
+        assertEquals(d1, getMedicineTest.getDateCreate());
     }
 
     @Test
@@ -91,13 +93,13 @@ public class MedicineTest {
         Medicine setMedicineTest = new Medicine("medicineIDTest", "nameTest",
                 "descriptionTest", "manufacturerTest",
                 "contentTest", new Date(), new Date(), 1);
-        setMedicineTest.setDateCreate(new Date());
-        assertEquals(new Date(), setMedicineTest.getDateCreate());
+        setMedicineTest.setDateCreate(d2);
+        assertEquals(d2, setMedicineTest.getDateCreate());
     }
 
     @Test
     public void getDateUpdate() {
-        assertEquals(new Date(), getMedicineTest.getDateUpdate());
+        assertEquals(d1, getMedicineTest.getDateUpdate());
     }
 
     @Test
@@ -105,8 +107,8 @@ public class MedicineTest {
         Medicine setMedicineTest = new Medicine("medicineIDTest", "nameTest",
                 "descriptionTest", "manufacturerTest",
                 "contentTest", new Date(), new Date(), 1);
-        setMedicineTest.setDateUpdate(new Date());
-        assertEquals(new Date(), setMedicineTest.getDateUpdate());
+        setMedicineTest.setDateUpdate(d2);
+        assertEquals(d2, setMedicineTest.getDateUpdate());
     }
 
     @Test

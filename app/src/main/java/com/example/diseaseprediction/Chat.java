@@ -14,7 +14,6 @@ import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -305,7 +304,7 @@ public class Chat extends AppCompatActivity {
      */
     public void getUserChatData() {
         mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(receiverID);
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Account receiver = snapshot.getValue(Account.class);
@@ -382,11 +381,7 @@ public class Chat extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.chat_menu_view_info:
-                        System.out.println("chat_menu_view_info");
-                        return true;
                     case R.id.chat_menu_end_session:
-                        System.out.println("chat_menu_end_session");
                         endSession(sessionID);
                         checkSessionStatus();
                         return true;
@@ -575,11 +570,10 @@ public class Chat extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     String accountType = Objects.requireNonNull(snapshot.child("typeID").getValue()).toString();
-                    Menu m = pm.getMenu();
                     if (accountType.equals("0")) {
-                        m.getItem(0).setTitle(getString(R.string.chat_menu_doctor_view_info));
+                        chat_toolbar_img_hamburger.setVisibility(View.VISIBLE);
                     } else {
-                        m.getItem(1).setVisible(false);
+                        chat_toolbar_img_hamburger.setVisibility(View.GONE);
                     }
                 } catch (NullPointerException e) {
                     Log.d(LOG_TAG, "Account type null", e);
@@ -747,7 +741,7 @@ public class Chat extends AppCompatActivity {
     private void getSymptomFirebase() {
         mSymptom = new ArrayList<>();
         mRef = FirebaseDatabase.getInstance().getReference("Symptom");
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mSymptom.clear();

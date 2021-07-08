@@ -299,8 +299,12 @@ public class PredictionResult extends AppCompatActivity {
 
             String finalText = "";
             // iterate and concatenate string, then displays advise from adviseList to TextView
-            for (int i = 0; i < mAdvise.size(); i++) {
-              finalText = finalText.concat("- " + mAdvise.get(i) + "\n");
+            if (mAdvise.size() != 1) {
+              for (int i = 0; i < mAdvise.size(); i++) {
+                finalText = finalText.concat("- " + mAdvise.get(i) + "\n");
+              }
+            } else {
+              finalText = mAdvise.get(0);
             }
             prediction_listview_advice_result.setText(finalText);
           }
