@@ -98,4 +98,6 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
     //read file csv
     implementation 'com.opencsv:opencsv:4.6'
+    //circular dots loader
+    implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.4'
 }

@@ -141,5 +141,21 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
-
+    <com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader
+        android:id="@+id/circularDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:loader_animDur="100"
+        app:loader_bigCircleRadius="20dp"
+        app:loader_circleRadius="7dp"
+        app:loader_defaultColor="@color/theme_1_P_light"
+        app:loader_firstShadowColor="@color/theme_1_S_dark"
+        app:loader_secondShadowColor="@color/theme_1_S_dark"
+        app:loader_selectedColor="@color/theme_1_S_dark"
+        app:loader_showRunningShadow="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.listener.MyClickListener;
@@ -87,14 +89,13 @@ public class Chat extends AppCompatActivity {
     private Handler handler;
     private boolean checkClickPredict = false;
     private boolean checkStartMessage = true;
-
+    private CircularDotsLoader circularDot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
         client = new TextClassificationClient(getApplicationContext());
-
         handler = new Handler();
 
         //Find view
@@ -102,6 +103,10 @@ public class Chat extends AppCompatActivity {
 
         // Initialize
         fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //loading
+        circularDot = findViewById(R.id.circularDot);
+//        circularDot.setVisibility(View.VISIBLE);
 
         //Set toolbar chat
         setToolbarChat();
@@ -243,6 +248,7 @@ public class Chat extends AppCompatActivity {
                     Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
                             , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
+//                    circularDot.setVisibility(View.VISIBLE);
                     //chatbot chat
                     String token = client.tokenize1(msg);
                     List<Result> results = client.classify(token);
@@ -303,6 +309,7 @@ public class Chat extends AppCompatActivity {
                     setMessageFirebase(message2);
                     getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
                     chat_txt_enter_mess.setText("");
+//                    circularDot.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
