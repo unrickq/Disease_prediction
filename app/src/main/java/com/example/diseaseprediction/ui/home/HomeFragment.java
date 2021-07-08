@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment {
               context.startActivity(i);
 
               //Send message started
-              DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message");
+              DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
               Message msg = new Message(reference.push().getKey(), accountIDTwo
                   , accountIDOne, context.getString(R.string.default_chatbot_hello)
                   , new Date(), sessionID, 1);

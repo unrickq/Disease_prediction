@@ -217,7 +217,7 @@ public class PredictionConfirm extends AppCompatActivity {
 
     String sessionID = prediction.getSessionID();
     // get messages in session between user and chat bot
-    mRef = FirebaseDatabase.getInstance().getReference("Message");
+    mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -225,8 +225,8 @@ public class PredictionConfirm extends AppCompatActivity {
         for (DataSnapshot sn : snapshot.getChildren()) {
           Message message = sn.getValue(Message.class);
           try {
-            // Get messages that belong to sessionID and was sent to chat bot i.e sender is patient
-            if (message.getSessionID().equals(sessionID) && message.getReceiverID().equals(Constants.CHATBOT_ID)) {
+            // Get messages that was sent to chat bot i.e sender is patient
+            if (message.getReceiverID().equals(Constants.CHATBOT_ID)) {
               messagesList.add(message);
             }
           } catch (NullPointerException e) {
