@@ -84,7 +84,8 @@
         app:layout_constraintBottom_toTopOf="@+id/chat_send_message_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar">
+        app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar"
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -146,8 +147,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:loader_animDur="100"
-        app:loader_bigCircleRadius="20dp"
-        app:loader_circleRadius="7dp"
+        app:loader_bigCircleRadius="18dp"
+        app:loader_circleRadius="6dp"
         app:loader_defaultColor="@color/theme_1_P_light"
         app:loader_firstShadowColor="@color/theme_1_S_dark"
         app:loader_secondShadowColor="@color/theme_1_S_dark"
@@ -157,5 +158,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/loadingText"
+        style="@style/subTitle_1_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.571"
+        tools:text="Đang xử lý kết quả"
+        android:textSize="13dp"
         android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

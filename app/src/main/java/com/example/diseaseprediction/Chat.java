@@ -90,6 +90,8 @@ public class Chat extends AppCompatActivity {
     private boolean checkClickPredict = false;
     private boolean checkStartMessage = true;
     private CircularDotsLoader circularDot;
+    private TextView loadingText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,13 +102,12 @@ public class Chat extends AppCompatActivity {
 
         //Find view
         getViews();
-
+//        circularDot.setVisibility(View.VISIBLE);
+        loadingText.setText("Đang xử lý kết quả");
+//        loadingText.setVisibility(View.VISIBLE);
         // Initialize
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //loading
-        circularDot = findViewById(R.id.circularDot);
-//        circularDot.setVisibility(View.VISIBLE);
 
         //Set toolbar chat
         setToolbarChat();
@@ -226,6 +227,8 @@ public class Chat extends AppCompatActivity {
             chat_img_send = findViewById(R.id.chat_img_send);
             chat_img_mic = findViewById(R.id.chat_img_mic);
             chat_recycler_view = findViewById(R.id.chat_recycler_view);
+            circularDot = findViewById(R.id.circularDot);
+            loadingText = findViewById(R.id.loadingText);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");
@@ -248,50 +251,27 @@ public class Chat extends AppCompatActivity {
                     Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
                             , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
-//                    circularDot.setVisibility(View.VISIBLE);
+                    circularDot.setVisibility(View.VISIBLE);
+                    loadingText.setVisibility(View.VISIBLE);
                     //chatbot chat
                     String token = client.tokenize1(msg);
                     List<Result> results = client.classify(token);
                     //get symptom user input
-                    String result = getString(R.string.default_chatbot_symptom);
                     List<String> tokenList = Arrays.asList(token.split(" "));
-                    //search binary symptom
-                    int mid = mSymptom.size()/2;
-                    for (String tk : tokenList) {
-                        tk = tk.replace("_", " ");
-                        boolean check = false;
-                        if(mSymptom.get(mid).getName().equals(tk)){
-                            result += tk + ", ";
-                        }else{
-                            for (int i = 0; i < mid; i++) {
-                                if(mSymptom.get(i).getName().equals(tk)){
-                                    result += tk + ", ";
-                                    check = true;
-                                }
-                            }
-                            if(check == false){
-                                for (int i = mid + 1; i < mSymptom.size(); i++) {
-                                    if(mSymptom.get(i).getName().equals(tk)){
-                                        result += tk + ", ";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //print symptom user input
-                    result = result.substring(0, result.length() - 2);
+                    String result = searchSymptoms(tokenList);
+                    //print symptom list
                     Message mess = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
                             result, new Date(), sessionID, 1);
                     setMessageFirebase(mess);
                     //get disease from model
                     String temp = getString(R.string.default_chatbot_disease_list);
                     for (int i = 0; i < 4; i++) {
-                        if(i==3){
-                            temp+= results.get(i).getTitle() +" "+String.format("%.2f", results.get(i).getConfidence()* 100) + "%";
-                        }else{
-                            temp+= results.get(i).getTitle() +" "+String.format("%.2f", results.get(i).getConfidence()* 100) + "%" +"\n";
+                        if (i == 3) {
+                            temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%";
+                        } else {
+                            temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%" + "\n";
                         }
-                     }
+                    }
                     //print disease list
                     Message diseaseList = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
                             temp, new Date(),
@@ -304,12 +284,13 @@ public class Chat extends AppCompatActivity {
                     chat_txt_enter_mess.setText("");
                     //print disease
                     Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
-                        results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
-                        sessionID, 1);
+                            results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
+                            sessionID, 1);
                     setMessageFirebase(message2);
                     getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
                     chat_txt_enter_mess.setText("");
-//                    circularDot.setVisibility(View.GONE);
+                    circularDot.setVisibility(View.GONE);
+                    loadingText.setVisibility(View.GONE);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
@@ -398,6 +379,41 @@ public class Chat extends AppCompatActivity {
 
             }
         };
+    }
+
+    /***
+     * Search symptom from firebase
+     * @return
+     * @param tokenList
+     */
+    private String searchSymptoms(List<String> tokenList) {
+        String result = getString(R.string.default_chatbot_symptom);
+        //search binary symptom
+        int mid = mSymptom.size() / 2;
+        for (String tk : tokenList) {
+            tk = tk.replace("_", " ");
+            boolean check = false;
+            if (mSymptom.get(mid).getName().equals(tk)) {
+                result += tk + ", ";
+            } else {
+                for (int i = 0; i < mid; i++) {
+                    if (mSymptom.get(i).getName().equals(tk)) {
+                        result += tk + ", ";
+                        check = true;
+                    }
+                }
+                if (check == false) {
+                    for (int i = mid + 1; i < mSymptom.size(); i++) {
+                        if (mSymptom.get(i).getName().equals(tk)) {
+                            result += tk + ", ";
+                        }
+                    }
+                }
+            }
+        }
+        //print symptom user input
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     /**
