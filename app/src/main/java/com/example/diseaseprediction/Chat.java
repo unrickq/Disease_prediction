@@ -179,6 +179,7 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Session ss = snapshot.getValue(Session.class);
+                    // status != 0 -> ask user
                     if (ss.getStatus() != 0) {
                         dialogConfirm(sessionID);
                     } else {
@@ -875,8 +876,9 @@ public class Chat extends AppCompatActivity {
             builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    onBackPressed();
                     endSession(sessionID);
+                    onBackPressed();
+
                 }
             });
             builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
