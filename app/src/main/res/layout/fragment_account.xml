@@ -20,8 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/account_txt_title"
@@ -30,94 +29,112 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:gravity="left"
+                android:text="@string/account_info_txt_title"
                 android:textColor="@color/theme_1_P"
                 android:visibility="gone"
-                android:text="@string/account_info_txt_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/account_img_avatar"
-                android:layout_width="141dp"
-                android:layout_height="141dp"
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/account_shimmer_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:src="@mipmap/ic_default_avatar_round" />
+                android:layout_marginTop="12dp">
 
-            <TextView
-                android:id="@+id/account_img_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="Upload"
-                android:textColor="@color/theme_1_P"
-                android:visibility="gone" />
+                <include layout="@layout/placeholder_account" />
 
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <TextView
-                android:id="@+id/account_txt_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:layout_marginTop="24dp"
-                android:textColor="@color/black" />
-
-
-            <TextView
-                android:id="@+id/account_txt_gender"
-                android:layout_width="match_parent"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/account_txt_title_gender"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            <LinearLayout
+                android:id="@+id/account_layout_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:layout_marginTop="@dimen/margin_top"
-                app:boxBackgroundColor="@color/background_B1_lightMode">
+                android:orientation="vertical">
 
-                <AutoCompleteTextView
-                    android:id="@+id/account_spinner_gender"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/account_img_avatar"
+                    android:layout_width="141dp"
+                    android:layout_height="141dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:src="@mipmap/ic_default_avatar_round" />
+
+                <TextView
+                    android:id="@+id/account_img_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:text="Upload"
+                    android:textColor="@color/theme_1_P"
+                    android:visibility="gone" />
+
+
+                <TextView
+                    android:id="@+id/account_txt_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/account_txt_title_gender"
-                    android:inputType="none" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <TextView
-                android:id="@+id/account_txt_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="12dp" />
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
 
 
-            <TextView
-                android:id="@+id/account_txt_email"
-                android:layout_width="match_parent"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" />
+                <TextView
+                    android:id="@+id/account_txt_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
 
-            <TextView
-                android:id="@+id/account_txt_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="12dp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/account_txt_title_gender"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_top"
+                    android:visibility="gone"
+                    app:boxBackgroundColor="@color/background_B1_lightMode">
 
+                    <AutoCompleteTextView
+                        android:id="@+id/account_spinner_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/account_txt_title_gender"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/account_txt_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+
+                <TextView
+                    android:id="@+id/account_txt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/account_txt_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+            </LinearLayout>
 
 
             <LinearLayout
@@ -125,17 +142,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/account_txt_title_doctor"
                     style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:layout_width="match_parent"
-                    android:textColor="@color/theme_1_P"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
                     android:gravity="start"
                     android:text="@string/account_info_doctor_txt_title"
+                    android:textColor="@color/theme_1_P"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.495"
                     app:layout_constraintStart_toStartOf="parent"
@@ -144,18 +162,18 @@
                 <TextView
                     android:id="@+id/account_doctor_txt_specialization"
                     android:layout_width="match_parent"
-                    android:textSize="17sp"
-                    android:textColor="@color/black"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_doctor_txt_title_specialization"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/margin_top"
+                    android:visibility="gone"
                     app:boxBackgroundColor="@color/background_B1_lightMode">
 
                     <AutoCompleteTextView
@@ -172,19 +190,18 @@
                     android:id="@+id/account_doctor_txt_experience"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:layout_marginTop="12dp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="12dp" />
+                    android:textSize="17sp" />
 
 
                 <TextView
                     android:id="@+id/account_doctor_txt_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:layout_marginTop="12dp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="12dp" />
-
+                    android:textSize="17sp" />
 
 
             </LinearLayout>

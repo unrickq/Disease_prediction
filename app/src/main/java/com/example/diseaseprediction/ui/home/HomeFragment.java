@@ -33,6 +33,7 @@ import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListPending;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment {
   private NavigationView navigationView;
   private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
       home_doctor_all_prediction_recycle_view;
+  private ShimmerFrameLayout home_shimmer_pending_prediction, home_shimmer_prediction, home_shimmer_consultation;
 
   private Context context;
 
@@ -157,11 +159,10 @@ public class HomeFragment extends Fragment {
       public void onClick(View view) {
         navigationView.getMenu().getItem(4).setChecked(true);
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                new ConsultationListFragment()).commit();
+            new ConsultationListFragment()).commit();
 
       }
     });
-
 
 
     return view;
@@ -184,14 +185,18 @@ public class HomeFragment extends Fragment {
     home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
 
     home_doctor_all_prediction_no_prediction_title =
-            view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
+        view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
     home_prediction_no_prediction_title = view.findViewById(R.id.home_prediction_no_prediction_title);
     home_consultation_no_consultation_title = view.findViewById(R.id.home_consultation_no_consultation_title);
 
-    //Create consultation recycle
-    home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
-    home_recycler_view_consultation.setHasFixedSize(true);
-
+    //shimmer
+    home_shimmer_pending_prediction = view.findViewById(R.id.home_shimmer_pending_prediction);
+    home_shimmer_prediction = view.findViewById(R.id.home_shimmer_prediction);
+    home_shimmer_consultation = view.findViewById(R.id.home_shimmer_consultation);
+    // start shimmer
+    home_shimmer_pending_prediction.startShimmer();
+    home_shimmer_prediction.startShimmer();
+    home_shimmer_consultation.startShimmer();
 
     //Create disease recycle
     home_recycler_view_disease = view.findViewById(R.id.home_recycler_view_disease);
@@ -203,6 +208,10 @@ public class HomeFragment extends Fragment {
     home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
 
     home_layout_disease_history = view.findViewById(R.id.home_layout_disease_history);
+
+    //Create consultation recycle
+    home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
+    home_recycler_view_consultation.setHasFixedSize(true);
   }
 
   /**
@@ -222,7 +231,7 @@ public class HomeFragment extends Fragment {
           csl = sn.getValue(ConsultationList.class);
           //Check to find consultation is exist or not
           if ((csl.getAccountOne().equals(accountIDOne) && csl.getAccountTwo().equals(accountIDTwo))
-                  || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
+              || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
             consultationList = csl;
           }
         }
@@ -239,7 +248,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
               mRef.push().setValue(new ConsultationList(accountIDOne
-                      , accountIDTwo, sessionID));
+                  , accountIDTwo, sessionID));
               //Send session id
               Intent i = new Intent(getActivity(), Chat.class);
               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -290,7 +299,7 @@ public class HomeFragment extends Fragment {
                 //Create new consultation list
                 mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
                 mRef.push().setValue(new ConsultationList(accountIDOne
-                        , accountIDTwo, sessionID));
+                    , accountIDTwo, sessionID));
 
                 //Send message started
                 DatabaseReference reference =
@@ -348,11 +357,14 @@ public class HomeFragment extends Fragment {
           Collections.reverse(consultationLists);
           consultationAdapter = new ConsultationAdapter(context, consultationLists, 3);
           home_recycler_view_consultation.setAdapter(consultationAdapter);
-
         } else {
           home_consultation_no_consultation_title.setVisibility(View.VISIBLE);
           home_txt_consultation_see_more.setVisibility(View.GONE);
         }
+
+        // stop and hide shimmer
+        home_shimmer_consultation.stopShimmer();
+        home_shimmer_consultation.setVisibility(View.GONE);
       }
 
       @Override
@@ -415,6 +427,9 @@ public class HomeFragment extends Fragment {
               home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
               home_doctor_all_prediction_txt_see_more.setVisibility(View.GONE);
             }
+            // stop and hide shimmer
+            home_shimmer_pending_prediction.stopShimmer();
+            home_shimmer_pending_prediction.setVisibility(View.GONE);
           }
 
           @Override
@@ -477,6 +492,9 @@ public class HomeFragment extends Fragment {
           home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
           home_txt_prediction_see_more.setVisibility(View.GONE);
         }
+        // stop and hide shimmer
+        home_shimmer_prediction.stopShimmer();
+        home_shimmer_prediction.setVisibility(View.GONE);
       }
 
       @Override
@@ -497,11 +515,13 @@ public class HomeFragment extends Fragment {
     //List disease history
     home_layout_disease_history.setVisibility(View.GONE);
     home_recycler_view_disease.setVisibility(View.GONE);
+    home_shimmer_prediction.setVisibility(View.GONE);
     home_search_view.setVisibility(View.GONE);
 
     //All prediction in pending
     home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
     home_doctor_all_prediction_recycle_view.setVisibility(View.VISIBLE);
+    home_shimmer_pending_prediction.setVisibility(View.VISIBLE);
 
     home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
     home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(context));

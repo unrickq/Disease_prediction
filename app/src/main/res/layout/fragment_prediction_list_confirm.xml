@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/padding"
     android:paddingRight="@dimen/padding"
-    tools:context=".ui.prediction.PredictionListFragment">
+    tools:context=".ui.predictionListConfirm.PredictionListPending">
 
     <TextView
         android:id="@+id/prediction_list_confirm_txt_title"
@@ -17,6 +17,38 @@
         android:visibility="gone"
         android:text="@string/prediction_list_confirm_txt_title" />
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/prediction_confirm_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+
+            <include layout="@layout/placeholder_item_prediction" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/prediction_list_confirm_recycler_view_main"
         android:layout_width="match_parent"
@@ -24,5 +56,6 @@
         android:layout_gravity="center"
         android:paddingBottom="12dp"
         android:overScrollMode="never"
+        android:visibility="gone"
         tools:listitem="@layout/item_prediction" />
 </LinearLayout>

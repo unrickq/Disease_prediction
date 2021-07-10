@@ -18,6 +18,7 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.object.ConsultationList;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +47,7 @@ public class ConsultationListFragment extends Fragment {
     private ConsultationAdapter consultationAdapter;
     private List<ConsultationList> consultationLists;
     private TextView consultation_list_txt_title;
+    private ShimmerFrameLayout consultation_shimmer;
 
     private Context context;
 
@@ -93,6 +95,8 @@ public class ConsultationListFragment extends Fragment {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         consultation_list_txt_title = view.findViewById(R.id.consultation_list_txt_title);
+        consultation_shimmer = view.findViewById(R.id.consultation_shimmer);
+        consultation_shimmer.startShimmer();
 
         //Create recycler
         consultation_list_recycler_view_main = view.findViewById(R.id.consultation_list_recycler_view_main);
@@ -126,11 +130,17 @@ public class ConsultationListFragment extends Fragment {
                         consultation_list_txt_title.setVisibility(View.GONE);
                         Collections.reverse(consultationLists);
                         consultationAdapter = new ConsultationAdapter(context, consultationLists,
-                                consultationLists.size());
+                            consultationLists.size());
                         consultation_list_recycler_view_main.setAdapter(consultationAdapter);
                     } else {
                         consultation_list_txt_title.setVisibility(View.VISIBLE);
                     }
+
+                    // Stop and hide shimmer
+                    consultation_shimmer.stopShimmer();
+                    consultation_shimmer.setVisibility(View.GONE);
+                    // display recycler view
+                    consultation_list_recycler_view_main.setVisibility(View.VISIBLE);
 
                 }
 

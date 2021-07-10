@@ -21,6 +21,7 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
 import com.example.diseaseprediction.object.Prediction;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,6 +52,7 @@ public class PredictionListFragment extends Fragment {
     private List<Prediction> mPredictionList;
     private PredictionAdapter patientPredictionAdapter;
     private TextView prediction_list_txt_title;
+    private ShimmerFrameLayout prediction_shimmer;
 
     private Context context;
 
@@ -93,6 +95,8 @@ public class PredictionListFragment extends Fragment {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         prediction_list_txt_title = view.findViewById(R.id.prediction_list_txt_title);
+        prediction_shimmer = view.findViewById(R.id.prediction_shimmer);
+        prediction_shimmer.startShimmer();
         prediction_list_recycler_view_main = view.findViewById(R.id.prediction_list_recycler_view_main);
         prediction_list_recycler_view_main.setHasFixedSize(true);
 
@@ -178,11 +182,17 @@ public class PredictionListFragment extends Fragment {
                         //Reverse list index to get latest prediction
                         Collections.reverse(mPredictionList);
                         patientPredictionAdapter = new PredictionAdapter(context,
-                                mPredictionList, 1, mPredictionList.size());
+                            mPredictionList, 1, mPredictionList.size());
                         prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
                     } else {
                         prediction_list_txt_title.setVisibility(View.VISIBLE);
                     }
+
+                    // Stop and hide shimmer
+                    prediction_shimmer.stopShimmer();
+                    prediction_shimmer.setVisibility(View.GONE);
+                    // Display recycler view
+                    prediction_list_recycler_view_main.setVisibility(View.VISIBLE);
 
                 }
 

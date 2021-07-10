@@ -25,6 +25,7 @@
     <color name="background_search">#26767680</color>
     <color name="background_chat">#E4E6EA</color>
     <color name="background_home_list">#F5F5F5</color>
+    <color name="background_placeholder">#B3B3B3</color>
 
     <color name="text_T1_lightMode">#000000</color>
     <color name="text_T2_lightMode">#666666</color>

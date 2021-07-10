@@ -25,6 +25,7 @@ import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.DoctorSpecialization;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -62,9 +63,10 @@ public class AccountFragment extends Fragment {
 
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
 
-    private LinearLayout account_layout_doctor;
+    private LinearLayout account_layout_normal, account_layout_doctor;
     private Button accout_btn_edit;
     private CircleImageView account_img_avatar;
+    private ShimmerFrameLayout account_shimmer_avatar;
 
     private Context context;
 
@@ -134,6 +136,11 @@ public class AccountFragment extends Fragment {
      */
     private void findViews(View view) {
         try {
+            // shimmer
+            account_shimmer_avatar = view.findViewById(R.id.account_shimmer_avatar);
+            account_shimmer_avatar.startShimmer();
+
+            account_layout_normal = view.findViewById(R.id.account_layout_normal);
             account_layout_doctor = view.findViewById(R.id.account_layout_doctor);
             //Button
             accout_btn_edit = view.findViewById(R.id.account_btn_edit);
@@ -226,6 +233,11 @@ public class AccountFragment extends Fragment {
                             } else {
                                 account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
                             }
+                            // Stop shimmer and display user layout
+                            account_shimmer_avatar.stopShimmer();
+                            account_shimmer_avatar.setVisibility(View.GONE);
+
+                            account_layout_normal.setVisibility(View.VISIBLE);
                         } catch (NullPointerException e) {
                             Log.d(TAG, "Account. Account ID null", e);
                         }

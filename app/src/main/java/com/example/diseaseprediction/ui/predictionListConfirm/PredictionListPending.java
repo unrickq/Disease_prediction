@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Prediction;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +48,10 @@ public class PredictionListPending extends Fragment {
     private RecyclerView prediction_list_confirm_recycler_view_main;
     private List<Prediction> mPredictionListDoctor;
     private PredictionAdapter doctorPredictionPendingListAdapter;
+    private ShimmerFrameLayout prediction_confirm_shimmer;
+
     private DoctorInfo mDoctor;
+
 
     private Context context;
 
@@ -58,6 +63,7 @@ public class PredictionListPending extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view,
                               @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         context = getActivity().getApplicationContext();
 
@@ -71,6 +77,10 @@ public class PredictionListPending extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         container.removeAllViews();
+
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList_pending));
+        ((MainActivity) getActivity()).setIconToolbar();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_prediction_list_confirm, container, false);
 
@@ -78,10 +88,11 @@ public class PredictionListPending extends Fragment {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         prediction_list_confirm_txt_title = view.findViewById(R.id.prediction_list_confirm_txt_title);
+        prediction_confirm_shimmer = view.findViewById(R.id.prediction_confirm_shimmer);
+        prediction_confirm_shimmer.startShimmer();
 
         prediction_list_confirm_recycler_view_main = view.findViewById(R.id.prediction_list_confirm_recycler_view_main);
         prediction_list_confirm_recycler_view_main.setHasFixedSize(true);
-
 
 
         return view;
@@ -130,11 +141,18 @@ public class PredictionListPending extends Fragment {
                                 //Reverse list index to get latest prediction
 //                            Collections.reverse(mPredictionListDoctor);
                                 doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                                        mPredictionListDoctor, 0, mPredictionListDoctor.size());
+                                    mPredictionListDoctor, 0, mPredictionListDoctor.size());
                                 prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
                             } else {
                                 prediction_list_confirm_txt_title.setVisibility(View.VISIBLE);
                             }
+
+                            // Stop and hide shimmer
+                            prediction_confirm_shimmer.stopShimmer();
+                            prediction_confirm_shimmer.setVisibility(View.GONE);
+
+                            // Display recycler view
+                            prediction_list_confirm_recycler_view_main.setVisibility(View.VISIBLE);
 
                         }
 

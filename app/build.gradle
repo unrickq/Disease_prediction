@@ -100,4 +100,7 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.6'
     //circular dots loader
     implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.4'
+
+    // FB shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }

@@ -11,10 +11,8 @@
         android:id="@+id/item_consultation_img_main"
         android:layout_width="65dp"
         android:layout_height="65dp"
-
         android:background="@drawable/background_avatar"
         android:gravity="center"
-        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,10 +48,10 @@
         android:id="@+id/item_consultation_txt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="@string/item_consultation_txt_time"
         app:layout_constraintBottom_toBottomOf="@+id/item_consultation_txt_message"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_consultation_txt_message" />
+        app:layout_constraintTop_toTopOf="@+id/item_consultation_txt_message"
+        tools:text="@string/item_consultation_txt_time" />
 
     <!--        <TextView-->
     <!--            android:id="@+id/item_consultation_txt_time"-->
@@ -66,5 +64,6 @@
     <!--            android:text="@string/item_consultation_txt_time"-->
     <!--            app:layout_constraintEnd_toEndOf="parent"-->
     <!--            app:layout_constraintTop_toTopOf="@+id/item_consultation_txt_name" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
