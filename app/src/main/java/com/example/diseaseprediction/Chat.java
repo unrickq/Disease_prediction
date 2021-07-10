@@ -510,14 +510,13 @@ public class Chat extends AppCompatActivity {
      */
     private void checkSessionStatus() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
-                        String sessionStatus =
-                                Objects.requireNonNull(snapshot.child(sessionID).child("status").getValue()).toString();
-                        int status = Integer.parseInt(sessionStatus);
+                        Session session = snapshot.getValue(Session.class);
+                        int status = session.getStatus();
                         if (status == 0) {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.GONE);
