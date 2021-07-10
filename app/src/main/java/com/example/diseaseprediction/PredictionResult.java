@@ -470,40 +470,16 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDTwo is receiver
      */
     private void createSessionWithCDoctor(String doctorID) {
-        //Get consultation list of two account
-        String accountIDOne;
-        String accountIDTwo;
-        if (fUser.getUid().compareTo(doctorID) < 0) {
-            accountIDOne = fUser.getUid();
-            accountIDTwo = doctorID;
-        } else {
-            accountIDOne = doctorID;
-            accountIDTwo = fUser.getUid();
-        }
 
-        mRef = FirebaseDatabase.getInstance().getReference("Session");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isFound = false;
-                Session ss = new Session();
-                // Find opening session
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    ss = sn.getValue(Session.class);
-                    //Check to find consultation is exist -> open Chat activity
-                    if (ss.getAccountIDOne().equals(accountIDOne) && ss.getAccountIDTwo().equals(accountIDTwo) && ss.getStatus() == 1) {
-                        isFound = true;
-                        //Send session id
-                        Intent i = new Intent(PredictionResult.this, Chat.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.putExtra("receiverID", doctorID);
-                        i.putExtra("sessionID", sessionID);
-                        PredictionResult.this.startActivity(i);
+        //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
+        if (mPrediction.getDoctorSessionID().equals("Default")) {
+            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isFound = false;
 
-                    }
-                }
-                // If no open session found -> create new session and send welcome msg then open Chat activity
-                if (!isFound) {
+                    // Create new Session
                     mRef = FirebaseDatabase.getInstance().getReference("Session");
                     sessionID = mRef.push().getKey();
                     Session session = new Session(sessionID, new Date(), new Date(), 1);
@@ -525,13 +501,21 @@ public class PredictionResult extends AppCompatActivity {
                     i.putExtra("sessionID", sessionID);
                     PredictionResult.this.startActivity(i);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } else {
+            //Send session id
+            Intent i = new Intent(PredictionResult.this, Chat.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("receiverID", doctorID);
+            i.putExtra("sessionID", mPrediction.getDoctorSessionID());
+            PredictionResult.this.startActivity(i);
+        }
+
     }
 
 

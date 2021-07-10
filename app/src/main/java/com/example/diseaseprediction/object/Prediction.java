@@ -57,6 +57,7 @@ public class Prediction implements Parcelable {
         this.status = status;
     }
 
+
     public static final Creator<Prediction> CREATOR = new Creator<Prediction>() {
         @Override
         public Prediction createFromParcel(Parcel in) {
@@ -74,6 +75,7 @@ public class Prediction implements Parcelable {
         patientID = in.readString();
         doctorID = in.readString();
         sessionID = in.readString();
+        doctorSessionID = in.readString();
         diseaseID = in.readString();
         notes = in.readString();
         hiddenSpecializationID = in.readString();
@@ -278,6 +280,7 @@ public class Prediction implements Parcelable {
         this.status = status;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -289,6 +292,7 @@ public class Prediction implements Parcelable {
         parcel.writeString(patientID);
         parcel.writeString(doctorID);
         parcel.writeString(sessionID);
+        parcel.writeString(doctorSessionID);
         parcel.writeString(diseaseID);
         parcel.writeString(notes);
         parcel.writeString(hiddenSpecializationID);
