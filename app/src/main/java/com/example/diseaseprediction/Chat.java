@@ -511,7 +511,7 @@ public class Chat extends AppCompatActivity {
     private void checkSessionStatus() {
         try {
             mRef = FirebaseDatabase.getInstance().getReference("Session");
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
