@@ -443,7 +443,6 @@ public class Chat extends AppCompatActivity {
                     switch (menuItem.getItemId()) {
                         case R.id.chat_menu_end_session:
                             endSession(sessionID);
-                            checkSessionStatus();
                             return true;
                     }
                     return true;
