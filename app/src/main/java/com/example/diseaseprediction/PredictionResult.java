@@ -470,51 +470,63 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDTwo is receiver
      */
     private void createSessionWithCDoctor(String doctorID) {
-
-        //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
-        if (mPrediction.getDoctorSessionID().equals("Default")) {
-            mRef = FirebaseDatabase.getInstance().getReference("Session");
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean isFound = false;
-
-                    // Create new Session
+        mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(mPrediction.getPredictionID());
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                Prediction newPrediction = snapshot.getValue(Prediction.class);
+                //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
+                if (newPrediction.getDoctorSessionID().equals("Default")) {
                     mRef = FirebaseDatabase.getInstance().getReference("Session");
-                    sessionID = mRef.push().getKey();
-                    Session session = new Session(sessionID, new Date(), new Date(), 1);
-                    session.setAccOneAndAccTwo(fUser.getUid(), doctorID);
-                    mRef.child(sessionID).setValue(session);
+                    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boolean isFound = false;
 
-                    //Send message started
-                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+                            // Create new Session
+                            mRef = FirebaseDatabase.getInstance().getReference("Session");
+                            sessionID = mRef.push().getKey();
+                            Session session = new Session(sessionID, new Date(), new Date(), 1);
+                            session.setAccOneAndAccTwo(fUser.getUid(), doctorID);
+                            mRef.child(sessionID).setValue(session);
 
-                    Message msg = new Message(reference.push().getKey(), doctorID, getString(R.string.default_chatbot_hello)
-                            , new Date(), sessionID, 1);
-                    reference.child(msg.getMessageID()).setValue(msg);
-                    //Update doctor session of prediction
-                    updateDoctorSessionInPrediction(mPrediction.getPredictionID(), sessionID);
-                    // Start Chat activity
+                            //Send message started
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+
+                            Message msg = new Message(reference.push().getKey(), doctorID, getString(R.string.default_chatbot_hello)
+                                    , new Date(), sessionID, 1);
+                            reference.child(msg.getMessageID()).setValue(msg);
+                            //Update doctor session of prediction
+                            updateDoctorSessionInPrediction(newPrediction.getPredictionID(), sessionID);
+                            // Start Chat activity
+                            Intent i = new Intent(PredictionResult.this, Chat.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("receiverID", doctorID);
+                            i.putExtra("sessionID", sessionID);
+                            PredictionResult.this.startActivity(i);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                } else {
+                    //Send session id
                     Intent i = new Intent(PredictionResult.this, Chat.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     i.putExtra("receiverID", doctorID);
-                    i.putExtra("sessionID", sessionID);
+                    i.putExtra("sessionID", newPrediction.getDoctorSessionID());
                     PredictionResult.this.startActivity(i);
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                }
-            });
-        } else {
-            //Send session id
-            Intent i = new Intent(PredictionResult.this, Chat.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("receiverID", doctorID);
-            i.putExtra("sessionID", mPrediction.getDoctorSessionID());
-            PredictionResult.this.startActivity(i);
-        }
+            }
+        });
+
 
     }
 
