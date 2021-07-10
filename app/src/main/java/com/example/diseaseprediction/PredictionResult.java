@@ -471,7 +471,7 @@ public class PredictionResult extends AppCompatActivity {
      */
     private void createSessionWithCDoctor(String doctorID) {
         mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(mPrediction.getPredictionID());
-        mRef.addValueEventListener(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Prediction newPrediction = snapshot.getValue(Prediction.class);

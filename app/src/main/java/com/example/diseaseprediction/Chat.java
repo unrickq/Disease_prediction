@@ -521,6 +521,7 @@ public class Chat extends AppCompatActivity {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.GONE);
                             Toast.makeText(Chat.this, getString(R.string.defaut_session_ended), Toast.LENGTH_SHORT).show();
+                            hideSoftKeyboard(Chat.this);
                         } else if (status == 1) {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.VISIBLE);

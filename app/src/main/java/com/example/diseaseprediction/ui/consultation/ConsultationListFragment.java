@@ -112,7 +112,7 @@ public class ConsultationListFragment extends Fragment {
      */
     private void loadListConsultation() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+            mRef = FirebaseDatabase.getInstance().getReference("Session");
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
