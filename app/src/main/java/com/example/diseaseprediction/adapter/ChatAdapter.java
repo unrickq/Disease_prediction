@@ -39,7 +39,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
     public static final int MSG_TYPE_LEFT_BOX = 2;
-    private String imgURL;
     MyClickListener listener;
 
 
@@ -83,45 +82,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     }
 
-//    /**
-//     * Set height of listview manual
-//     *
-//     * @param listView ListView
-//     */
-//    public static void setListViewHeightBasedOnChildren(final ListView listView) {
-//        listView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                ListAdapter listAdapter = listView.getAdapter();
-//                if (listAdapter == null) {
-//                    return;
-//                }
-//                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-//                int listWidth = listView.getMeasuredWidth();
-//                for (int i = 0; i < listAdapter.getCount(); i++) {
-//                    View listItem = listAdapter.getView(i, null, listView);
-//                    listItem.measure(
-//                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-//                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//                    totalHeight += listItem.getMeasuredHeight();
-//                }
-//                ViewGroup.LayoutParams params = listView.getLayoutParams();
-//                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() * 15)));
-//                listView.setLayoutParams(params);
-//                listView.requestLayout();
-//            }
-//        });
-//    }
-
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ViewHolder holder, int position) {
         try {
             //Get message
             Message msg = mMessage.get(position);
             holder.item_chat_show_message.setText(msg.getMessage());
-            //Get checkbox if message have a suggestion
-//        getCheckBox(msg, holder);
-
             //Custom date under message
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
             String shortTimeStr = sdf.format(msg.getDateSend().getTime());
@@ -168,173 +134,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-//    public void createCheckBox(ChatAdapter.ViewHolder holder, List<Symptom> ls, List<RecommendSymptom> rc, Message
-//    msg) {
-//        if (holder.item_chat_layout_checkbox != null) {
-//            if (ls.size() != 0) {
-//                //Set checkbox layout enable or disable
-//                if (msg.getStatus() == 2) {
-//                    holder.item_chat_checkbox.setEnabled(false);
-//                    holder.item_chat_checkbox_done.setEnabled(false);
-//                } else {
-//                    holder.item_chat_checkbox.setEnabled(true);
-//                    holder.item_chat_checkbox_done.setEnabled(true);
-//                }
-//
-//                //Set layout checkbox visible
-//                holder.item_chat_layout_checkbox.setVisibility(View.VISIBLE);
-//                //Create new adapter
-//                symptomAdapter = new ArrayAdapter<Symptom>(mContext, android.R.layout
-//                .simple_list_item_multiple_choice, ls);
-//                holder.item_chat_checkbox.setAdapter(symptomAdapter);
-//                //Set height of checkbox
-//                setListViewHeightBasedOnChildren(holder.item_chat_checkbox);
-//
-//                //Set item checked
-//                for (int i = 0; i < rc.size(); i++) {
-//                    if (rc.get(i).getStatus() == 1) {
-//                        for (int j = 0; j < holder.item_chat_checkbox.getAdapter().getCount(); j++) {
-//                            Symptom sm = (Symptom) holder.item_chat_checkbox.getItemAtPosition(j);
-//                            if (sm.getSymptomsID().equals(rc.get(i).getSymptomsID())) {
-//                                holder.item_chat_checkbox.setItemChecked(j, true);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                //Set onclick in item
-//                holder.item_chat_checkbox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                        //Get item value checked
-//                        Symptom value = (Symptom) holder.item_chat_checkbox.getItemAtPosition(i);
-//
-//                    }
-//                });
-//
-//                //Button done clicked
-//                holder.item_chat_checkbox_done.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        SparseBooleanArray sparseBooleanArray = holder.item_chat_checkbox.getCheckedItemPositions();
-//                        String itemsSelected = "";
-//
-//                        //Set check status in firebase as unchecked (status = 0)
-//                        for (int i = 0; i < rc.size(); i++) {
-//                            updateRecommendValue(rc.get(i).getMessageID(), rc.get(i).getSymptomsID(), 0);
-//                        }
-//
-//                        //Then set check status that row have checked (status = 1)
-//                        for (int i = 0; i < sparseBooleanArray.size(); i++) {
-//                            int position = sparseBooleanArray.keyAt(i);
-//                            if (sparseBooleanArray.get(position)) {
-//                                System.out.println("checked position" + position);
-//                                //Get value of index checked
-//                                Symptom st = (Symptom) holder.item_chat_checkbox.getItemAtPosition(position);
-//                                for (int j = 0; j < rc.size(); j++) {
-//                                    if (rc.get(j).getSymptomsID().equals(st.getSymptomsID())) {
-//                                        updateRecommendValue(rc.get(j).getMessageID(), rc.get(j).getSymptomsID(), 1);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        //Set disable checkbox layout
-//                        mRef2 = FirebaseDatabase.getInstance().getReference("Message");
-//                        mRef2.child(msg.getMessageID()).child("status").setValue(2);
-//                    }
-//                });
-//            } else {
-//                //Layout checkbox gone
-//                holder.item_chat_layout_checkbox.setVisibility(View.GONE);
-//            }
-//        }
-//    }
-
-//    public void getCheckBox(Message msg, ChatAdapter.ViewHolder holder) {
-//        //List symptom
-//        mSymptom = new ArrayList<>();
-//        //List id of symptom (String type)
-//        List<String> tempSymptom = new ArrayList<>();
-//        List<RecommendSymptom> tempRecommend = new ArrayList<>();
-//        //Go to recommendSymptom
-//        mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
-//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                tempSymptom.clear();
-//                tempRecommend.clear();
-//                //Loop and get all value that equal to message ID
-//                for (DataSnapshot sn : snapshot.getChildren()) {
-//                    RecommendSymptom rcs = sn.getValue(RecommendSymptom.class);
-//                    if (rcs.getMessageID().equals(msg.getMessageID())) {
-//                        //Add symptomID to temp array
-//                        tempSymptom.add(rcs.getSymptomsID());
-//                        //tempRecommend list use for get status (checked or not)
-//                        tempRecommend.add(rcs);
-//                    }
-//                }
-//
-//                //Get name of symptom
-//                mRef2 = FirebaseDatabase.getInstance().getReference("Symptom");
-//                mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        mSymptom.clear();
-//                        for (DataSnapshot sn : snapshot.getChildren()) {
-//                            for (String id : tempSymptom) {
-//                                Symptom st = sn.getValue(Symptom.class);
-//                                if (id.equals(st.getSymptomsID())) {
-//                                    //Add symptom to list symptom (Object)
-//                                    mSymptom.add(st);
-//                                }
-//                            }
-//                        }
-//                        //Create checkbox layout
-//                        createCheckBox(holder, mSymptom, tempRecommend, msg);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
-//  /**
-//   * Update recommendSymptom status to firebase
-//   *
-//   * @param messageID Message ID
-//   * @param symptomID Symptom ID
-//   * @param status    Status (0: Unchecked | 1: Checked)
-//   */
-//  private void updateRecommendValue(String messageID, String symptomID, int status) {
-//    mRef = FirebaseDatabase.getInstance().getReference("RecommendSymptom");
-//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                //Loop and get all value that equal to message ID
-//                for (DataSnapshot sn : snapshot.getChildren()) {
-//                    RecommendSymptom rcs = sn.getValue(RecommendSymptom.class);
-//                    if (rcs.getMessageID().equals(messageID) && rcs.getSymptomsID().equals(symptomID)) {
-//                        mRef.child(sn.getKey()).child("status").setValue(status);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-
     //setter button predict
     public void setPredictButtonListener(MyClickListener myClickListener) {
         this.listener = myClickListener;
@@ -342,9 +141,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_chat_show_message, item_chat_time;
-        public LinearLayout item_chat_layout_show_message, item_chat_layout_checkbox;
-        //        public ListView item_chat_checkbox;
-//        public Button item_chat_checkbox_done;
+        public LinearLayout item_chat_layout_show_message;
         public Button item_chat_box_button_predict;
         MyClickListener myClickListener;
 
@@ -355,9 +152,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
             item_chat_time = itemView.findViewById(R.id.item_chat_time);
             item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
-//            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
-//            item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
-//            item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
             item_chat_box_button_predict = (Button) itemView.findViewById(R.id.item_chat_box_button_predict);
             this.myClickListener = listener;
             item_chat_box_button_predict.setOnClickListener(new View.OnClickListener() {
@@ -374,9 +168,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
             item_chat_time = itemView.findViewById(R.id.item_chat_time);
             item_chat_layout_show_message = itemView.findViewById(R.id.item_chat_layout_show_message);
-//            item_chat_layout_checkbox = itemView.findViewById(R.id.item_chat_layout_checkbox);
-//            item_chat_checkbox_done = itemView.findViewById(R.id.item_chat_checkbox_done);
-//            item_chat_checkbox = itemView.findViewById(R.id.item_chat_checkbox);
         }
     }
 }

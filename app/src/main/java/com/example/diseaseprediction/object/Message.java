@@ -137,9 +137,9 @@ public class Message {
     }
 
     /**
-     * Set Status. 0: Deleted | 1: Normal
+     * Set Status. 0: Deleted | 1: Normal | 2:??? | 3:???
      *
-     * @param status 0: Deleted | 1: Normal
+     * @param status 0: Deleted | 1: Normal | 2:??? | 3:???
      */
     public void setStatus(int status) {
         this.status = status;

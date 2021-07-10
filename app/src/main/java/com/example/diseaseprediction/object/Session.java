@@ -53,18 +53,38 @@ public class Session {
         this.status = status;
     }
 
+    /**
+     * Get account ID One
+     *
+     * @return account ID One
+     */
     public String getAccountIDOne() {
         return accountIDOne;
     }
 
+    /**
+     * Set account ID One
+     *
+     * @param accountIDOne account ID One
+     */
     public void setAccountIDOne(String accountIDOne) {
         this.accountIDOne = accountIDOne;
     }
 
+    /**
+     * Get account ID Two
+     *
+     * @return account ID Two
+     */
     public String getAccountIDTwo() {
         return accountIDTwo;
     }
 
+    /**
+     * Set account ID Two
+     *
+     * @param accountIDTwo account ID Two
+     */
     public void setAccountIDTwo(String accountIDTwo) {
         this.accountIDTwo = accountIDTwo;
     }

@@ -17,8 +17,6 @@ public class testActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-//        addDataDiseaseAdvise(new DiseaseAdvise("99999",  "99999", 1));
-//        addDataAdvise(new Advise("99999", "Chưa có lời khuyên cho bệnh này", new Date(), new Date(), 1));
 
     }
 

@@ -804,39 +804,6 @@ public class Chat extends AppCompatActivity {
             Log.d(LOG_TAG, "createPrediction()");
         }
     }
-//    /**
-//     * check symptom by name
-//     *
-//     * @param listSymp
-//     * @param myCallback
-//     */
-//    private void checkSymptomByNameFirebase(List<String> listSymp , MyCallback myCallback) {
-//        mRef2 = FirebaseDatabase.getInstance().getReference("Symptom");
-//        Query disQuery = mRef2.orderByChild("name").equalTo(listSymp.get(0));
-//        disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                try {
-//                        if(snapshot.exists()){
-//                            System.out.println("da vao day roi");
-//                            myCallback.onCallback("true");
-//
-//                        }
-//                } catch (Exception e) {
-//                    Log.d(LOG_TAG, "Not found disease in database", e);
-//                }
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
-//    public interface MyCallback {
-//        void onCallback(String value);
-//    }
 
     /**
      * Get symptom in firebase

@@ -25,7 +25,6 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
-import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
@@ -52,605 +51,526 @@ import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-  private static final String TAG = "HomeFragment";
+    private static final String TAG = "HomeFragment";
 
-  private DatabaseReference mRef;
-  private FirebaseUser fUser;
-  private DoctorInfo mDoctor;
+    private DatabaseReference mRef;
+    private FirebaseUser fUser;
+    private DoctorInfo mDoctor;
 
-  private String sessionID;
+    private String sessionID;
 
-  private List<Session> consultationLists;
-  private List<Prediction> mPredictionListDoctor;
-  private List<Prediction> mPredictionListPatient;
-  private ConsultationAdapter consultationAdapter;
-  private PredictionAdapter doctorPredictionPendingListAdapter;
-  private PredictionAdapter patientPredictionAdapter;
+    private List<Session> consultationLists;
+    private List<Prediction> mPredictionListDoctor;
+    private List<Prediction> mPredictionListPatient;
+    private ConsultationAdapter consultationAdapter;
+    private PredictionAdapter doctorPredictionPendingListAdapter;
+    private PredictionAdapter patientPredictionAdapter;
 
-  private ConsultationList consultationList;
-  private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
-      home_doctor_all_prediction_txt_see_more,
-      home_txt_title, home_txt_prediction_title, home_txt_consultation_title,
-      home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
-      home_consultation_no_consultation_title;
-  private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
-  private SearchView home_search_view;
-  private NavigationView navigationView;
-  private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
-      home_doctor_all_prediction_recycle_view;
-  private ShimmerFrameLayout home_shimmer_pending_prediction, home_shimmer_prediction, home_shimmer_consultation;
+    private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
+            home_doctor_all_prediction_txt_see_more,
+            home_txt_title, home_txt_prediction_title, home_txt_consultation_title,
+            home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
+            home_consultation_no_consultation_title;
+    private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
+    private SearchView home_search_view;
+    private NavigationView navigationView;
+    private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
+            home_doctor_all_prediction_recycle_view;
+    private ShimmerFrameLayout home_shimmer_pending_prediction, home_shimmer_prediction, home_shimmer_consultation;
 
-  private Context context;
+    private Context context;
 
-  public HomeFragment() {
-    // Required empty public constructor
-  }
-
-  /**
-   * IMPORTANT: all Context-related methods must be placed in here
-   */
-  @Override
-  public void onViewCreated(@NonNull @NotNull View view,
-                            @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    context = getActivity().getApplicationContext();
-    home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(context));
-    home_recycler_view_disease.setLayoutManager(new LinearLayoutManager(context));
-    //Search clicked
-    home_search_view.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        createSessionWithChatBot();
-      }
-    });
-
-
-    //Set UI by role
-    setUIByAccountType();
-
-    //Load list consultation to recycler
-    loadConsultationList();
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater,
-                           ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_home, container, false);
-    //Get current user
-    fUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    //set toolbar
-    ((MainActivity) getActivity()).setActionBarTitle("");
-    ((MainActivity) getActivity()).setIconToolbar();
-    container.removeAllViews();
-
-    //find view
-    findView(view);
-
-
-    home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        navigationView.getMenu().getItem(2).setChecked(true);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-            new PredictionListPending()).commit();
-      }
-    });
-
-    //See more prediction clicked
-    home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        navigationView.getMenu().getItem(3).setChecked(true);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-            new PredictionListFragment()).commit();
-      }
-    });
-
-    //See more consultation clicked
-    home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        navigationView.getMenu().getItem(4).setChecked(true);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-            new ConsultationListFragment()).commit();
-
-      }
-    });
-
-
-    return view;
-  }
-
-  /**
-   * Find view by ID
-   *
-   * @param view view
-   */
-  private void findView(View view) {
-    navigationView = getActivity().findViewById(R.id.nav_view);
-    home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
-    home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
-    home_doctor_all_prediction_txt_see_more = view.findViewById(R.id.home_doctor_all_prediction_txt_see_more);
-    home_search_view = view.findViewById(R.id.home_search_view);
-
-    home_txt_title = view.findViewById(R.id.home_txt_title);
-    home_txt_prediction_title = view.findViewById(R.id.home_txt_prediction_title);
-    home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
-
-    home_doctor_all_prediction_no_prediction_title =
-        view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
-    home_prediction_no_prediction_title = view.findViewById(R.id.home_prediction_no_prediction_title);
-    home_consultation_no_consultation_title = view.findViewById(R.id.home_consultation_no_consultation_title);
-
-    //shimmer
-    home_shimmer_pending_prediction = view.findViewById(R.id.home_shimmer_pending_prediction);
-    home_shimmer_prediction = view.findViewById(R.id.home_shimmer_prediction);
-    home_shimmer_consultation = view.findViewById(R.id.home_shimmer_consultation);
-    // start shimmer
-    home_shimmer_pending_prediction.startShimmer();
-    home_shimmer_prediction.startShimmer();
-    home_shimmer_consultation.startShimmer();
-
-    //Create disease recycle
-    home_recycler_view_disease = view.findViewById(R.id.home_recycler_view_disease);
-    home_recycler_view_disease.setHasFixedSize(true);
-
-
-    // Create pending prediction
-    home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
-    home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
-
-    home_layout_disease_history = view.findViewById(R.id.home_layout_disease_history);
-
-    //Create consultation recycle
-    home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
-    home_recycler_view_consultation.setHasFixedSize(true);
-  }
-
-  /**
-   * Create new chat session
-   * accountIDOne is sender
-   * accountIDTwo is receiver
-   * CHATBOT_ID is receiver (account two in consultation)
-   */
-//  private void createSession(String accountIDOne, String accountIDTwo) {
-//    //Get consultation list of two account
-//    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-//    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//      @Override
-//      public void onDataChange(@NonNull DataSnapshot snapshot) {
-//        ConsultationList csl = new ConsultationList();
-//        for (DataSnapshot sn : snapshot.getChildren()) {
-//          csl = sn.getValue(ConsultationList.class);
-//          //Check to find consultation is exist or not
-//          if ((csl.getAccountOne().equals(accountIDOne) && csl.getAccountTwo().equals(accountIDTwo))
-//              || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
-//            consultationList = csl;
-//          }
-//        }
-//
-//        //If consultation is null
-//        //Then create new session, consultation
-//        if (consultationList == null) {
-//          mRef = FirebaseDatabase.getInstance().getReference("Session");
-//          sessionID = mRef.push().getKey();
-//          mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
-//          //Create new consultation list
-//          mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-//          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//              mRef.push().setValue(new ConsultationList(accountIDOne
-//                  , accountIDTwo, sessionID));
-//              //Send session id
-//              Intent i = new Intent(getActivity(), Chat.class);
-//              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//              i.putExtra("receiverID", accountIDTwo);
-//              i.putExtra("sessionID", sessionID);
-////                            i.putExtra("isChatBot", true);
-//              context.startActivity(i);
-//
-//              //Send message started
-//              DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
-//
-//              Message msg = new Message(reference.push().getKey(), accountIDTwo
-//                  , accountIDOne, context.getString(R.string.default_chatbot_hello)
-//                  , new Date(), sessionID, 1);
-//              reference.child(msg.getMessageID()).setValue(msg);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//          });
-//        }
-//        //If consultation is not null
-//        //Then find the last session,
-//        //if it equal to 1, then it is current session,
-//        //if not, then create new session and new consultation
-//        else {
-//          sessionID = "default";
-//          mRef = FirebaseDatabase.getInstance().getReference("Session");
-//          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//              Session ss = new Session();
-//              for (DataSnapshot sn : snapshot.getChildren()) {
-//                ss = sn.getValue(Session.class);
-//                //Get current session of two account
-//                if (ss.getSessionID().equals(consultationList.getSessionID())) {
-//                  if (ss.getStatus() == 1) {
-//                    sessionID = ss.getSessionID();
-//                  }
-//                }
-//              }
-//              //If session is null
-//              if (sessionID.equals("default")) {
-//                sessionID = mRef.push().getKey();
-//                mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
-//                //Create new consultation list
-//                mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-//                mRef.push().setValue(new ConsultationList(accountIDOne
-//                    , accountIDTwo, sessionID));
-//
-//                //Send message started
-//                DatabaseReference reference =
-//                    FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
-//                Message msg = new Message(reference.push().getKey(), accountIDTwo
-//                    , accountIDOne, context.getString(R.string.default_chatbot_hello)
-//                    , new Date(), sessionID, 1);
-//                reference.child(msg.getMessageID()).setValue(msg);
-//              }
-//              //Send session id
-//              Intent i = new Intent(getActivity(), Chat.class);
-//              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//              i.putExtra("receiverID", accountIDTwo);
-//              i.putExtra("sessionID", sessionID);
-////                            i.putExtra("isChatBot", true);
-//              context.startActivity(i);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//          });
-//        }
-//      }
-//
-//      @Override
-//      public void onCancelled(@NonNull DatabaseError error) {
-//
-//      }
-//    });
-//  }
-
-  /**
-   * Create new chat session
-   * accountIDOne is sender
-   * accountIDTwo is receiver
-   * CHATBOT_ID is receiver (account two in consultation)
-   */
-  private void createSessionWithChatBot() {
-    //Get consultation list of two account
-    String accountIDOne;
-    String accountIDTwo;
-    if (fUser.getUid().compareTo(Constants.CHATBOT_ID) < 0) {
-      accountIDOne = fUser.getUid();
-      accountIDTwo = Constants.CHATBOT_ID;
-    } else {
-      accountIDOne = Constants.CHATBOT_ID;
-      accountIDTwo = fUser.getUid();
+    public HomeFragment() {
+        // Required empty public constructor
     }
 
-    mRef = FirebaseDatabase.getInstance().getReference("Session");
-    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        boolean isFound = false;
-        Session ss = new Session();
-        // Find opening session
-        for (DataSnapshot sn : snapshot.getChildren()) {
-          ss = sn.getValue(Session.class);
+    /**
+     * IMPORTANT: all Context-related methods must be placed in here
+     */
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view,
+                              @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-          //Check to find consultation is exist -> open Chat activity
-          if (ss != null &&
-                  ss.getAccountIDOne().equals(accountIDOne) &&
-                  ss.getAccountIDTwo().equals(accountIDTwo) &&
-                  ss.getStatus() == 1) {
-            isFound = true;
-            //Send session id
-            Intent i = new Intent(getActivity(), Chat.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("receiverID", Constants.CHATBOT_ID);
-            i.putExtra("sessionID", sessionID);
-            context.startActivity(i);
-
-          }
-        }
-        // If no open session found -> create new session and send welcome msg then open Chat activity
-        if (!isFound) {
-          mRef = FirebaseDatabase.getInstance().getReference("Session");
-          sessionID = mRef.push().getKey();
-          Session session = new Session(sessionID, new Date(), new Date(), 1);
-          session.setAccOneAndAccTwo(fUser.getUid(), Constants.CHATBOT_ID);
-          mRef.child(sessionID).setValue(session);
-
-          //Send message started
-          DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
-
-          Message msg = new Message(reference.push().getKey(), Constants.CHATBOT_ID, context.getString(R.string.default_chatbot_hello)
-                  , new Date(), sessionID, 1);
-          reference.child(msg.getMessageID()).setValue(msg);
-
-          // Start Chat activity
-          Intent i = new Intent(getActivity(), Chat.class);
-          i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          i.putExtra("receiverID", Constants.CHATBOT_ID);
-          i.putExtra("sessionID", sessionID);
-          context.startActivity(i);
-        }
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
-  }
-
-  /**
-   * Load consultation of current account
-   */
-  private void loadConsultationList() {
-    consultationLists = new ArrayList<>();
-    mRef = FirebaseDatabase.getInstance().getReference("Session");
-    mRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        consultationLists.clear();
-        for (DataSnapshot sh : snapshot.getChildren()) {
-          Session ss = sh.getValue(Session.class);
-          if (ss.getAccountIDOne().equals(fUser.getUid()) || ss.getAccountIDTwo().equals(fUser.getUid())) {
-            consultationLists.add(ss);
-          }
-        }
-        if (consultationLists.size() > 0) {
-          // Update UI
-          home_consultation_no_consultation_title.setVisibility(View.GONE);
-          home_txt_consultation_see_more.setVisibility(View.VISIBLE);
-          //Reverse list index to get latest consultation
-          Collections.reverse(consultationLists);
-          consultationAdapter = new ConsultationAdapter(context, consultationLists, 3);
-          home_recycler_view_consultation.setAdapter(consultationAdapter);
-        } else {
-          home_consultation_no_consultation_title.setVisibility(View.VISIBLE);
-          home_txt_consultation_see_more.setVisibility(View.GONE);
-        }
-
-        // stop and hide shimmer
-        home_shimmer_consultation.stopShimmer();
-        home_shimmer_consultation.setVisibility(View.GONE);
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
-  }
-
-  /**
-   * DOCTOR TYPE
-   * Load all prediction pending
-   */
-  private void loadAllPredictionPending() {
-    mPredictionListDoctor = new ArrayList<>();
-    //Find specialization id of doctor account
-    mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
-    mRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        mDoctor = snapshot.getValue(DoctorInfo.class);
-        //Go to prediction
-        Query predictionByDateCreate =
-            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
-        predictionByDateCreate.addValueEventListener(new ValueEventListener() {
-          @Override
-          public void onDataChange(@NonNull DataSnapshot snapshot) {
-            mPredictionListDoctor.clear();
-            for (DataSnapshot sh : snapshot.getChildren()) {
-              Prediction pr = sh.getValue(Prediction.class);
-              assert pr != null;
-              try {
-                if (pr.getStatus() == 0) {
-                  //Check if specializationID in prediction equal with specializationID in doctor
-                  // account
-                  if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
-                    //Add to prediction list
-                    mPredictionListDoctor.add(pr);
-                  }
-                }
-              } catch (NullPointerException e) {
-                Log.e(TAG, "Home. Patient ID null", e);
-              }
+        context = getActivity().getApplicationContext();
+        home_recycler_view_consultation.setLayoutManager(new LinearLayoutManager(context));
+        home_recycler_view_disease.setLayoutManager(new LinearLayoutManager(context));
+        //Search clicked
+        home_search_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createSessionWithChatBot();
             }
-            //Reverse list index to get latest consultation
-//                        Collections.reverse(mPredictionListDoctor);
-            //Create adapter
-            //goToScreen 0: doctor confirm screen
-            if (mPredictionListDoctor.size() > 0) {
-              // Update UI
-              home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
-              home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
-              //Reverse list index to get latest consultation
-//              Collections.reverse(mPredictionListDoctor);
-              // Load list to adapter
-              doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                  mPredictionListDoctor, 0, 3);
-              home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
-            } else {
-              home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
-              home_doctor_all_prediction_txt_see_more.setVisibility(View.GONE);
-            }
-            // stop and hide shimmer
-            home_shimmer_pending_prediction.stopShimmer();
-            home_shimmer_pending_prediction.setVisibility(View.GONE);
-          }
-
-          @Override
-          public void onCancelled(@NonNull DatabaseError error) {
-
-          }
         });
-      }
 
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-      }
-    });
-  }
 
-  /**
-   * Load prediction by type account
-   * Load list prediction of patient if account type is 1
-   * Load list prediction that confirmed by account doctor if account type is 0
-   *
-   * @param typeAcc type of account. 0: doctor | 1: patient
-   */
-  private void loadAllPredictionOfAccount(int typeAcc) {
-    mPredictionListPatient = new ArrayList<>();
-    mRef = FirebaseDatabase.getInstance().getReference("Prediction");
-    mRef.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        mPredictionListPatient.clear();
-        for (DataSnapshot sh : snapshot.getChildren()) {
-          Prediction pr = sh.getValue(Prediction.class);
-          //If patientId equal with current accountID
-          try {
-            if (typeAcc == 0) {
-              if (pr.getDoctorID().equals(fUser.getUid())) {
-                mPredictionListPatient.add(pr);
-              }
-            } else if (typeAcc == 1) {
-              if (pr.getPatientID().equals(fUser.getUid())) {
-                mPredictionListPatient.add(pr);
-              }
-            }
-          } catch (NullPointerException e) {
-            Log.d(TAG, "Home. Patient ID null", e);
-          }
-        }
-        //goToScreen 1: prediction result screen
-        // Only load prediction list when current account is patient
-        if (mPredictionListPatient.size() > 0) {
-          //Update UI
-          home_prediction_no_prediction_title.setVisibility(View.GONE);
-          home_txt_prediction_see_more.setVisibility(View.VISIBLE);
-          //Reverse list index to get latest prediction
-          Collections.reverse(mPredictionListPatient);
-          // Load list to adapter
-          patientPredictionAdapter = new PredictionAdapter(context,
-              mPredictionListPatient, 1, 3);
-          home_recycler_view_disease.setAdapter(patientPredictionAdapter);
-        } else if (typeAcc == 1) {
-          home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
-          home_txt_prediction_see_more.setVisibility(View.GONE);
-        }
-        // stop and hide shimmer
-        home_shimmer_prediction.stopShimmer();
-        home_shimmer_prediction.setVisibility(View.GONE);
-      }
+        //Set UI by role
+        setUIByAccountType();
 
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-
-      }
-    });
-  }
-
-  /**
-   * UI of doctor role
-   */
-  private void setUIDoctor() {
-    home_txt_title.setText(context.getString(R.string.home_doctor_txt_title));
-    home_txt_prediction_title.setText(context.getString(R.string.home_doctor_txt_prediction_title));
-    home_txt_consultation_title.setText(context.getString(R.string.home_doctor_txt_consultation_title));
-
-    //List disease history
-    home_layout_disease_history.setVisibility(View.GONE);
-    home_recycler_view_disease.setVisibility(View.GONE);
-    home_shimmer_prediction.setVisibility(View.GONE);
-    home_search_view.setVisibility(View.GONE);
-
-    //All prediction in pending
-    home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
-    home_doctor_all_prediction_recycle_view.setVisibility(View.VISIBLE);
-    home_shimmer_pending_prediction.setVisibility(View.VISIBLE);
-
-    home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
-    home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(context));
-    loadAllPredictionPending();
-    //type 0: doctor
-    loadAllPredictionOfAccount(0);
-  }
-
-  /**
-   * UI of user role
-   */
-  private void setUIPatient() {
-    //Set doctor visibility gone
-    home_doctor_all_prediction_layout_title.setVisibility(View.GONE);
-    home_doctor_all_prediction_recycle_view.setVisibility(View.GONE);
-
-    //Patient
-    home_txt_title.setText(context.getString(R.string.home_txt_title));
-    home_txt_prediction_title.setText(context.getString(R.string.home_txt_prediction_title));
-    home_txt_consultation_title.setText(context.getString(R.string.home_txt_consultation_title));
-    //type 1: patient
-    loadAllPredictionOfAccount(1);
-
-  }
-
-  /**
-   * Set UI by type of account
-   */
-  private void setUIByAccountType() {
-    //Get disease
-    if (!fUser.getUid().equals("")) {
-      mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-      mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-          try {
-            if (snapshot.child("typeID").getValue().toString().equals("0")) {
-              setUIDoctor();
-            } else {
-              setUIPatient();
-            }
-
-          } catch (NullPointerException e) {
-            Log.e(TAG, "setUIByAccountType: TypeID Null", e);
-            Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(context, Login.class);
-            startActivity(i);
-          }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-      });
+        //Load list consultation to recycler
+        loadConsultationList();
     }
-  }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //set toolbar
+        ((MainActivity) getActivity()).setActionBarTitle("");
+        ((MainActivity) getActivity()).setIconToolbar();
+        container.removeAllViews();
+
+        //find view
+        findView(view);
+
+
+        home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(2).setChecked(true);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new PredictionListPending()).commit();
+            }
+        });
+
+        //See more prediction clicked
+        home_txt_prediction_see_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(3).setChecked(true);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new PredictionListFragment()).commit();
+            }
+        });
+
+        //See more consultation clicked
+        home_txt_consultation_see_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationView.getMenu().getItem(4).setChecked(true);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new ConsultationListFragment()).commit();
+
+            }
+        });
+
+
+        return view;
+    }
+
+    /**
+     * Find view by ID
+     *
+     * @param view view
+     */
+    private void findView(View view) {
+        try {
+            navigationView = getActivity().findViewById(R.id.nav_view);
+            home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
+            home_txt_consultation_see_more = view.findViewById(R.id.home_txt_consultation_see_more);
+            home_doctor_all_prediction_txt_see_more = view.findViewById(R.id.home_doctor_all_prediction_txt_see_more);
+            home_search_view = view.findViewById(R.id.home_search_view);
+
+            home_txt_title = view.findViewById(R.id.home_txt_title);
+            home_txt_prediction_title = view.findViewById(R.id.home_txt_prediction_title);
+            home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
+
+            home_doctor_all_prediction_no_prediction_title =
+                    view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
+            home_prediction_no_prediction_title = view.findViewById(R.id.home_prediction_no_prediction_title);
+            home_consultation_no_consultation_title = view.findViewById(R.id.home_consultation_no_consultation_title);
+
+            //shimmer
+            home_shimmer_pending_prediction = view.findViewById(R.id.home_shimmer_pending_prediction);
+            home_shimmer_prediction = view.findViewById(R.id.home_shimmer_prediction);
+            home_shimmer_consultation = view.findViewById(R.id.home_shimmer_consultation);
+            // start shimmer
+            home_shimmer_pending_prediction.startShimmer();
+            home_shimmer_prediction.startShimmer();
+            home_shimmer_consultation.startShimmer();
+
+            //Create disease recycle
+            home_recycler_view_disease = view.findViewById(R.id.home_recycler_view_disease);
+            home_recycler_view_disease.setHasFixedSize(true);
+
+
+            // Create pending prediction
+            home_doctor_all_prediction_layout_title = view.findViewById(R.id.home_doctor_all_prediction_layout_title);
+            home_doctor_all_prediction_recycle_view = view.findViewById(R.id.home_doctor_all_prediction_recycle_view);
+
+            home_layout_disease_history = view.findViewById(R.id.home_layout_disease_history);
+
+            //Create consultation recycle
+            home_recycler_view_consultation = view.findViewById(R.id.home_recycler_view_consultation);
+            home_recycler_view_consultation.setHasFixedSize(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "findView()");
+        }
+    }
+
+    /**
+     * Create new chat session
+     * accountIDOne is sender
+     * accountIDTwo is receiver
+     * CHATBOT_ID is receiver (account two in consultation)
+     */
+    private void createSessionWithChatBot() {
+        try {
+            //Get consultation list of two account
+            String accountIDOne;
+            String accountIDTwo;
+            if (fUser.getUid().compareTo(Constants.CHATBOT_ID) < 0) {
+                accountIDOne = fUser.getUid();
+                accountIDTwo = Constants.CHATBOT_ID;
+            } else {
+                accountIDOne = Constants.CHATBOT_ID;
+                accountIDTwo = fUser.getUid();
+            }
+
+            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isFound = false;
+                    Session ss = new Session();
+                    // Find opening session
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        ss = sn.getValue(Session.class);
+
+                        //Check to find consultation is exist -> open Chat activity
+                        if (ss != null &&
+                                ss.getAccountIDOne().equals(accountIDOne) &&
+                                ss.getAccountIDTwo().equals(accountIDTwo) &&
+                                ss.getStatus() == 1) {
+                            isFound = true;
+                            //Send session id
+                            Intent i = new Intent(getActivity(), Chat.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("receiverID", Constants.CHATBOT_ID);
+                            i.putExtra("sessionID", sessionID);
+                            context.startActivity(i);
+
+                        }
+                    }
+                    // If no open session found -> create new session and send welcome msg then open Chat activity
+                    if (!isFound) {
+                        mRef = FirebaseDatabase.getInstance().getReference("Session");
+                        sessionID = mRef.push().getKey();
+                        Session session = new Session(sessionID, new Date(), new Date(), 1);
+                        session.setAccOneAndAccTwo(fUser.getUid(), Constants.CHATBOT_ID);
+                        mRef.child(sessionID).setValue(session);
+
+                        //Send message started
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+
+                        Message msg = new Message(reference.push().getKey(), Constants.CHATBOT_ID, context.getString(R.string.default_chatbot_hello)
+                                , new Date(), sessionID, 1);
+                        reference.child(msg.getMessageID()).setValue(msg);
+
+                        // Start Chat activity
+                        Intent i = new Intent(getActivity(), Chat.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.putExtra("receiverID", Constants.CHATBOT_ID);
+                        i.putExtra("sessionID", sessionID);
+                        context.startActivity(i);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "createSessionWithChatBot()");
+        }
+
+    }
+
+    /**
+     * Load consultation of current account
+     */
+    private void loadConsultationList() {
+        try {
+            consultationLists = new ArrayList<>();
+            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    consultationLists.clear();
+                    for (DataSnapshot sh : snapshot.getChildren()) {
+                        Session ss = sh.getValue(Session.class);
+                        if (ss.getAccountIDOne().equals(fUser.getUid()) || ss.getAccountIDTwo().equals(fUser.getUid())) {
+                            consultationLists.add(ss);
+                        }
+                    }
+                    if (consultationLists.size() > 0) {
+                        // Update UI
+                        home_consultation_no_consultation_title.setVisibility(View.GONE);
+                        home_txt_consultation_see_more.setVisibility(View.VISIBLE);
+                        //Reverse list index to get latest consultation
+                        Collections.reverse(consultationLists);
+                        consultationAdapter = new ConsultationAdapter(context, consultationLists, 3);
+                        home_recycler_view_consultation.setAdapter(consultationAdapter);
+                    } else {
+                        home_consultation_no_consultation_title.setVisibility(View.VISIBLE);
+                        home_txt_consultation_see_more.setVisibility(View.GONE);
+                    }
+
+                    // stop and hide shimmer
+                    home_shimmer_consultation.stopShimmer();
+                    home_shimmer_consultation.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadConsultationList()");
+        }
+    }
+
+    /**
+     * DOCTOR TYPE
+     * Load all prediction pending
+     */
+    private void loadAllPredictionPending() {
+        try {
+            mPredictionListDoctor = new ArrayList<>();
+            //Find specialization id of doctor account
+            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo").child(fUser.getUid());
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mDoctor = snapshot.getValue(DoctorInfo.class);
+                    //Go to prediction
+                    Query predictionByDateCreate =
+                            FirebaseDatabase.getInstance().getReference("Prediction").orderByChild("dateCreate/time");
+                    predictionByDateCreate.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            mPredictionListDoctor.clear();
+                            for (DataSnapshot sh : snapshot.getChildren()) {
+                                Prediction pr = sh.getValue(Prediction.class);
+                                assert pr != null;
+                                try {
+                                    if (pr.getStatus() == 0) {
+                                        //Check if specializationID in prediction equal with specializationID in doctor
+                                        // account
+                                        if (pr.getHiddenSpecializationID().equals(mDoctor.getSpecializationID())) {
+                                            //Add to prediction list
+                                            mPredictionListDoctor.add(pr);
+                                        }
+                                    }
+                                } catch (NullPointerException e) {
+                                    Log.e(TAG, "Home. Patient ID null", e);
+                                }
+                            }
+                            //Reverse list index to get latest consultation
+//                        Collections.reverse(mPredictionListDoctor);
+                            //Create adapter
+                            //goToScreen 0: doctor confirm screen
+                            if (mPredictionListDoctor.size() > 0) {
+                                // Update UI
+                                home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
+                                home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
+                                //Reverse list index to get latest consultation
+//              Collections.reverse(mPredictionListDoctor);
+                                // Load list to adapter
+                                doctorPredictionPendingListAdapter = new PredictionAdapter(context,
+                                        mPredictionListDoctor, 0, 3);
+                                home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
+                            } else {
+                                home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
+                                home_doctor_all_prediction_txt_see_more.setVisibility(View.GONE);
+                            }
+                            // stop and hide shimmer
+                            home_shimmer_pending_prediction.stopShimmer();
+                            home_shimmer_pending_prediction.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadAllPredictionPending()");
+        }
+    }
+
+    /**
+     * Load prediction by type account
+     * Load list prediction of patient if account type is 1
+     * Load list prediction that confirmed by account doctor if account type is 0
+     *
+     * @param typeAcc type of account. 0: doctor | 1: patient
+     */
+    private void loadAllPredictionOfAccount(int typeAcc) {
+        try {
+            mPredictionListPatient = new ArrayList<>();
+            mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mPredictionListPatient.clear();
+                    for (DataSnapshot sh : snapshot.getChildren()) {
+                        Prediction pr = sh.getValue(Prediction.class);
+                        //If patientId equal with current accountID
+                        try {
+                            if (typeAcc == 0) {
+                                if (pr.getDoctorID().equals(fUser.getUid())) {
+                                    mPredictionListPatient.add(pr);
+                                }
+                            } else if (typeAcc == 1) {
+                                if (pr.getPatientID().equals(fUser.getUid())) {
+                                    mPredictionListPatient.add(pr);
+                                }
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "Home. Patient ID null", e);
+                        }
+                    }
+                    //goToScreen 1: prediction result screen
+                    // Only load prediction list when current account is patient
+                    if (mPredictionListPatient.size() > 0) {
+                        //Update UI
+                        home_prediction_no_prediction_title.setVisibility(View.GONE);
+                        home_txt_prediction_see_more.setVisibility(View.VISIBLE);
+                        //Reverse list index to get latest prediction
+                        Collections.reverse(mPredictionListPatient);
+                        // Load list to adapter
+                        patientPredictionAdapter = new PredictionAdapter(context,
+                                mPredictionListPatient, 1, 3);
+                        home_recycler_view_disease.setAdapter(patientPredictionAdapter);
+                    } else if (typeAcc == 1) {
+                        home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
+                        home_txt_prediction_see_more.setVisibility(View.GONE);
+                    }
+                    // stop and hide shimmer
+                    home_shimmer_prediction.stopShimmer();
+                    home_shimmer_prediction.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "loadAllPredictionOfAccount()");
+        }
+    }
+
+    /**
+     * UI of doctor role
+     */
+    private void setUIDoctor() {
+        try {
+            home_txt_title.setText(context.getString(R.string.home_doctor_txt_title));
+            home_txt_prediction_title.setText(context.getString(R.string.home_doctor_txt_prediction_title));
+            home_txt_consultation_title.setText(context.getString(R.string.home_doctor_txt_consultation_title));
+
+            //List disease history
+            home_layout_disease_history.setVisibility(View.GONE);
+            home_recycler_view_disease.setVisibility(View.GONE);
+            home_shimmer_prediction.setVisibility(View.GONE);
+            home_search_view.setVisibility(View.GONE);
+
+            //All prediction in pending
+            home_doctor_all_prediction_layout_title.setVisibility(View.VISIBLE);
+            home_doctor_all_prediction_recycle_view.setVisibility(View.VISIBLE);
+            home_shimmer_pending_prediction.setVisibility(View.VISIBLE);
+
+            home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
+            home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(context));
+            loadAllPredictionPending();
+            //type 0: doctor
+            loadAllPredictionOfAccount(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setUIDoctor()");
+        }
+    }
+
+    /**
+     * UI of user role
+     */
+    private void setUIPatient() {
+        try {
+            //Set doctor visibility gone
+            home_doctor_all_prediction_layout_title.setVisibility(View.GONE);
+            home_doctor_all_prediction_recycle_view.setVisibility(View.GONE);
+
+            //Patient
+            home_txt_title.setText(context.getString(R.string.home_txt_title));
+            home_txt_prediction_title.setText(context.getString(R.string.home_txt_prediction_title));
+            home_txt_consultation_title.setText(context.getString(R.string.home_txt_consultation_title));
+            //type 1: patient
+            loadAllPredictionOfAccount(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setUIPatient()");
+        }
+    }
+
+    /**
+     * Set UI by type of account
+     */
+    private void setUIByAccountType() {
+        try {
+            //Get disease
+            if (!fUser.getUid().equals("")) {
+                mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        try {
+                            if (snapshot.child("typeID").getValue().toString().equals("0")) {
+                                setUIDoctor();
+                            } else {
+                                setUIPatient();
+                            }
+
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, "setUIByAccountType: TypeID Null", e);
+                            Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().signOut();
+                            Intent i = new Intent(context, Login.class);
+                            startActivity(i);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "setUIByAccountType()");
+        }
+    }
 }
