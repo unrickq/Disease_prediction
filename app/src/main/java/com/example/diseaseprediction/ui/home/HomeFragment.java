@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
 
   private String sessionID;
 
-  private List<ConsultationList> consultationLists;
+  private List<Session> consultationLists;
   private List<Prediction> mPredictionListDoctor;
   private List<Prediction> mPredictionListPatient;
   private ConsultationAdapter consultationAdapter;
@@ -101,7 +101,7 @@ public class HomeFragment extends Fragment {
     home_search_view.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        createSession(fUser.getUid(), Constants.CHATBOT_ID);
+        createSessionWithChatBot();
       }
     });
 
@@ -220,108 +220,182 @@ public class HomeFragment extends Fragment {
    * accountIDTwo is receiver
    * CHATBOT_ID is receiver (account two in consultation)
    */
-  private void createSession(String accountIDOne, String accountIDTwo) {
+//  private void createSession(String accountIDOne, String accountIDTwo) {
+//    //Get consultation list of two account
+//    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+//    mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//      @Override
+//      public void onDataChange(@NonNull DataSnapshot snapshot) {
+//        ConsultationList csl = new ConsultationList();
+//        for (DataSnapshot sn : snapshot.getChildren()) {
+//          csl = sn.getValue(ConsultationList.class);
+//          //Check to find consultation is exist or not
+//          if ((csl.getAccountOne().equals(accountIDOne) && csl.getAccountTwo().equals(accountIDTwo))
+//              || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
+//            consultationList = csl;
+//          }
+//        }
+//
+//        //If consultation is null
+//        //Then create new session, consultation
+//        if (consultationList == null) {
+//          mRef = FirebaseDatabase.getInstance().getReference("Session");
+//          sessionID = mRef.push().getKey();
+//          mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
+//          //Create new consultation list
+//          mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+//          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//              mRef.push().setValue(new ConsultationList(accountIDOne
+//                  , accountIDTwo, sessionID));
+//              //Send session id
+//              Intent i = new Intent(getActivity(), Chat.class);
+//              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//              i.putExtra("receiverID", accountIDTwo);
+//              i.putExtra("sessionID", sessionID);
+////                            i.putExtra("isChatBot", true);
+//              context.startActivity(i);
+//
+//              //Send message started
+//              DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+//
+//              Message msg = new Message(reference.push().getKey(), accountIDTwo
+//                  , accountIDOne, context.getString(R.string.default_chatbot_hello)
+//                  , new Date(), sessionID, 1);
+//              reference.child(msg.getMessageID()).setValue(msg);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//          });
+//        }
+//        //If consultation is not null
+//        //Then find the last session,
+//        //if it equal to 1, then it is current session,
+//        //if not, then create new session and new consultation
+//        else {
+//          sessionID = "default";
+//          mRef = FirebaseDatabase.getInstance().getReference("Session");
+//          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//              Session ss = new Session();
+//              for (DataSnapshot sn : snapshot.getChildren()) {
+//                ss = sn.getValue(Session.class);
+//                //Get current session of two account
+//                if (ss.getSessionID().equals(consultationList.getSessionID())) {
+//                  if (ss.getStatus() == 1) {
+//                    sessionID = ss.getSessionID();
+//                  }
+//                }
+//              }
+//              //If session is null
+//              if (sessionID.equals("default")) {
+//                sessionID = mRef.push().getKey();
+//                mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
+//                //Create new consultation list
+//                mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+//                mRef.push().setValue(new ConsultationList(accountIDOne
+//                    , accountIDTwo, sessionID));
+//
+//                //Send message started
+//                DatabaseReference reference =
+//                    FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+//                Message msg = new Message(reference.push().getKey(), accountIDTwo
+//                    , accountIDOne, context.getString(R.string.default_chatbot_hello)
+//                    , new Date(), sessionID, 1);
+//                reference.child(msg.getMessageID()).setValue(msg);
+//              }
+//              //Send session id
+//              Intent i = new Intent(getActivity(), Chat.class);
+//              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//              i.putExtra("receiverID", accountIDTwo);
+//              i.putExtra("sessionID", sessionID);
+////                            i.putExtra("isChatBot", true);
+//              context.startActivity(i);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//          });
+//        }
+//      }
+//
+//      @Override
+//      public void onCancelled(@NonNull DatabaseError error) {
+//
+//      }
+//    });
+//  }
+
+  /**
+   * Create new chat session
+   * accountIDOne is sender
+   * accountIDTwo is receiver
+   * CHATBOT_ID is receiver (account two in consultation)
+   */
+  private void createSessionWithChatBot() {
     //Get consultation list of two account
-    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+    String accountIDOne;
+    String accountIDTwo;
+    if (fUser.getUid().compareTo(Constants.CHATBOT_ID) < 0) {
+      accountIDOne = fUser.getUid();
+      accountIDTwo = Constants.CHATBOT_ID;
+    } else {
+      accountIDOne = Constants.CHATBOT_ID;
+      accountIDTwo = fUser.getUid();
+    }
+
+    mRef = FirebaseDatabase.getInstance().getReference("Session");
     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        ConsultationList csl = new ConsultationList();
+        boolean isFound = false;
+        Session ss = new Session();
+        // Find opening session
         for (DataSnapshot sn : snapshot.getChildren()) {
-          csl = sn.getValue(ConsultationList.class);
-          //Check to find consultation is exist or not
-          if ((csl.getAccountOne().equals(accountIDOne) && csl.getAccountTwo().equals(accountIDTwo))
-              || (csl.getAccountOne().equals(accountIDTwo) && csl.getAccountTwo().equals(accountIDOne))) {
-            consultationList = csl;
+          ss = sn.getValue(Session.class);
+
+          //Check to find consultation is exist -> open Chat activity
+          if (ss != null &&
+                  ss.getAccountIDOne().equals(accountIDOne) &&
+                  ss.getAccountIDTwo().equals(accountIDTwo) &&
+                  ss.getStatus() == 1) {
+            isFound = true;
+            //Send session id
+            Intent i = new Intent(getActivity(), Chat.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("receiverID", Constants.CHATBOT_ID);
+            i.putExtra("sessionID", sessionID);
+            context.startActivity(i);
+
           }
         }
-
-        //If consultation is null
-        //Then create new session, consultation
-        if (consultationList == null) {
+        // If no open session found -> create new session and send welcome msg then open Chat activity
+        if (!isFound) {
           mRef = FirebaseDatabase.getInstance().getReference("Session");
           sessionID = mRef.push().getKey();
-          mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
-          //Create new consultation list
-          mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-              mRef.push().setValue(new ConsultationList(accountIDOne
-                  , accountIDTwo, sessionID));
-              //Send session id
-              Intent i = new Intent(getActivity(), Chat.class);
-              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              i.putExtra("receiverID", accountIDTwo);
-              i.putExtra("sessionID", sessionID);
-//                            i.putExtra("isChatBot", true);
-              context.startActivity(i);
+          Session session = new Session(sessionID, new Date(), new Date(), 1);
+          session.setAccOneAndAccTwo(fUser.getUid(), Constants.CHATBOT_ID);
+          mRef.child(sessionID).setValue(session);
 
-              //Send message started
-              DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+          //Send message started
+          DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
 
-              Message msg = new Message(reference.push().getKey(), accountIDTwo
-                  , accountIDOne, context.getString(R.string.default_chatbot_hello)
+          Message msg = new Message(reference.push().getKey(), Constants.CHATBOT_ID, context.getString(R.string.default_chatbot_hello)
                   , new Date(), sessionID, 1);
-              reference.child(msg.getMessageID()).setValue(msg);
-            }
+          reference.child(msg.getMessageID()).setValue(msg);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-          });
-        }
-        //If consultation is not null
-        //Then find the last session,
-        //if it equal to 1, then it is current session,
-        //if not, then create new session and new consultation
-        else {
-          sessionID = "default";
-          mRef = FirebaseDatabase.getInstance().getReference("Session");
-          mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-              Session ss = new Session();
-              for (DataSnapshot sn : snapshot.getChildren()) {
-                ss = sn.getValue(Session.class);
-                //Get current session of two account
-                if (ss.getSessionID().equals(consultationList.getSessionID())) {
-                  if (ss.getStatus() == 1) {
-                    sessionID = ss.getSessionID();
-                  }
-                }
-              }
-              //If session is null
-              if (sessionID.equals("default")) {
-                sessionID = mRef.push().getKey();
-                mRef.child(sessionID).setValue(new Session(sessionID, new Date(), new Date(), 1));
-                //Create new consultation list
-                mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
-                mRef.push().setValue(new ConsultationList(accountIDOne
-                    , accountIDTwo, sessionID));
-
-                //Send message started
-                DatabaseReference reference =
-                    FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
-                Message msg = new Message(reference.push().getKey(), accountIDTwo
-                    , accountIDOne, context.getString(R.string.default_chatbot_hello)
-                    , new Date(), sessionID, 1);
-                reference.child(msg.getMessageID()).setValue(msg);
-              }
-              //Send session id
-              Intent i = new Intent(getActivity(), Chat.class);
-              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              i.putExtra("receiverID", accountIDTwo);
-              i.putExtra("sessionID", sessionID);
-//                            i.putExtra("isChatBot", true);
-              context.startActivity(i);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-          });
+          // Start Chat activity
+          Intent i = new Intent(getActivity(), Chat.class);
+          i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          i.putExtra("receiverID", Constants.CHATBOT_ID);
+          i.putExtra("sessionID", sessionID);
+          context.startActivity(i);
         }
       }
 
@@ -337,16 +411,15 @@ public class HomeFragment extends Fragment {
    */
   private void loadConsultationList() {
     consultationLists = new ArrayList<>();
-    mRef = FirebaseDatabase.getInstance().getReference("ConsultationList");
+    mRef = FirebaseDatabase.getInstance().getReference("Session");
     mRef.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
         consultationLists.clear();
         for (DataSnapshot sh : snapshot.getChildren()) {
-          ConsultationList cls = sh.getValue(ConsultationList.class);
-          assert cls != null;
-          if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
-            consultationLists.add(cls);
+          Session ss = sh.getValue(Session.class);
+          if (ss.getAccountIDOne().equals(fUser.getUid()) || ss.getAccountIDTwo().equals(fUser.getUid())) {
+            consultationLists.add(ss);
           }
         }
         if (consultationLists.size() > 0) {

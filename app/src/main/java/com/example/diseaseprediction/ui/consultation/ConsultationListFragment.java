@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
-import com.example.diseaseprediction.object.ConsultationList;
+import com.example.diseaseprediction.object.Session;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,7 +45,7 @@ public class ConsultationListFragment extends Fragment {
 
     private RecyclerView consultation_list_recycler_view_main;
     private ConsultationAdapter consultationAdapter;
-    private List<ConsultationList> consultationLists;
+    private List<Session> consultationLists;
     private TextView consultation_list_txt_title;
     private ShimmerFrameLayout consultation_shimmer;
 
@@ -118,11 +118,10 @@ public class ConsultationListFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     consultationLists.clear();
                     for (DataSnapshot sh : snapshot.getChildren()) {
-                        ConsultationList cls = sh.getValue(ConsultationList.class);
-                        assert cls != null;
+                        Session ss = sh.getValue(Session.class);
                         //Get all consultation list depend on user ID 1 or user ID 2
-                        if (cls.getAccountOne().equals(fUser.getUid()) || cls.getAccountTwo().equals(fUser.getUid())) {
-                            consultationLists.add(cls);
+                        if (ss.getAccountIDOne().equals(fUser.getUid()) || ss.getAccountIDTwo().equals(fUser.getUid())) {
+                            consultationLists.add(ss);
                         }
                     }
                     //Reverse list index to get latest consultation

@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -248,7 +247,7 @@ public class Chat extends AppCompatActivity {
             if (receiverID.equals(Constants.CHATBOT_ID)) {
                 try {
                     // user chat
-                    Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
+                    Message message = new Message("", fUser.getUid()
                             , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     circularDot.setVisibility(View.VISIBLE);
@@ -260,7 +259,7 @@ public class Chat extends AppCompatActivity {
                     List<String> tokenList = Arrays.asList(token.split(" "));
                     String result = searchSymptoms(tokenList);
                     //print symptom list
-                    Message mess = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                    Message mess = new Message("", Constants.CHATBOT_ID,
                             result, new Date(), sessionID, 1);
                     setMessageFirebase(mess);
                     //get disease from model
@@ -273,17 +272,17 @@ public class Chat extends AppCompatActivity {
                         }
                     }
                     //print disease list
-                    Message diseaseList = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                    Message diseaseList = new Message("", Constants.CHATBOT_ID,
                             temp, new Date(),
                             sessionID, 1);
                     setMessageFirebase(diseaseList);
                     //print ""benh cua ban la"
                     Message message1 = new Message("", Constants.CHATBOT_ID,
-                            fUser.getUid(), getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
+                            getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
                     setMessageFirebase(message1);
                     chat_txt_enter_mess.setText("");
                     //print disease
-                    Message message2 = new Message("", Constants.CHATBOT_ID, fUser.getUid(),
+                    Message message2 = new Message("", Constants.CHATBOT_ID,
                             results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
                             sessionID, 1);
                     setMessageFirebase(message2);
@@ -303,7 +302,7 @@ public class Chat extends AppCompatActivity {
         try {
             if (!msg.equals("")) {
                 //user chat vs user
-                Message message = new Message("", fUser.getUid(), receiverID, msg
+                Message message = new Message("", fUser.getUid(), msg
                         , new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 chat_txt_enter_mess.setText("");
@@ -561,7 +560,7 @@ public class Chat extends AppCompatActivity {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Message msg = sn.getValue(Message.class);
 
-                        if (msg != null && msg.getReceiverID() != null) {
+                        if (msg != null && msg.getSenderID() != null) {
 //                        if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
 //                                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
 //                                && msg.getSenderID().equals(currentUserID)
@@ -902,12 +901,12 @@ public class Chat extends AppCompatActivity {
     public void nextChat(String msg) {
         try {
             if (!msg.equals("")) {
-                Message message = new Message("", fUser.getUid(), Constants.CHATBOT_ID
+                Message message = new Message("", fUser.getUid()
                         , msg, new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 //Chatbot chat
                 Message message1 = new Message("", Constants.CHATBOT_ID,
-                        fUser.getUid(), getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
+                        getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
                 setMessageFirebase(message1);
                 chat_txt_enter_mess.setText("");
                 allMess += msg + " ";

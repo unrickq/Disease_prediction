@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.R;
-import com.example.diseaseprediction.object.ConsultationList;
 import com.example.diseaseprediction.object.Message;
+import com.example.diseaseprediction.object.Session;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,10 +38,10 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     private static final String LOG_TAG = "Consultation adapter";
     private Context mContext;
     private String latestMessage, latestTime;
-    private List<ConsultationList> mConsultationList;
+    private List<Session> mConsultationList;
     private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
 
-    public ConsultationAdapter(Context context, List<ConsultationList> mConsultationList, int sizeLoad) {
+    public ConsultationAdapter(Context context, List<Session> mConsultationList, int sizeLoad) {
         try {
             //Get current user
             fUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,12 +74,12 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     public void onBindViewHolder(final ConsultationAdapter.ViewHolder holder, int position) {
         try {
             //Collections.reverse(mConsultationList);
-            ConsultationList consultation = mConsultationList.get(position);
+            Session consultation = mConsultationList.get(position);
             //Get username depend on current account
-            if (consultation.getAccountOne().equals(fUser.getUid())) {
-                getUserName(consultation.getAccountTwo(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
+            if (consultation.getAccountIDOne().equals(fUser.getUid())) {
+                getUserName(consultation.getAccountIDTwo(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
             } else {
-                getUserName(consultation.getAccountOne(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
+                getUserName(consultation.getAccountIDOne(), holder.item_consultation_txt_name, holder.item_consultation_img_main);
             }
             //Get messeage
             getLatestMessageAndTime(consultation.getSessionID(), holder.item_consultation_txt_message, holder.item_consultation_txt_time);
@@ -89,10 +89,10 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
                     Intent i = new Intent(mContext, Chat.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     //Open chat depend on current account
-                    if (consultation.getAccountOne().equals(fUser.getUid())) {
-                        i.putExtra("receiverID", consultation.getAccountTwo());
+                    if (consultation.getAccountIDOne().equals(fUser.getUid())) {
+                        i.putExtra("receiverID", consultation.getAccountIDTwo());
                     } else {
-                        i.putExtra("receiverID", consultation.getAccountOne());
+                        i.putExtra("receiverID", consultation.getAccountIDOne());
                     }
                     i.putExtra("sessionID", consultation.getSessionID());
                     i.putExtra("isChatBot", false);

@@ -237,8 +237,8 @@ public class PredictionConfirm extends AppCompatActivity {
           for (DataSnapshot sn : snapshot.getChildren()) {
             Message message = sn.getValue(Message.class);
           try {
-            // Get messages that was sent to chat bot i.e sender is patient
-            if (message.getReceiverID().equals(Constants.CHATBOT_ID)) {
+            // Get messages that was sent by patient
+            if (message.getSenderID().equals(prediction.getPatientID())) {
               messagesList.add(message);
             }
           } catch (NullPointerException e) {

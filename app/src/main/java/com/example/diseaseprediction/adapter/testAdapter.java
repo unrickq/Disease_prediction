@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.ConsultationList;
-import com.example.diseaseprediction.object.Message;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,7 +67,7 @@ public class testAdapter extends RecyclerView.Adapter<testAdapter.ViewHolder>{
 //        });
         ConsultationList consultation = mconsultationList.get(position);
         getUserName(consultation.getAccountOne(),holder.item_consultation_txt_name,holder.item_consultation_img_main);
-        getLatestMessageAndTime(consultation.getAccountTwo(),holder.item_consultation_txt_message, holder.item_consultation_txt_time);
+//        getLatestMessageAndTime(consultation.getAccountTwo(),holder.item_consultation_txt_message, holder.item_consultation_txt_time);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,28 +119,28 @@ public class testAdapter extends RecyclerView.Adapter<testAdapter.ViewHolder>{
         });
     }
 
-    public void getLatestMessageAndTime(String uID, TextView item_consultation_txt_message, TextView item_consultation_txt_time){
-        latestMessage = "";
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
-        mRef = FirebaseDatabase.getInstance().getReference("Message");
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()){
-                    Message msg = sn.getValue(Message.class);
-                    if (msg.getReceiverID().equals(fUser) && msg.getSenderID().equals(uID)
-                            ||msg.getReceiverID().equals(uID)
-                            && msg.getSenderID().equals(fUser)){
-                        latestMessage = msg.getMessage();
-                        //latestTime = msg.getDateSend().toString();
-                    }
-                    item_consultation_txt_message.setText(latestMessage);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    public void getLatestMessageAndTime(String uID, TextView item_consultation_txt_message, TextView item_consultation_txt_time){
+//        latestMessage = "";
+//        fUser = FirebaseAuth.getInstance().getCurrentUser();
+//        mRef = FirebaseDatabase.getInstance().getReference("Message");
+//        mRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot sn : snapshot.getChildren()){
+//                    Message msg = sn.getValue(Message.class);
+//                    if (msg.getReceiverID().equals(fUser) && msg.getSenderID().equals(uID)
+//                            ||msg.getReceiverID().equals(uID)
+//                            && msg.getSenderID().equals(fUser)){
+//                        latestMessage = msg.getMessage();
+//                        //latestTime = msg.getDateSend().toString();
+//                    }
+//                    item_consultation_txt_message.setText(latestMessage);
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 }

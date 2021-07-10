@@ -6,7 +6,6 @@ public class Message {
 
     private String messageID;
     private String senderID;
-    private String receiverID;
     private String message;
     private Date dateSend;
     private String sessionID;
@@ -21,19 +20,17 @@ public class Message {
     /**
      * Init new Message
      *
-     * @param messageID  Message ID
-     * @param senderID   Sender ID
-     * @param receiverID Receiver ID
-     * @param message    Message content
-     * @param dateSend   Send date
-     * @param sessionID  Session ID
-     * @param status     Message status
+     * @param messageID Message ID
+     * @param senderID  Sender ID
+     * @param message   Message content
+     * @param dateSend  Send date
+     * @param sessionID Session ID
+     * @param status    Message status
      */
-    public Message(String messageID, String senderID, String receiverID, String message, Date dateSend,
+    public Message(String messageID, String senderID, String message, Date dateSend,
                    String sessionID, int status) {
         this.messageID = messageID;
         this.senderID = senderID;
-        this.receiverID = receiverID;
         this.message = message;
         this.dateSend = dateSend;
         this.sessionID = sessionID;
@@ -74,24 +71,6 @@ public class Message {
      */
     public void setSenderID(String senderID) {
         this.senderID = senderID;
-    }
-
-    /**
-     * Get receiver ID
-     *
-     * @return receiver ID
-     */
-    public String getReceiverID() {
-        return receiverID;
-    }
-
-    /**
-     * Set receiver ID
-     *
-     * @param receiverID receiver ID
-     */
-    public void setReceiverID(String receiverID) {
-        this.receiverID = receiverID;
     }
 
     /**

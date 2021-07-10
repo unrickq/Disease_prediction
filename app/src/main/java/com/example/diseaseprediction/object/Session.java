@@ -7,6 +7,8 @@ import java.util.Date;
  */
 public class Session {
     private String sessionID;
+    private String accountIDOne;
+    private String accountIDTwo;
     private Date dateCreate;
     private Date dateUpdate;
     private int status;
@@ -15,6 +17,25 @@ public class Session {
      * Session constructor
      */
     public Session() {
+    }
+
+    /**
+     * Create new session
+     *
+     * @param sessionID    Session ID
+     * @param dateCreate   Date create
+     * @param dateUpdate   Date update
+     * @param accountIDOne account ID One
+     * @param accountIDTwo account ID Two
+     * @param status       0: End session | 1: In session
+     */
+    public Session(String sessionID, String accountIDOne, String accountIDTwo, Date dateCreate, Date dateUpdate, int status) {
+        this.sessionID = sessionID;
+        this.accountIDOne = accountIDOne;
+        this.accountIDTwo = accountIDTwo;
+        this.dateCreate = dateCreate;
+        this.dateUpdate = dateUpdate;
+        this.status = status;
     }
 
     /**
@@ -30,6 +51,38 @@ public class Session {
         this.dateCreate = dateCreate;
         this.dateUpdate = dateUpdate;
         this.status = status;
+    }
+
+    public String getAccountIDOne() {
+        return accountIDOne;
+    }
+
+    public void setAccountIDOne(String accountIDOne) {
+        this.accountIDOne = accountIDOne;
+    }
+
+    public String getAccountIDTwo() {
+        return accountIDTwo;
+    }
+
+    public void setAccountIDTwo(String accountIDTwo) {
+        this.accountIDTwo = accountIDTwo;
+    }
+
+    /**
+     * Compare and set the smaller accID to accIDOne
+     *
+     * @param accountIDOne accountIDOne
+     * @param accountIDTwo accountIDTwo
+     */
+    public void setAccOneAndAccTwo(String accountIDOne, String accountIDTwo) {
+        if (accountIDOne.compareTo(accountIDTwo) < 0) {
+            this.accountIDOne = accountIDOne;
+            this.accountIDTwo = accountIDTwo;
+        } else {
+            this.accountIDOne = accountIDTwo;
+            this.accountIDTwo = accountIDOne;
+        }
     }
 
     /**
