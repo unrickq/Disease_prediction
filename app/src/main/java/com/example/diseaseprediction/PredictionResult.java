@@ -472,6 +472,7 @@ public class PredictionResult extends AppCompatActivity {
     private void createSessionWithCDoctor(String doctorID) {
 
         //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
+        Log.d(TAG, mPrediction.getDoctorSessionID());
         if (mPrediction.getDoctorSessionID().equals("Default")) {
             mRef = FirebaseDatabase.getInstance().getReference("Session");
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {

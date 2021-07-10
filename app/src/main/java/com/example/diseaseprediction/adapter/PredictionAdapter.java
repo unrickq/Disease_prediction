@@ -38,7 +38,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     private DatabaseReference mRef;
     private FirebaseUser fUser;
     private Context mContext;
-    private List<Prediction> mPredictions;
+    private List<Prediction> predictionsList;
     private SimpleDateFormat sdf;
     private int goToScreen;
     private ArrayList<Integer> indexList;
@@ -57,12 +57,12 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
             this.goToScreen = goToScreen;
 
             //Limit row load
-            this.mPredictions = new ArrayList<>();
+            this.predictionsList = new ArrayList<>();
             if (sizeLoad >= mPredictions.size()) {
-                this.mPredictions = mPredictions;
+                this.predictionsList = mPredictions;
             } else {
                 for (int i = 0; i < sizeLoad; i++) {
-                    this.mPredictions.add(mPredictions.get(i));
+                    this.predictionsList.add(mPredictions.get(i));
                 }
             }
             // find indexes of prediction that start a new day
@@ -84,7 +84,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
     @Override
     public void onBindViewHolder(PredictionAdapter.ViewHolder holder, int position) {
         try {
-            Prediction prediction = mPredictions.get(position);
+            Prediction prediction = predictionsList.get(position);
             getDataToUI(prediction, holder.item_prediction_txt_disease, holder.item_prediction_txt_status);
 
             // set default layout
@@ -114,7 +114,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                 }
             }
             // if this prediction is the last item of the list -> remove divider
-            if (position == mPredictions.size() - 1) {
+            if (position == predictionsList.size() - 1) {
                 holder.prediction_item_divider.setVisibility(View.GONE);
             }
 
@@ -145,7 +145,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return mPredictions.size();
+        return predictionsList.size();
     }
 
     /**
