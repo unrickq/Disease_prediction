@@ -890,7 +890,7 @@ public class Chat extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (receiverID.equals(Constants.CHATBOT_ID)) {
-            endSession(sessionID);
+            //endSession(sessionID);
         }
     }
 

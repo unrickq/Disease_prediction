@@ -121,6 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/login_txt_by_type_doctor"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_btn_login_by_google" />
