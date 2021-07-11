@@ -37,7 +37,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
             style="@style/heading_7_bold"
-            android:text="Edit" />
+            android:text="@string/account_toolbar_edit" />
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
