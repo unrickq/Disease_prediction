@@ -126,13 +126,13 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                         //Doctor confirm prediction
                         Intent i = new Intent(mContext, PredictionConfirm.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.putExtra("mPrediction", prediction);
+                        i.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
                         mContext.startActivity(i);
                     } else if (goToScreen == 1) {
                         //Patient prediction
                         Intent i = new Intent(mContext, PredictionResult.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.putExtra("mPrediction", prediction);
+                        i.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
                         mContext.startActivity(i);
                     }
                 }

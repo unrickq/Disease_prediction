@@ -196,6 +196,24 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        if (receiverID.equals(Constants.CHATBOT_ID)) {
+//            //endSession(sessionID);
+//        }
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiverID.equals(Constants.CHATBOT_ID)) {
+            endSession(sessionID);
+        }
+    }
+
+
     /**
      * Hide keyboard
      *
@@ -782,10 +800,11 @@ public class Chat extends AppCompatActivity {
                         mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
                             @Override
                             //If new prediction are created
-                            //Then end the current session of chat
+                            //Then end the current session of chat and display a notification dialog
                             public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
                                 endSession(sessionID);
                                 checkSessionStatus();
+                                dialogPrediction(pre);
                             }
                         });
                     } catch (Exception e) {
@@ -845,7 +864,6 @@ public class Chat extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     endSession(sessionID);
                     onBackPressed();
-
                 }
             });
             builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
@@ -862,6 +880,33 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    private void dialogPrediction(Prediction prediction) {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.chat_dialog_prediction_title);
+            builder.setMessage(R.string.chat_dialog_prediction_msg);
+            builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
+                new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(Chat.this, PredictionResult.class);
+                    intent.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
+                    startActivity(intent);
+                }
+            });
+            builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
+                new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Do nothing
+                }
+            });
+            builder.create().show();
+        } catch (NullPointerException e) {
+            Log.e(LOG_TAG, "dialogPrediction: null pointer", e);
+        }
+    }
+
 
     /**
      * @param msg
@@ -870,7 +915,7 @@ public class Chat extends AppCompatActivity {
         try {
             if (!msg.equals("")) {
                 Message message = new Message("", fUser.getUid()
-                        , msg, new Date(), sessionID, 1);
+                    , msg, new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 //Chatbot chat
                 Message message1 = new Message("", Constants.CHATBOT_ID,
@@ -886,20 +931,4 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (receiverID.equals(Constants.CHATBOT_ID)) {
-            //endSession(sessionID);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (receiverID.equals(Constants.CHATBOT_ID)) {
-            endSession(sessionID);
-
-        }
-    }
 }

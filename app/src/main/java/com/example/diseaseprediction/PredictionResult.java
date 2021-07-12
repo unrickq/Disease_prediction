@@ -41,6 +41,7 @@ import java.util.Objects;
 
 public class PredictionResult extends AppCompatActivity {
     private static final String TAG = "PredictionResult";
+    public static final String INTENT_EXTRA_PREDICTION = "mPrediction";
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
     private FirebaseUser fUser;
@@ -98,7 +99,7 @@ public class PredictionResult extends AppCompatActivity {
 
         //Get receiver id
         intent = getIntent();
-        mPrediction = intent.getParcelableExtra("mPrediction");
+        mPrediction = intent.getParcelableExtra(INTENT_EXTRA_PREDICTION);
         getDataToUI(mPrediction);
 
         prediction_toolbar_img_pre.setOnClickListener(new View.OnClickListener() {

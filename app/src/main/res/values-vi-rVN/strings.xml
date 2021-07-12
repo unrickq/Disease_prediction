@@ -128,6 +128,9 @@
     <string name="chat_menu_patient_view_info">Xem thông tin bác sĩ</string>
     <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
+    <string name="chat_dialog_prediction_title">Chẩn đoán đã được tạo</string>
+    <string name="chat_dialog_prediction_msg">Chẩn đoán của bạn đã được tạo và sẽ được xác nhận bởi đội ngũ bác sĩ của chúng tôi trong thời gian sớm nhất.\nBạn có muốn kiểm tra trạng thái của chẩn đoán không?</string>
+
 
     <string name="exception_chat_load_user">Không thể tải người dùng</string>
 

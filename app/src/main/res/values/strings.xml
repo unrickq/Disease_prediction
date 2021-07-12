@@ -139,6 +139,9 @@
     <string name="chat_menu_patient_view_info">View doctor\'s information</string>
     <string name="chat_menu_doctor_view_info">View patient\'s information</string>
     <string name="chat_menu_end_session">End session</string>
+    <string name="chat_dialog_prediction_title">Prediction created</string>
+    <string name="chat_dialog_prediction_msg">Your prediction has been created and will be confirmed by one of our doctor soon. Do you want to check the status of your prediction?</string>
+
 
     <string name="exception_chat_load_user">Can\'t load user</string>
 
