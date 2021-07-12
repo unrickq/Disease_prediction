@@ -206,6 +206,7 @@
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>
     <string name="consultation_preview_message">You: %1$s</string>
     <string name="account_toolbar_edit">Edit</string>
+    <string name="prediction_result_disease_updated">\"Disease (Disease updated)\"</string>
 
     <string-array name="spinner_language">
         <item>EN</item>

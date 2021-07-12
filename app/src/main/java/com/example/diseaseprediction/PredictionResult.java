@@ -208,8 +208,7 @@ public class PredictionResult extends AppCompatActivity {
                             prediction_txt_disease_description_result.setText(disease.getDescription());
                             // prediction incorrect
                             if (pr.getStatus() == 2) {
-                                prediction_txt_disease_title.setText(getString(R.string.prediction_txt_disease_title).concat(" (Disease" +
-                                        " updated)"));
+                                prediction_txt_disease_title.setText(getString(R.string.prediction_result_disease_updated));
                                 // doctor select unknown disease
                                 if (pr.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
                                     String unknownDisease = pr.getNotes();

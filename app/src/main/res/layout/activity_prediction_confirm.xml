@@ -82,7 +82,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_top"
+                    android:layout_marginStart="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -100,7 +100,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:inputType="textMultiLine"
                         android:text="@string/prediction_txt_disease_description_result" />
                 </LinearLayout>
 
@@ -139,7 +138,6 @@
                         style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/prediction_confirm_txt_disease_title" />
 
                     <TextView
@@ -147,7 +145,6 @@
                         style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/prediction_txt_disease_description_result" />
 
                     <com.google.android.material.textfield.TextInputLayout

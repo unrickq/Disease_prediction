@@ -135,6 +135,8 @@
     <string name="prediction_adapter_confirmed_correct">Bác sĩ đã xác nhận</string>
     <string name="prediction_adapter_confirmed_incorrect">Bác sĩ đã xác nhận! Bệnh đã được thay đổi</string>
     <string name="prediction_txt_contact_doctor">Bạn cần tư vấn? </string>
+    <string name="prediction_result_disease_updated">Bệnh (Bệnh đã được thay đổi) </string>
+
 
     <string name="home_doctor_txt_title">Xin chào bác sĩ !</string>
     <string name="home_doctor_txt_prediction_title">Bệnh của bệnh nhân</string>
