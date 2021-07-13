@@ -41,6 +41,7 @@ import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
+import com.example.diseaseprediction.object.PredictionSymptom;
 import com.example.diseaseprediction.object.RecommendSymptom;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.object.Symptom;
@@ -90,6 +91,7 @@ public class Chat extends AppCompatActivity {
     private boolean checkStartMessage = true;
     private CircularDotsLoader circularDot;
     private TextView loadingText;
+    private List<Symptom> tempSymptom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -406,6 +408,7 @@ public class Chat extends AppCompatActivity {
      */
     private String searchSymptoms(List<String> tokenList) {
         String result = getString(R.string.default_chatbot_symptom);
+        tempSymptom = new ArrayList<>();
         //search binary symptom
         int mid = mSymptom.size() / 2;
         for (String tk : tokenList) {
@@ -413,17 +416,20 @@ public class Chat extends AppCompatActivity {
             boolean check = false;
             if (mSymptom.get(mid).getName().equals(tk)) {
                 result += tk + ", ";
+                tempSymptom.add(mSymptom.get(mid));
             } else {
                 for (int i = 0; i < mid; i++) {
                     if (mSymptom.get(i).getName().equals(tk)) {
                         result += tk + ", ";
                         check = true;
+                        tempSymptom.add(mSymptom.get(i));
                     }
                 }
                 if (check == false) {
                     for (int i = mid + 1; i < mSymptom.size(); i++) {
                         if (mSymptom.get(i).getName().equals(tk)) {
                             result += tk + ", ";
+                            tempSymptom.add(mSymptom.get(i));
                         }
                     }
                 }
@@ -641,6 +647,7 @@ public class Chat extends AppCompatActivity {
             disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
                     try {
                         for (DataSnapshot sn : snapshot.getChildren()) {
                             Disease d = sn.getValue(Disease.class);
@@ -797,16 +804,64 @@ public class Chat extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
                         pre.setPredictionID(mRef2.push().getKey());
-                        mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
-                            @Override
-                            //If new prediction are created
-                            //Then end the current session of chat and display a notification dialog
-                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                endSession(sessionID);
-                                checkSessionStatus();
-                                dialogPrediction(pre);
+                        System.out.println(pre.getDiseaseID());
+                        if (!tempSymptom.isEmpty() && tempSymptom != null) {
+
+                            mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
+                                @Override
+                                //If new prediction are created
+                                //Then end the current session of chat and display a notification dialog
+                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
+                                    createPredictionSymptom(pre.getPredictionID());
+                                    endSession(sessionID);
+                                    checkSessionStatus();
+                                    dialogPrediction(pre);
+                                }
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "Not found disease in database", e);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "createPrediction()");
+        }
+    }
+
+    /**
+     * Create new prediction symptom
+     *
+     * @param predictionID
+     *
+     */
+    private void createPredictionSymptom(String predictionID) {
+        try {
+            mRef2 = FirebaseDatabase.getInstance().getReference("PredictionSymptom");
+            mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+
+                        if (!tempSymptom.isEmpty() && tempSymptom != null) {
+                            List<PredictionSymptom> psList = new ArrayList<>();
+                            for (Symptom s:tempSymptom) {
+                                psList.add(new PredictionSymptom(predictionID, s.getSymptomsID(), 1));
                             }
-                        });
+                            for (PredictionSymptom ps :psList) {
+                                mRef2.child(mRef2.push().getKey()).setValue(ps);
+                            }
+
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.d(LOG_TAG, "Not found disease in database", e);
@@ -886,21 +941,21 @@ public class Chat extends AppCompatActivity {
             builder.setTitle(R.string.chat_dialog_prediction_title);
             builder.setMessage(R.string.chat_dialog_prediction_msg);
             builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
-                new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(Chat.this, PredictionResult.class);
-                    intent.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
-                    startActivity(intent);
-                }
-            });
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(Chat.this, PredictionResult.class);
+                            intent.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
+                            startActivity(intent);
+                        }
+                    });
             builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
-                new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //Do nothing
-                }
-            });
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //Do nothing
+                        }
+                    });
             builder.create().show();
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "dialogPrediction: null pointer", e);
@@ -915,7 +970,7 @@ public class Chat extends AppCompatActivity {
         try {
             if (!msg.equals("")) {
                 Message message = new Message("", fUser.getUid()
-                    , msg, new Date(), sessionID, 1);
+                        , msg, new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 //Chatbot chat
                 Message message1 = new Message("", Constants.CHATBOT_ID,

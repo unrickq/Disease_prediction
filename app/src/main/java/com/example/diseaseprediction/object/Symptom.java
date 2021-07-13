@@ -6,7 +6,7 @@ import java.util.Date;
  * Symptom
  */
 public class Symptom {
-    private String symptomsID;
+    private String symptomID;
     private String name;
     private String description;
     private Date dateCreate;
@@ -31,7 +31,7 @@ public class Symptom {
      */
     public Symptom(String symptomsID, String name, String description, Date dateCreate,
                    Date dateUpdate, int status) {
-        this.symptomsID = symptomsID;
+        this.symptomID = symptomsID;
         this.name = name;
         this.description = description;
         this.dateCreate = dateCreate;
@@ -45,7 +45,7 @@ public class Symptom {
      * @return Symptom ID
      */
     public String getSymptomsID() {
-        return symptomsID;
+        return symptomID;
     }
 
     /**
@@ -54,7 +54,7 @@ public class Symptom {
      * @param symptomsID Symptom ID
      */
     public void setSymptomsID(String symptomsID) {
-        this.symptomsID = symptomsID;
+        this.symptomID = symptomsID;
     }
 
     /**
