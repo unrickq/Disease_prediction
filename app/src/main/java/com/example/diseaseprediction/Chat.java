@@ -70,6 +70,7 @@ public class Chat extends AppCompatActivity {
 
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
+    private DatabaseReference mRef3;
     private FirebaseUser fUser;
     private PopupMenu pm;
 
@@ -279,38 +280,56 @@ public class Chat extends AppCompatActivity {
                     //get symptom user input
                     List<String> tokenList = Arrays.asList(token.split(" "));
                     String result = searchSymptoms(tokenList);
-                    //print symptom list
-                    Message mess = new Message("", Constants.CHATBOT_ID,
-                            result, new Date(), sessionID, 1);
-                    setMessageFirebase(mess);
-                    //get disease from model
-                    String temp = getString(R.string.default_chatbot_disease_list);
-                    for (int i = 0; i < 4; i++) {
-                        if (i == 3) {
-                            temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%";
-                        } else {
-                            temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%" + "\n";
+                    if (!result.isEmpty()) {
+                        //print symptom list
+                        Message mess = new Message("", Constants.CHATBOT_ID,
+                                result, new Date(), sessionID, 1);
+                        setMessageFirebase(mess);
+
+                        //get disease from model
+                        String temp = getString(R.string.default_chatbot_disease_list);
+                        for (int i = 0; i < 4; i++) {
+                            if (i == 3) {
+                                temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%";
+                            } else {
+                                temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%" + "\n";
+                            }
                         }
+                        //print disease list
+                        Message diseaseList = new Message("", Constants.CHATBOT_ID,
+                                temp, new Date(),
+                                sessionID, 1);
+                        setMessageFirebase(diseaseList);
+                        //print ""benh cua ban la"
+                        Message message1 = new Message("", Constants.CHATBOT_ID,
+                                getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
+                        setMessageFirebase(message1);
+                        chat_txt_enter_mess.setText("");
+                        //print disease
+                        Message message2 = new Message("", Constants.CHATBOT_ID,
+                                results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
+                                sessionID, 1);
+                        setMessageFirebase(message2);
+                        getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
+                        chat_txt_enter_mess.setText("");
+                        circularDot.setVisibility(View.GONE);
+                        loadingText.setVisibility(View.GONE);
+                    } else {
+                        Message mess = new Message("", Constants.CHATBOT_ID,
+                                "Hiện tại dữ liệu của chúng tôi có những triệu chứng này", new Date(), sessionID, 1);
+                        setMessageFirebase(mess);
+                        chat_txt_enter_mess.setText("");
+                        circularDot.setVisibility(View.GONE);
+                        loadingText.setVisibility(View.GONE);
+                        Message mess2 = new Message("", Constants.CHATBOT_ID,
+                                "Không đủ dữ liệu không thể chuẩn đoán bệnh", new Date(), sessionID, 1);
+                        setMessageFirebase(mess2);
+                        getDiseaseByNameFirebase("", fUser.getUid());
+
+
                     }
-                    //print disease list
-                    Message diseaseList = new Message("", Constants.CHATBOT_ID,
-                            temp, new Date(),
-                            sessionID, 1);
-                    setMessageFirebase(diseaseList);
-                    //print ""benh cua ban la"
-                    Message message1 = new Message("", Constants.CHATBOT_ID,
-                            getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
-                    setMessageFirebase(message1);
-                    chat_txt_enter_mess.setText("");
-                    //print disease
-                    Message message2 = new Message("", Constants.CHATBOT_ID,
-                            results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
-                            sessionID, 1);
-                    setMessageFirebase(message2);
-                    getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
-                    chat_txt_enter_mess.setText("");
-                    circularDot.setVisibility(View.GONE);
-                    loadingText.setVisibility(View.GONE);
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Exception when talking with chatbot ");
@@ -411,18 +430,21 @@ public class Chat extends AppCompatActivity {
         tempSymptom = new ArrayList<>();
         //search binary symptom
         int mid = mSymptom.size() / 2;
+        boolean checkNotEmpty = false;
         for (String tk : tokenList) {
             tk = tk.replace("_", " ");
             boolean check = false;
             if (mSymptom.get(mid).getName().equals(tk)) {
                 result += tk + ", ";
                 tempSymptom.add(mSymptom.get(mid));
+                checkNotEmpty = true;
             } else {
                 for (int i = 0; i < mid; i++) {
                     if (mSymptom.get(i).getName().equals(tk)) {
                         result += tk + ", ";
                         check = true;
                         tempSymptom.add(mSymptom.get(i));
+                        checkNotEmpty = true;
                     }
                 }
                 if (check == false) {
@@ -430,13 +452,17 @@ public class Chat extends AppCompatActivity {
                         if (mSymptom.get(i).getName().equals(tk)) {
                             result += tk + ", ";
                             tempSymptom.add(mSymptom.get(i));
+                            checkNotEmpty = true;
                         }
                     }
                 }
             }
         }
-        //print symptom user input
-        result = result.substring(0, result.length() - 2);
+        if (checkNotEmpty == false)
+            result = "";
+        else
+            //print symptom user input
+            result = result.substring(0, result.length() - 2);
         return result;
     }
 
@@ -520,8 +546,8 @@ public class Chat extends AppCompatActivity {
      */
     private void endSession(String currentSession) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Session").child(currentSession);
-            mRef.child("status").setValue(0);
+            mRef3 = FirebaseDatabase.getInstance().getReference("Session").child(currentSession);
+            mRef3.child("status").setValue(0);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "endSession()");
@@ -643,30 +669,48 @@ public class Chat extends AppCompatActivity {
     private void getDiseaseByNameFirebase(String disease, String uId) {
         try {
             mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
-            Query disQuery = mRef2.orderByChild("name").equalTo(disease);
-            disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-
-                    try {
-                        for (DataSnapshot sn : snapshot.getChildren()) {
-                            Disease d = sn.getValue(Disease.class);
-                            Prediction pre = new Prediction("0", uId, "Default",
-                                    sessionID, "Default",
-                                    d.getDiseaseID(), "Default", new Date(), new Date(),
-                                    d.getSpecializationID(), 0);
-                            createPrediction(pre);
+            Query disQuery;
+            if (disease.isEmpty()) {
+                disQuery = mRef2.orderByChild("diseaseID").equalTo("99999");
+                disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        try {
+                            endSession(sessionID);
+                            checkSessionStatus();
+                        } catch (Exception e) {
+                            Log.d(LOG_TAG, "Not found disease in database", e);
                         }
-                    } catch (Exception e) {
-                        Log.d(LOG_TAG, "Not found disease in database", e);
                     }
-                }
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
+                });
+            } else {
+                disQuery = mRef2.orderByChild("name").equalTo(disease);
+                disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        try {
+                            for (DataSnapshot sn : snapshot.getChildren()) {
+                                Disease d = sn.getValue(Disease.class);
+                                Prediction pre = new Prediction("0", uId, "Default",
+                                        sessionID, "Default",
+                                        d.getDiseaseID(), "Default", new Date(), new Date(),
+                                        d.getSpecializationID(), 0);
+                                createPrediction(pre);
+                            }
+                        } catch (Exception e) {
+                            Log.d(LOG_TAG, "Not found disease in database", e);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                    }
+                });
+            }
 
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getDiseaseByNameFirebase()");
@@ -841,7 +885,6 @@ public class Chat extends AppCompatActivity {
      * Create new prediction symptom
      *
      * @param predictionID
-     *
      */
     private void createPredictionSymptom(String predictionID) {
         try {
@@ -853,10 +896,10 @@ public class Chat extends AppCompatActivity {
 
                         if (!tempSymptom.isEmpty() && tempSymptom != null) {
                             List<PredictionSymptom> psList = new ArrayList<>();
-                            for (Symptom s:tempSymptom) {
-                                psList.add(new PredictionSymptom(predictionID, s.getSymptomsID(), 1));
+                            for (Symptom s : tempSymptom) {
+                                psList.add(new PredictionSymptom(predictionID, s.getSymptomID(), 1));
                             }
-                            for (PredictionSymptom ps :psList) {
+                            for (PredictionSymptom ps : psList) {
                                 mRef2.child(mRef2.push().getKey()).setValue(ps);
                             }
 

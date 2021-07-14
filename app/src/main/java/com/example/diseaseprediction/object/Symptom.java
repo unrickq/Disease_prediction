@@ -22,16 +22,16 @@ public class Symptom {
     /**
      * Create new symptom
      *
-     * @param symptomsID  Symptom ID
+     * @param symptomID  Symptom ID
      * @param name        Name of symptom
      * @param description Description of symptom
      * @param dateCreate  Date create
      * @param dateUpdate  Date update
      * @param status      0: Deleted | 1: Normal
      */
-    public Symptom(String symptomsID, String name, String description, Date dateCreate,
+    public Symptom(String symptomID, String name, String description, Date dateCreate,
                    Date dateUpdate, int status) {
-        this.symptomID = symptomsID;
+        this.symptomID = symptomID;
         this.name = name;
         this.description = description;
         this.dateCreate = dateCreate;
@@ -44,17 +44,17 @@ public class Symptom {
      *
      * @return Symptom ID
      */
-    public String getSymptomsID() {
+    public String getSymptomID() {
         return symptomID;
     }
 
     /**
      * Set Symptom ID
      *
-     * @param symptomsID Symptom ID
+     * @param symptomID Symptom ID
      */
-    public void setSymptomsID(String symptomsID) {
-        this.symptomID = symptomsID;
+    public void setSymptomID(String symptomID) {
+        this.symptomID = symptomID;
     }
 
     /**
