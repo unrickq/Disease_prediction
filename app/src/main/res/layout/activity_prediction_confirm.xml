@@ -100,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/prediction_txt_disease_description_result" />
+                        tools:text="@string/prediction_txt_disease_description_result" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -145,7 +145,7 @@
                         style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/prediction_txt_disease_description_result" />
+                        tools:text="@string/prediction_txt_disease_description_result" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/prediction_confirm_disease_select_layout"

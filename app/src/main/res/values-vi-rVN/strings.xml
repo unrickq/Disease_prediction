@@ -119,8 +119,8 @@
     <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
     <string name="default_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
     <string name="defaut_session_ended">Phiên chat đã kết thúc</string>
-    <string name="default_not_enough_symptom">Hiện tại dữ liệu của chúng tôi chưa có những triệu chứng này</string>
-    <string name="default_not_enough_data">Không đủ dữ liệu để đưa ra chẩn đoán bệnh. Vui lòng tạo phiên chat mới để nhận dự đoán đúng nhất</string>
+    <string name="default_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
+    <string name="default_not_enough_data">Nhưng chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>

@@ -231,7 +231,7 @@ public class AccountInfo extends AppCompatActivity {
                 isValid = false;
             } else {
                 if (!account_info_txt_title_email.getEditText().getText().toString().trim()
-                        .matches(Constants.EMAIL_PATTERN)) {
+                    .matches(AppConstants.EMAIL_PATTERN)) {
                     account_info_txt_title_email.setError(getString(R.string.default_email_regex));
                     isValid = false;
                 }

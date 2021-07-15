@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diseaseprediction.Constants;
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.PredictionConfirm;
 import com.example.diseaseprediction.PredictionResult;
 import com.example.diseaseprediction.R;
@@ -163,7 +163,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (prediction.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+                    if (prediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                         String unknownDisease = prediction.getNotes();
                         item_prediction_txt_disease.setText(unknownDisease);
                     } else {
@@ -183,7 +183,6 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Prediction pd = snapshot.getValue(Prediction.class);
-
                     if (pd.getStatus() == 0) {
                         item_prediction_txt_status.setText(R.string.prediction_adapter_waiting_confirm);
                         item_prediction_txt_status.setTextColor(mContext.getResources().getColor(R.color.text_warning));

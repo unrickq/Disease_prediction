@@ -144,7 +144,7 @@ public class Chat extends AppCompatActivity {
                 public void onClick(View v) {
                     String msg = chat_txt_enter_mess.getText().toString();
                     try {
-                        if (!receiverID.equals(Constants.CHATBOT_ID)) {
+                        if (!receiverID.equals(AppConstants.CHATBOT_ID)) {
                             chatWithDoctor(msg);
                         } else {
                             nextChat(msg);
@@ -175,7 +175,7 @@ public class Chat extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (receiverID.equals(Constants.CHATBOT_ID)) {
+        if (receiverID.equals(AppConstants.CHATBOT_ID)) {
             System.out.println("session la" + sessionID);
             mRef = FirebaseDatabase.getInstance().getReference("Session").child(sessionID);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -211,7 +211,7 @@ public class Chat extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (receiverID.equals(Constants.CHATBOT_ID)) {
+        if (receiverID.equals(AppConstants.CHATBOT_ID)) {
             endSession(sessionID);
         }
     }
@@ -225,12 +225,12 @@ public class Chat extends AppCompatActivity {
     public static void hideSoftKeyboard(Activity activity) {
         try {
             InputMethodManager inputMethodManager =
-                    (InputMethodManager) activity.getSystemService(
-                            Activity.INPUT_METHOD_SERVICE);
+                (InputMethodManager) activity.getSystemService(
+                    Activity.INPUT_METHOD_SERVICE);
             if (inputMethodManager.isAcceptingText()) {
                 inputMethodManager.hideSoftInputFromWindow(
-                        activity.getCurrentFocus().getWindowToken(),
-                        0
+                    activity.getCurrentFocus().getWindowToken(),
+                    0
                 );
             }
         } catch (Exception e) {
@@ -266,11 +266,11 @@ public class Chat extends AppCompatActivity {
         if (!msg.equals("")) {
             // User request
             //user chat vs user
-            if (receiverID.equals(Constants.CHATBOT_ID)) {
+            if (receiverID.equals(AppConstants.CHATBOT_ID)) {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid()
-                            , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
+                        , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     circularDot.setVisibility(View.VISIBLE);
                     loadingText.setVisibility(View.VISIBLE);
@@ -280,54 +280,54 @@ public class Chat extends AppCompatActivity {
                     //get symptom user input
                     List<String> tokenList = Arrays.asList(token.split(" "));
                     String result = searchSymptoms(tokenList);
+                    // If symptom found
                     if (!result.isEmpty()) {
                         //print symptom list
-                        Message mess = new Message("", Constants.CHATBOT_ID,
-                                result, new Date(), sessionID, 1);
+                        Message mess = new Message("", AppConstants.CHATBOT_ID,
+                            result, new Date(), sessionID, 1);
                         setMessageFirebase(mess);
 
                         //get disease from model
                         String temp = getString(R.string.default_chatbot_disease_list);
                         for (int i = 0; i < 4; i++) {
                             if (i == 3) {
-                                temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%";
+                                temp += results.get(i).getTitle() + " " + String.format("%.2f",
+                                    results.get(i).getConfidence() * 100) + "%";
                             } else {
-                                temp += results.get(i).getTitle() + " " + String.format("%.2f", results.get(i).getConfidence() * 100) + "%" + "\n";
+                                temp += results.get(i).getTitle() + " " + String.format("%.2f",
+                                    results.get(i).getConfidence() * 100) + "%" + "\n";
                             }
                         }
                         //print disease list
-                        Message diseaseList = new Message("", Constants.CHATBOT_ID,
-                                temp, new Date(),
-                                sessionID, 1);
+                        Message diseaseList = new Message("", AppConstants.CHATBOT_ID,
+                            temp, new Date(),
+                            sessionID, 1);
                         setMessageFirebase(diseaseList);
                         //print ""benh cua ban la"
-                        Message message1 = new Message("", Constants.CHATBOT_ID,
-                                getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
+                        Message message1 = new Message("", AppConstants.CHATBOT_ID,
+                            getString(R.string.default_chatbot_disease), new Date(), sessionID, 1);
                         setMessageFirebase(message1);
                         chat_txt_enter_mess.setText("");
                         //print disease
-                        Message message2 = new Message("", Constants.CHATBOT_ID,
-                                results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
-                                sessionID, 1);
+                        Message message2 = new Message("", AppConstants.CHATBOT_ID,
+                            results.get(0).getTitle() + " " + results.get(0).getConfidence() * 100 + "%", new Date(),
+                            sessionID, 1);
                         setMessageFirebase(message2);
-                        getDiseaseByNameFirebase(results.get(0).getTitle(), fUser.getUid());
+                        getDiseaseByNameAndCreatePredictionFirebase(results.get(0).getTitle(), fUser.getUid());
                         chat_txt_enter_mess.setText("");
                         circularDot.setVisibility(View.GONE);
                         loadingText.setVisibility(View.GONE);
-                    } else {
-                        Message mess = new Message("", Constants.CHATBOT_ID,
-                                getString(R.string.default_not_enough_symptom), new Date(), sessionID, 1);
+                    } else { // No symptom found
+                        Message mess = new Message("", AppConstants.CHATBOT_ID,
+                            getString(R.string.default_not_enough_symptom), new Date(), sessionID, 1);
                         setMessageFirebase(mess);
                         chat_txt_enter_mess.setText("");
                         circularDot.setVisibility(View.GONE);
                         loadingText.setVisibility(View.GONE);
-                        Message mess2 = new Message("", Constants.CHATBOT_ID,
-                                getString(R.string.default_not_enough_data), new Date(), sessionID, 1);
-
+                        Message mess2 = new Message("", AppConstants.CHATBOT_ID,
+                            getString(R.string.default_not_enough_data), new Date(), sessionID, 1);
                         setMessageFirebase(mess2);
-                        getDiseaseByNameFirebase("", fUser.getUid());
-
-
+                        getDiseaseByNameAndCreatePredictionFirebase(AppConstants.DISEASE_OTHER_NAME, fUser.getUid());
                     }
 
 
@@ -344,7 +344,7 @@ public class Chat extends AppCompatActivity {
             if (!msg.equals("")) {
                 //user chat vs user
                 Message message = new Message("", fUser.getUid(), msg
-                        , new Date(), sessionID, 1);
+                    , new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 chat_txt_enter_mess.setText("");
             }
@@ -448,7 +448,7 @@ public class Chat extends AppCompatActivity {
                         checkNotEmpty = true;
                     }
                 }
-                if (check == false) {
+                if (!check) {
                     for (int i = mid + 1; i < mSymptom.size(); i++) {
                         if (mSymptom.get(i).getName().equals(tk)) {
                             result += tk + ", ";
@@ -541,7 +541,7 @@ public class Chat extends AppCompatActivity {
     }
 
     /**
-     * End current session
+     * End current session and hide soft keyboard
      *
      * @param currentSession Current session
      */
@@ -572,6 +572,7 @@ public class Chat extends AppCompatActivity {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.GONE);
                             Toast.makeText(Chat.this, getString(R.string.defaut_session_ended), Toast.LENGTH_SHORT).show();
+                            // hide keyboard
                             hideSoftKeyboard(Chat.this);
                         } else if (status == 1) {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
@@ -586,8 +587,6 @@ public class Chat extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-            //Hide keyboard
-            hideSoftKeyboard(Chat.this);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "checkSessionStatus()");
@@ -612,12 +611,6 @@ public class Chat extends AppCompatActivity {
                         Message msg = sn.getValue(Message.class);
 
                         if (msg != null && msg.getSenderID() != null) {
-//                        if (msg.getReceiverID().equals(currentUserID) && msg.getSenderID().equals(receiverID)
-//                                && msg.getSessionID().equals(sessionID) || msg.getReceiverID().equals(receiverID)
-//                                && msg.getSenderID().equals(currentUserID)
-//                                && msg.getSessionID().equals(sessionID)) {
-//
-//                        }
                             mMessage.add(msg);
                             if (msg.getStatus() == 3) {
                                 if (checkStartMessage) {
@@ -639,8 +632,6 @@ public class Chat extends AppCompatActivity {
                                     mRef2 = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
                                     mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                     checkClickPredict = true;
-//                                getPredict();
-
                                 }
                             });
                         }
@@ -667,61 +658,36 @@ public class Chat extends AppCompatActivity {
      * @param disease Disease Name
      * @param uId     Current user ID
      */
-    private void getDiseaseByNameFirebase(String disease, String uId) {
+    private void getDiseaseByNameAndCreatePredictionFirebase(String disease, String uId) {
         try {
             mRef2 = FirebaseDatabase.getInstance().getReference("Disease");
             Query disQuery;
-            if (disease.isEmpty()) {
-                disQuery = mRef2.orderByChild("diseaseID").equalTo("99999");
-                disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        try {
-                            try {
-                                for (DataSnapshot sn : snapshot.getChildren()) {
-                                    Disease d = sn.getValue(Disease.class);
-                                    Prediction pre = new Prediction("0", uId, "Default",
-                                            sessionID, "Default",
-                                            d.getDiseaseID(), "Default", new Date(), new Date(),
-                                            d.getSpecializationID(), 0);
-                                    createPrediction(pre);
-                                }
-                            } catch (Exception e) {
-                                Log.d(LOG_TAG, "Not found disease in database", e);
+            disQuery = mRef2.orderByChild("name").equalTo(disease);
+            disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    try {
+                        for (DataSnapshot sn : snapshot.getChildren()) {
+                            Disease d = sn.getValue(Disease.class);
+                            Prediction pre = new Prediction("0", uId, "Default",
+                                sessionID, "Default",
+                                d.getDiseaseID(), "Default", new Date(), new Date(),
+                                d.getSpecializationID(), 0);
+                            // If disease name is "other disease" => set Note
+                            if (disease.equals(AppConstants.DISEASE_OTHER_NAME)) {
+                                pre.setNotes(AppConstants.DISEASE_OTHER_NAME);
                             }
-                        } catch (Exception e) {
-                            Log.d(LOG_TAG, "Not found disease in database", e);
+                            createPrediction(pre);
                         }
+                    } catch (Exception e) {
+                        Log.d(LOG_TAG, "Not found disease in database", e);
                     }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
-            } else {
-                disQuery = mRef2.orderByChild("name").equalTo(disease);
-                disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        try {
-                            for (DataSnapshot sn : snapshot.getChildren()) {
-                                Disease d = sn.getValue(Disease.class);
-                                Prediction pre = new Prediction("0", uId, "Default",
-                                        sessionID, "Default",
-                                        d.getDiseaseID(), "Default", new Date(), new Date(),
-                                        d.getSpecializationID(), 0);
-                                createPrediction(pre);
-                            }
-                        } catch (Exception e) {
-                            Log.d(LOG_TAG, "Not found disease in database", e);
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                    }
-                });
-            }
+                }
 
-
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getDiseaseByNameFirebase()");
@@ -767,7 +733,7 @@ public class Chat extends AppCompatActivity {
         try {
             // Check microphone access permission
             if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
                 // Call Voice input
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -782,8 +748,8 @@ public class Chat extends AppCompatActivity {
                 // ask for the permission.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(
-                            new String[]{Manifest.permission.RECORD_AUDIO},
-                            REQUEST_CODE_SPEECH);
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        REQUEST_CODE_SPEECH);
                 }
             }
         } catch (Exception e) {
@@ -830,9 +796,9 @@ public class Chat extends AppCompatActivity {
         super.onStart();
         Log.v(LOG_TAG, "onStart");
         handler.post(
-                () -> {
-                    client.load();
-                });
+            () -> {
+                client.load();
+            });
     }
 
     @Override
@@ -840,9 +806,9 @@ public class Chat extends AppCompatActivity {
         super.onStop();
         Log.v(LOG_TAG, "onStop");
         handler.post(
-                () -> {
-                    client.unload();
-                });
+            () -> {
+                client.unload();
+            });
     }
 
     /**
@@ -859,21 +825,19 @@ public class Chat extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
                         pre.setPredictionID(mRef2.push().getKey());
-                        System.out.println(pre.getDiseaseID());
-
-                            mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
-                                @Override
-                                //If new prediction are created
-                                //Then end the current session of chat and display a notification dialog
-                                public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                    if(!tempSymptom.isEmpty() || tempSymptom != null){
-                                        createPredictionSymptom(pre.getPredictionID());
-                                    }
-                                    endSession(sessionID);
-                                    checkSessionStatus();
-                                    dialogPrediction(pre);
+                        mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
+                            @Override
+                            //If new prediction are created
+                            //Then end the current session of chat and display a notification dialog
+                            public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error,
+                                                   @NonNull @NotNull DatabaseReference ref) {
+                                if (!tempSymptom.isEmpty() || tempSymptom != null) {
+                                    createPredictionSymptom(pre.getPredictionID());
                                 }
-                            });
+                                endSession(sessionID);
+                                dialogPrediction(pre);
+                            }
+                        });
 
 
                     } catch (Exception e) {
@@ -905,7 +869,6 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     try {
-
                         if (!tempSymptom.isEmpty() && tempSymptom != null) {
                             List<PredictionSymptom> psList = new ArrayList<>();
                             for (Symptom s : tempSymptom) {
@@ -914,7 +877,6 @@ public class Chat extends AppCompatActivity {
                             for (PredictionSymptom ps : psList) {
                                 mRef2.child(mRef2.push().getKey()).setValue(ps);
                             }
-
                         }
 
                     } catch (Exception e) {
@@ -963,27 +925,28 @@ public class Chat extends AppCompatActivity {
 
 
     /**
-     * Create dialog confirm
+     * Create dialog to confirm when user click on back button
      */
     private void dialogConfirm(String sessionID) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.default_dialog_end_session_prediction);
-            builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    endSession(sessionID);
-                    onBackPressed();
-                }
-            });
-            builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //Do nothing
-                }
-            });
-            builder.create();
-            builder.show();
+            builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        endSession(sessionID);
+                        onBackPressed();
+                    }
+                });
+            builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Do nothing
+                    }
+                });
+            builder.create().show();
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "dialogConfirm()");
@@ -996,21 +959,21 @@ public class Chat extends AppCompatActivity {
             builder.setTitle(R.string.chat_dialog_prediction_title);
             builder.setMessage(R.string.chat_dialog_prediction_msg);
             builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent(Chat.this, PredictionResult.class);
-                            intent.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
-                            startActivity(intent);
-                        }
-                    });
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Chat.this, PredictionResult.class);
+                        intent.putExtra(PredictionResult.INTENT_EXTRA_PREDICTION, prediction);
+                        startActivity(intent);
+                    }
+                });
             builder.setNegativeButton(getString(R.string.dialog_confirm_change_account_no),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            //Do nothing
-                        }
-                    });
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Do nothing
+                    }
+                });
             builder.create().show();
         } catch (NullPointerException e) {
             Log.e(LOG_TAG, "dialogPrediction: null pointer", e);
@@ -1025,11 +988,11 @@ public class Chat extends AppCompatActivity {
         try {
             if (!msg.equals("")) {
                 Message message = new Message("", fUser.getUid()
-                        , msg, new Date(), sessionID, 1);
+                    , msg, new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 //Chatbot chat
-                Message message1 = new Message("", Constants.CHATBOT_ID,
-                        getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
+                Message message1 = new Message("", AppConstants.CHATBOT_ID,
+                    getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
                 setMessageFirebase(message1);
                 chat_txt_enter_mess.setText("");
                 allMess += msg + " ";

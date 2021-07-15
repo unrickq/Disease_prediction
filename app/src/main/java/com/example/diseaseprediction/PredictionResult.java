@@ -211,7 +211,7 @@ public class PredictionResult extends AppCompatActivity {
                             if (pr.getStatus() == 2) {
                                 prediction_txt_disease_title.setText(getString(R.string.prediction_result_disease_updated));
                                 // doctor select unknown disease
-                                if (pr.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+                                if (pr.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                                     String unknownDisease = pr.getNotes();
                                     prediction_txt_disease_result.setText(unknownDisease);
                                 }

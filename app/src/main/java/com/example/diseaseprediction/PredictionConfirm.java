@@ -106,7 +106,7 @@ public class PredictionConfirm extends AppCompatActivity {
           String note = "";
           String diseaseID = selectedDisease.getDiseaseID();
           // Check if doctor select other disease option
-          if (diseaseID.equals(Constants.DISEASE_OTHER_ID)) {
+          if (diseaseID.equals(AppConstants.DISEASE_OTHER_ID)) {
             // get disease name
             note = prediction_confirm_disease_other.getText().toString();
             // check if disease name empty
@@ -193,7 +193,7 @@ public class PredictionConfirm extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
               selectedDisease = (Disease) parent.getItemAtPosition(position);
               // selected disease is 'Other disease'
-              if (selectedDisease.getDiseaseID().equals(Constants.DISEASE_OTHER_ID)) {
+              if (selectedDisease.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                 prediction_confirm_disease_other_layout.setVisibility(View.VISIBLE);
               } else {
                 prediction_confirm_disease_other_layout.setVisibility(View.GONE);

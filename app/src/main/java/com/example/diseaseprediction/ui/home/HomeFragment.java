@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.Chat;
-import com.example.diseaseprediction.Constants;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
@@ -228,11 +228,11 @@ public class HomeFragment extends Fragment {
             //Get consultation list of two account
             String accountIDOne;
             String accountIDTwo;
-            if (fUser.getUid().compareTo(Constants.CHATBOT_ID) < 0) {
+            if (fUser.getUid().compareTo(AppConstants.CHATBOT_ID) < 0) {
                 accountIDOne = fUser.getUid();
-                accountIDTwo = Constants.CHATBOT_ID;
+                accountIDTwo = AppConstants.CHATBOT_ID;
             } else {
-                accountIDOne = Constants.CHATBOT_ID;
+                accountIDOne = AppConstants.CHATBOT_ID;
                 accountIDTwo = fUser.getUid();
             }
 
@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment {
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("receiverID", Constants.CHATBOT_ID);
+                            i.putExtra("receiverID", AppConstants.CHATBOT_ID);
                             i.putExtra("sessionID", sessionID);
                             context.startActivity(i);
 
@@ -266,20 +266,21 @@ public class HomeFragment extends Fragment {
                         mRef = FirebaseDatabase.getInstance().getReference("Session");
                         sessionID = mRef.push().getKey();
                         Session session = new Session(sessionID, new Date(), new Date(), 1);
-                        session.setAccOneAndAccTwo(fUser.getUid(), Constants.CHATBOT_ID);
+                        session.setAccOneAndAccTwo(fUser.getUid(), AppConstants.CHATBOT_ID);
                         mRef.child(sessionID).setValue(session);
 
                         //Send message started
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
 
-                        Message msg = new Message(reference.push().getKey(), Constants.CHATBOT_ID, context.getString(R.string.default_chatbot_hello)
-                                , new Date(), sessionID, 1);
+                        Message msg = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
+                            context.getString(R.string.default_chatbot_hello)
+                            , new Date(), sessionID, 1);
                         reference.child(msg.getMessageID()).setValue(msg);
 
                         // Start Chat activity
                         Intent i = new Intent(getActivity(), Chat.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        i.putExtra("receiverID", Constants.CHATBOT_ID);
+                        i.putExtra("receiverID", AppConstants.CHATBOT_ID);
                         i.putExtra("sessionID", sessionID);
                         context.startActivity(i);
                     }
