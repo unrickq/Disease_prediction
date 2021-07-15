@@ -6,17 +6,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.LayoutInflater;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
 
 public class Disconnect {
     Activity activity;
@@ -27,12 +16,15 @@ public class Disconnect {
     }
 
     public void startDialog_main(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.disconnect_internet,null));
-        builder.setCancelable(true);
-        alertDialog = builder.create();
-        alertDialog.show();
+        if (!this.activity.isFinishing()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            LayoutInflater inflater = activity.getLayoutInflater();
+            builder.setView(inflater.inflate(R.layout.disconnect_internet, null));
+            builder.setCancelable(true);
+            alertDialog = builder.create();
+            alertDialog.show();
+        }
+
     }
     void startDialog_chat(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
