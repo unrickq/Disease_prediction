@@ -323,6 +323,7 @@ public class Chat extends AppCompatActivity {
                         loadingText.setVisibility(View.GONE);
                         Message mess2 = new Message("", Constants.CHATBOT_ID,
                                 getString(R.string.default_not_enough_data), new Date(), sessionID, 1);
+
                         setMessageFirebase(mess2);
                         getDiseaseByNameFirebase("", fUser.getUid());
 
@@ -676,8 +677,18 @@ public class Chat extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                         try {
-                            endSession(sessionID);
-                            checkSessionStatus();
+                            try {
+                                for (DataSnapshot sn : snapshot.getChildren()) {
+                                    Disease d = sn.getValue(Disease.class);
+                                    Prediction pre = new Prediction("0", uId, "Default",
+                                            sessionID, "Default",
+                                            d.getDiseaseID(), "Default", new Date(), new Date(),
+                                            d.getSpecializationID(), 0);
+                                    createPrediction(pre);
+                                }
+                            } catch (Exception e) {
+                                Log.d(LOG_TAG, "Not found disease in database", e);
+                            }
                         } catch (Exception e) {
                             Log.d(LOG_TAG, "Not found disease in database", e);
                         }
@@ -849,7 +860,6 @@ public class Chat extends AppCompatActivity {
                     try {
                         pre.setPredictionID(mRef2.push().getKey());
                         System.out.println(pre.getDiseaseID());
-                        if (!tempSymptom.isEmpty() && tempSymptom != null) {
 
                             mRef2.child(pre.getPredictionID()).setValue(pre, new DatabaseReference.CompletionListener() {
                                 @Override
@@ -862,7 +872,7 @@ public class Chat extends AppCompatActivity {
                                     dialogPrediction(pre);
                                 }
                             });
-                        }
+                        
 
                     } catch (Exception e) {
                         e.printStackTrace();
