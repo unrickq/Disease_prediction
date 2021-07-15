@@ -1,11 +1,13 @@
 package com.example.diseaseprediction;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.object.Session;
+import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,6 +17,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
 
 public class testActivity extends AppCompatActivity {
 
@@ -26,29 +34,43 @@ public class testActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        AssetManager am = this.getAssets();
+        try {
+            InputStream fis = am.open("abc.txt");
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String line;
+            int count = 1;
+            while ((line = br.readLine()) != null) {
+                addDataSymptom(new Symptom(String.valueOf(count),  line,  "Default", new Date(),  new Date(), 1));
+                count++;
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        myRef = FirebaseDatabase.getInstance().getReference("Session");
 //        Query a2 = FirebaseDatabase.getInstance().getReference("PredictionSymptom")
 //                .child("ID tu push").setValue(object cua prediction symptom).
 //        //Tìm tất cả các Node có status = 0
-        Query a2 = FirebaseDatabase.getInstance().getReference("Session")
-                .orderByChild("status")
-                .equalTo(0);
-        a2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Session ss = ds.getValue(Session.class);
-                    System.out.println("quang " + ss.getSessionID());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-    }
+//        Query a2 = FirebaseDatabase.getInstance().getReference("Session")
+//                .orderByChild("status")
+//                .equalTo(0);
+//        a2.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                for (DataSnapshot ds : snapshot.getChildren()) {
+//                    Session ss = ds.getValue(Session.class);
+//                    System.out.println("quang " + ss.getSessionID());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -140,24 +162,24 @@ public class testActivity extends AppCompatActivity {
 //
 //            }
 //        });
-//    }
+    }
 
 //
-//    void addDataSymptom(Symptom sm){
-//        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                sm.setSymptomsID(myRef.push().getKey());
-//                myRef.child(sm.getSymptomsID()).setValue(sm);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
+    void addDataSymptom(Symptom sm){
+        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                sm.setSymptomsID(myRef.push().getKey());
+                myRef.child(sm.getSymptomID()).setValue(sm);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
 //    addDataDiseaseAdvise(new DiseaseAdvise("1",  "1", 1));
 //    addDataDiseaseAdvise(new DiseaseAdvise("1",  "2", 1));

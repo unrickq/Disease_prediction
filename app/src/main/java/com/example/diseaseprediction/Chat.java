@@ -866,13 +866,15 @@ public class Chat extends AppCompatActivity {
                                 //If new prediction are created
                                 //Then end the current session of chat and display a notification dialog
                                 public void onComplete(@Nullable @org.jetbrains.annotations.Nullable DatabaseError error, @NonNull @NotNull DatabaseReference ref) {
-                                    createPredictionSymptom(pre.getPredictionID());
+                                    if(!tempSymptom.isEmpty() || tempSymptom != null){
+                                        createPredictionSymptom(pre.getPredictionID());
+                                    }
                                     endSession(sessionID);
                                     checkSessionStatus();
                                     dialogPrediction(pre);
                                 }
                             });
-                        
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
