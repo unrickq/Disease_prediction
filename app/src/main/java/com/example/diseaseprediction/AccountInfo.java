@@ -214,13 +214,15 @@ public class AccountInfo extends AppCompatActivity {
                 account_info_txt_title_phone.setError(getString(R.string.default_empty_phone));
                 isValid = false;
             } else {
-                String phone = account_info_txt_title_phone.getEditText().getText().toString().trim();
-                if ((phone.startsWith("0") && phone.length() != 10) || // phone length must equal to 10 when
-                        // start with '0'
-                        (!phone.startsWith("0") && phone.length() != 9)) { // phone number length must equal to 9 when
-                    // not start with '0'
-                    account_info_txt_title_phone.setError(getString(R.string.error_login_phone_too_long));
-                    isValid = false;
+                if (account_info_txt_title_phone.isEnabled()) {
+                    String phone = account_info_txt_title_phone.getEditText().getText().toString().trim();
+                    if ((phone.startsWith("0") && phone.length() != 10) || // phone length must equal to 10 when
+                            // start with '0'
+                            (!phone.startsWith("0") && phone.length() != 9)) { // phone number length must equal to 9 when
+                        // not start with '0'
+                        account_info_txt_title_phone.setError(getString(R.string.error_login_phone_too_long));
+                        isValid = false;
+                    }
                 }
             }
 
