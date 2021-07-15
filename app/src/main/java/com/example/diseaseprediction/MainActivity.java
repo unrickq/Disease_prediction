@@ -1,5 +1,6 @@
 package com.example.diseaseprediction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -70,10 +71,14 @@ public class MainActivity extends AppCompatActivity {
   private View shimmer_divider;
 
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+
+
 
 
     findViews();
@@ -97,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
               getUIofNavHeader();
             }
-
           @Override
           public void onCancelled(@NonNull DatabaseError error) {
 

@@ -92,11 +92,43 @@ public class Chat extends AppCompatActivity {
     private CircularDotsLoader circularDot;
     private TextView loadingText;
     private List<Symptom> tempSymptom;
+//    private boolean check_Dialog_Disconnect = false;
+    private boolean check_First_Load = false;
+    private boolean check_Dialog_Disconnect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Disconnect disconnect = new Disconnect(Chat.this);
+        disconnect.isConnectNetwork();
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    if(check_Dialog_Disconnect) {
+                        disconnect.dismissDialog();
+                        Toast.makeText(Chat.this, "Connected", Toast.LENGTH_LONG).show();
+                        check_Dialog_Disconnect = false;
+                    }
+                } else {
+                        disconnect.startDialog_main();
+                        Toast.makeText(Chat.this, "Disconnected", Toast.LENGTH_LONG).show();
+                        check_Dialog_Disconnect = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(Chat.this, "Cancel", Toast.LENGTH_LONG).show();
+            }
+        });
+
+//        disconnect.startDialog_main();
+
 
         client = new TextClassificationClient(getApplicationContext());
         handler = new Handler();
@@ -134,6 +166,7 @@ public class Chat extends AppCompatActivity {
         //Then load all message
         if (receiverID != null && sessionID != null) {
             getUserChatData();
+
             //Set icon mic visibility when empty edit text
             chat_txt_enter_mess.addTextChangedListener(updateIconOnWriteWatcher());
 
@@ -886,6 +919,7 @@ public class Chat extends AppCompatActivity {
         try {
             mSymptom = new ArrayList<>();
             mRef = FirebaseDatabase.getInstance().getReference("Symptom");
+
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

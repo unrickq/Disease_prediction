@@ -1,7 +1,10 @@
 package com.example.diseaseprediction.ui.home;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.Constants;
+import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
@@ -79,6 +84,11 @@ public class HomeFragment extends Fragment {
     private ShimmerFrameLayout home_shimmer_pending_prediction, home_shimmer_prediction, home_shimmer_consultation;
 
     private Context context;
+    private boolean check_First_Load = false;
+    private boolean check_Dialog_Disconnect = false;
+    private boolean wifiConnect = false;
+    private boolean mobileConnect = false;
+    private AlertDialog alertDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -109,7 +119,60 @@ public class HomeFragment extends Fragment {
 
         //Load list consultation to recycler
         loadConsultationList();
+
+        Disconnect disconnect = new Disconnect(getActivity());
+        disconnect.isConnectNetwork();
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    if(check_Dialog_Disconnect) {
+                        disconnect.dismissDialog();
+                        Toast.makeText(getActivity(), "Connected", Toast.LENGTH_LONG).show();
+                        check_Dialog_Disconnect = false;
+                    }
+                } else {
+                    if(check_First_Load){
+                        disconnect.startDialog_main();
+                        Toast.makeText(getActivity(), "Disconnected", Toast.LENGTH_LONG).show();
+                        check_Dialog_Disconnect = true;
+                    }
+                    else{
+                        check_First_Load = true;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Cancel", Toast.LENGTH_LONG).show();
+            }
+        });
+
+//        isConnectNetwork_1();
+
     }
+
+    public void isConnectNetwork_1(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+            wifiConnect = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+            mobileConnect = networkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            if(!wifiConnect || !mobileConnect){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.disconnect_internet,null));
+                builder.setCancelable(true);
+                alertDialog = builder.create();
+                alertDialog.show();
+            }
+        }
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
