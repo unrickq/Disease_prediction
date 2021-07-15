@@ -316,7 +316,7 @@ public class CodeVerify extends AppCompatActivity {
 
                                 FirebaseUser user = task.getResult().getUser();
                                 mAccount = new Account();
-                                mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+                                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
                                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {

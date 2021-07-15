@@ -6,6 +6,7 @@ package com.example.diseaseprediction.object;
 public class PredictionMedicine {
     private String predictionID;
     private String medicineID;
+    private String dosage;
     private int status;
 
     /**
@@ -15,9 +16,10 @@ public class PredictionMedicine {
      * @param medicineID   medicine ID
      * @param status       0: Deleted | 1: Normal
      */
-    public PredictionMedicine(String predictionID, String medicineID, int status) {
+    public PredictionMedicine(String predictionID, String medicineID, String dosage, int status) {
         this.predictionID = predictionID;
         this.medicineID = medicineID;
+        this.dosage = dosage;
         this.status = status;
     }
 
@@ -61,6 +63,24 @@ public class PredictionMedicine {
      */
     public void setMedicineID(String medicineID) {
         this.medicineID = medicineID;
+    }
+
+    /**
+     * Get dosage
+     *
+     * @return dosage
+     */
+    public String getDosage() {
+        return dosage;
+    }
+
+    /**
+     * Set dosage
+     *
+     * @param dosage dosage
+     */
+    public void setDosage(String dosage) {
+        this.dosage = dosage;
     }
 
     /**

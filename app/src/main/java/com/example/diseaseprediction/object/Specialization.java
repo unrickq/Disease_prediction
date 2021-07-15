@@ -2,7 +2,7 @@ package com.example.diseaseprediction.object;
 
 import java.util.Date;
 
-public class DoctorSpecialization {
+public class Specialization {
     private String specializationID;
     private String name;
     private Date dateCreate;
@@ -12,7 +12,7 @@ public class DoctorSpecialization {
     /**
      * Doctor specialization constructor
      */
-    public DoctorSpecialization() {
+    public Specialization() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class DoctorSpecialization {
      * @param dateUpdate       Date update
      * @param status           0: Deleted | 1: Normal
      */
-    public DoctorSpecialization(String specializationID, String name, Date dateCreate, Date dateUpdate, int status) {
+    public Specialization(String specializationID, String name, Date dateCreate, Date dateUpdate, int status) {
         this.specializationID = specializationID;
         this.name = name;
         this.dateCreate = dateCreate;

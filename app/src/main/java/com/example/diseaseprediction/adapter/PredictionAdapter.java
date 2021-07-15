@@ -159,7 +159,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                             TextView item_prediction_txt_status) {
         try {
             //Get disease
-            mRef = FirebaseDatabase.getInstance().getReference("Disease").child(prediction.getDiseaseID());
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE).child(prediction.getDiseaseID());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -178,7 +178,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
             });
 
             //Get date and status
-            mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

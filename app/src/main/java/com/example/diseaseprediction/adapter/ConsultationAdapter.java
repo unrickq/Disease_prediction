@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.Chat;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Message;
@@ -113,7 +114,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     //Get user by user ID
     public void getUserName(String userId, TextView item_consultation_txt_name, CircleImageView item_consultation_img_main) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(userId);
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(userId);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -138,7 +139,7 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
     public void getLatestMessageAndTime(String sessionID, TextView item_consultation_txt_message, TextView item_consultation_txt_time) {
         try {
             Message latestMessage = new Message();
-            mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

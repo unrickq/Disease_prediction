@@ -14,15 +14,15 @@ public class SymptomTest {
 
     @Test
     public void getSymptomsID() {
-        assertEquals("symptomsIDTest", getSymptomTest.getSymptomsID());
+        assertEquals("symptomsIDTest", getSymptomTest.getSymptomID());
     }
 
     @Test
     public void setSymptomsID() {
         Symptom setSymptomTest = new Symptom("symptomsIDTest", "nameTest",
                 "descriptionTest", new Date(), new Date(), 1);
-        setSymptomTest.setSymptomsID("symptomsIDTest2");
-        assertEquals("symptomsIDTest2", setSymptomTest.getSymptomsID());
+        setSymptomTest.setSymptomID("symptomsIDTest2");
+        assertEquals("symptomsIDTest2", setSymptomTest.getSymptomID());
     }
 
     @Test

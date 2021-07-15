@@ -169,7 +169,7 @@ public class PredictionConfirm extends AppCompatActivity {
    */
   private void getDiseasesListAndLoadUI() {
     try {
-      mRef = FirebaseDatabase.getInstance().getReference("Disease");
+      mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE);
       mRef.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -229,17 +229,17 @@ public class PredictionConfirm extends AppCompatActivity {
 
       String sessionID = prediction.getSessionID();
       // get messages in session between user and chat bot
-      mRef = FirebaseDatabase.getInstance().getReference("Message/" + sessionID);
+      mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
       mRef.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
           for (DataSnapshot sn : snapshot.getChildren()) {
             Message message = sn.getValue(Message.class);
-          try {
-            // Get messages that was sent by patient
-            if (message.getSenderID().equals(prediction.getPatientID())) {
-              messagesList.add(message);
+            try {
+              // Get messages that was sent by patient
+              if (message.getSenderID().equals(prediction.getPatientID())) {
+                messagesList.add(message);
             }
           } catch (NullPointerException e) {
             Log.e(LOG_TAG, "loadPatientDescription: Null pointer", e);
@@ -380,7 +380,7 @@ public class PredictionConfirm extends AppCompatActivity {
     try {
       // check if prediction status still equal to 0 i.e "waiting for confirmation"
       if (predictionStatus == 0) {
-        mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
+        mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
         mRef.child("doctorID").setValue(doctorID);
         // if prediction correct
         if (type == 0) {
@@ -412,7 +412,7 @@ public class PredictionConfirm extends AppCompatActivity {
    */
   private void checkPredictionStatus() {
     try {
-      mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(prediction.getPredictionID());
+      mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
       mRef.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {

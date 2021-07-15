@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
@@ -112,7 +113,7 @@ public class ConsultationListFragment extends Fragment {
      */
     private void loadListConsultation() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Session");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

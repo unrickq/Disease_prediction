@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.object.DoctorInfo;
-import com.example.diseaseprediction.object.DoctorSpecialization;
+import com.example.diseaseprediction.object.Specialization;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,10 +35,10 @@ public class AccountInfoDoctor extends AppCompatActivity {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
-    private ArrayAdapter<DoctorSpecialization> specializationAdapter;
-    private ArrayList<DoctorSpecialization> specialization;
+    private ArrayAdapter<Specialization> specializationAdapter;
+    private ArrayList<Specialization> specialization;
     private DoctorInfo mDoctor;
-    private DoctorSpecialization ds;
+    private Specialization ds;
 
     private TextInputLayout account_info_doctor_txt_title_experience, account_info_doctor_txt_title_description, account_info_doctor_txt_title_specialization;
     private Button account_info_doctor_btn_edit_done;
@@ -193,7 +193,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
         try {
             //get user by id
             mDoctor = new DoctorInfo();
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -203,13 +203,13 @@ public class AccountInfoDoctor extends AppCompatActivity {
                         mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
                         try {
                             //Set spinner
-                            specialization = new ArrayList<DoctorSpecialization>();
-                            mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                            specialization = new ArrayList<Specialization>();
+                            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
                             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot sh : snapshot.getChildren()) {
-                                        ds = sh.getValue(DoctorSpecialization.class);
+                                        ds = sh.getValue(Specialization.class);
                                         try {
                                             assert ds != null;
                                             if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
@@ -221,7 +221,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
                                         }
                                     }
                                     //Set spinner
-                                    specializationAdapter = new ArrayAdapter<DoctorSpecialization>(AccountInfoDoctor.this, R.layout.support_simple_spinner_dropdown_item, specialization);
+                                    specializationAdapter = new ArrayAdapter<Specialization>(AccountInfoDoctor.this, R.layout.support_simple_spinner_dropdown_item, specialization);
                                     account_info_doctor_spinner_specialization.setAdapter(specializationAdapter);
                                 }
 
@@ -264,7 +264,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
      */
     private void saveData() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
 
             if (account_info_doctor_txt_title_experience.getEditText().getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("experience").setValue(-1);
@@ -281,16 +281,16 @@ public class AccountInfoDoctor extends AppCompatActivity {
             if (account_info_doctor_spinner_specialization.getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("specializationID").setValue("Default");
             } else {
-                mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot sh : snapshot.getChildren()) {
-                            ds = sh.getValue(DoctorSpecialization.class);
+                            ds = sh.getValue(Specialization.class);
                             try {
                                 assert ds != null;
                                 if (ds.getName().equals(account_info_doctor_spinner_specialization.getText().toString())) {
-                                    mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+                                    mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
                                     mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
                                 }
                             } catch (NullPointerException e) {

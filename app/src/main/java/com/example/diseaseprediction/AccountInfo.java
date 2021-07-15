@@ -137,7 +137,7 @@ public class AccountInfo extends AppCompatActivity {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -260,7 +260,7 @@ public class AccountInfo extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     saveData();
-                    mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+                    mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -340,7 +340,7 @@ public class AccountInfo extends AppCompatActivity {
      */
     private void saveData() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             //Name
             if (account_info_txt_title_name.getEditText().getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("name").setValue("Default");

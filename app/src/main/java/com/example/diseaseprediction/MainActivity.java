@@ -196,17 +196,17 @@ public class MainActivity extends AppCompatActivity {
             });
 
             //Set prediction list confirm visibility depend on type account
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Account ac = snapshot.getValue(Account.class);
-                    try {
-                        if (ac.getTypeID() == 0) {
-                            Menu mn = navigationView.getMenu();
-                            mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
-                        } else if (ac.getTypeID() == 1) {
-                            Menu mn = navigationView.getMenu();
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Account ac = snapshot.getValue(Account.class);
+                try {
+                    if (ac.getTypeID() == 0) {
+                        Menu mn = navigationView.getMenu();
+                        mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
+                    } else if (ac.getTypeID() == 1) {
+                        Menu mn = navigationView.getMenu();
                             mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
                         }
 
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkDataOfAccount(FirebaseUser user) {
         try {
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkDataOfAccountDoctor(FirebaseUser user) {
         try {
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

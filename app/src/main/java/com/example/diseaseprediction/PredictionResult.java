@@ -117,7 +117,7 @@ public class PredictionResult extends AppCompatActivity {
         prediction_txt_contact_doctor_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(mPrediction.getPredictionID());
+                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -168,7 +168,7 @@ public class PredictionResult extends AppCompatActivity {
      */
     private void getDataToUI(Prediction mPrediction) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(mPrediction.getPredictionID());
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -199,7 +199,7 @@ public class PredictionResult extends AppCompatActivity {
                     }
 
                     //Get disease
-                    mRef2 = FirebaseDatabase.getInstance().getReference("Disease").child(mPrediction.getDiseaseID());
+                    mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE).child(mPrediction.getDiseaseID());
                     mRef2.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -231,7 +231,7 @@ public class PredictionResult extends AppCompatActivity {
             });
 
             //Hide 'contact doctor' option if user is a doctor
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -270,7 +270,7 @@ public class PredictionResult extends AppCompatActivity {
         try {
             ArrayList<String> tempAdvise = new ArrayList<>();
             List<String> mAdvise = new ArrayList<>();
-            mRef = FirebaseDatabase.getInstance().getReference("DiseaseAdvise");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE_ADVISE);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -288,7 +288,7 @@ public class PredictionResult extends AppCompatActivity {
                     }
 
                     //Get name of advise
-                    mRef2 = FirebaseDatabase.getInstance().getReference("Advise");
+                    mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ADVISE);
                     mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -340,28 +340,28 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDTwo is receiver
      */
     private void createSessionWithCDoctor(String doctorID) {
-        mRef = FirebaseDatabase.getInstance().getReference("Prediction").child(mPrediction.getPredictionID());
+        mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Prediction newPrediction = snapshot.getValue(Prediction.class);
                 //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
                 if (newPrediction.getDoctorSessionID().equals("Default")) {
-                    mRef = FirebaseDatabase.getInstance().getReference("Session");
+                    mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             boolean isFound = false;
 
                             // Create new Session
-                            mRef = FirebaseDatabase.getInstance().getReference("Session");
+                            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
                             sessionID = mRef.push().getKey();
                             Session session = new Session(sessionID, new Date(), new Date(), 1);
                             session.setAccOneAndAccTwo(fUser.getUid(), doctorID);
                             mRef.child(sessionID).setValue(session);
 
                             //Send message started
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Message/" + sessionID);
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                             Message msg = new Message(reference.push().getKey(), doctorID, getString(R.string.default_chatbot_hello)
                                     , new Date(), sessionID, 1);
@@ -408,7 +408,7 @@ public class PredictionResult extends AppCompatActivity {
      */
     private void updateDoctorSessionInPrediction(String predictionID, String doctorSession) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Prediction");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION);
             mRef.child(predictionID).child("doctorSessionID").setValue(doctorSession);
         } catch (Exception e) {
             e.printStackTrace();

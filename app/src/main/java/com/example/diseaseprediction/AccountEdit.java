@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
-import com.example.diseaseprediction.object.DoctorSpecialization;
+import com.example.diseaseprediction.object.Specialization;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
@@ -57,10 +57,10 @@ public class AccountEdit extends AppCompatActivity {
     private FirebaseUser fUser;
     private Account mAccount;
     private DoctorInfo mDoctor;
-    private DoctorSpecialization ds;
+    private Specialization ds;
     private Uri imgPath;
-    private ArrayAdapter<DoctorSpecialization> specializationAdapter;
-    private ArrayList<DoctorSpecialization> specialization;
+    private ArrayAdapter<Specialization> specializationAdapter;
+    private ArrayList<Specialization> specialization;
     private ArrayAdapter genderAdapter;
     private TextInputLayout account_edit_txt_title_name, account_edit_txt_title_gender, account_edit_txt_title_phone,
             account_edit_txt_title_email, account_edit_txt_title_address,
@@ -234,7 +234,7 @@ public class AccountEdit extends AppCompatActivity {
                 isValid = false;
             } else {
                 if (!account_edit_txt_title_email.getEditText().getText().toString().trim()
-                    .matches(AppConstants.EMAIL_PATTERN)) {
+                        .matches(AppConstants.EMAIL_PATTERN)) {
                     account_edit_txt_title_email.setError(getString(R.string.default_email_regex));
                     isValid = false;
                 }
@@ -335,7 +335,7 @@ public class AccountEdit extends AppCompatActivity {
             account_edit_txt_title_phone.setEnabled(false);
 
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts").child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -367,7 +367,7 @@ public class AccountEdit extends AppCompatActivity {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -475,7 +475,7 @@ public class AccountEdit extends AppCompatActivity {
      */
     private void updateValue() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             //Name
             if (account_edit_txt_title_name.getEditText().getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("name").setValue("Default");
@@ -529,7 +529,7 @@ public class AccountEdit extends AppCompatActivity {
         try {
             //get user by id
             mDoctor = new DoctorInfo();
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -540,13 +540,13 @@ public class AccountEdit extends AppCompatActivity {
                         mDoctor = snapshot.child(fUser.getUid()).getValue(DoctorInfo.class);
                         try {
                             //Set spinner
-                            specialization = new ArrayList<DoctorSpecialization>();
-                            mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                            specialization = new ArrayList<Specialization>();
+                            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
                             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot sh : snapshot.getChildren()) {
-                                        ds = sh.getValue(DoctorSpecialization.class);
+                                        ds = sh.getValue(Specialization.class);
                                         try {
                                             assert ds != null;
                                             if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
@@ -559,7 +559,7 @@ public class AccountEdit extends AppCompatActivity {
                                         }
                                     }
                                     //Set spinner
-                                    specializationAdapter = new ArrayAdapter<DoctorSpecialization>(AccountEdit.this,
+                                    specializationAdapter = new ArrayAdapter<Specialization>(AccountEdit.this,
                                             R.layout.support_simple_spinner_dropdown_item, specialization);
                                     account_doctor_spinner_specialization.setAdapter(specializationAdapter);
                                 }
@@ -604,7 +604,7 @@ public class AccountEdit extends AppCompatActivity {
      */
     private void saveDataOfDoctor() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
 
             if (account_doctor_txt_title_experience.getEditText().getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("experience").setValue(-1);
@@ -621,16 +621,16 @@ public class AccountEdit extends AppCompatActivity {
             if (account_doctor_spinner_specialization.getText().toString().equals("")) {
                 mRef.child(fUser.getUid()).child("specializationID").setValue("Default");
             } else {
-                mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot sh : snapshot.getChildren()) {
-                            ds = sh.getValue(DoctorSpecialization.class);
+                            ds = sh.getValue(Specialization.class);
                             try {
                                 assert ds != null;
                                 if (ds.getName().equals(account_doctor_spinner_specialization.getText().toString())) {
-                                    mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+                                    mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
                                     mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
                                 }
                             } catch (NullPointerException e) {
@@ -665,7 +665,7 @@ public class AccountEdit extends AppCompatActivity {
                 progressDialog.show();
 
                 //Get reference "images" in storage firebase
-                sRef = FirebaseStorage.getInstance().getReference().child("images/" + UUID.randomUUID().toString());
+                sRef = FirebaseStorage.getInstance().getReference().child(AppConstants.STORAGE_IMG + "/" + UUID.randomUUID().toString());
                 sRef.putFile(imgPath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -676,7 +676,7 @@ public class AccountEdit extends AppCompatActivity {
                                 sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+                                        mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
                                         mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
                                         Glide.with(AccountEdit.this).load(uri.toString()).into(account_img_avatar);
                                     }

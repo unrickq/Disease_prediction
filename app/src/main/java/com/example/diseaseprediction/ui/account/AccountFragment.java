@@ -20,11 +20,12 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.AccountEdit;
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
-import com.example.diseaseprediction.object.DoctorSpecialization;
+import com.example.diseaseprediction.object.Specialization;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,13 +54,13 @@ public class AccountFragment extends Fragment {
 
     private Account mAccount;
     private DoctorInfo mDoctor;
-    private DoctorSpecialization ds;
-    private ArrayAdapter<DoctorSpecialization> specializationAdapter;
-    private ArrayList<DoctorSpecialization> specialization;
+    private Specialization ds;
+    private ArrayAdapter<Specialization> specializationAdapter;
+    private ArrayList<Specialization> specialization;
 
     private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email,
-        account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
-        account_doctor_txt_description;
+            account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
+            account_doctor_txt_description;
 
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
 
@@ -182,7 +183,7 @@ public class AccountFragment extends Fragment {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -263,7 +264,7 @@ public class AccountFragment extends Fragment {
         try {
             //get user by id
             mDoctor = new DoctorInfo();
-            mRef = FirebaseDatabase.getInstance().getReference("DoctorInfo");
+            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -275,12 +276,12 @@ public class AccountFragment extends Fragment {
                         try {
                             //Set spinner
                             specialization = new ArrayList<>();
-                            mRef = FirebaseDatabase.getInstance().getReference("Specialization");
+                            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
                             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot sh : snapshot.getChildren()) {
-                                        ds = sh.getValue(DoctorSpecialization.class);
+                                        ds = sh.getValue(Specialization.class);
                                         try {
                                             assert ds != null;
                                             if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {

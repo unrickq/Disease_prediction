@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PredictionMedicineTest {
     PredictionMedicine getPredictionMedicineTest = new PredictionMedicine("predictionIDTest",
-            "medicineIDTest", 1);
+            "medicineIDTest", "dosageTest", 1);
 
     @Test
     public void getPredictionID() {
@@ -16,7 +16,7 @@ public class PredictionMedicineTest {
     @Test
     public void setPredictionID() {
         PredictionMedicine setPredictionMedicineTest = new PredictionMedicine("predictionIDTest",
-                "medicineIDTest", 1);
+                "medicineIDTest", "dosageTest", 1);
         setPredictionMedicineTest.setPredictionID("predictionIDTest2");
         assertEquals("predictionIDTest2", setPredictionMedicineTest.getPredictionID());
     }
@@ -29,9 +29,22 @@ public class PredictionMedicineTest {
     @Test
     public void setMedicineID() {
         PredictionMedicine setPredictionMedicineTest = new PredictionMedicine("predictionIDTest",
-                "medicineIDTest", 1);
+                "medicineIDTest", "dosageTest", 1);
         setPredictionMedicineTest.setMedicineID("medicineIDTest2");
         assertEquals("medicineIDTest2", setPredictionMedicineTest.getMedicineID());
+    }
+
+    @Test
+    public void getDosage() {
+        assertEquals("dosageTest", getPredictionMedicineTest.getDosage());
+    }
+
+    @Test
+    public void setDosage() {
+        PredictionMedicine setPredictionMedicineTest = new PredictionMedicine("predictionIDTest",
+                "medicineIDTest", "dosageTest", 1);
+        setPredictionMedicineTest.setDosage("dosageTest2");
+        assertEquals("dosageTest2", setPredictionMedicineTest.getDosage());
     }
 
     @Test
@@ -42,7 +55,7 @@ public class PredictionMedicineTest {
     @Test
     public void setStatus() {
         PredictionMedicine setPredictionMedicineTest = new PredictionMedicine("predictionIDTest",
-                "medicineIDTest", 1);
+                "medicineIDTest", "dosageTest", 1);
         setPredictionMedicineTest.setStatus(0);
         assertEquals(0, setPredictionMedicineTest.getStatus());
     }

@@ -235,7 +235,7 @@ public class Login extends AppCompatActivity {
      */
     private void CreateNewAccount(FirebaseUser user) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference().child("Accounts");
+            mRef = FirebaseDatabase.getInstance().getReference().child(AppConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -276,7 +276,7 @@ public class Login extends AppCompatActivity {
                                 if (account.getTypeID() == 0) {
                                     DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(),
                                             new Date(), 1);
-                                    mRef = FirebaseDatabase.getInstance().getReference().child("DoctorInfo");
+                                    mRef = FirebaseDatabase.getInstance().getReference().child(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
                                     mRef.child(user.getUid()).setValue(doctorInfo);
                                 }
                                 //Go to account information activity
