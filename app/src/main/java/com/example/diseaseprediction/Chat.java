@@ -316,13 +316,13 @@ public class Chat extends AppCompatActivity {
                         loadingText.setVisibility(View.GONE);
                     } else {
                         Message mess = new Message("", Constants.CHATBOT_ID,
-                                "Hiện tại dữ liệu của chúng tôi có những triệu chứng này", new Date(), sessionID, 1);
+                                getString(R.string.default_not_enough_symptom), new Date(), sessionID, 1);
                         setMessageFirebase(mess);
                         chat_txt_enter_mess.setText("");
                         circularDot.setVisibility(View.GONE);
                         loadingText.setVisibility(View.GONE);
                         Message mess2 = new Message("", Constants.CHATBOT_ID,
-                                "Không đủ dữ liệu không thể chuẩn đoán bệnh", new Date(), sessionID, 1);
+                                getString(R.string.default_not_enough_data), new Date(), sessionID, 1);
                         setMessageFirebase(mess2);
                         getDiseaseByNameFirebase("", fUser.getUid());
 

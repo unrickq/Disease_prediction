@@ -130,6 +130,8 @@
     <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
     <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
     <string name="defaut_session_ended">Session ended</string>
+    <string name="default_not_enough_symptom">Currently our data do not have these symptoms</string>
+    <string name="default_not_enough_data">Not enough data to make predictions. Please create a new chat session to get predictions </string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>

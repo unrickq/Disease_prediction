@@ -2,10 +2,19 @@ package com.example.diseaseprediction;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.diseaseprediction.object.Session;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 public class testActivity extends AppCompatActivity {
 
@@ -18,6 +27,27 @@ public class testActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+//        myRef = FirebaseDatabase.getInstance().getReference("Session");
+//        Query a2 = FirebaseDatabase.getInstance().getReference("PredictionSymptom")
+//                .child("ID tu push").setValue(object cua prediction symptom).
+//        //Tìm tất cả các Node có status = 0
+        Query a2 = FirebaseDatabase.getInstance().getReference("Session")
+                .orderByChild("status")
+                .equalTo(0);
+        a2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Session ss = ds.getValue(Session.class);
+                    System.out.println("quang " + ss.getSessionID());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
 //    @Override
