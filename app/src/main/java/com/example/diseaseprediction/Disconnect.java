@@ -18,7 +18,7 @@ public class Disconnect {
         this.activity = activity;
     }
 
-    public void startDialog_main(){
+    public void startDialog_main() {
         if (!this.activity.isFinishing()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             LayoutInflater inflater = activity.getLayoutInflater();
@@ -29,51 +29,52 @@ public class Disconnect {
         }
     }
 
-    public void dismissDialog(){
-        if(alertDialog != null){
-            if(alertDialog.isShowing()){
+    public void dismissDialog() {
+        if (alertDialog != null) {
+            if (alertDialog.isShowing()) {
                 alertDialog.dismiss();
+                alertDialog = null;
             }
         }
 
     }
 
-    public void isInternetConnect(){
-        keepLive();
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    dismissDialog();
-                } else {
-                    startDialog_main();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
-    }
-
     /**
-     * Keep connect to firebase by using temp reference
+     * Check the connection to firebase
+     * 1.First retrieve data through temp reference "keepLive" for keep connect to firebase
+     * Because firebase closes the connection after 60 seconds of inactivity.
+     * 2.".info/connected" inside "keepLive" to disable dialog Disconnect for first time app running
+     * Because ".info/connected" run before an app connected to firebase ==> The connect is always return false
      */
-    public void keepLive() {
+    public void isInternetConnect() {
+        //Retrieve data on firebase through temp reference "keepLive"
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference("keepLive");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                //Retrieve data on the default table CheckConnect(.info/connected) from firebase
+                DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+                connectedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        boolean connected = snapshot.getValue(Boolean.class);
+                        if (connected) {
+                            //If connected
+                            dismissDialog();
+                        } else {
+                            startDialog_main();
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                    }
+                });
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-
             }
         });
     }
-
 }
