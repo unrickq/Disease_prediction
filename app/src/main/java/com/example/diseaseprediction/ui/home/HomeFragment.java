@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.Chat;
+import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
@@ -109,6 +110,8 @@ public class HomeFragment extends Fragment {
 
         //Load list consultation to recycler
         loadConsultationList();
+
+        isInternetConnect();
     }
 
     @Override
@@ -573,5 +576,25 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
             Log.d(TAG, "setUIByAccountType()");
         }
+    }
+
+    void isInternetConnect(){
+        Disconnect disconnect = new Disconnect(getActivity());
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                        disconnect.dismissDialog();
+                } else {
+                        disconnect.startDialog_main();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), "Cancel", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
