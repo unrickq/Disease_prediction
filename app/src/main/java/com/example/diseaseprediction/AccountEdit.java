@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -51,6 +53,9 @@ public class AccountEdit extends AppCompatActivity {
     private static final String TAG = "AccountEdit";
     private final int PICK_IMAGE_REQUEST = 71;
     boolean isModified = false;
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     //Firebase
     private StorageReference sRef;
     private DatabaseReference mRef;
@@ -112,7 +117,21 @@ public class AccountEdit extends AppCompatActivity {
             }
         });
 
-        isInternetConnect();
+    }
+
+    @Override
+    protected void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
     @Override
@@ -137,14 +156,6 @@ public class AccountEdit extends AppCompatActivity {
             super.onBackPressed();
         }
 
-    }
-
-    /**
-     * Check connect to internet
-     */
-    void isInternetConnect() {
-        Disconnect disconnect = new Disconnect(AccountEdit.this);
-        disconnect.isInternetConnect();
     }
 
     /**

@@ -3,6 +3,8 @@ package com.example.diseaseprediction;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +35,9 @@ import java.util.ArrayList;
 
 public class AccountInfo extends AppCompatActivity {
     private static final String TAG = "AccountInfo";
+
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -75,7 +80,21 @@ public class AccountInfo extends AppCompatActivity {
             }
         });
 
-        isInternetConnect();
+    }
+
+    @Override
+    protected void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
     @Override
@@ -92,13 +111,6 @@ public class AccountInfo extends AppCompatActivity {
         builder.create().show();
     }
 
-    /**
-     * Check connect to internet
-     */
-    void isInternetConnect() {
-        Disconnect disconnect = new Disconnect(AccountInfo.this);
-        disconnect.isInternetConnect();
-    }
 
     /**
      * Get view

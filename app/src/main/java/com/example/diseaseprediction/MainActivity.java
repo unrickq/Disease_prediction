@@ -1,7 +1,9 @@
 package com.example.diseaseprediction;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     public static final String FRAGMENT = "fragment";
+
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -104,8 +109,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
         //Check internet connected or not
-        isInternetConnect();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
     private void findViews() {
@@ -437,11 +455,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Check connect to internet
-     */
-    void isInternetConnect() {
-        Disconnect disconnect = new Disconnect(MainActivity.this);
-        disconnect.isInternetConnect();
-    }
 }

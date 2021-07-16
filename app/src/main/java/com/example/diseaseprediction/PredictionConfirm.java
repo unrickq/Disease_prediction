@@ -2,6 +2,8 @@ package com.example.diseaseprediction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +40,8 @@ import java.util.Date;
 public class PredictionConfirm extends AppCompatActivity {
 
   private static final String LOG_TAG = "Prediction Confirm";
+  //Internet connection
+  private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
   //
   ArrayList<Disease> diseasesList = new ArrayList<>();
   // Firebase
@@ -73,7 +77,21 @@ public class PredictionConfirm extends AppCompatActivity {
 
     checkPredictionStatus();
 
-    isInternetConnect();
+  }
+
+  @Override
+  protected void onStart() {
+    //Check internet connected or not
+    IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    registerReceiver(networkChangeListener, filter);
+    super.onStart();
+  }
+
+  @Override
+  protected void onStop() {
+    //Check internet connected or not
+    unregisterReceiver(networkChangeListener);
+    super.onStop();
   }
 
   /**
@@ -474,11 +492,6 @@ public class PredictionConfirm extends AppCompatActivity {
       e.printStackTrace();
       Log.d(LOG_TAG, "displayThanksDialog()");
     }
-  }
-
-  void isInternetConnect(){
-    Disconnect disconnect = new Disconnect(PredictionConfirm.this);
-    disconnect.isInternetConnect();
   }
 
 }

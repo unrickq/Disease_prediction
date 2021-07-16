@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,6 +68,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Chat extends AppCompatActivity {
     private static final String LOG_TAG = "Chat Activity";
     private static final int REQUEST_CODE_SPEECH = 10;
+
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
@@ -167,7 +172,7 @@ public class Chat extends AppCompatActivity {
             toast.show();
         }
 
-        isInternetConnect();
+
 
     }
 
@@ -783,6 +788,9 @@ public class Chat extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
         super.onStart();
         Log.v(LOG_TAG, "onStart");
         handler.post(
@@ -793,6 +801,8 @@ public class Chat extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
         super.onStop();
         Log.v(LOG_TAG, "onStop");
         handler.post(
@@ -992,11 +1002,6 @@ public class Chat extends AppCompatActivity {
             Log.d(LOG_TAG, "nextChat()");
         }
 
-    }
-
-    void isInternetConnect(){
-        Disconnect disconnect = new Disconnect(Chat.this);
-        disconnect.isInternetConnect();
     }
 
 }

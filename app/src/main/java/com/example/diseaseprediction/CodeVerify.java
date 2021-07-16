@@ -2,6 +2,8 @@ package com.example.diseaseprediction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,6 +46,9 @@ public class CodeVerify extends AppCompatActivity {
 
     public static final String INTENT_MOBILE = "mobile";
     private static final String TAG = "CodeVerifyActivity";
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     private Account mAccount;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
@@ -164,15 +169,21 @@ public class CodeVerify extends AppCompatActivity {
         // Begin phone verification
         startPhoneNumberVerification(phoneNumber);
 
-        isInternetConnect();
     }
 
-    /**
-     * Check connect to internet
-     */
-    void isInternetConnect() {
-        Disconnect disconnect = new Disconnect(CodeVerify.this);
-        disconnect.isInternetConnect();
+    @Override
+    protected void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
     /**
