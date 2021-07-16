@@ -37,6 +37,7 @@ import com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.listener.MyClickListener;
+import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.model.Result;
 import com.example.diseaseprediction.model.TextClassificationClient;
 import com.example.diseaseprediction.object.Account;

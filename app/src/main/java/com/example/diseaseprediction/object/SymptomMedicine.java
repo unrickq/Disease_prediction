@@ -1,12 +1,12 @@
 package com.example.diseaseprediction.object;
 
 /**
- * Prediction medicine
+ * Symptom medicine
  */
 public class SymptomMedicine {
+
     private String symptomID;
     private String medicineID;
-    private String dosage;
     private int status;
 
     /**
@@ -16,10 +16,9 @@ public class SymptomMedicine {
      * @param medicineID medicine ID
      * @param status     0: Deleted | 1: Normal
      */
-    public SymptomMedicine(String symptomID, String medicineID, String dosage, int status) {
+    public SymptomMedicine(String symptomID, String medicineID, int status) {
         this.symptomID = symptomID;
         this.medicineID = medicineID;
-        this.dosage = dosage;
         this.status = status;
     }
 
@@ -63,24 +62,6 @@ public class SymptomMedicine {
      */
     public void setMedicineID(String medicineID) {
         this.medicineID = medicineID;
-    }
-
-    /**
-     * Get dosage
-     *
-     * @return dosage
-     */
-    public String getDosage() {
-        return dosage;
-    }
-
-    /**
-     * Set dosage
-     *
-     * @param dosage dosage
-     */
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
     }
 
     /**
