@@ -574,4 +574,5 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "setUIByAccountType()");
         }
     }
+
 }

@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,6 +69,9 @@ public class Chat extends AppCompatActivity {
     private static final String LOG_TAG = "Chat Activity";
     private static final int REQUEST_CODE_SPEECH = 10;
 
+    //Internet connection
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+
     private DatabaseReference mRef;
     private DatabaseReference mRef2;
     private DatabaseReference mRef3;
@@ -103,9 +108,6 @@ public class Chat extends AppCompatActivity {
 
         //Find view
         getViews();
-//        circularDot.setVisibility(View.VISIBLE);
-        loadingText.setText("Đang xử lý kết quả");
-//        loadingText.setVisibility(View.VISIBLE);
         // Initialize
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -170,6 +172,8 @@ public class Chat extends AppCompatActivity {
             toast.show();
         }
 
+
+
     }
 
     /**
@@ -194,14 +198,6 @@ public class Chat extends AppCompatActivity {
         }
     }
 
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (receiverID.equals(Constants.CHATBOT_ID)) {
-//            //endSession(sessionID);
-//        }
-//    }
 
     @Override
     protected void onDestroy() {
@@ -248,6 +244,7 @@ public class Chat extends AppCompatActivity {
             chat_recycler_view = findViewById(R.id.chat_recycler_view);
             circularDot = findViewById(R.id.circularDot);
             loadingText = findViewById(R.id.loadingText);
+            loadingText.setText(getString(R.string.Default_In_Process_Prediction));
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");
@@ -791,6 +788,9 @@ public class Chat extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
         super.onStart();
         Log.v(LOG_TAG, "onStart");
         handler.post(
@@ -801,6 +801,8 @@ public class Chat extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
         super.onStop();
         Log.v(LOG_TAG, "onStop");
         handler.post(

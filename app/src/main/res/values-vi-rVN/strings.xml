@@ -121,6 +121,7 @@
     <string name="defaut_session_ended">Phiên chat đã kết thúc</string>
     <string name="default_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
     <string name="default_not_enough_data">Nhưng chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
+    <string name="Default_In_Process_Prediction">Đang xử lý kết quả</string>
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
@@ -213,5 +214,7 @@
     <string name="dialog_account_info_fill_required">Xin hãy điền đầy đủ thông tin yêu cầu!</string>
     <string name="consultation_preview_message">Bạn: %1$s</string>
 
+    <string name="disconnect_message">Xin vui lòng kiểm tra kết nối mạng của bạn</string>
+    <string name="disconnect_internet_btn_retry">Retry</string>
 
 </resources>

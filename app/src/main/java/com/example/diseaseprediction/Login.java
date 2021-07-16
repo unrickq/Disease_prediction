@@ -1,6 +1,8 @@
 package com.example.diseaseprediction;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,6 +54,7 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mRef;
 
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     private int type = 1;
 
     @Override
@@ -104,7 +107,6 @@ public class Login extends AppCompatActivity {
             }
         });
 
-
     }
 
     /**
@@ -135,6 +137,10 @@ public class Login extends AppCompatActivity {
      */
     @Override
     public void onStart() {
+        //Check internet connected or not
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, filter);
+
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -146,6 +152,13 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        //Check internet connected or not
+        unregisterReceiver(networkChangeListener);
+        super.onStop();
     }
 
     @Override
@@ -395,5 +408,4 @@ public class Login extends AppCompatActivity {
             return "+84" + phone;
         }
     }
-
 }

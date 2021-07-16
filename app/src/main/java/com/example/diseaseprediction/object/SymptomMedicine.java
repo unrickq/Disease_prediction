@@ -3,8 +3,8 @@ package com.example.diseaseprediction.object;
 /**
  * Prediction medicine
  */
-public class PredictionMedicine {
-    private String predictionID;
+public class SymptomMedicine {
+    private String symptomID;
     private String medicineID;
     private String dosage;
     private int status;
@@ -12,12 +12,12 @@ public class PredictionMedicine {
     /**
      * Create prediction medicine
      *
-     * @param predictionID prediction ID
-     * @param medicineID   medicine ID
-     * @param status       0: Deleted | 1: Normal
+     * @param symptomID  prediction ID
+     * @param medicineID medicine ID
+     * @param status     0: Deleted | 1: Normal
      */
-    public PredictionMedicine(String predictionID, String medicineID, String dosage, int status) {
-        this.predictionID = predictionID;
+    public SymptomMedicine(String symptomID, String medicineID, String dosage, int status) {
+        this.symptomID = symptomID;
         this.medicineID = medicineID;
         this.dosage = dosage;
         this.status = status;
@@ -26,25 +26,25 @@ public class PredictionMedicine {
     /**
      * Constructor
      */
-    public PredictionMedicine() {
+    public SymptomMedicine() {
     }
 
     /**
-     * Get predictionID
+     * Get symptomID
      *
-     * @return predictionID
+     * @return symptomID
      */
-    public String getPredictionID() {
-        return predictionID;
+    public String getSymptomID() {
+        return symptomID;
     }
 
     /**
-     * Set predictionID
+     * Set symptomID
      *
-     * @param predictionID predictionID
+     * @param symptomID symptomID
      */
-    public void setPredictionID(String predictionID) {
-        this.predictionID = predictionID;
+    public void setSymptomID(String symptomID) {
+        this.symptomID = symptomID;
     }
 
     /**

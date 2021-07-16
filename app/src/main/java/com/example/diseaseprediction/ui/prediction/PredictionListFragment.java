@@ -69,7 +69,6 @@ public class PredictionListFragment extends Fragment {
         //Set toolbar
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList));
         ((MainActivity) getActivity()).setIconToolbar();
-
     }
 
     @Override
