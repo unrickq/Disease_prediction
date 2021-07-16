@@ -213,6 +213,9 @@
     <string name="account_toolbar_edit">Edit</string>
     <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
 
+    <string name="disconnect_title">No internet connection</string>
+    <string name="disconnect_loading">Loading ...</string>
+
     <string-array name="spinner_language">
         <item>EN</item>
         <item>VN</item>

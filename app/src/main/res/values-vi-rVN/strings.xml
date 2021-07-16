@@ -213,5 +213,7 @@
     <string name="dialog_account_info_fill_required">Xin hãy điền đầy đủ thông tin yêu cầu!</string>
     <string name="consultation_preview_message">Bạn: %1$s</string>
 
+    <string name="disconnect_title">Không có internet</string>
+    <string name="disconnect_loading">Đang tải ...</string>
 
 </resources>

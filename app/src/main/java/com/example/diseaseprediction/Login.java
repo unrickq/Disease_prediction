@@ -398,21 +398,7 @@ public class Login extends AppCompatActivity {
 
     void isInternetConnect(){
         Disconnect disconnect = new Disconnect(Login.this);
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    disconnect.dismissDialog();
-                } else {
-                    disconnect.startDialog_main();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        disconnect.isInternetConnect();
     }
 
 }

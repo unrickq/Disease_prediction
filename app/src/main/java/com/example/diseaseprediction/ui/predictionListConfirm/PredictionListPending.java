@@ -177,22 +177,9 @@ public class PredictionListPending extends Fragment {
             Log.d(TAG, "loadAllPredictionPending()");
         }
     }
+
     void isInternetConnect(){
         Disconnect disconnect = new Disconnect(getActivity());
-        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    disconnect.dismissDialog();
-                } else {
-                    disconnect.startDialog_main();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+        disconnect.isInternetConnect();
     }
 }
