@@ -103,9 +103,6 @@ public class Chat extends AppCompatActivity {
 
         //Find view
         getViews();
-//        circularDot.setVisibility(View.VISIBLE);
-        loadingText.setText("Đang xử lý kết quả");
-//        loadingText.setVisibility(View.VISIBLE);
         // Initialize
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -197,14 +194,6 @@ public class Chat extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        if (receiverID.equals(Constants.CHATBOT_ID)) {
-//            //endSession(sessionID);
-//        }
-//    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -250,6 +239,7 @@ public class Chat extends AppCompatActivity {
             chat_recycler_view = findViewById(R.id.chat_recycler_view);
             circularDot = findViewById(R.id.circularDot);
             loadingText = findViewById(R.id.loadingText);
+            loadingText.setText(getString(R.string.Default_In_Process_Prediction));
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");

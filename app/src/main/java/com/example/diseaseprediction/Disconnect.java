@@ -2,21 +2,13 @@ package com.example.diseaseprediction;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.view.LayoutInflater;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
 
 public class Disconnect {
     Activity activity;
@@ -47,6 +39,7 @@ public class Disconnect {
     }
 
     public void isInternetConnect(){
+        keepLive();
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -58,8 +51,27 @@ public class Disconnect {
                     startDialog_main();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+    /**
+     * Keep connect to firebase by using temp reference
+     */
+    public void keepLive() {
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference("keepLive");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
             }
         });
     }

@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.Chat;
-import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
@@ -110,8 +109,6 @@ public class HomeFragment extends Fragment {
 
         //Load list consultation to recycler
         loadConsultationList();
-
-        isInternetConnect();
     }
 
     @Override
@@ -578,8 +575,4 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    void isInternetConnect(){
-        Disconnect disconnect = new Disconnect(getActivity());
-        disconnect.isInternetConnect();
-    }
 }

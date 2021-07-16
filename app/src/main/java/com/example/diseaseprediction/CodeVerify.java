@@ -163,6 +163,16 @@ public class CodeVerify extends AppCompatActivity {
 
         // Begin phone verification
         startPhoneNumberVerification(phoneNumber);
+
+        isInternetConnect();
+    }
+
+    /**
+     * Check connect to internet
+     */
+    void isInternetConnect() {
+        Disconnect disconnect = new Disconnect(CodeVerify.this);
+        disconnect.isInternetConnect();
     }
 
     /**

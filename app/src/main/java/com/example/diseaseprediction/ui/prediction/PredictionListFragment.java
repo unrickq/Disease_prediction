@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.AppConstants;
-import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
@@ -70,8 +69,6 @@ public class PredictionListFragment extends Fragment {
         //Set toolbar
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_predictionList));
         ((MainActivity) getActivity()).setIconToolbar();
-        isInternetConnect();
-
     }
 
     @Override
@@ -208,9 +205,5 @@ public class PredictionListFragment extends Fragment {
             e.printStackTrace();
             Log.d(TAG, "loadAllPredictionOfAccount()");
         }
-    }
-    void isInternetConnect(){
-        Disconnect disconnect = new Disconnect(getActivity());
-        disconnect.isInternetConnect();
     }
 }

@@ -56,36 +56,36 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
-  private Account mAccount;
-  private DoctorInfo mDoctor;
+    private Account mAccount;
+    private DoctorInfo mDoctor;
 
-  private AppBarConfiguration mAppBarConfiguration;
-  private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
-  private CircleImageView nav_header_avatar;
-  private DrawerLayout drawer;
-  private NavigationView navigationView;
-  private NavHostFragment navHostFragment;
-  private ConstraintLayout nav_account_info;
-  private ShimmerFrameLayout nav_shimmer;
-  private View shimmer_divider;
-
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    private AppBarConfiguration mAppBarConfiguration;
+    private TextView nav_header_txt_acc_name, nav_header_txt_acc_phone;
+    private CircleImageView nav_header_avatar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private NavHostFragment navHostFragment;
+    private ConstraintLayout nav_account_info;
+    private ShimmerFrameLayout nav_shimmer;
+    private View shimmer_divider;
 
 
-    findViews();
-    //Get current user
-    fUser = FirebaseAuth.getInstance().getCurrentUser();
-    //Set toolbar
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayShowTitleEnabled(false);
-    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
-    //Set navigation
-    setNavigation();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        findViews();
+        //Get current user
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //Set toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_hamburger);
+        //Set navigation
+        setNavigation();
 
         //Check data of account
         checkDataOfAccount(fUser);
@@ -95,38 +95,41 @@ public class MainActivity extends AppCompatActivity {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-              getUIofNavHeader();
+                getUIofNavHeader();
             }
 
-          @Override
-          public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-          }
+            }
         });
-  }
 
-  private void findViews() {
+        //Check internet connected or not
+        isInternetConnect();
+    }
 
-    drawer = findViewById(R.id.drawer_layout);
-    navigationView = findViewById(R.id.nav_view);
-    View headerView = navigationView.getHeaderView(0);
-    nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
-    nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
-    nav_shimmer = headerView.findViewById(R.id.nav_shimmer);
-    nav_shimmer.startShimmer();
-    shimmer_divider = headerView.findViewById(R.id.shimmer_divider);
-    nav_account_info = headerView.findViewById(R.id.nav_account_info);
-  }
+    private void findViews() {
+
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        nav_header_txt_acc_name = headerView.findViewById(R.id.nav_header_txt_acc_name);
+        nav_header_txt_acc_phone = headerView.findViewById(R.id.nav_header_txt_acc_phone);
+        nav_shimmer = headerView.findViewById(R.id.nav_shimmer);
+        nav_shimmer.startShimmer();
+        shimmer_divider = headerView.findViewById(R.id.shimmer_divider);
+        nav_account_info = headerView.findViewById(R.id.nav_account_info);
+    }
 
 
-  /**
-   * Set left navigation
-   */
-  private void setNavigation() {
-    try {
+    /**
+     * Set left navigation
+     */
+    private void setNavigation() {
+        try {
 
-      // Passing each menu ID as a set of Ids because each
-      // menu should be considered as top level destinations.
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_home,
                     R.id.nav_account,
@@ -197,16 +200,16 @@ public class MainActivity extends AppCompatActivity {
 
             //Set prediction list confirm visibility depend on type account
             mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Account ac = snapshot.getValue(Account.class);
-                try {
-                    if (ac.getTypeID() == 0) {
-                        Menu mn = navigationView.getMenu();
-                        mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
-                    } else if (ac.getTypeID() == 1) {
-                        Menu mn = navigationView.getMenu();
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Account ac = snapshot.getValue(Account.class);
+                    try {
+                        if (ac.getTypeID() == 0) {
+                            Menu mn = navigationView.getMenu();
+                            mn.findItem(R.id.nav_predictionListConfirm).setVisible(true);
+                        } else if (ac.getTypeID() == 1) {
+                            Menu mn = navigationView.getMenu();
                             mn.findItem(R.id.nav_predictionListConfirm).setVisible(false);
                         }
 
@@ -308,22 +311,22 @@ public class MainActivity extends AppCompatActivity {
                             nav_header_txt_acc_phone.setText(mAccount.getPhone());
                         }
 
-                      //set image
-                      nav_header_avatar = findViewById(R.id.nav_header_avatar);
-                      if (!mAccount.getImage().equals("Default")) {
-                        Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
-                      } else {
-                        nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
+                        //set image
+                        nav_header_avatar = findViewById(R.id.nav_header_avatar);
+                        if (!mAccount.getImage().equals("Default")) {
+                            Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+                        } else {
+                            nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
 //                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
-                      }
+                        }
 
-                      // Stop and hide shimmer
-                      nav_shimmer.stopShimmer();
-                      nav_shimmer.setVisibility(View.GONE);
-                      shimmer_divider.setVisibility(View.GONE);
+                        // Stop and hide shimmer
+                        nav_shimmer.stopShimmer();
+                        nav_shimmer.setVisibility(View.GONE);
+                        shimmer_divider.setVisibility(View.GONE);
 
-                      // Display account Info
-                      nav_account_info.setVisibility(View.VISIBLE);
+                        // Display account Info
+                        nav_account_info.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -432,5 +435,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.d(TAG, "checkDataOfAccountDoctor()");
         }
+    }
+
+    /**
+     * Check connect to internet
+     */
+    void isInternetConnect() {
+        Disconnect disconnect = new Disconnect(MainActivity.this);
+        disconnect.isInternetConnect();
     }
 }

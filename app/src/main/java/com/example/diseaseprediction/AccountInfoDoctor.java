@@ -62,6 +62,15 @@ public class AccountInfoDoctor extends AppCompatActivity {
             }
         });
 
+        isInternetConnect();
+    }
+
+    /**
+     * Check connect to internet
+     */
+    void isInternetConnect() {
+        Disconnect disconnect = new Disconnect(AccountInfoDoctor.this);
+        disconnect.isInternetConnect();
     }
 
     //Find view by ID

@@ -74,6 +74,8 @@ public class AccountInfo extends AppCompatActivity {
                 }
             }
         });
+
+        isInternetConnect();
     }
 
     @Override
@@ -88,6 +90,14 @@ public class AccountInfo extends AppCompatActivity {
                 });
 
         builder.create().show();
+    }
+
+    /**
+     * Check connect to internet
+     */
+    void isInternetConnect() {
+        Disconnect disconnect = new Disconnect(AccountInfo.this);
+        disconnect.isInternetConnect();
     }
 
     /**

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.AppConstants;
-import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
@@ -65,7 +64,6 @@ public class ConsultationListFragment extends Fragment {
             //Set toolbar
             ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.menu_consultationList));
             ((MainActivity) getActivity()).setIconToolbar();
-            isInternetConnect();
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "getMessagesFirebase()");
@@ -155,9 +153,5 @@ public class ConsultationListFragment extends Fragment {
             e.printStackTrace();
             Log.d(TAG, "loadListConsultation()");
         }
-    }
-    void isInternetConnect(){
-        Disconnect disconnect = new Disconnect(getActivity());
-        disconnect.isInternetConnect();
     }
 }

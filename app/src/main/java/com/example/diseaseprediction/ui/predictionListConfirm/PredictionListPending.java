@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.AppConstants;
-import com.example.diseaseprediction.Disconnect;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
@@ -74,8 +72,6 @@ public class PredictionListPending extends Fragment {
 
         //Load UI
         loadAllPredictionPending();
-
-        isInternetConnect();
     }
 
     @Override
@@ -176,10 +172,5 @@ public class PredictionListPending extends Fragment {
             e.printStackTrace();
             Log.d(TAG, "loadAllPredictionPending()");
         }
-    }
-
-    void isInternetConnect(){
-        Disconnect disconnect = new Disconnect(getActivity());
-        disconnect.isInternetConnect();
     }
 }

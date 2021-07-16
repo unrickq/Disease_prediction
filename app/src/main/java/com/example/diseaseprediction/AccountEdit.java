@@ -111,6 +111,8 @@ public class AccountEdit extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        isInternetConnect();
     }
 
     @Override
@@ -135,6 +137,14 @@ public class AccountEdit extends AppCompatActivity {
             super.onBackPressed();
         }
 
+    }
+
+    /**
+     * Check connect to internet
+     */
+    void isInternetConnect() {
+        Disconnect disconnect = new Disconnect(AccountEdit.this);
+        disconnect.isInternetConnect();
     }
 
     /**
