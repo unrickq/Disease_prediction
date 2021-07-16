@@ -811,6 +811,7 @@ public class Chat extends AppCompatActivity {
 
     /**
      * Create new prediction
+     * Add symptoms to prediction (if any)
      * And end session
      *
      * @param pre Prediction object

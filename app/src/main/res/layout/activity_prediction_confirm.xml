@@ -58,6 +58,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+<!--            Patient description-->
             <LinearLayout
                 android:id="@+id/prediction_confirm_description_layout"
                 android:layout_width="match_parent"
@@ -73,7 +74,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_tool_bar">
 
                 <ImageView
-                    android:id="@+id/prediction_confirm_img_description"
                     android:layout_width="61dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
@@ -87,7 +87,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/prediction_confirm_txt_disease_description_title"
+                        android:id="@+id/prediction_confirm_txt_patient_description_title"
                         style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                         android:text="@string/prediction_confirm_txt_disease_description_title" />
 
                     <TextView
-                        android:id="@+id/prediction_confirm_txt_disease_description_result"
+                        android:id="@+id/prediction_confirm_txt_patient_description_txt"
                         style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -105,8 +105,9 @@
 
             </LinearLayout>
 
+            <!--            Disease prediction-->
             <LinearLayout
-                android:id="@+id/prediction_confirm_prediction_layout"
+                android:id="@+id/prediction_confirm_disease_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -120,7 +121,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_description_layout">
 
                 <ImageView
-                    android:id="@+id/prediction_confirm_img_prediction"
                     android:layout_width="61dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
@@ -141,7 +141,7 @@
                         android:text="@string/prediction_confirm_txt_disease_title" />
 
                     <TextView
-                        android:id="@+id/prediction_confirm_txt_disease_prediction_result"
+                        android:id="@+id/prediction_confirm_txt_disease_prediction_disease_name"
                         style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,6 +183,8 @@
                             android:background="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+
+                <!--                Medicine-->
             </LinearLayout>
 
             <GridLayout
@@ -195,7 +197,7 @@
                 android:rowCount="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_prediction_layout">
+                app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_disease_layout">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/prediction_confirm_prediction_wrong_btn"
@@ -207,7 +209,7 @@
                     android:text="@string/prediction_confirm_btn_incorrect"
                     app:cornerRadius="@dimen/btn_corner_radius"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_prediction_layout" />
+                    app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_disease_layout" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/prediction_confirm_prediction_correct_btn"
@@ -218,7 +220,7 @@
                     android:text="@string/prediction_confirm_btn_correct"
                     app:cornerRadius="@dimen/btn_corner_radius"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_prediction_layout" />
+                    app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_disease_layout" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/prediction_confirm_prediction_confirm_btn"
