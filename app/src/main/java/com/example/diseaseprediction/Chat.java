@@ -253,12 +253,12 @@ public class Chat extends AppCompatActivity {
     }
 
     /**
-     * Chat with chat bot
-     * Then create new prediction
+     * Handle when user click on "Get Prediction" button.
+     * Chatbot will send some messages and create new prediction
      *
      * @param msg message
      */
-    private void chatWithChatbot(String msg) {
+    private void chatbotCreatePrediction(String msg) {
         if (!msg.equals("")) {
             // User request
             //user chat vs user
@@ -266,7 +266,7 @@ public class Chat extends AppCompatActivity {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid()
-                            , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
+                        , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     circularDot.setVisibility(View.VISIBLE);
                     loadingText.setVisibility(View.VISIBLE);
@@ -624,8 +624,9 @@ public class Chat extends AppCompatActivity {
                             chatAdapter.setPredictButtonListener(new MyClickListener() {
                                 @Override
                                 public void onPredict(View button, int position) {
-                                    chatWithChatbot(allMess);
-                                    mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                                    chatbotCreatePrediction(allMess);
+                                    mRef2 =
+                                        FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
                                     mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                     checkClickPredict = true;
                                 }
