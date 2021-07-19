@@ -258,7 +258,6 @@ public class HomeFragment extends Fragment {
                             i.putExtra("receiverID", AppConstants.CHATBOT_ID);
                             i.putExtra("sessionID", sessionID);
                             context.startActivity(i);
-
                         }
                     }
                     // If no open session found -> create new session and send welcome msg then open Chat activity
