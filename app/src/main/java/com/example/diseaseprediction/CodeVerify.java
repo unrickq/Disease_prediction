@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.object.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -338,7 +339,7 @@ public class CodeVerify extends AppCompatActivity {
 
                                 FirebaseUser user = task.getResult().getUser();
                                 mAccount = new Account();
-                                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
+                                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
                                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {

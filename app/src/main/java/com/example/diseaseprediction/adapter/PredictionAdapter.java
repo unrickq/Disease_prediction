@@ -16,6 +16,7 @@ import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.PredictionConfirm;
 import com.example.diseaseprediction.PredictionResult;
 import com.example.diseaseprediction.R;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.Prediction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -159,7 +160,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
                             TextView item_prediction_txt_status) {
         try {
             //Get disease
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE).child(prediction.getDiseaseID());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(prediction.getDiseaseID());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -178,7 +179,7 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionAdapter.Vi
             });
 
             //Get date and status
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

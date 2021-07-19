@@ -5,10 +5,10 @@ package com.example.diseaseprediction.object;
  */
 public class PredictionMedicine {
 
-    String predictionID;
-    String medicineID;
-    String dosage;
-    int status;
+    private String predictionID;
+    private String medicineID;
+    private String dosage;
+    private int status;
 
     /**
      * Create new Prediction Medicine object

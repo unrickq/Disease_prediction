@@ -20,9 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.AccountEdit;
-import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Specialization;
@@ -54,7 +54,7 @@ public class AccountFragment extends Fragment {
 
     private Account mAccount;
     private DoctorInfo mDoctor;
-    private Specialization ds;
+    private Specialization mSpecialization;
     private ArrayAdapter<Specialization> specializationAdapter;
     private ArrayList<Specialization> specialization;
 
@@ -183,7 +183,7 @@ public class AccountFragment extends Fragment {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -264,7 +264,7 @@ public class AccountFragment extends Fragment {
         try {
             //get user by id
             mDoctor = new DoctorInfo();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -276,20 +276,20 @@ public class AccountFragment extends Fragment {
                         try {
                             //Set spinner
                             specialization = new ArrayList<>();
-                            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SPECIALIZATION);
+                            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SPECIALIZATION);
                             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot sh : snapshot.getChildren()) {
-                                        ds = sh.getValue(Specialization.class);
+                                        mSpecialization = sh.getValue(Specialization.class);
                                         try {
-                                            assert ds != null;
-                                            if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
-                                                String specialization = ds.getName();
+                                            assert mSpecialization != null;
+                                            if (mDoctor.getSpecializationID().equals(mSpecialization.getSpecializationID())) {
+                                                String specialization = mSpecialization.getName();
                                                 account_doctor_txt_specialization.setText(Html.fromHtml(context.getString(R.string.account_info_doctor_specialization_format, specialization)));
                                                 account_doctor_spinner_specialization.setText(specialization);
                                             }
-                                            specialization.add(ds);
+                                            specialization.add(mSpecialization);
                                         } catch (NullPointerException e) {
                                             Log.d(TAG, "Account. loadDataOfDoctor", e);
                                         }

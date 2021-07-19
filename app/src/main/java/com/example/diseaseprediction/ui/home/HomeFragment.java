@@ -25,6 +25,7 @@ import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.ConsultationAdapter;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
@@ -236,7 +237,7 @@ public class HomeFragment extends Fragment {
                 accountIDTwo = fUser.getUid();
             }
 
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -262,14 +263,14 @@ public class HomeFragment extends Fragment {
                     }
                     // If no open session found -> create new session and send welcome msg then open Chat activity
                     if (!isFound) {
-                        mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
+                        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
                         sessionID = mRef.push().getKey();
                         Session session = new Session(sessionID, new Date(), new Date(), 1);
                         session.setAccOneAndAccTwo(fUser.getUid(), AppConstants.CHATBOT_ID);
                         mRef.child(sessionID).setValue(session);
 
                         //Send message started
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                         Message msg = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
                             context.getString(R.string.default_chatbot_hello)
@@ -303,7 +304,7 @@ public class HomeFragment extends Fragment {
     private void loadConsultationList() {
         try {
             consultationLists = new ArrayList<>();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -351,14 +352,14 @@ public class HomeFragment extends Fragment {
         try {
             mPredictionListDoctor = new ArrayList<>();
             //Find specialization id of doctor account
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     mDoctor = snapshot.getValue(DoctorInfo.class);
                     //Go to prediction
                     Query predictionByDateCreate =
-                            FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
+                            FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
                     predictionByDateCreate.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -429,7 +430,7 @@ public class HomeFragment extends Fragment {
     private void loadAllPredictionOfAccount(int typeAcc) {
         try {
             mPredictionListPatient = new ArrayList<>();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -542,7 +543,7 @@ public class HomeFragment extends Fragment {
         try {
             //Get disease
             if (!fUser.getUid().equals("")) {
-                mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

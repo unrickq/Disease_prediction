@@ -25,6 +25,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             //Set prediction list confirm visibility depend on type account
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             //get user by id
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -371,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkDataOfAccount(FirebaseUser user) {
         try {
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -421,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkDataOfAccountDoctor(FirebaseUser user) {
         try {
             mAccount = new Account();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

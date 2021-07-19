@@ -14,10 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Prediction;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -107,14 +107,14 @@ public class PredictionListPending extends Fragment {
         try {
             mPredictionListDoctor = new ArrayList<>();
             //Find specialization id of doctor account
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     mDoctor = snapshot.getValue(DoctorInfo.class);
                     //Go to prediction
                     Query predictionByDateCreate =
-                            FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
+                            FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
                     predictionByDateCreate.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.MyClickListener;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.model.Result;
@@ -212,7 +213,7 @@ public class Chat extends AppCompatActivity {
     public void onBackPressed() {
         if (receiverID.equals(AppConstants.CHATBOT_ID)) {
             System.out.println("session la" + sessionID);
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION).child(sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION).child(sessionID);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -355,7 +356,7 @@ public class Chat extends AppCompatActivity {
      */
     public void getUserChatData() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(receiverID);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(receiverID);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -517,7 +518,7 @@ public class Chat extends AppCompatActivity {
      */
     private void setMessageFirebase(Message msg) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -543,7 +544,7 @@ public class Chat extends AppCompatActivity {
      */
     private void endSession(String currentSession) {
         try {
-            mRef3 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION).child(currentSession);
+            mRef3 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION).child(currentSession);
             mRef3.child("status").setValue(0);
             //Hide keyboard
             hideSoftKeyboard(Chat.this);
@@ -559,7 +560,7 @@ public class Chat extends AppCompatActivity {
      */
     private void checkSessionStatus() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SESSION).child(sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION).child(sessionID);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -598,7 +599,7 @@ public class Chat extends AppCompatActivity {
     private void getMessagesFirebase(String currentUserID, String receiverID) {
         try {
             mMessage = new ArrayList<>();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -610,11 +611,11 @@ public class Chat extends AppCompatActivity {
                             mMessage.add(msg);
                             if (msg.getStatus() == 3) {
                                 if (checkStartMessage) {
-                                    mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                                    mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
                                     mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                 }
                                 if (checkClickPredict) {
-                                    mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                                    mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
                                     mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                 }
                             }
@@ -626,7 +627,7 @@ public class Chat extends AppCompatActivity {
                                 public void onPredict(View button, int position) {
                                     chatbotCreatePrediction(allMess);
                                     mRef2 =
-                                        FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                                            FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
                                     mRef2.child(msg.getMessageID()).child("status").setValue(4);
                                     checkClickPredict = true;
                                 }
@@ -657,7 +658,7 @@ public class Chat extends AppCompatActivity {
      */
     private void getDiseaseByNameAndCreatePredictionFirebase(String disease, String uId) {
         try {
-            mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_DISEASE);
+            mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE);
             Query disQuery;
             disQuery = mRef2.orderByChild("name").equalTo(disease);
             disQuery.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -696,7 +697,7 @@ public class Chat extends AppCompatActivity {
      */
     private void setUIByAccountType() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -822,7 +823,7 @@ public class Chat extends AppCompatActivity {
      */
     private void createPrediction(Prediction pre) {
         try {
-            mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION);
+            mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION);
             mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -867,7 +868,7 @@ public class Chat extends AppCompatActivity {
      */
     private void createPredictionSymptom(String predictionID) {
         try {
-            mRef2 = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION_SYMPTOM);
+            mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_SYMPTOM);
             mRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -905,7 +906,7 @@ public class Chat extends AppCompatActivity {
     private void getSymptomFirebase() {
         try {
             mSymptom = new ArrayList<>();
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_SYMPTOM);
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SYMPTOM);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

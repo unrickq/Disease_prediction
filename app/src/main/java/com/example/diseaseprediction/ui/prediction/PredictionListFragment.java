@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.Login;
 import com.example.diseaseprediction.MainActivity;
 import com.example.diseaseprediction.R;
 import com.example.diseaseprediction.adapter.PredictionAdapter;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.Prediction;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,7 +109,7 @@ public class PredictionListFragment extends Fragment {
      */
     private void loadUIByType() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -150,7 +150,7 @@ public class PredictionListFragment extends Fragment {
     private void loadAllPredictionOfAccount(int typeAcc) {
         try {
             mPredictionList = new ArrayList<>();
-            Query predictionByDateUpdate = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_TABLE_PREDICTION).orderByChild(
+            Query predictionByDateUpdate = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).orderByChild(
                     "dateUpdate/time");
             predictionByDateUpdate.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

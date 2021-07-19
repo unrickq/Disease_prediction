@@ -109,20 +109,6 @@ title __DISEASEPREDICTION's Class Diagram__\n
         {static} + DISEASE_OTHER_ID : String
         {static} + DISEASE_OTHER_NAME : String
         {static} + EMAIL_PATTERN : String
-        {static} + FIREBASE_TABLE_ACCOUNT : String
-        {static} + FIREBASE_TABLE_ADVISE : String
-        {static} + FIREBASE_TABLE_DISEASE : String
-        {static} + FIREBASE_TABLE_DISEASE_ADVISE : String
-        {static} + FIREBASE_TABLE_DOCTOR_INFO : String
-        {static} + FIREBASE_TABLE_MEDICINE : String
-        {static} + FIREBASE_TABLE_MESSAGE : String
-        {static} + FIREBASE_TABLE_PREDICTION : String
-        {static} + FIREBASE_TABLE_PREDICTION_MEDICINE : String
-        {static} + FIREBASE_TABLE_PREDICTION_SYMPTOM : String
-        {static} + FIREBASE_TABLE_SESSION : String
-        {static} + FIREBASE_TABLE_SPECIALIZATION : String
-        {static} + FIREBASE_TABLE_SYMPTOM : String
-        {static} + STORAGE_IMG : String
     }
   }
   

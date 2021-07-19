@@ -3,6 +3,7 @@ package com.example.diseaseprediction.object;
 public class PredictionSymptom {
     private String  predictionID;
     private String symptomID;
+    private int status;
 
     public PredictionSymptom(String predictionID, String symptomID, int status) {
         this.predictionID = predictionID;
@@ -33,7 +34,5 @@ public class PredictionSymptom {
     public void setStatus(int status) {
         this.status = status;
     }
-
-    private int status;
 
 }

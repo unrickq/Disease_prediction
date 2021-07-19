@@ -267,10 +267,10 @@ title __OBJECT's Class Diagram__\n
   namespace com.example.diseaseprediction {
     namespace object {
       class com.example.diseaseprediction.object.PredictionMedicine {
-          ~ dosage : String
-          ~ medicineID : String
-          ~ predictionID : String
-          ~ status : int
+          - dosage : String
+          - medicineID : String
+          - predictionID : String
+          - status : int
           + PredictionMedicine()
           + getDosage()
           + getMedicineID()
