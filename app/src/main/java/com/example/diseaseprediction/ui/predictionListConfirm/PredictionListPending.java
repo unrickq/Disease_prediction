@@ -43,8 +43,8 @@ import java.util.List;
 public class PredictionListPending extends Fragment {
     private static final String TAG = "PredictionListConfirm";
 
-    FirebaseUser fUser;
-    DatabaseReference mRef;
+    private FirebaseUser fUser;
+    private DatabaseReference mRef;
     private TextView prediction_list_confirm_txt_title;
     private RecyclerView prediction_list_confirm_recycler_view_main;
     private List<Prediction> mPredictionListDoctor;

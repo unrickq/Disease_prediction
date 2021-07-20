@@ -2,6 +2,9 @@ package com.example.diseaseprediction.object;
 
 import java.util.Date;
 
+/**
+ * Specialization of doctor
+ */
 public class Specialization {
     private String specializationID;
     private String name;

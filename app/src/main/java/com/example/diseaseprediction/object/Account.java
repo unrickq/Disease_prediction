@@ -3,7 +3,7 @@ package com.example.diseaseprediction.object;
 import java.util.Date;
 
 /**
- * Account Class
+ * Account
  */
 public class Account {
     private String accountId;

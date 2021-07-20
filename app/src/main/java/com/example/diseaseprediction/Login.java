@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private DatabaseReference mRef;
 
-    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
+    private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     private int type = 1;
 
     @Override

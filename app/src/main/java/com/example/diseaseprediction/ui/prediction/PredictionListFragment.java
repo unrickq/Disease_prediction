@@ -46,8 +46,8 @@ import java.util.List;
 public class PredictionListFragment extends Fragment {
     private static final String TAG = "PredictionListFragment";
 
-    FirebaseUser fUser;
-    DatabaseReference mRef;
+    private FirebaseUser fUser;
+    private DatabaseReference mRef;
 
     private RecyclerView prediction_list_recycler_view_main;
     private List<Prediction> mPredictionList;

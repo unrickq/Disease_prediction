@@ -41,8 +41,8 @@ import java.util.List;
  */
 public class ConsultationListFragment extends Fragment {
     private static final String TAG = "ConsultationFragment";
-    FirebaseUser fUser;
-    DatabaseReference mRef;
+    private FirebaseUser fUser;
+    private DatabaseReference mRef;
 
     private RecyclerView consultation_list_recycler_view_main;
     private ConsultationAdapter consultationAdapter;

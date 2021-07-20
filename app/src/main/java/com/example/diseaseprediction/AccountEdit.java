@@ -54,7 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AccountEdit extends AppCompatActivity {
     private static final String TAG = "AccountEdit";
     private final int PICK_IMAGE_REQUEST = 71;
-    boolean isModified = false;
+    private boolean isModified = false;
     //Internet connection
     private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 

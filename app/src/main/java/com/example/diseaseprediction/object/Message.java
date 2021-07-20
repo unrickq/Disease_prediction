@@ -2,6 +2,9 @@ package com.example.diseaseprediction.object;
 
 import java.util.Date;
 
+/**
+ * Message
+ */
 public class Message {
 
     private String messageID;

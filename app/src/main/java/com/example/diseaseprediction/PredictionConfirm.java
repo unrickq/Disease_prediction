@@ -45,7 +45,7 @@ public class PredictionConfirm extends AppCompatActivity {
   //Internet connection
   private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
   //
-  ArrayList<Disease> diseasesList = new ArrayList<>();
+  private ArrayList<Disease> diseasesList = new ArrayList<>();
   // Firebase
   private DatabaseReference mRef;
   private FirebaseUser fUser;
