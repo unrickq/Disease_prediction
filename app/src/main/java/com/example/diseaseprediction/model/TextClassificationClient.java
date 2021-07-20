@@ -241,7 +241,6 @@ public class TextClassificationClient {
 
         loadDictionary(dictionaryFilevo);
         System.out.println("Token : " + token.toString());
-        System.out.println(get_synonymous("hôi miệng"));
         /* Load the text file into an array of words and their synonyms,
          * we can specify the size of the array too */
         String result = "";
