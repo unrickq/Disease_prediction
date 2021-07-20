@@ -257,7 +257,7 @@ public class HomeFragment extends Fragment {
                             Intent i = new Intent(getActivity(), Chat.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("receiverID", AppConstants.CHATBOT_ID);
-                            i.putExtra("sessionID", sessionID);
+                            i.putExtra("sessionID", ss.getSessionID());
                             context.startActivity(i);
                         }
                     }
