@@ -45,9 +45,11 @@ import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
+import com.example.diseaseprediction.object.PredictionMedicine;
 import com.example.diseaseprediction.object.PredictionSymptom;
 import com.example.diseaseprediction.object.Session;
 import com.example.diseaseprediction.object.Symptom;
+import com.example.diseaseprediction.object.SymptomMedicine;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -266,7 +268,7 @@ public class Chat extends AppCompatActivity {
                 try {
                     // user chat
                     Message message = new Message("", fUser.getUid()
-                        , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
+                            , getString(R.string.chatbox_button_predict), new Date(), sessionID, 1);
                     setMessageFirebase(message);
                     circularDot.setVisibility(View.VISIBLE);
                     loadingText.setVisibility(View.VISIBLE);
@@ -836,6 +838,10 @@ public class Chat extends AppCompatActivity {
                                                    @NonNull @NotNull DatabaseReference ref) {
                                 if (!tempSymptom.isEmpty() || tempSymptom != null) {
                                     createPredictionSymptom(pre.getPredictionID());
+                                    for (int i = 0; i < tempSymptom.size(); i++) {
+                                        getSymptomMedicine(tempSymptom.get(i).getSymptomID(), pre.getPredictionID());
+                                    }
+
                                 }
                                 endSession(sessionID);
                                 dialogPrediction(pre);
@@ -896,6 +902,61 @@ public class Chat extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "createPrediction()");
+        }
+    }
+
+
+    /**
+     * get symptom medicine
+     */
+    private void getSymptomMedicine(String sympID, String predictionID) {
+        try {
+            //get symptom ID by prediction ID
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SYMPTOM_MEDICINE);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        SymptomMedicine sm = sn.getValue(SymptomMedicine.class);
+                        if(sm.getSymptomID().equals(sympID)){
+                            addPredictionMedicine(sm.getMedicineID(), predictionID);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "checkPredictionStatus()");
+        }
+    }
+
+    /**
+     * get symptom medicine
+     */
+    private void addPredictionMedicine(String sympID, String predictionID) {
+        try {
+            //get symptom ID by prediction ID
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, sympID, "Default", 1));
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "checkPredictionStatus()");
         }
     }
 

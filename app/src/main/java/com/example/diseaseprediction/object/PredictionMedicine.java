@@ -10,6 +10,9 @@ public class PredictionMedicine {
     private String dosage;
     private int status;
 
+    public PredictionMedicine(){
+
+    }
     /**
      * Create new Prediction Medicine object
      *

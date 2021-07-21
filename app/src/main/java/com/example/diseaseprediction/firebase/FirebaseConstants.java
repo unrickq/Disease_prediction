@@ -16,10 +16,11 @@ public class FirebaseConstants {
     public static final String FIREBASE_TABLE_MEDICINE = "Medicine";
     public static final String FIREBASE_TABLE_MESSAGE = "Message";
     public static final String FIREBASE_TABLE_PREDICTION = "Prediction";
-    public static final String FIREBASE_TABLE_PREDICTION_MEDICINE = "Account";
+    public static final String FIREBASE_TABLE_PREDICTION_MEDICINE = "PredictionMedicine";
     public static final String FIREBASE_TABLE_PREDICTION_SYMPTOM = "PredictionSymptom";
     public static final String FIREBASE_TABLE_SESSION = "Session";
     public static final String FIREBASE_TABLE_SYMPTOM = "Symptom";
+    public static final String FIREBASE_TABLE_SYMPTOM_MEDICINE = "SymptomMedicine";
     public static final String STORAGE_IMG = "images";
     public static StorageReference sRef;
     public static DatabaseReference mRef;
