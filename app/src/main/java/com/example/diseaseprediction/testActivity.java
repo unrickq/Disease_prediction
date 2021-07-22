@@ -1,13 +1,24 @@
 package com.example.diseaseprediction;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.diseaseprediction.object.Session;
+import com.example.diseaseprediction.firebase.FirebaseConstants;
+import com.example.diseaseprediction.object.Medicine;
+import com.example.diseaseprediction.object.PredictionMedicine;
 import com.example.diseaseprediction.object.Symptom;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,37 +29,314 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
+import java.util.ArrayList;
 
 public class testActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SPEECH = 10;
     FirebaseUser firebaseUser;
-    DatabaseReference myRef;
+    DatabaseReference mRef;
+    LinearLayout layoutList;
+    Button buttonAdd, submit;
+
+    private ArrayList<Medicine> loadMedicineList = new ArrayList<>();
+    private ArrayList<PredictionMedicine> predictionMedicineList = new ArrayList<>();
+    private String predictionID = "-Mf8Z9n6PEIjCph3O4YB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        AssetManager am = this.getAssets();
+
+        layoutList = findViewById(R.id.layout_list);
+        buttonAdd = findViewById(R.id.button);
+        submit = findViewById(R.id.submit);
+
+        GetPredictionMedicineToUI(predictionID);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Create default prediction medicine layout
+                getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1 Viên");
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SavePredictionMedicineList();
+            }
+        });
+
+    }
+
+    private void SavePredictionMedicineList() {
+        //Check valid data of UI (Is empty or not)
+        if (checkMedicineLayout() == 0) {
+            //Check predictionMedicineList is empty or not
+            if (predictionMedicineList.size() == 0) {
+                Toast.makeText(testActivity.this, "Add prediction First!", Toast.LENGTH_SHORT).show();
+            } else {
+                removeAllPredictionMedicine(predictionID);
+                for (int i = 0; i < predictionMedicineList.size(); i++) {
+                    PredictionMedicine tmp = new PredictionMedicine(predictionID,
+                            predictionMedicineList.get(i).getMedicineID(),
+                            predictionMedicineList.get(i).getDosage(), 1);
+                    addPredictionMedicine(tmp);
+                }
+                Toast.makeText(testActivity.this, "Enter All Details Correctly!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * Load prediction medicine to UI
+     *
+     * @param predictionID prediction ID
+     */
+    private void GetPredictionMedicineToUI(String predictionID) {
         try {
-            InputStream fis = am.open("abc.txt");
-            StringBuilder sb = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            int count = 1;
-            while ((line = br.readLine()) != null) {
-                addDataSymptom(new Symptom(String.valueOf(count),  line,  "Default", new Date(),  new Date(), 1));
-                count++;
+            Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
+            QGetPredictionMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
+                        //
+                        getMedicineAndDosageToUI(pm.getMedicineID(), pm.getDosage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+//            Log.d(LOG_TAG, "checkPredictionStatus()");
+        }
+    }
+
+    private void getMedicineAndDosageToUI(String medicineID, String dosage) {
+        try {
+            Query QGetMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
+            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Medicine m = sn.getValue(Medicine.class);
+                        addView(m, dosage);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            //Log.d(LOG_TAG, "checkPredictionStatus()");
+        }
+    }
+
+
+    private void addView(Medicine setMedicine, String dosage) {
+        //Clear medicine array
+        loadMedicineList.clear();
+        //Find view of layout
+        final View item_add_medicine
+                = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
+        TextInputLayout item_add_medicine_editText_order_layout
+                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+        TextInputLayout item_add_medicine_editText_dosage_layout
+                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+        AutoCompleteTextView item_add_medicine_autoComplete
+                = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+        ImageView item_add_medicine_btn_delete
+                = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
+        TextView hiddenMedicineValue
+                = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+
+        //Load list Medicine
+        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE);
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    Medicine medicine = sn.getValue(Medicine.class);
+                    loadMedicineList.add(medicine);
+                }
+
+                ArrayAdapter arrayAdapter = new ArrayAdapter(testActivity.this, android.R.layout.simple_spinner_item, loadMedicineList);
+                item_add_medicine_autoComplete.setAdapter(arrayAdapter);
+
+                //Handle event item click AutoCompleteTextView
+                item_add_medicine_autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Medicine tmpM = (Medicine) adapterView.getItemAtPosition(i);
+                        hiddenMedicineValue.setText(tmpM.getMedicineID());
+                        if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                            item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                        } else {
+                            item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                //Set data to UI
+                item_add_medicine_autoComplete.setText(setMedicine.getName());
+                arrayAdapter.getFilter().filter(null);
+                //IF value equal to MEDICINE_OTHER_NAME. Then set visible editText
+                if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                    item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                } else {
+                    item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                }
+                hiddenMedicineValue.setText(setMedicine.getMedicineID());
+                item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+        //Button X
+        item_add_medicine_btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeView(item_add_medicine);
+            }
+        });
+        //Add layout
+        layoutList.addView(item_add_medicine);
+    }
+
+    //Check data on medicine layout
+    private int checkMedicineLayout() {
+        //List prediction medicine
+        predictionMedicineList.clear();
+        int checkValid = 0;
+        String otherMedicine = "";
+
+        //Loop all layout
+        for (int i = 0; i < layoutList.getChildCount(); i++) {
+            PredictionMedicine prm = new PredictionMedicine(predictionID, "Default", "Default", 1);
+            //Get view on each layout
+            View item_add_medicine = layoutList.getChildAt(i);
+            //Find UI
+            TextInputLayout item_add_medicine_editText_dosage_layout
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+            TextInputLayout item_add_medicine_editText_order_layout
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+            AutoCompleteTextView item_add_medicine_autoComplete
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+            TextView hiddenMedicineValue
+                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+
+            //Check valid on each layout
+            //If AutoCompleteTextView is other medicine
+            if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                otherMedicine = item_add_medicine_editText_order_layout.getEditText().getText().toString();
+                //Check if other_medicine_editText empty
+                if (!otherMedicine.trim().isEmpty()) {
+                    //Check editText dosage
+                    if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+                        prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+                        prm.setMedicineID(hiddenMedicineValue.getText().toString());
+                        // !!!!! Add note that other medicine name !!!!
+                        // !!!!!
+                    }
+                } else {
+                    //Other medicine empty
+                    item_add_medicine_editText_order_layout.setError(getString(R.string.error_field_empty));
+                    checkValid++;
+                    break;
+                }
+            }
+            //Check dosage empty
+            if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+                prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+                prm.setMedicineID(hiddenMedicineValue.getText().toString());
+            } else {
+                item_add_medicine_editText_dosage_layout.setError("Please fill this");
+                checkValid++;
+                break;
+            }
+            //Add all prediction medicine to list
+            predictionMedicineList.add(prm);
         }
+
+        return checkValid;
+    }
+
+    private void removeView(View view) {
+        layoutList.removeView(view);
+    }
+
+    /**
+     * Add prediction Medicine
+     *
+     * @param predictionMedicine predictionMedicine
+     */
+    private void addPredictionMedicine(PredictionMedicine predictionMedicine) {
+        try {
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    mRef.child(mRef.push().getKey())
+                            .setValue(predictionMedicine);
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+//            Log.d(LOG_TAG, "checkPredictionStatus()");
+        }
+    }
+
+    /**
+     * Remove all predictionMedicine by predictionID
+     *
+     * @param predictionID prediction ID
+     */
+    private void removeAllPredictionMedicine(String predictionID) {
+        try {
+            Query QGetMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
+            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        sn.getRef().removeValue();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+//            Log.d(LOG_TAG, "setMessageFirebase()");
+        }
+    }
 //        myRef = FirebaseDatabase.getInstance().getReference("Session");
 //        Query a2 = FirebaseDatabase.getInstance().getReference("PredictionSymptom")
 //                .child("ID tu push").setValue(object cua prediction symptom).
@@ -133,12 +421,12 @@ public class testActivity extends AppCompatActivity {
 //    }
 //
 //    void addDataMedicine(Medicine md){
-//        myRef = FirebaseDatabase.getInstance().getReference("Medicine");
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//        mRef = FirebaseDatabase.getInstance().getReference("Medicine");
+//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                md.setMedicineID(myRef.push().getKey());
-//                myRef.child(md.getMedicineID()).setValue(md);
+////                md.setMedicineID(mRef.push().getKey());
+//                mRef.child(md.getMedicineID()).setValue(md);
 //            }
 //
 //            @Override
@@ -162,16 +450,16 @@ public class testActivity extends AppCompatActivity {
 //
 //            }
 //        });
-    }
+//    }
 
-//
-    void addDataSymptom(Symptom sm){
-        myRef = FirebaseDatabase.getInstance().getReference("Symptom");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    //
+    void addDataSymptom(Symptom sm) {
+        mRef = FirebaseDatabase.getInstance().getReference("Symptom");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                sm.setSymptomsID(myRef.push().getKey());
-                myRef.child(sm.getSymptomID()).setValue(sm);
+                mRef.child(sm.getSymptomID()).setValue(sm);
             }
 
             @Override

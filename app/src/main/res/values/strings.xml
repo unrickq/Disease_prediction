@@ -76,7 +76,7 @@
     <string name="prediction_txt_disease_description_result">TextView</string>
     <string name="prediction_txt_symptom_title">Symptom</string>
     <string name="prediction_txt_symptom_result">TextView</string>
-    <string name="prediction_txt_medicine_title">Medicine</string>
+    <string name="prediction_txt_medicine_title">Medicine (Doctor has not confirmed)</string>
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Advice</string>
     <string name="prediction_txt_advice_result">TextView</string>
@@ -132,7 +132,7 @@
     <string name="defaut_session_ended">Session ended</string>
     <string name="default_not_enough_symptom">Our system can\'t detect what your symptoms are. Therefore the system is not able to make a prediction.</string>
     <string name="default_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctor to find out what your disease is </string>
-    <string name="Default_In_Process_Prediction">Please wait...</string>
+    <string name="default_in_process_prediction">Please wait...</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -157,7 +157,6 @@
     <string name="home_doctor_txt_prediction_title">Patient\'s disease</string>
     <string name="home_doctor_txt_consultation_title">Patient\'s consultation</string>
     <string name="home_doctor_all_prediction_txt_title">Pending Predictions</string>
-    <string name="prediction_list_confirm_txt_title">No pending prediction</string>
 
     <string name="account_info_btn_done">Done</string>
     <string name="account_info_txt_title">Personal Information</string>
@@ -208,6 +207,9 @@
     <string name="prediction_confirm_txt_medicine_name">Medicine name</string>
     <string name="prediction_confirm_txt_medicine_dosage">Dosage</string>
     <string name="prediction_txt_today">Today</string>
+    <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
+    <string name="prediction_result_medicine_updated">Medicine (Doctor confirmed)</string>
+    <string name="prediction_list_confirm_txt_title">No pending prediction</string>
 
     <string name="chatbox_button_predict">Give prediction</string>
     <string name="account_edit_txt_img_upload">Upload</string>
@@ -215,11 +217,13 @@
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>
     <string name="consultation_preview_message">You: %1$s</string>
     <string name="account_toolbar_edit">Edit</string>
-    <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
 
     <string name="disconnect_title">No Internet connection</string>
     <string name="disconnect_internet_btn_retry">Retry</string>
     <string name="disconnect_message">Please check your internet connection and try again later</string>
+    <string name="item_add_medicine_editText_dosage">Dosage</string>
+    <string name="item_add_medicine_editText_order_layout">Other medicine</string>
+    <string name="item_add_medicine_autoComplete">Select medicine</string>
 
 
     <string-array name="spinner_language">

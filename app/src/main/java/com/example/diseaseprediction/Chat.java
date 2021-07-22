@@ -247,7 +247,7 @@ public class Chat extends AppCompatActivity {
             chat_recycler_view = findViewById(R.id.chat_recycler_view);
             circularDot = findViewById(R.id.circularDot);
             loadingText = findViewById(R.id.loadingText);
-            loadingText.setText(getString(R.string.Default_In_Process_Prediction));
+            loadingText.setText(getString(R.string.default_in_process_prediction));
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");
@@ -939,14 +939,14 @@ public class Chat extends AppCompatActivity {
     /**
      * get symptom medicine
      */
-    private void addPredictionMedicine(String sympID, String predictionID) {
+    private void addPredictionMedicine(String medicineID, String predictionID) {
         try {
             //get symptom ID by prediction ID
             mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, sympID, "1", 1));
+                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1", 1));
                 }
 
                 @Override

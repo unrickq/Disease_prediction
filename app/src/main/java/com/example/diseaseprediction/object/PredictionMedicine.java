@@ -10,9 +10,6 @@ public class PredictionMedicine {
     private String dosage;
     private int status;
 
-    public PredictionMedicine(){
-
-    }
     /**
      * Create new Prediction Medicine object
      *
@@ -26,6 +23,13 @@ public class PredictionMedicine {
         this.medicineID = medicineID;
         this.dosage = dosage;
         this.status = status;
+    }
+
+    /**
+     * Constructor
+     */
+    public PredictionMedicine() {
+
     }
 
     /**

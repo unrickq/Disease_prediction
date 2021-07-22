@@ -224,10 +224,9 @@
                         android:text="@string/prediction_confirm_txt_medicine" />
 
                     <LinearLayout
-
+                        android:id="@+id/medicine_confirm_layout_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_top"
                         android:layout_weight="1"
                         android:orientation="horizontal"
                         android:layout_marginBottom="10dp">
@@ -235,18 +234,18 @@
                         <TextView
                             android:id="@+id/prediction_confirm_txt_medicine_name"
                             style="@style/subTitle_2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            tools:text="@string/prediction_confirm_txt_medicine_name" />
+                            android:layout_weight=".6"
+                            android:text="@string/prediction_confirm_txt_medicine_name" />
 
                         <TextView
                             android:id="@+id/prediction_confirm_txt_medicine_dosage"
                             style="@style/subTitle_2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            tools:text="@string/prediction_confirm_txt_medicine_dosage" />
+                            android:layout_weight=".4"
+                            android:text="@string/prediction_confirm_txt_medicine_dosage" />
 
                     </LinearLayout>
 
@@ -256,19 +255,29 @@
 <!--                        android:layout_height="wrap_content"-->
 <!--                        android:layout_gravity="center"-->
 <!--                        android:overScrollMode="never"-->
-<!--                        android:visibility="visible"-->
-<!--                        tools:listitem="@layout/item_medicine_view"-->
-<!--                        />-->
+                    <!--                        android:visibility="visible"-->
+                    <!--                        tools:listitem="@layout/item_medicine_view"-->
+                    <!--                        />-->
                     <LinearLayout
                         android:id="@+id/medicine_confirm_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/margin_top"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"></LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/medicine_confirm_layout_add_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"></LinearLayout>
 
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/medicine_confirm_img_add"
+                        android:layout_width="49dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add"
+                        android:visibility="gone" />
                 </LinearLayout>
 
             </LinearLayout>

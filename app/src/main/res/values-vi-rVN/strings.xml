@@ -66,7 +66,7 @@
     <string name="prediction_txt_disease_description_result">TextView</string>
     <string name="prediction_txt_symptom_title">Triệu chứng</string>
     <string name="prediction_txt_symptom_result">TextView</string>
-    <string name="prediction_txt_medicine_title">Thuốc</string>
+    <string name="prediction_txt_medicine_title">Thuốc (Bác sĩ chưa xác nhận)</string>
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Lời khuyên</string>
     <string name="prediction_txt_advice_result">TextView</string>
@@ -121,7 +121,7 @@
     <string name="defaut_session_ended">Phiên chat đã kết thúc</string>
     <string name="default_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
     <string name="default_not_enough_data">Nhưng chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
-    <string name="Default_In_Process_Prediction">Đang xử lý kết quả</string>
+    <string name="default_in_process_prediction">Đang xử lý kết quả</string>
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
@@ -133,7 +133,6 @@
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
     <string name="chat_dialog_prediction_title">Chẩn đoán đã được tạo</string>
     <string name="chat_dialog_prediction_msg">Chẩn đoán của bạn đã được tạo và sẽ được xác nhận bởi đội ngũ bác sĩ của chúng tôi trong thời gian sớm nhất.\nBạn có muốn kiểm tra trạng thái của chẩn đoán không?</string>
-
 
     <string name="exception_chat_load_user">Không thể tải người dùng</string>
 
@@ -164,6 +163,7 @@
     <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
     <string name="error_unknown_contactDev">Đã có lỗi xảy ra. Vui lòng liên hệ nhà phát triển để được hỗ trợ</string>
     <string name="error_login_phone_too_long">Số điện thoại không hợp lệ</string>
+    <string name="error_txt">Lỗi!</string>
 
     <string name="code_verify_txt_title">Nhập mã xác nhận</string>
     <string name="code_verify_edit_txt_code">Mã xác nhận</string>
@@ -175,7 +175,7 @@
     <string name="code_verify_txt_note">Xin hãy kiểm tra mã xác nhận trong ứng dụng Nhắn tin của bạn</string>
     <string name="code_verify_resend_title">Đã gửi mã xác nhận!</string>
     <string name="code_verify_resend_content">Mã xác nhận đã được gửi đi</string>
-    <string name="error_txt">Lỗi!</string>
+
     <string name="login_txt_by_type_doctor">Đăng nhập bằng tài khoản Bác sĩ</string>
 
     <string name="upload_img_waiting">Đang tải lên…</string>
@@ -192,14 +192,20 @@
     <string name="prediction_confirm_dialog_incorrect">Bạn có chắc chắn dự đoán này không chính xác?</string>
     <string name="prediction_confirm_dialog_correct">Bạn có chắc chắn dự đoán này chính xác</string>
     <string name="prediction_confirm_txt_medicine">Thuốc</string>
-    <string name="dialog_button_cancel">Huỷ</string>
     <string name="prediction_confirm_txt_disease_prediction_title">Xin hãy chọn bệnh đúng cho dự đoán này</string>
     <string name="prediction_confirm_dialog_thankyou">Cảm ơn bạn vì đã xác nhận!</string>
     <string name="prediction_confirm_txt_medicine_name">Tên thuốc</string>
     <string name="prediction_confirm_txt_medicine_dosage">Liều lượng</string>
-    <string name="dialog_button_ok">OK</string>
+    <string name="prediction_txt_today">Hôm nay</string>
+    <string name="prediction_result_medicine_updated">Thuốc (Bác sĩ đã xác nhận)</string>
     <string name="prediction_confirm_dialog_prediction_status_invalid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
+
     <string name="dialog_button_yes">Đúng</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_confirm_discard_changes">Bỏ thay đổi?</string>
+    <string name="dialog_account_info_fill_required">Xin hãy điền đầy đủ thông tin yêu cầu!</string>
+    <string name="dialog_button_cancel">Huỷ</string>
+
     <string name="account_txt_title_phone_format">&lt;b>Số điện thoại:&lt;/b>  %1$s</string>
     <string name="account_txt_title_email_format">&lt;b>Email:&lt;/b>  %1$s</string>
     <string name="account_txt_title_gender_format">&lt;b>Giới tính:&lt;/b>  %1$s</string>
@@ -209,16 +215,17 @@
     <string name="account_info_doctor_specialization_format">&lt;b>Chuyên khoa:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_description_format">&lt;b>Mô tả ngắn về bạn: &lt;/b>  %1$s</string>
     <string name="account_toolbar_edit">Chỉnh sửa</string>
-    <string name="prediction_txt_today">Hôm nay</string>
 
     <string name="chatbox_button_predict">Đưa ra dự đoán</string>
     <string name="account_edit_txt_img_upload">Tải lên</string>
-    <string name="dialog_confirm_discard_changes">Bỏ thay đổi?</string>
-    <string name="dialog_account_info_fill_required">Xin hãy điền đầy đủ thông tin yêu cầu!</string>
     <string name="consultation_preview_message">Bạn: %1$s</string>
 
     <string name="disconnect_title">Không có kết nối Internet</string>
     <string name="disconnect_message">Xin hãy kiểm tra kết nối Internet của bạn và thử lại sau</string>
-    <string name="disconnect_internet_btn_retry">Retry</string>
+    <string name="disconnect_internet_btn_retry">Thử lại</string>
+
+    <string name="item_add_medicine_editText_dosage">Liều lượng</string>
+    <string name="item_add_medicine_editText_order_layout">Loại thuốc khác</string>
+    <string name="item_add_medicine_autoComplete">Chọn thuốc</string>
 
 </resources>

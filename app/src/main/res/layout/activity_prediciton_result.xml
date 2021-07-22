@@ -204,14 +204,37 @@
                         android:layout_weight="1"
                         android:text="@string/prediction_txt_medicine_title" />
 
-                    <TextView
-                        android:id="@+id/prediction_listview_medicine_result"
-                        style="@style/subTitle_2"
+                    <LinearLayout
+                        android:id="@+id/medicine_confirm_layout_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/prediction_txt_medicine_title" />
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/prediction_confirm_txt_medicine_name"
+                            style="@style/subTitle_2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text="@string/prediction_confirm_txt_medicine_name" />
+
+                        <TextView
+                            android:id="@+id/prediction_confirm_txt_medicine_dosage"
+                            style="@style/subTitle_2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="@string/prediction_confirm_txt_medicine_dosage" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/medicine_confirm_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>

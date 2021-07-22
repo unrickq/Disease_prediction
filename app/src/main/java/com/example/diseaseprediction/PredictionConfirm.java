@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatSpinner;
 
 import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
@@ -30,9 +28,6 @@ import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.PredictionMedicine;
-import com.example.diseaseprediction.object.PredictionSymptom;
-import com.example.diseaseprediction.object.Symptom;
-import com.example.diseaseprediction.object.SymptomMedicine;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,13 +35,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PredictionConfirm extends AppCompatActivity {
 
@@ -55,11 +50,13 @@ public class PredictionConfirm extends AppCompatActivity {
     private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
     //
     private ArrayList<Disease> diseasesList = new ArrayList<>();
+    private ArrayList<Medicine> loadMedicineList = new ArrayList<>();
+    private ArrayList<PredictionMedicine> predictionMedicineList = new ArrayList<>();
     // Firebase
     private DatabaseReference mRef;
     private FirebaseUser fUser;
     // Layout
-    private ImageView prediction_confirm_toolbar_img_pre;
+    private ImageView prediction_confirm_toolbar_img_pre, medicine_confirm_img_add;
     private TextView prediction_confirm_txt_disease_description_result;
     private TextView prediction_confirm_txt_disease_prediction_result;
     private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout;
@@ -68,15 +65,15 @@ public class PredictionConfirm extends AppCompatActivity {
     private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
             prediction_confirm_prediction_confirm_btn;
     private ArrayAdapter diseaseAdapter;
-    private Prediction prediction;
+    private Prediction mPrediction;
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
-    private TextView prediction_confirm_txt_medicine_name ;
+    private TextView prediction_confirm_txt_medicine_name;
     private TextView prediction_confirm_txt_medicine_dosage;
-    private LinearLayout medicine_confirm_layout;
+    private LinearLayout medicine_confirm_layout, medicine_confirm_layout_add_list;
     private View item_medicine_view;
-    private TextView medicineName ;
-    private TextView medicineDosage ;
+    private TextView medicineName;
+    private TextView medicineDosage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +84,11 @@ public class PredictionConfirm extends AppCompatActivity {
 
         // Get prediction ID from Intent
         Intent intent = getIntent();
-        prediction = intent.getParcelableExtra("mPrediction");
-
+        mPrediction = intent.getParcelableExtra("mPrediction");
         setUpUI();
-        GetPredictionMedicine();
+        getPredictionMedicine();
         checkPredictionStatus();
-
+        GetPredictionMedicineToUI(mPrediction.getPredictionID());
     }
 
     @Override
@@ -139,7 +135,12 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_prediction_confirm_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    handleSaveData();
+//                    handleSaveData();
+                    if (handleSaveData() && checkPredictionMedicine()) {
+                        savePredicitonMedicine();
+                        savePrediction(fUser.getUid(), 1);
+                        displayThanksDialog();
+                    }
                 }
             });
             // Event for back button
@@ -147,6 +148,13 @@ public class PredictionConfirm extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
+                }
+            });
+            medicine_confirm_img_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Create default prediction medicine layout
+                    getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1 Viên");
                 }
             });
         } catch (Exception e) {
@@ -184,6 +192,8 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_txt_medicine_dosage.setText(R.string.prediction_confirm_txt_medicine_dosage);
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
             medicine_confirm_layout.removeAllViews();
+            medicine_confirm_img_add = findViewById(R.id.medicine_confirm_img_add);
+            medicine_confirm_layout_add_list = findViewById(R.id.medicine_confirm_layout_add_list);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,7 +216,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     // Get diseases and add to list
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Disease disease = sn.getValue(Disease.class);
-                        if (disease.getDiseaseID().equals(prediction.getDiseaseID())) {
+                        if (disease.getDiseaseID().equals(mPrediction.getDiseaseID())) {
                             selectedDisease = disease;
                         }
                         diseasesList.add(disease);
@@ -257,7 +267,7 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             ArrayList<Message> messagesList = new ArrayList<>();
 
-            String sessionID = prediction.getSessionID();
+            String sessionID = mPrediction.getSessionID();
             // get messages in session between user and chat bot
             mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -268,7 +278,7 @@ public class PredictionConfirm extends AppCompatActivity {
                         Message message = sn.getValue(Message.class);
                         try {
                             // Get messages that was sent by patient
-                            if (message.getSenderID().equals(prediction.getPatientID())) {
+                            if (message.getSenderID().equals(mPrediction.getPatientID())) {
                                 messagesList.add(message);
                             }
                         } catch (NullPointerException e) {
@@ -384,9 +394,14 @@ public class PredictionConfirm extends AppCompatActivity {
             // display
             prediction_confirm_disease_select_layout.setVisibility(View.VISIBLE);
             prediction_confirm_prediction_confirm_btn.setVisibility(View.VISIBLE);
+
+            medicine_confirm_img_add.setVisibility(View.VISIBLE);
+            medicine_confirm_layout_add_list.setVisibility(View.VISIBLE);
             // hide
             prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
             prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
+
+            medicine_confirm_layout.setVisibility(View.GONE);
             // set text
             prediction_confirm_txt_disease_prediction_result.setText(R.string.prediction_confirm_txt_disease_prediction_title);
         } catch (Exception e) {
@@ -398,7 +413,8 @@ public class PredictionConfirm extends AppCompatActivity {
     /**
      * This method is built for Confirm button. It will check and save updated data to Firebase
      */
-    private void handleSaveData() {
+    private boolean handleSaveData() {
+        boolean check = false;
         String note = "";
         String diseaseID = selectedDisease.getDiseaseID();
         // Check if doctor select other disease option
@@ -407,13 +423,17 @@ public class PredictionConfirm extends AppCompatActivity {
             note = prediction_confirm_disease_other.getText().toString();
             // check if disease name empty
             if (!note.trim().isEmpty()) {
-                savePrediction(fUser.getUid(), 1);
+//                savePrediction(fUser.getUid(), 1);
+                check = true;
             } else {
                 prediction_confirm_disease_other_layout.setError(getString(R.string.error_field_empty));
+                check = false;
             }
         } else { // doctor select known diseases
-            savePrediction(fUser.getUid(), 1);
+//            savePrediction(fUser.getUid(), 1);
+            check = true;
         }
+        return check;
     }
 
 
@@ -431,7 +451,7 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             // check if prediction status still equal to 0 i.e "waiting for confirmation"
             if (predictionStatus == 0) {
-                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
+                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
                 mRef.child("doctorID").setValue(doctorID);
                 // if prediction correct
                 if (type == 0) {
@@ -449,7 +469,7 @@ public class PredictionConfirm extends AppCompatActivity {
 
             mRef.child("dateUpdate").setValue(new Date());
 
-            displayThanksDialog();
+//            displayThanksDialog();
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "savePrediction()");
@@ -463,7 +483,7 @@ public class PredictionConfirm extends AppCompatActivity {
      */
     private void checkPredictionStatus() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -528,19 +548,17 @@ public class PredictionConfirm extends AppCompatActivity {
     /**
      * Get Prediction Medicine
      */
-    private void GetPredictionMedicine() {
+    private void getPredictionMedicine() {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
-            mRef.addValueEventListener(new ValueEventListener() {
+            Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(mPrediction.getPredictionID());
+            QGetPredictionMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
-
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        if (pm.getPredictionID().equals(prediction.getPredictionID())) {
-                            getMedicine(pm.getMedicineID(),pm.getDosage());
-
-                        }
+                        getMedicine(pm.getMedicineID(), pm.getDosage());
                     }
                 }
 
@@ -551,30 +569,30 @@ public class PredictionConfirm extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(LOG_TAG, "checkPredictionStatus()");
+            Log.d(LOG_TAG, "getPredictionMedicine()");
         }
     }
 
     /**
-     * get medicine
+     * Get medicine
+     * Then add medicine to layout medicine
      */
-    private void getMedicine(String medicineID,String dosage) {
+    private void getMedicine(String medicineID, String dosage) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE);
-            mRef.addValueEventListener(new ValueEventListener() {
+            Query QGetMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
+            QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine m = sn.getValue(Medicine.class);
-                        if (m.getMedicineID().equals(medicineID)) {
-                            item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view,null,false);
-                            medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
-                            medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
-                            medicineName.setText(m.getName());
-                            medicineDosage.setText(dosage);
-                            medicine_confirm_layout.addView(item_medicine_view);
-
-                        }
+                        item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
+                        medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
+                        medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
+                        medicineName.setText(m.getName());
+                        medicineDosage.setText(dosage);
+                        medicine_confirm_layout.addView(item_medicine_view);
                     }
                 }
 
@@ -585,7 +603,324 @@ public class PredictionConfirm extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(LOG_TAG, "checkPredictionStatus()");
+            Log.d(LOG_TAG, "getMedicine()");
+        }
+    }
+
+    /**
+     * Check valid of medicine_confirm_layout_add_list
+     */
+    private boolean checkPredictionMedicine() {
+        //Check valid data of UI (Is empty or not)
+        if (checkMedicineLayout() == 0) {
+            //Check predictionMedicineList is empty or not
+            if (predictionMedicineList.size() == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Save predictionMedicine
+     */
+    private void savePredicitonMedicine() {
+        try {
+            //Remove all prediction medicine in firebase
+            removeAllPredictionMedicine(mPrediction.getPredictionID());
+            //Then add new prediction medicine to firebase
+            for (int i = 0; i < predictionMedicineList.size(); i++) {
+                PredictionMedicine tmp = new PredictionMedicine(mPrediction.getPredictionID(),
+                        predictionMedicineList.get(i).getMedicineID(),
+                        predictionMedicineList.get(i).getDosage(), 1);
+                addPredictionMedicine(tmp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "savePredicitonMedicine()");
+        }
+    }
+
+    /**
+     * Load prediction medicine to UI
+     *
+     * @param predictionID prediction ID
+     */
+    private void GetPredictionMedicineToUI(String predictionID) {
+        try {
+            Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
+            QGetPredictionMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
+                        getMedicineAndDosageToUI(pm.getMedicineID(), pm.getDosage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "GetPredictionMedicineToUI()");
+        }
+    }
+
+    /**
+     * Get medicine and dosage
+     * Then load it to UI
+     *
+     * @param medicineID medicince ID
+     * @param dosage     dosage
+     */
+    private void getMedicineAndDosageToUI(String medicineID, String dosage) {
+        try {
+            Query QGetMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
+            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Medicine m = sn.getValue(Medicine.class);
+                        addView(m, dosage);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getMedicineAndDosageToUI()");
+        }
+    }
+
+
+    /**
+     * Add new row to medicine_confirm_layout_add_list
+     *
+     * @param mMedicine medicine
+     * @param dosage    dosage
+     */
+    private void addView(Medicine mMedicine, String dosage) {
+        try {
+            //Clear medicine array
+            loadMedicineList.clear();
+            //Find view of layout
+            final View item_add_medicine
+                    = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
+            TextInputLayout item_add_medicine_editText_order_layout
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+            TextInputLayout item_add_medicine_editText_dosage_layout
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+            AutoCompleteTextView item_add_medicine_autoComplete
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+            ImageView item_add_medicine_btn_delete
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
+            TextView hiddenMedicineValue
+                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+
+            //Load list Medicine
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Medicine medicine = sn.getValue(Medicine.class);
+                        loadMedicineList.add(medicine);
+                    }
+
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(PredictionConfirm.this, android.R.layout.simple_spinner_item, loadMedicineList);
+                    item_add_medicine_autoComplete.setAdapter(arrayAdapter);
+
+                    //Handle event item click AutoCompleteTextView
+                    item_add_medicine_autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Medicine tmpM = (Medicine) adapterView.getItemAtPosition(i);
+                            hiddenMedicineValue.setText(tmpM.getMedicineID());
+                            if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                                item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                            } else {
+                                item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+
+                    //Set data to UI
+                    item_add_medicine_autoComplete.setText(mMedicine.getName());
+                    arrayAdapter.getFilter().filter(null);
+                    //IF value equal to MEDICINE_OTHER_NAME. Then set visible editText
+                    if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                        item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                    } else {
+                        item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                    }
+                    hiddenMedicineValue.setText(mMedicine.getMedicineID());
+                    item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+
+            //Button X
+            item_add_medicine_btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeView(item_add_medicine);
+                }
+            });
+            //Add layout
+            medicine_confirm_layout_add_list.addView(item_add_medicine);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "addView()");
+        }
+    }
+
+    /**
+     * Check data on medicine layout
+     *
+     * @return number of invalid checked
+     */
+    private int checkMedicineLayout() {
+        //List prediction medicine
+        predictionMedicineList.clear();
+        int checkValid = 0;
+        String otherMedicine = "";
+
+        try {
+            //Loop all layout
+            for (int i = 0; i < medicine_confirm_layout_add_list.getChildCount(); i++) {
+                PredictionMedicine prm = new PredictionMedicine(mPrediction.getPredictionID(), "Default", "Default", 1);
+                //Get view on each layout
+                View item_add_medicine = medicine_confirm_layout_add_list.getChildAt(i);
+                //Find UI
+                TextInputLayout item_add_medicine_editText_dosage_layout
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+                TextInputLayout item_add_medicine_editText_order_layout
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+                AutoCompleteTextView item_add_medicine_autoComplete
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+                TextView hiddenMedicineValue
+                        = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+
+                //Check valid on each layout
+                //If AutoCompleteTextView is other medicine
+                if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+                    otherMedicine = item_add_medicine_editText_order_layout.getEditText().getText().toString();
+                    //Check if other_medicine_editText empty
+                    if (!otherMedicine.trim().isEmpty()) {
+                        //Check editText dosage
+                        if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+                            prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+                            prm.setMedicineID(hiddenMedicineValue.getText().toString());
+                            // !!!!! Add note that other medicine name !!!!
+                            // !!!!!
+                        }
+                    } else {
+                        //Other medicine empty
+                        item_add_medicine_editText_order_layout.setError(getString(R.string.error_field_empty));
+                        checkValid++;
+                        break;
+                    }
+                }
+                //Check dosage empty
+                if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+                    prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+                    prm.setMedicineID(hiddenMedicineValue.getText().toString());
+                } else {
+                    item_add_medicine_editText_dosage_layout.setError("Please fill this");
+                    checkValid++;
+                    break;
+                }
+                //Add all prediction medicine to list
+                predictionMedicineList.add(prm);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "checkMedicineLayout()");
+        }
+        return checkValid;
+    }
+
+    /**
+     * Remove view in layout add_medicine
+     *
+     * @param view view
+     */
+    private void removeView(View view) {
+        medicine_confirm_layout_add_list.removeView(view);
+    }
+
+    /**
+     * Add new prediction Medicine to firebase
+     *
+     * @param predictionMedicine predictionMedicine
+     */
+    private void addPredictionMedicine(PredictionMedicine predictionMedicine) {
+        try {
+            DatabaseReference newRef = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
+            newRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    newRef.child(mRef.push().getKey())
+                            .setValue(predictionMedicine);
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "addPredictionMedicine()");
+        }
+    }
+
+    /**
+     * Remove all predictionMedicine by predictionID
+     *
+     * @param predictionID prediction ID
+     */
+    private void removeAllPredictionMedicine(String predictionID) {
+        try {
+            //Find all prediction medicine where predictionID = "value"
+            Query QGetMedicine = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
+            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        sn.getRef().removeValue();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "removeAllPredictionMedicine()");
         }
     }
 
