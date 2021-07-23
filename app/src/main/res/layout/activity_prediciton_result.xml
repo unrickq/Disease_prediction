@@ -22,18 +22,18 @@
             android:id="@+id/prediction_toolbar_img_pre"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:padding="2dp"
             android:layout_centerVertical="true"
+            android:padding="2dp"
             android:src="@drawable/ic_back_1" />
 
         <TextView
             android:id="@+id/prediction_title"
+            style="@style/heading_7_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            style="@style/heading_7_bold"
 
             android:text="@string/prediction_title_result" />
 
@@ -43,6 +43,7 @@
         android:id="@+id/elevation"
         android:layout_width="match_parent"
         android:layout_height="6dp"
+        android:elevation="1dp"
         android:background="@drawable/shadow"
         app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_tool_bar" />
 
@@ -51,7 +52,7 @@
         android:layout_height="0dp"
         android:paddingLeft="@dimen/padding"
         android:paddingRight="@dimen/padding"
-        app:layout_constraintBottom_toTopOf="@+id/prediction_btn_back"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prediction_confirm_tool_bar">
@@ -59,7 +60,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_top"
             android:orientation="vertical">
 
             <LinearLayout
@@ -174,68 +174,82 @@
 
             </LinearLayout>
 
+            <!--            Medicine-->
             <LinearLayout
+                android:id="@+id/prediction_result_medicine_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal"
-                android:padding="@dimen/margin_top">
+                android:orientation="vertical"
+                android:padding="@dimen/margin_top"
+                android:visibility="visible">
 
-                <ImageView
-                    android:id="@+id/prediction_img_medicine"
-                    android:layout_width="61dp"
-                    android:layout_height="31dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_prediction_medicine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_top"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/prediction_img_medicine"
+                        android:layout_width="61dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_prediction_medicine" />
 
                     <TextView
                         android:id="@+id/prediction_txt_medicine_title"
                         style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_top"
                         android:layout_weight="1"
                         android:text="@string/prediction_txt_medicine_title" />
 
-                    <LinearLayout
-                        android:id="@+id/medicine_confirm_layout_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/prediction_confirm_txt_medicine_name"
-                            style="@style/subTitle_2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".6"
-                            android:text="@string/prediction_confirm_txt_medicine_name" />
-
-                        <TextView
-                            android:id="@+id/prediction_confirm_txt_medicine_dosage"
-                            style="@style/subTitle_2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".4"
-                            android:text="@string/prediction_confirm_txt_medicine_dosage" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/medicine_confirm_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"></LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/medicine_confirm_layout_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="@dimen/margin_top" />
+
+
+                    <TextView
+                        android:id="@+id/prediction_confirm_txt_medicine_name"
+                        style="@style/subTitle_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".6"
+                        android:text="@string/prediction_confirm_txt_medicine_name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/prediction_confirm_txt_medicine_dosage"
+                        style="@style/subTitle_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:text="@string/prediction_confirm_txt_medicine_dosage"
+
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/medicine_confirm_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical" />
 
             </LinearLayout>
 
@@ -285,23 +299,23 @@
                 android:id="@+id/prediction_layout_contact_doctor"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/margin_top"
+                android:orientation="horizontal"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/prediction_txt_contact_doctor"
                     android:layout_width="wrap_content"
-                    android:padding="5dp"
                     android:layout_height="30dp"
+                    android:padding="5dp"
                     android:text="@string/prediction_txt_contact_doctor"
                     app:cornerRadius="@dimen/btn_corner_radius" />
 
                 <TextView
                     android:id="@+id/prediction_txt_contact_doctor_click"
-                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
+                    android:padding="5dp"
                     android:text="@string/prediction_btn_contact_doctor"
                     android:textColor="@color/theme_1_P"
                     app:cornerRadius="@dimen/btn_corner_radius" />
@@ -310,17 +324,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <Button
-        android:id="@+id/prediction_btn_back"
-        android:layout_width="345dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="@string/prediction_btn_back"
-        app:cornerRadius="@dimen/btn_corner_radius"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

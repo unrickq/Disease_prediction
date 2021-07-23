@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -9,25 +10,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <!--        Placeholder-->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/margin_top" />
+
         <TextView
             android:id="@+id/item_medicine_txt_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".60"
-            android:text="@string/prediction_confirm_txt_medicine_name" />
+            android:textColor="@color/black"
+            tools:text="@string/prediction_confirm_txt_medicine_name" />
 
         <TextView
             android:id="@+id/item_medicine_txt_dosage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".40"
-            android:text="@string/prediction_confirm_txt_medicine_dosage" />
+            android:textColor="@color/black"
+            tools:text="@string/prediction_confirm_txt_medicine_dosage" />
     </LinearLayout>
 
     <View
         android:id="@+id/medicine_item_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="24dp"
         android:background="#E2E2E2" />
 </LinearLayout>

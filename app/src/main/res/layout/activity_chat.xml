@@ -71,6 +71,7 @@
         android:id="@+id/elevation"
         android:layout_width="match_parent"
         android:layout_height="6dp"
+        android:elevation="1dp"
         android:background="@drawable/shadow"
         app:layout_constraintTop_toBottomOf="@+id/chat_tool_bar" />
 

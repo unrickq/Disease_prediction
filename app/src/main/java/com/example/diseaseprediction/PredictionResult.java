@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -63,12 +62,13 @@ public class PredictionResult extends AppCompatActivity {
     private Prediction mPrediction;
     private String sessionID;
 
-    private TextView prediction_txt_disease_result, prediction_txt_disease_description_result, prediction_listview_advice_result,
-            prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title, prediction_txt_medicine_title;
+    private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
+        prediction_listview_advice_result,
+        prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
+        prediction_txt_medicine_title;
     private ImageView prediction_img_status, prediction_toolbar_img_pre;
     private LinearLayout prediction_layout_contact_doctor;
-    private Button prediction_btn_back;
-    private LinearLayout medicine_confirm_layout;
+    private LinearLayout medicine_confirm_layout, prediction_result_medicine_layout;
     private View item_medicine_view;
     private TextView medicineName;
     private TextView medicineDosage;
@@ -91,8 +91,8 @@ public class PredictionResult extends AppCompatActivity {
                 for (int i = 0; i < listAdapter.getCount(); i++) {
                     View listItem = listAdapter.getView(i, null, listView);
                     listItem.measure(
-                            View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                        View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                     totalHeight += listItem.getMeasuredHeight();
                 }
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
@@ -124,16 +124,11 @@ public class PredictionResult extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        prediction_btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
         prediction_txt_contact_doctor_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+                mRef =
+                    FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -186,9 +181,9 @@ public class PredictionResult extends AppCompatActivity {
             prediction_img_status = findViewById(R.id.prediction_img_status);
             prediction_toolbar_img_pre = findViewById(R.id.prediction_toolbar_img_pre);
             prediction_txt_contact_doctor_click = findViewById(R.id.prediction_txt_contact_doctor_click);
-            prediction_btn_back = findViewById(R.id.prediction_btn_back);
             prediction_layout_contact_doctor = findViewById(R.id.prediction_layout_contact_doctor);
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
+            prediction_result_medicine_layout = findViewById(R.id.prediction_result_medicine_layout);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "findView()");
@@ -202,7 +197,8 @@ public class PredictionResult extends AppCompatActivity {
      */
     private void getDataToUI(Prediction mPrediction) {
         try {
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+            mRef =
+                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -221,7 +217,7 @@ public class PredictionResult extends AppCompatActivity {
                                 prediction_img_status.setImageResource(R.drawable.ic_correct);
                             } else if (pr.getStatus() == 2) {
                                 prediction_layout_contact_doctor.setVisibility(View.VISIBLE);
-                                prediction_txt_status.setText(getString(R.string.prediction_txt_status_correct));
+                                prediction_txt_status.setText(getString(R.string.prediction_txt_status_incorrect));
 //                            prediction_txt_status.setTextColor(Color.parseColor("#ff2b55"));
                                 prediction_txt_status.setTextColor(getResources().getColor(R.color.text_success));
 //                            prediction_img_status.setImageResource(R.drawable.ic_incorrect);
@@ -233,7 +229,8 @@ public class PredictionResult extends AppCompatActivity {
                     }
 
                     //Get disease
-                    mRef2 = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(mPrediction.getDiseaseID());
+                    mRef2 =
+                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(mPrediction.getDiseaseID());
                     mRef2.addValueEventListener(new ValueEventListener() {
                         @SuppressLint("SetTextI18n")
                         @Override
@@ -242,15 +239,10 @@ public class PredictionResult extends AppCompatActivity {
                             // prediction correct
                             prediction_txt_disease_result.setText(disease.getName());
                             prediction_txt_disease_description_result.setText(disease.getDescription());
-                            // prediction incorrect
-                            if (pr.getStatus() == 2) {
-                                prediction_txt_disease_title.setText(getString(R.string.prediction_result_disease_updated));
-                                prediction_txt_medicine_title.setText(R.string.prediction_result_medicine_updated);
-                                // doctor select unknown disease
-                                if (pr.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
-                                    String unknownDisease = pr.getNotes();
-                                    prediction_txt_disease_result.setText(unknownDisease);
-                                }
+                            // doctor select unknown disease
+                            if (pr.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
+                                String unknownDisease = pr.getNotes();
+                                prediction_txt_disease_result.setText(unknownDisease);
                             }
                         }
 
@@ -258,6 +250,14 @@ public class PredictionResult extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
+
+                    // Load medicine if prediction is confirmed
+                    if (pr.getStatus() != 0) {
+                        prediction_result_medicine_layout.setVisibility(View.VISIBLE);
+                        getPredictionMedicine();
+                    } else {
+                        prediction_result_medicine_layout.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
@@ -279,7 +279,8 @@ public class PredictionResult extends AppCompatActivity {
                             }
                         } catch (NullPointerException e) {
                             Log.e(TAG, "getDataToUI: TypeID Null", e);
-                            Toast.makeText(PredictionResult.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PredictionResult.this, getString(R.string.error_unknown_contactDev),
+                                Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -291,7 +292,7 @@ public class PredictionResult extends AppCompatActivity {
             });
 
             getAdviseList(mPrediction.getDiseaseID());
-            getPredictionMedicine();
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "getDataToUI()");
@@ -377,12 +378,14 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDTwo is receiver
      */
     private void createSessionWithCDoctor(String doctorID) {
-        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+        mRef =
+            FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 Prediction newPrediction = snapshot.getValue(Prediction.class);
-                //Prediction has no session with doctor -> create new session and send welcome msg then open Chat activity
+                //Prediction has no session with doctor -> create new session and send welcome msg then open Chat
+                // activity
                 if (newPrediction.getDoctorSessionID().equals("Default")) {
                     mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
                     mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -391,17 +394,20 @@ public class PredictionResult extends AppCompatActivity {
                             boolean isFound = false;
 
                             // Create new Session
-                            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
+                            mRef =
+                                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SESSION);
                             sessionID = mRef.push().getKey();
                             Session session = new Session(sessionID, new Date(), new Date(), 1);
                             session.setAccOneAndAccTwo(fUser.getUid(), doctorID);
                             mRef.child(sessionID).setValue(session);
 
                             //Send message started
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                            DatabaseReference reference =
+                                FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
-                            Message msg = new Message(reference.push().getKey(), doctorID, getString(R.string.default_chatbot_hello)
-                                    , new Date(), sessionID, 1);
+                            Message msg = new Message(reference.push().getKey(), doctorID,
+                                getString(R.string.default_chatbot_hello)
+                                , new Date(), sessionID, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                             //Update doctor session of prediction
                             updateDoctorSessionInPrediction(newPrediction.getPredictionID(), sessionID);
@@ -459,8 +465,8 @@ public class PredictionResult extends AppCompatActivity {
     private void getPredictionMedicine() {
         try {
             Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
-                    .orderByChild("predictionID").equalTo(mPrediction.getPredictionID());
+                .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                .orderByChild("predictionID").equalTo(mPrediction.getPredictionID());
             QGetPredictionMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -482,14 +488,14 @@ public class PredictionResult extends AppCompatActivity {
     }
 
     /**
-     * Get medicine
+     * Get medicine.
      * Then set data to layout of medicine
      */
     private void getMedicine(String medicineID, String dosage) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                    .orderByChild("medicineID").equalTo(medicineID);
+                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                .orderByChild("medicineID").equalTo(medicineID);
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
