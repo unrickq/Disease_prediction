@@ -66,13 +66,13 @@
     <string name="prediction_txt_disease_description_result">TextView</string>
     <string name="prediction_txt_symptom_title">Triệu chứng</string>
     <string name="prediction_txt_symptom_result">TextView</string>
-    <string name="prediction_txt_medicine_title">Thuốc (Bác sĩ chưa xác nhận)</string>
+    <string name="prediction_txt_medicine_title">Thuốc</string>
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Lời khuyên</string>
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">Chưa có chẩn đoán của bạn</string>
     <string name="prediction_txt_status_correct">Đã xác nhận</string>
-    <string name="prediction_txt_status_incorrect">Đã xác nhận! Bệnh đã được thay đổi</string>
+    <string name="prediction_txt_status_incorrect">Đã xác nhận! Chẩn đoán đã được cập nhật</string>
     <string name="prediction_txt_status_pending">Đang chờ xác nhận từ bác sĩ…</string>
     <string name="prediction_txt_status">Trạng thái</string>
     <string name="prediction_title_result">Chẩn đoán</string>
@@ -112,12 +112,13 @@
     <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
     <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
     <string name="default_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
-    <string name="default_chatbot_disease">Nên chúng tôi đưa ra dự đoán là&#160;</string>
+    <string name="default_chatbot_disease">Nên chúng tôi đưa ra dự đoán là: %1$s</string>
     <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
     <string name="default_email_regex">Vui lòng nhập đúng địa chỉ email</string>
     <string name="default_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
     <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
     <string name="default_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
+    <string name="default_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
     <string name="defaut_session_ended">Phiên chat đã kết thúc</string>
     <string name="default_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
     <string name="default_not_enough_data">Nhưng chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
@@ -131,6 +132,9 @@
     <string name="chat_menu_patient_view_info">Xem thông tin bác sĩ</string>
     <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
+    <string name="chat_dialog_attention_title">Lưu ý</string>
+    <string name="chat_dialog_attention_description">Chào mừng bạn đến với chức năng \"Lấy chẩn đoán bệnh\".\n Dưới đây là một số lưu ý bạn nên làm theo để hệ thống có thể đưa ra kết quả chính xác nhất:\n 1) Bạn cần nhập triệu chứng một cách rõ ràng.\n2) Nên tách các triệu chứng khác nhau bằng dấu phây.\n3) Không nên dùng thể phủ định</string>
+    <string name="chat_dialog_attention_btn_understand">Tôi đã hiểu</string>
     <string name="chat_dialog_prediction_title">Chẩn đoán đã được tạo</string>
     <string name="chat_dialog_prediction_msg">Chẩn đoán của bạn đã được tạo và sẽ được xác nhận bởi đội ngũ bác sĩ của chúng tôi trong thời gian sớm nhất.\nBạn có muốn kiểm tra trạng thái của chẩn đoán không?</string>
 
@@ -227,5 +231,6 @@
     <string name="item_add_medicine_editText_dosage">Liều lượng</string>
     <string name="item_add_medicine_editText_order_layout">Loại thuốc khác</string>
     <string name="item_add_medicine_autoComplete">Chọn thuốc</string>
+    <string name="prediction_confirm_add_medicine">Thêm thuốc</string>
 
 </resources>

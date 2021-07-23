@@ -76,13 +76,13 @@
     <string name="prediction_txt_disease_description_result">TextView</string>
     <string name="prediction_txt_symptom_title">Symptom</string>
     <string name="prediction_txt_symptom_result">TextView</string>
-    <string name="prediction_txt_medicine_title">Medicine (Doctor has not confirmed)</string>
+    <string name="prediction_txt_medicine_title">Medicine</string>
     <string name="prediction_txt_medicine_result">TextView</string>
     <string name="prediction_txt_advice_title">Advice</string>
     <string name="prediction_txt_advice_result">TextView</string>
     <string name="prediction_list_txt_title">No prediction</string>
     <string name="prediction_txt_status_correct">Doctor confirmed!</string>
-    <string name="prediction_txt_status_incorrect">Doctor confirmed! Disease updated</string>
+    <string name="prediction_txt_status_incorrect">Doctor confirmed and prediction updated</string>
     <string name="prediction_txt_status_pending">Waiting for doctor confirmation… </string>
     <string name="prediction_txt_status">Status</string>
     <string name="prediction_title_result">Prediction</string>
@@ -123,12 +123,14 @@
     <string name="default_empty_specialization">Please select specialization</string>
     <string name="default_speech_support_device">Your Device Don\'t Support Speech Input</string>
     <string name="default_chatbot_symptom">Your symptoms: &#160;</string>
-    <string name="default_chatbot_disease">So we make predictions is</string>
+    <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
+    <string name="default_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
+    <string name="default_chatbot_disease">So we make predictions is: %1$s</string>
     <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
     <string name="default_email_regex">Please enter the correct email</string>
     <string name="default_chatbot_continue_symptom">Do you have any other symptoms?</string>
     <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
-    <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
+
     <string name="defaut_session_ended">Session ended</string>
     <string name="default_not_enough_symptom">Our system can\'t detect what your symptoms are. Therefore the system is not able to make a prediction.</string>
     <string name="default_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctor to find out what your disease is </string>
@@ -143,7 +145,7 @@
     <string name="chat_menu_doctor_view_info">View patient\'s information</string>
     <string name="chat_menu_end_session">End session</string>
     <string name="chat_dialog_prediction_title">Prediction created</string>
-    <string name="chat_dialog_prediction_msg">Your prediction has been created and will be confirmed by one of our doctor soon. Do you want to check the status of your prediction?</string>
+    <string name="chat_dialog_prediction_msg">Your prediction has been created and will be confirmed by our doctors soon. Do you want to check the status of your prediction?</string>
 
 
     <string name="exception_chat_load_user">Can\'t load user</string>
@@ -224,6 +226,10 @@
     <string name="item_add_medicine_editText_dosage">Dosage</string>
     <string name="item_add_medicine_editText_order_layout">Other medicine</string>
     <string name="item_add_medicine_autoComplete">Select medicine</string>
+    <string name="prediction_confirm_add_medicine">Add new Medicine</string>
+    <string name="chat_dialog_attention_title">Attention!</string>
+    <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n 1) You need to enter your symptoms clearly.\n2) Different symptoms should be separated by commas.\n3) Negative sentences should not be used</string>
+    <string name="chat_dialog_attention_btn_understand">I understand</string>
 
 
     <string-array name="spinner_language">
