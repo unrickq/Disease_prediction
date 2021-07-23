@@ -68,15 +68,15 @@ public class HomeFragment extends Fragment {
     private PredictionAdapter patientPredictionAdapter;
 
     private TextView home_txt_prediction_see_more, home_txt_consultation_see_more,
-            home_doctor_all_prediction_txt_see_more,
-            home_txt_title, home_txt_prediction_title, home_txt_consultation_title,
-            home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
-            home_consultation_no_consultation_title;
+        home_doctor_all_prediction_txt_see_more,
+        home_txt_title, home_txt_prediction_title, home_txt_consultation_title,
+        home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
+        home_consultation_no_consultation_title;
     private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
     private SearchView home_search_view;
     private NavigationView navigationView;
     private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
-            home_doctor_all_prediction_recycle_view;
+        home_doctor_all_prediction_recycle_view;
     private ShimmerFrameLayout home_shimmer_pending_prediction, home_shimmer_prediction, home_shimmer_consultation;
 
     private Context context;
@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 navigationView.getMenu().getItem(2).setChecked(true);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new PredictionListPending()).commit();
+                    new PredictionListPending()).commit();
             }
         });
 
@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 navigationView.getMenu().getItem(3).setChecked(true);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new PredictionListFragment()).commit();
+                    new PredictionListFragment()).commit();
             }
         });
 
@@ -158,7 +158,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 navigationView.getMenu().getItem(4).setChecked(true);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new ConsultationListFragment()).commit();
+                    new ConsultationListFragment()).commit();
 
             }
         });
@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
             home_txt_consultation_title = view.findViewById(R.id.home_txt_consultation_title);
 
             home_doctor_all_prediction_no_prediction_title =
-                    view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
+                view.findViewById(R.id.home_doctor_all_prediction_no_prediction_title);
             home_prediction_no_prediction_title = view.findViewById(R.id.home_prediction_no_prediction_title);
             home_consultation_no_consultation_title = view.findViewById(R.id.home_consultation_no_consultation_title);
 
@@ -249,9 +249,9 @@ public class HomeFragment extends Fragment {
 
                         //Check to find consultation is exist -> open Chat activity
                         if (ss != null &&
-                                ss.getAccountIDOne().equals(accountIDOne) &&
-                                ss.getAccountIDTwo().equals(accountIDTwo) &&
-                                ss.getStatus() == 1) {
+                            ss.getAccountIDOne().equals(accountIDOne) &&
+                            ss.getAccountIDTwo().equals(accountIDTwo) &&
+                            ss.getStatus() == 1) {
                             isFound = true;
                             //Send session id
                             Intent i = new Intent(getActivity(), Chat.class);
@@ -270,7 +270,8 @@ public class HomeFragment extends Fragment {
                         mRef.child(sessionID).setValue(session);
 
                         //Send message started
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                        DatabaseReference reference =
+                            FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                         Message msg = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
                             context.getString(R.string.default_chatbot_hello)
@@ -318,10 +319,15 @@ public class HomeFragment extends Fragment {
                     if (consultationLists.size() > 0) {
                         // Update UI
                         home_consultation_no_consultation_title.setVisibility(View.GONE);
-                        home_txt_consultation_see_more.setVisibility(View.VISIBLE);
+                        // Display 'See more' button if list size greater than the defined number
+                        if (consultationLists.size() > AppConstants.HOME_NUM_ITEMS_CONSULTATION) {
+                            home_txt_consultation_see_more.setVisibility(View.VISIBLE);
+                        }
                         //Reverse list index to get latest consultation
                         Collections.reverse(consultationLists);
-                        consultationAdapter = new ConsultationAdapter(context, consultationLists, 3);
+
+                        consultationAdapter = new ConsultationAdapter(context, consultationLists,
+                            AppConstants.HOME_NUM_ITEMS_CONSULTATION);
                         home_recycler_view_consultation.setAdapter(consultationAdapter);
                     } else {
                         home_consultation_no_consultation_title.setVisibility(View.VISIBLE);
@@ -352,14 +358,15 @@ public class HomeFragment extends Fragment {
         try {
             mPredictionListDoctor = new ArrayList<>();
             //Find specialization id of doctor account
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
+            mRef =
+                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO).child(fUser.getUid());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     mDoctor = snapshot.getValue(DoctorInfo.class);
                     //Go to prediction
                     Query predictionByDateCreate =
-                            FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
+                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).orderByChild("dateCreate/time");
                     predictionByDateCreate.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -387,12 +394,13 @@ public class HomeFragment extends Fragment {
                             if (mPredictionListDoctor.size() > 0) {
                                 // Update UI
                                 home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
-                                home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
-                                //Reverse list index to get latest consultation
-//              Collections.reverse(mPredictionListDoctor);
+                                // Display 'See more' button if list size greater than the defined number
+                                if (mPredictionListDoctor.size() > AppConstants.HOME_NUM_ITEMS_PENDING_PREDICTION) {
+                                    home_doctor_all_prediction_txt_see_more.setVisibility(View.VISIBLE);
+                                }
                                 // Load list to adapter
                                 doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                                        mPredictionListDoctor, 0, 3);
+                                    mPredictionListDoctor, 0, AppConstants.HOME_NUM_ITEMS_PENDING_PREDICTION);
                                 home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
                             } else {
                                 home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
@@ -457,12 +465,16 @@ public class HomeFragment extends Fragment {
                     if (mPredictionListPatient.size() > 0) {
                         //Update UI
                         home_prediction_no_prediction_title.setVisibility(View.GONE);
-                        home_txt_prediction_see_more.setVisibility(View.VISIBLE);
+                        // Display 'See more' button if list size greater than the defined number
+                        if (mPredictionListPatient.size() > AppConstants.HOME_NUM_ITEMS_PREDICTION) {
+                            home_txt_prediction_see_more.setVisibility(View.VISIBLE);
+                        }
                         //Reverse list index to get latest prediction
                         Collections.reverse(mPredictionListPatient);
                         // Load list to adapter
                         patientPredictionAdapter = new PredictionAdapter(context,
-                                mPredictionListPatient, 1, 3);
+                            mPredictionListPatient, 1, AppConstants.HOME_NUM_ITEMS_PREDICTION);
+
                         home_recycler_view_disease.setAdapter(patientPredictionAdapter);
                     } else if (typeAcc == 1) {
                         home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
@@ -543,7 +555,8 @@ public class HomeFragment extends Fragment {
         try {
             //Get disease
             if (!fUser.getUid().equals("")) {
-                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+                mRef =
+                    FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
                 mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -556,7 +569,8 @@ public class HomeFragment extends Fragment {
 
                         } catch (NullPointerException e) {
                             Log.e(TAG, "setUIByAccountType: TypeID Null", e);
-                            Toast.makeText(context, context.getString(R.string.error_unknown_relogin), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.error_unknown_relogin),
+                                Toast.LENGTH_SHORT).show();
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(context, Login.class);
                             startActivity(i);
