@@ -139,7 +139,7 @@
     <string name="chat_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
     <string name="chat_session_ended">Session ended</string>
     <string name="chat_not_enough_symptom">Our system can\'t detect what your symptoms are. Therefore the system is not able to make a prediction.</string>
-    <string name="chat_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctor to find out what your disease is </string>
+    <string name="chat_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctors to find out what your disease is </string>
     <string name="chat_in_process_prediction">Please wait...</string>
     <string name="chatbox_button_predict">Give prediction</string>
 
