@@ -29,6 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        Placeholder-->
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/account_shimmer_avatar"
             android:layout_width="match_parent"
@@ -40,6 +41,7 @@
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
+        <!--        User layout-->
         <LinearLayout
             android:id="@+id/account_layout_normal"
             android:layout_width="match_parent"
@@ -128,7 +130,7 @@
                 android:textSize="17sp" />
         </LinearLayout>
 
-
+        <!--        Doctor layout-->
         <LinearLayout
             android:id="@+id/account_layout_doctor"
             android:layout_width="match_parent"

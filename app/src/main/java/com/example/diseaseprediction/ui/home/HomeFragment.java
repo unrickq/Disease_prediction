@@ -274,7 +274,7 @@ public class HomeFragment extends Fragment {
                             FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                         Message msg = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
-                            context.getString(R.string.default_chatbot_hello)
+                            context.getString(R.string.chat_chatbot_hello)
                             , new Date(), sessionID, 1);
                         reference.child(msg.getMessageID()).setValue(msg);
 

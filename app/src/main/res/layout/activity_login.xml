@@ -64,9 +64,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
+            app:boxBackgroundColor="@color/white"
+            app:counterEnabled="true"
+            app:counterMaxLength="@integer/length_log_in"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
-            app:boxBackgroundColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/login_img_next"
             app:layout_constraintStart_toEndOf="@+id/login_txt_country_code"
             app:layout_constraintTop_toBottomOf="@+id/login_txt_phone_login">
@@ -77,7 +79,8 @@
                 android:layout_height="52dp"
                 android:background="@null"
                 android:hint="@string/login_eTxt_user"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="@integer/length_log_in" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,11 +119,11 @@
 
         <TextView
             android:id="@+id/login_txt_by_type"
-            android:textColor="@color/theme_1_P"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/login_txt_by_type_doctor"
+            android:textColor="@color/theme_1_P"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

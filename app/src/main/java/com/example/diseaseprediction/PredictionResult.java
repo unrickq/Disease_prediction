@@ -406,7 +406,7 @@ public class PredictionResult extends AppCompatActivity {
                                 FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                             Message msg = new Message(reference.push().getKey(), doctorID,
-                                getString(R.string.default_chatbot_hello)
+                                getString(R.string.chat_chatbot_hello)
                                 , new Date(), sessionID, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                             //Update doctor session of prediction

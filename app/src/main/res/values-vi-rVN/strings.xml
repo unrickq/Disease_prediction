@@ -104,30 +104,31 @@
     <string name="default_gender_female">Nữ</string>
     <string name="default_gender_other">Khác</string>
     <string name="default_empty_email">Vui lòng nhập email của bạn</string>
+    <string name="default_email_regex">Vui lòng nhập địa chỉ email theo định dạng: abc@def.xyz</string>
     <string name="default_empty_phone">Vui lòng nhập số điện thoại của bạn</string>
     <string name="default_empty_address">Vui lòng nhập địa chỉ của bạn</string>
     <string name="default_empty_code">Vui lòng nhập mã xác minh của bạn</string>
     <string name="default_empty_experience">Vui lòng nhập số năm kinh nghiệm</string>
     <string name="default_empty_description">Vui lòng nhập mô tả ngắn về bạn</string>
     <string name="default_empty_specialization">Vui lòng chọn chuyên khoa của bạn</string>
-    <string name="default_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
-    <string name="default_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
-    <string name="default_chatbot_disease">Nên chúng tôi đưa ra dự đoán là: %1$s</string>
-    <string name="default_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
-    <string name="default_email_regex">Vui lòng nhập đúng địa chỉ email</string>
-    <string name="default_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
-    <string name="default_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
-    <string name="default_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
-    <string name="default_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
-    <string name="defaut_session_ended">Phiên chat đã kết thúc</string>
-    <string name="default_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
-    <string name="default_not_enough_data">Nhưng chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
-    <string name="default_in_process_prediction">Đang xử lý kết quả</string>
 
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>
     <string name="dialog_confirm_change_account_no">Không</string>
+
+    <string name="chat_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
+    <string name="chat_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
+    <string name="chat_chatbot_disease">Nên chúng tôi đưa ra dự đoán là: %1$s</string>
+    <string name="chat_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
+    <string name="chat_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
+    <string name="chat_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
+    <string name="chat_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
+    <string name="chat_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
+    <string name="chat_session_ended">Phiên chat đã kết thúc</string>
+    <string name="chat_not_enough_symptom">Hệ thống của chúng tôi không thể nhận diện được các triệu chứng của bạn. Do đó, hệ thống không thể đưa ra dự đoán.</string>
+    <string name="chat_not_enough_data">Tuy nhiên, chúng tôi đã tạo một dự đoán tạm và gửi nó tới các bác sĩ để họ có thể chẩn đoán bệnh của bạn.</string>
+    <string name="chat_in_process_prediction">Đang xử lý kết quả</string>
 
     <string name="chat_menu_patient_view_info">Xem thông tin bác sĩ</string>
     <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
@@ -164,6 +165,7 @@
     <string name="account_info_txt_subtitle">Xin hãy điền thông tin cá nhân của bạn</string>
 
     <string name="error_field_empty">Không được để trống</string>
+    <string name="error_field_length_excess">Xin đừng nhập quá %1$d kí tự</string>
     <string name="error_unknown_relogin">Đã có lỗi xảy ra. Vui lòng đăng nhập lại</string>
     <string name="error_unknown_contactDev">Đã có lỗi xảy ra. Vui lòng liên hệ nhà phát triển để được hỗ trợ</string>
     <string name="error_login_phone_too_long">Số điện thoại không hợp lệ</string>

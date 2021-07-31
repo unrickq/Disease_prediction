@@ -93,6 +93,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_name"
                 android:layout_marginTop="24dp"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
@@ -102,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:maxLength="@integer/length_account_info_name"
                     android:hint="@string/account_txt_title_name"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -168,7 +171,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top"
-
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_address"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -176,12 +180,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:maxLength="@integer/length_account_info_address"
                     android:ems="10"
                     android:hint="@string/account_txt_title_address"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <!--            Doctor Layout-->
             <LinearLayout
                 android:id="@+id/account_edit_layout_doctor"
                 android:layout_width="match_parent"
@@ -250,6 +255,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="@integer/length_account_info_doctor_description"
                     app:boxBackgroundColor="@color/background_B1_lightMode">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -257,6 +264,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:maxLength="@integer/length_account_info_doctor_description"
                         android:ems="10"
                         android:hint="@string/account_info_doctor_description"
                         android:inputType="textMultiLine"

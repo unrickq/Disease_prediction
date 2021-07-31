@@ -61,6 +61,8 @@
                 android:id="@+id/account_info_txt_title_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
@@ -132,6 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_address"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 

@@ -118,28 +118,30 @@
     <string name="default_empty_phone">Please enter your phone</string>
     <string name="default_empty_address">Please enter your address</string>
     <string name="default_empty_code">Please enter your code</string>
-    <string name="default_empty_experience">Please enter your year experience</string>
+    <string name="default_email_regex">Please enter the correct email format: abc@def.xyz</string>
+    <string name="default_empty_experience">Please enter your year of experience</string>
     <string name="default_empty_description">Please enter some description about you</string>
     <string name="default_empty_specialization">Please select specialization</string>
-    <string name="default_speech_support_device">Your Device Don\'t Support Speech Input</string>
-    <string name="default_chatbot_symptom">Your symptoms: &#160;</string>
-    <string name="default_chatbot_disease_list">You may have diseases such as:\n </string>
-    <string name="default_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
-    <string name="default_chatbot_disease">So we make predictions is: %1$s</string>
-    <string name="default_chatbot_hello">Hello all! Let\'s started!</string>
-    <string name="default_email_regex">Please enter the correct email</string>
-    <string name="default_chatbot_continue_symptom">Do you have any other symptoms?</string>
-    <string name="default_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
-
-    <string name="defaut_session_ended">Session ended</string>
-    <string name="default_not_enough_symptom">Our system can\'t detect what your symptoms are. Therefore the system is not able to make a prediction.</string>
-    <string name="default_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctor to find out what your disease is </string>
-    <string name="default_in_process_prediction">Please wait...</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
     <string name="dialog_confirm_change_account_yes">Yes</string>
     <string name="dialog_confirm_change_account_no">No</string>
+
+
+    <string name="chat_chatbot_hello">Hello all! Let\'s started!</string>
+    <string name="chat_chatbot_continue_symptom">Do you have any other symptoms?</string>
+    <string name="chat_speech_support_device">Your Device Don\'t Support Speech Input</string>
+    <string name="chat_chatbot_symptom">Your symptoms: &#160;</string>
+    <string name="chat_chatbot_disease_list">You may have diseases such as:\n </string>
+    <string name="chat_chatbot_disease_list_item">%1$s (%2$.0f%%)</string>
+    <string name="chat_chatbot_disease">So we make predictions is: %1$s</string>
+    <string name="chat_dialog_end_session_prediction">The prediction will be ended when you exit the chat. Do you want to continue?</string>
+    <string name="chat_session_ended">Session ended</string>
+    <string name="chat_not_enough_symptom">Our system can\'t detect what your symptoms are. Therefore the system is not able to make a prediction.</string>
+    <string name="chat_not_enough_data">But we\'ve created a temporary prediction for you and sent it to our doctor to find out what your disease is </string>
+    <string name="chat_in_process_prediction">Please wait...</string>
+    <string name="chatbox_button_predict">Give prediction</string>
 
     <string name="chat_menu_patient_view_info">View doctor\'s information</string>
     <string name="chat_menu_doctor_view_info">View patient\'s information</string>
@@ -184,6 +186,7 @@
 
     <string name="error_txt">Error!</string>
     <string name="error_field_empty">Field can\'t be empty!</string>
+    <string name="error_field_length_excess">Please do not enter more than %1$d characters</string>
     <string name="error_unknown_relogin">An error happened. Please log in again</string>
     <string name="error_unknown_contactDev">An error happened. Please contact the developer for assistance!</string>
     <string name="error_login_phone_too_long">Phone number format is incorrect!</string>
@@ -213,7 +216,7 @@
     <string name="prediction_result_medicine_updated">Medicine (Doctor confirmed)</string>
     <string name="prediction_list_confirm_txt_title">No pending prediction</string>
 
-    <string name="chatbox_button_predict">Give prediction</string>
+
     <string name="account_edit_txt_img_upload">Upload</string>
     <string name="dialog_confirm_discard_changes">Discard changes?</string>
     <string name="dialog_account_info_fill_required">Please fill in the required information!</string>

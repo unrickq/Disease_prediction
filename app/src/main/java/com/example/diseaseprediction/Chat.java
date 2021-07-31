@@ -248,7 +248,7 @@ public class Chat extends AppCompatActivity {
             chat_recycler_view = findViewById(R.id.chat_recycler_view);
             circularDot = findViewById(R.id.circularDot);
             loadingText = findViewById(R.id.loadingText);
-            loadingText.setText(getString(R.string.default_in_process_prediction));
+            loadingText.setText(getString(R.string.chat_in_process_prediction));
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(LOG_TAG, "getViews()");
@@ -287,16 +287,16 @@ public class Chat extends AppCompatActivity {
                         setMessageFirebase(mess);
 
                         //get disease from model
-                        String temp = getString(R.string.default_chatbot_disease_list);
+                        String temp = getString(R.string.chat_chatbot_disease_list);
                         for (int i = 0; i <= 3; i++) {
                             // If the percentage greater than 1%
                             if (results.get(i).getConfidence() > 0.01) {
                                 // If this is the last disease -> do not create new line
                                 if (i == 3) {
-                                    temp += String.format(getString(R.string.default_chatbot_disease_list_item),
+                                    temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
                                         results.get(i).getTitle(), results.get(i).getConfidence() * 100);
                                 } else {
-                                    temp += String.format(getString(R.string.default_chatbot_disease_list_item),
+                                    temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
                                         results.get(i).getTitle(), results.get(i).getConfidence() * 100) + "\n";
                                 }
                             }
@@ -308,7 +308,7 @@ public class Chat extends AppCompatActivity {
                         setMessageFirebase(diseaseList);
                         //print ""benh cua ban la"
                         Message message1 = new Message("", AppConstants.CHATBOT_ID,
-                            String.format(getString(R.string.default_chatbot_disease), results.get(0).getTitle()),
+                            String.format(getString(R.string.chat_chatbot_disease), results.get(0).getTitle()),
                             new Date(), sessionID, 1);
                         setMessageFirebase(message1);
                         chat_txt_enter_mess.setText("");
@@ -322,13 +322,13 @@ public class Chat extends AppCompatActivity {
                         loadingText.setVisibility(View.GONE);
                     } else { // No symptom found
                         Message mess = new Message("", AppConstants.CHATBOT_ID,
-                            getString(R.string.default_not_enough_symptom), new Date(), sessionID, 1);
+                            getString(R.string.chat_not_enough_symptom), new Date(), sessionID, 1);
                         setMessageFirebase(mess);
                         chat_txt_enter_mess.setText("");
                         circularDot.setVisibility(View.GONE);
                         loadingText.setVisibility(View.GONE);
                         Message mess2 = new Message("", AppConstants.CHATBOT_ID,
-                            getString(R.string.default_not_enough_data), new Date(), sessionID, 1);
+                            getString(R.string.chat_not_enough_data), new Date(), sessionID, 1);
                         setMessageFirebase(mess2);
                         getDiseaseByNameAndCreatePredictionFirebase(AppConstants.DISEASE_OTHER_NAME, fUser.getUid());
                     }
@@ -431,7 +431,7 @@ public class Chat extends AppCompatActivity {
      * @param tokenList
      */
     private String searchSymptoms(List<String> tokenList) {
-        String result = getString(R.string.default_chatbot_symptom);
+        String result = getString(R.string.chat_chatbot_symptom);
         tempSymptom = new ArrayList<>();
         //search binary symptom
         int mid = mSymptom.size() / 2;
@@ -581,7 +581,7 @@ public class Chat extends AppCompatActivity {
                         if (status == 0) {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.GONE);
-                            Toast.makeText(Chat.this, getString(R.string.defaut_session_ended), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Chat.this, getString(R.string.chat_session_ended), Toast.LENGTH_SHORT).show();
                         } else if (status == 1) {
                             chat_send_message_layout = findViewById(R.id.chat_send_message_layout);
                             chat_send_message_layout.setVisibility(View.VISIBLE);
@@ -758,7 +758,7 @@ public class Chat extends AppCompatActivity {
                 try {
                     startActivityForResult(intent, REQUEST_CODE_SPEECH);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(this, getString(R.string.default_speech_support_device), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.chat_speech_support_device), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             } else {
@@ -1034,7 +1034,7 @@ public class Chat extends AppCompatActivity {
     private void dialogConfirm(String sessionID) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.default_dialog_end_session_prediction);
+            builder.setMessage(R.string.chat_dialog_end_session_prediction);
             builder.setPositiveButton(getString(R.string.dialog_confirm_change_account_yes),
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -1098,7 +1098,7 @@ public class Chat extends AppCompatActivity {
                 setMessageFirebase(message);
                 //Chatbot chat
                 Message message1 = new Message("", AppConstants.CHATBOT_ID,
-                    getString(R.string.default_chatbot_continue_symptom), new Date(), sessionID, 3);
+                    getString(R.string.chat_chatbot_continue_symptom), new Date(), sessionID, 3);
                 setMessageFirebase(message1);
                 chat_txt_enter_mess.setText("");
                 allMess += msg + " ";

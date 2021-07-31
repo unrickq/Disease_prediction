@@ -93,6 +93,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_doctor_description"
                 android:layout_marginTop="@dimen/margin_top"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
@@ -102,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:maxLength="@integer/length_account_info_doctor_description"
                     android:hint="@string/account_info_doctor_description"
                     android:inputType="textMultiLine"
                     android:overScrollMode="always" />

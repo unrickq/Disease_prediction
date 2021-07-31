@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="length_log_in">10</integer>
+
+    <integer name="length_code_verify_otp">6</integer>
+
+    <integer name="length_account_info_name">30</integer>
+    <integer name="length_account_info_address">40</integer>
+
+    <integer name="length_account_info_doctor_description">30</integer>
+</resources>
