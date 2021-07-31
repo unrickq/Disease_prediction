@@ -8,10 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#D1D1D1</color>
+    <color name="apple_gray">#66666666</color>
 
     <color name="theme_1_P_dark">#387BAC</color>
     <color name="theme_1_P">#2B6497</color>
+    <color name="theme_1_P_trans_20">#992B6497</color>
     <color name="theme_1_P_light">#83B9FF</color>
+    <color name="theme_1_P_light_trans_80">#CC83B9FF</color>
     <color name="theme_1_S_dark">#4D82CB</color>
     <color name="theme_1_S">#82B1FF</color>
     <color name="theme_1_S_light">#B6E3FF</color>

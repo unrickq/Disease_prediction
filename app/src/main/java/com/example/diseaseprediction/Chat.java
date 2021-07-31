@@ -370,7 +370,10 @@ public class Chat extends AppCompatActivity {
                     Account receiver = snapshot.getValue(Account.class);
                     if (receiver != null) {
                         chat_toolbar_txt_name.setText(receiver.getName());
-                        Glide.with(Chat.this).load(receiver.getImage()).into(chat_toolbar_img_avatar);
+                        Glide.with(Chat.this)
+                            .load(receiver.getImage())
+                            .error(R.mipmap.ic_default_avatar_round)
+                            .into(chat_toolbar_img_avatar);
                         getMessagesFirebase(fUser.getUid(), receiverID);
                     } else {
                         Log.e(LOG_TAG, "Cannot get account info");

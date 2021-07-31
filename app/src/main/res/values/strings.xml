@@ -42,7 +42,7 @@
     <string name="account_txt_title_email">Email</string>
     <string name="account_txt_title_email_format">&lt;b>Email:&lt;/b>  %1$s</string>
     <string name="account_txt_email">TextView</string>
-    <string name="account_btn_edit">Edit</string>
+    <string name="account_btn_edit">Edit profile</string>
     <string name="account_btn_edit_done">Done</string>
 
     <string name="consultation_list_txt_title">No consultation</string>
@@ -237,6 +237,8 @@
     <string name="dialog_prediction_edit_confirm">Please check the modified information again as you will not be able to edit the information again after clicking confirm.</string>
     <string name="dialog_prediction_edit_confirmed">Confirm</string>
     <string name="dialog_prediction_edit_check_again">Re-check</string>
+
+    <string name="filechooser_picture">Select Picture</string>
 
 
     <string-array name="spinner_language">

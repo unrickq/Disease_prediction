@@ -1,7 +1,9 @@
 package com.example.diseaseprediction.ui.account;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -11,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +31,8 @@ import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Specialization;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +40,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,8 +60,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AccountFragment extends Fragment {
 
     private static final String TAG = "AccountFragment";
+    private final int PICK_IMAGE_REQUEST = 71;
 
     //Firebase
+    private StorageReference sRef;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
 
@@ -57,6 +72,7 @@ public class AccountFragment extends Fragment {
     private Specialization mSpecialization;
     private ArrayAdapter<Specialization> specializationAdapter;
     private ArrayList<Specialization> specialization;
+    private Uri imgPath;
 
     private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email,
             account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
@@ -65,8 +81,9 @@ public class AccountFragment extends Fragment {
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
 
     private LinearLayout account_layout_normal, account_layout_doctor;
-    private Button accout_btn_edit;
+    private Button account_btn_edit;
     private CircleImageView account_img_avatar;
+    private ImageView account_img_avatar_upload;
     private ShimmerFrameLayout account_shimmer_avatar;
 
     private Context context;
@@ -102,7 +119,7 @@ public class AccountFragment extends Fragment {
         account_spinner_gender.setAdapter(genderAdapter);
 
         //Click button edit
-        accout_btn_edit.setOnClickListener(new View.OnClickListener() {
+        account_btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AccountEdit.class);
@@ -110,6 +127,29 @@ public class AccountFragment extends Fragment {
 
             }
         });
+
+        account_img_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_picture)),
+                    PICK_IMAGE_REQUEST);
+            }
+        });
+
+        account_img_avatar_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_picture)),
+                    PICK_IMAGE_REQUEST);
+            }
+        });
+
 
         //get data and load it to UI
         getDataForUI();
@@ -130,6 +170,17 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Open file image mobile
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+            && data != null && data.getData() != null) {
+            imgPath = data.getData();
+            uploadImage();
+        }
+    }
+
     /**
      * Find view by ID
      *
@@ -144,7 +195,7 @@ public class AccountFragment extends Fragment {
             account_layout_normal = view.findViewById(R.id.account_layout_normal);
             account_layout_doctor = view.findViewById(R.id.account_layout_doctor);
             //Button
-            accout_btn_edit = view.findViewById(R.id.account_btn_edit);
+            account_btn_edit = view.findViewById(R.id.account_btn_edit);
 
 
             //Find view
@@ -160,6 +211,7 @@ public class AccountFragment extends Fragment {
 
             account_img_avatar = view.findViewById(R.id.account_img_avatar);
 
+            account_img_avatar_upload = view.findViewById(R.id.account_img_avatar_upload);
 
             account_doctor_txt_experience = view.findViewById(R.id.account_doctor_txt_experience);
 
@@ -230,7 +282,10 @@ public class AccountFragment extends Fragment {
 
                             //Set image
                             if (!mAccount.getImage().equals("Default")) {
-                                Glide.with(AccountFragment.this).load(mAccount.getImage()).into(account_img_avatar);
+                                Glide.with(AccountFragment.this)
+                                    .load(mAccount.getImage())
+                                    .error(R.mipmap.ic_default_avatar_round)
+                                    .into(account_img_avatar);
                             } else {
                                 account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
                             }
@@ -332,6 +387,63 @@ public class AccountFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "loadDataOfDoctor()");
+        }
+    }
+
+    /**
+     * Upload file img to storage firebase
+     */
+    private void uploadImage() {
+        try {
+            if (imgPath != null) {
+                final ProgressDialog progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setTitle(getString(R.string.upload_img_waiting));
+                progressDialog.show();
+
+                //Get reference "images" in storage firebase
+                sRef =
+                    FirebaseStorage.getInstance().getReference().child(FirebaseConstants.STORAGE_IMG + "/" + UUID.randomUUID().toString());
+                sRef.putFile(imgPath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(requireContext(), getString(R.string.upload_img_done), Toast.LENGTH_SHORT).show();
+                            //Get url of image in storage firebase
+                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    mRef =
+                                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
+                                    mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
+                                    // load image
+                                    Glide.with(requireContext())
+                                        .load(uri.toString())
+                                        .error(R.mipmap.ic_default_avatar_round)
+                                        .into(account_img_avatar);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(requireContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "uploadImage()");
         }
     }
 }

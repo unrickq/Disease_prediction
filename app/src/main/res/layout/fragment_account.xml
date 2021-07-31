@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        Placeholder-->
+        <!--        Placeholder-->
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/account_shimmer_avatar"
             android:layout_width="match_parent"
@@ -47,26 +47,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/account_img_avatar"
-                android:layout_width="141dp"
-                android:layout_height="141dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:src="@mipmap/ic_default_avatar_round" />
-
-            <TextView
-                android:id="@+id/account_img_upload"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="Upload"
-                android:textColor="@color/theme_1_P"
-                android:visibility="gone" />
+                android:layout_marginTop="12dp">
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/account_img_avatar"
+                    android:layout_width="141dp"
+                    android:layout_height="141dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:src="@mipmap/ic_default_avatar_round"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/account_img_avatar_upload"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_round_white"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_add_image"
+                    app:layout_constraintEnd_toEndOf="@+id/account_img_avatar"
+                    app:layout_constraintTop_toTopOf="@+id/account_img_avatar" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/account_txt_name"

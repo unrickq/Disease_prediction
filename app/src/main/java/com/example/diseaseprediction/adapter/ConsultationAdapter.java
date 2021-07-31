@@ -119,7 +119,10 @@ public class ConsultationAdapter extends RecyclerView.Adapter<ConsultationAdapte
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     item_consultation_txt_name.setText(snapshot.child("name").getValue().toString());
-                    Glide.with(mContext).load(snapshot.child("image").getValue().toString()).into(item_consultation_img_main);
+                    Glide.with(mContext)
+                        .load(snapshot.child("image").getValue().toString())
+                        .error(R.mipmap.ic_default_avatar_round)
+                        .into(item_consultation_img_main);
                 }
 
                 @Override

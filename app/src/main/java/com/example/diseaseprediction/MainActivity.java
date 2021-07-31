@@ -334,7 +334,10 @@ public class MainActivity extends AppCompatActivity {
                         //set image
                         nav_header_avatar = findViewById(R.id.nav_header_avatar);
                         if (!mAccount.getImage().equals("Default")) {
-                            Glide.with(MainActivity.this).load(mAccount.getImage()).into(nav_header_avatar);
+                            Glide.with(MainActivity.this)
+                                .load(mAccount.getImage())
+                                .error(R.mipmap.ic_default_avatar_round)
+                                .into(nav_header_avatar);
                         } else {
                             nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
 //                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);

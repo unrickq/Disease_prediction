@@ -70,24 +70,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/account_edit_img_avatar"
-                android:layout_width="141dp"
-                android:layout_height="141dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="12dp"
-                android:src="@mipmap/ic_default_avatar_round" />
-
-            <TextView
-                android:id="@+id/account_edit_img_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="@string/account_edit_txt_img_upload"
-                android:textColor="@color/theme_1_P" />
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/account_edit_txt_title_name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"

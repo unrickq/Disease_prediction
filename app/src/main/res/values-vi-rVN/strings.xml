@@ -33,7 +33,7 @@
     <string name="account_txt_title_email">Email</string>
     <string name="account_txt_email">TextView</string>
     <string name="account_txt_title_phone">Số điện thoại</string>
-    <string name="account_btn_edit">Chỉnh sửa</string>
+    <string name="account_btn_edit">Chỉnh sửa thông tin</string>
     <string name="account_btn_edit_done">Lưu lại</string>
 
     <string name="consultation_list_txt_title">Bạn chưa có tư vấn nào</string>
@@ -237,5 +237,7 @@
     <string name="dialog_prediction_edit_confirm">Xin bạn vui lòng kiểm tra lại thông tin đã sửa đổi vì bạn sẽ không thể sửa đổi lại thông tin sau khi đã nhấn xác nhận</string>
     <string name="dialog_prediction_edit_confirmed">Xác nhận</string>
     <string name="dialog_prediction_edit_check_again">Kiểm tra lại</string>
+
+    <string name="filechooser_picture">Chọn hình</string>
 
 </resources>

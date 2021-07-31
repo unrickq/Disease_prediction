@@ -1,12 +1,9 @@
 package com.example.diseaseprediction;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,20 +14,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.object.Specialization;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,17 +32,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.UUID;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEdit extends AppCompatActivity {
     private static final String TAG = "AccountEdit";
@@ -59,13 +45,11 @@ public class AccountEdit extends AppCompatActivity {
     private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     //Firebase
-    private StorageReference sRef;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
     private Account mAccount;
     private DoctorInfo mDoctor;
     private Specialization ds;
-    private Uri imgPath;
     private ArrayAdapter<Specialization> specializationAdapter;
     private ArrayList<Specialization> specialization;
     private ArrayAdapter genderAdapter;
@@ -74,11 +58,9 @@ public class AccountEdit extends AppCompatActivity {
             account_doctor_txt_title_experience, account_doctor_txt_title_description,
             account_doctor_txt_title_specialization;
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
-    private TextView account_img_upload;
     private ImageView chat_toolbar_img_pre;
     private LinearLayout account_layout_doctor;
     private Button account_btn_edit_done;
-    private CircleImageView account_img_avatar, nav_header_avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,16 +81,6 @@ public class AccountEdit extends AppCompatActivity {
                 if (checkEmpty()) {
                     dialogConfirm(0);
                 }
-            }
-        });
-
-        account_img_upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
 
@@ -136,16 +108,6 @@ public class AccountEdit extends AppCompatActivity {
         super.onStop();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Open file image mobile
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            imgPath = data.getData();
-            uploadImage();
-        }
-    }
 
     /**
      * Display confirm dialog on back pressed
@@ -184,9 +146,6 @@ public class AccountEdit extends AppCompatActivity {
             account_edit_txt_title_email = findViewById(R.id.account_edit_txt_title_email);
 
             account_edit_txt_title_address = findViewById(R.id.account_edit_txt_title_address);
-            account_img_avatar = findViewById(R.id.account_edit_img_avatar);
-            account_img_upload = findViewById(R.id.account_edit_img_upload);
-
 
             account_doctor_txt_title_experience = findViewById(R.id.account_edit_doctor_txt_title_experience);
 
@@ -436,12 +395,12 @@ public class AccountEdit extends AppCompatActivity {
                                 account_edit_txt_title_address.getEditText().setText(address);
                             }
 
-                            //Set image
-                            if (!mAccount.getImage().equals("Default")) {
-                                Glide.with(AccountEdit.this).load(mAccount.getImage()).into(account_img_avatar);
-                            } else {
-                                account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
-                            }
+//                            //Set image
+//                            if (!mAccount.getImage().equals("Default")) {
+//                                Glide.with(AccountEdit.this).load(mAccount.getImage()).into(account_img_avatar);
+//                            } else {
+//                                account_img_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
+//                            }
                         } catch (NullPointerException e) {
                             Log.d(TAG, "getDataForUI: Account ID null", e);
                         }
@@ -677,54 +636,5 @@ public class AccountEdit extends AppCompatActivity {
         }
     }
 
-    /**
-     * Upload file img to storage firebase
-     */
-    private void uploadImage() {
-        try {
-            if (imgPath != null) {
-                final ProgressDialog progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle(getString(R.string.upload_img_waiting));
-                progressDialog.show();
 
-                //Get reference "images" in storage firebase
-                sRef = FirebaseStorage.getInstance().getReference().child(FirebaseConstants.STORAGE_IMG + "/" + UUID.randomUUID().toString());
-                sRef.putFile(imgPath)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                progressDialog.dismiss();
-                                Toast.makeText(AccountEdit.this, getString(R.string.upload_img_done), Toast.LENGTH_SHORT).show();
-                                //Get url of image in storage firebase
-                                sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
-                                        mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
-                                        Glide.with(AccountEdit.this).load(uri.toString()).into(account_img_avatar);
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                                Toast.makeText(AccountEdit.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                        .getTotalByteCount());
-                                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                            }
-                        });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "uploadImage()");
-        }
-    }
 }
