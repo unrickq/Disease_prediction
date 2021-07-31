@@ -134,7 +134,7 @@
     <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
     <string name="chat_dialog_attention_title">Lưu ý</string>
-    <string name="chat_dialog_attention_description">Chào mừng bạn đến với chức năng \"Lấy chẩn đoán bệnh\".\n Dưới đây là một số lưu ý bạn nên làm theo để hệ thống có thể đưa ra kết quả chính xác nhất:\n 1) Bạn cần nhập triệu chứng một cách rõ ràng.\n2) Nên tách các triệu chứng khác nhau bằng dấu phây.\n3) Không nên dùng thể phủ định</string>
+    <string name="chat_dialog_attention_description">Chào mừng bạn đến với chức năng \"Lấy chẩn đoán bệnh\".\nDưới đây là một số lưu ý bạn nên làm theo để hệ thống có thể đưa ra kết quả chính xác nhất:\n1) Bạn cần nhập triệu chứng một cách rõ ràng.\n2) Nên tách các triệu chứng khác nhau bằng dấu phây.\n3) Không nên dùng thể phủ định</string>
     <string name="chat_dialog_attention_btn_understand">Tôi đã hiểu</string>
     <string name="chat_dialog_prediction_title">Chẩn đoán đã được tạo</string>
     <string name="chat_dialog_prediction_msg">Chẩn đoán của bạn đã được tạo và sẽ được xác nhận bởi đội ngũ bác sĩ của chúng tôi trong thời gian sớm nhất.\nBạn có muốn kiểm tra trạng thái của chẩn đoán không?</string>
@@ -201,7 +201,7 @@
     <string name="prediction_confirm_txt_disease_prediction_title">Xin hãy chọn bệnh đúng cho dự đoán này</string>
     <string name="prediction_confirm_dialog_thankyou">Cảm ơn bạn vì đã xác nhận!</string>
     <string name="prediction_confirm_txt_medicine_name">Tên thuốc</string>
-    <string name="prediction_confirm_txt_medicine_dosage">Liều lượng</string>
+    <string name="prediction_confirm_txt_medicine_dosage">Liều lượng \n(Trên ngày)</string>
     <string name="prediction_txt_today">Hôm nay</string>
     <string name="prediction_result_medicine_updated">Thuốc (Bác sĩ đã xác nhận)</string>
     <string name="prediction_confirm_dialog_prediction_status_invalid">Xin lỗi, dự đoán này đã được xác nhận bởi một bác sĩ khác\nBạn sẽ được điều hướng về màn hình chính</string>
@@ -234,5 +234,8 @@
     <string name="item_add_medicine_editText_order_layout">Loại thuốc khác</string>
     <string name="item_add_medicine_autoComplete">Chọn thuốc</string>
     <string name="prediction_confirm_add_medicine">Thêm thuốc</string>
+    <string name="dialog_prediction_edit_confirm">Xin bạn vui lòng kiểm tra lại thông tin đã sửa đổi vì bạn sẽ không thể sửa đổi lại thông tin sau khi đã nhấn xác nhận</string>
+    <string name="dialog_prediction_edit_confirmed">Xác nhận</string>
+    <string name="dialog_prediction_edit_check_again">Kiểm tra lại</string>
 
 </resources>

@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
         home_doctor_all_prediction_no_prediction_title, home_prediction_no_prediction_title,
         home_consultation_no_consultation_title;
     private RelativeLayout home_doctor_all_prediction_layout_title, home_layout_disease_history;
-    private SearchView home_search_view;
+    private LinearLayout home_search_view;
     private NavigationView navigationView;
     private RecyclerView home_recycler_view_consultation, home_recycler_view_disease,
         home_doctor_all_prediction_recycle_view;

@@ -31,14 +31,29 @@
                 android:text="@string/home_txt_title"
                 android:textSize="36sp" />
 
-            <SearchView
+            <LinearLayout
                 android:id="@+id/home_search_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_searchview_custom"
-                android:queryHint="@string/home_search_view" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <ImageView
+                    android:id="@+id/home_search_view_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="?android:attr/actionModeWebSearchDrawable" />
+
+                <TextView
+                    android:id="@+id/home_search_view_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_top"
+                    android:text="@string/home_search_view" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/home_img_advertise"

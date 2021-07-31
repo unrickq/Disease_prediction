@@ -210,7 +210,7 @@
     <string name="prediction_confirm_dialog_prediction_status_invalid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
     <string name="prediction_confirm_txt_medicine">Medicine</string>
     <string name="prediction_confirm_txt_medicine_name">Medicine name</string>
-    <string name="prediction_confirm_txt_medicine_dosage">Dosage</string>
+    <string name="prediction_confirm_txt_medicine_dosage">Dosage (Per day)</string>
     <string name="prediction_txt_today">Today</string>
     <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
     <string name="prediction_result_medicine_updated">Medicine (Doctor confirmed)</string>
@@ -231,8 +231,12 @@
     <string name="item_add_medicine_autoComplete">Select medicine</string>
     <string name="prediction_confirm_add_medicine">Add new Medicine</string>
     <string name="chat_dialog_attention_title">Attention!</string>
-    <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n 1) You need to enter your symptoms clearly.\n2) Different symptoms should be separated by commas.\n3) Negative sentences should not be used</string>
+    <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n1) You need to enter your symptoms clearly.\n2) Different symptoms should be separated by commas.\n3) Negative sentences should not be used</string>
     <string name="chat_dialog_attention_btn_understand">I understand</string>
+
+    <string name="dialog_prediction_edit_confirm">Please check the modified information again as you will not be able to edit the information again after clicking confirm.</string>
+    <string name="dialog_prediction_edit_confirmed">Confirm</string>
+    <string name="dialog_prediction_edit_check_again">Re-check</string>
 
 
     <string-array name="spinner_language">
