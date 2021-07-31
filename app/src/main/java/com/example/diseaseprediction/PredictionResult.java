@@ -472,7 +472,7 @@ public class PredictionResult extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        getMedicine(pm.getMedicineID(), pm.getDosage());
+                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes());
                     }
                 }
 
@@ -491,11 +491,11 @@ public class PredictionResult extends AppCompatActivity {
      * Get medicine.
      * Then set data to layout of medicine
      */
-    private void getMedicine(String medicineID, String dosage) {
+    private void getMedicine(String medicineID, String dosage, String notes) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                .orderByChild("medicineID").equalTo(medicineID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -504,11 +504,16 @@ public class PredictionResult extends AppCompatActivity {
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
                         medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
                         medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
-                        medicineName.setText(m.getName());
+                        if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
+                            medicineName.setText(notes);
+                        } else {
+                            medicineName.setText(m.getName());
+                        }
                         medicineDosage.setText(dosage);
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
                 }
+
 
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError error) {

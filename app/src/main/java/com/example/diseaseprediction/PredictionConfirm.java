@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -566,7 +568,7 @@ public class PredictionConfirm extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        getMedicine(pm.getMedicineID(), pm.getDosage());
+                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes());
                     }
                 }
 
@@ -585,11 +587,11 @@ public class PredictionConfirm extends AppCompatActivity {
      * Get medicine
      * Then add medicine to layout medicine
      */
-    private void getMedicine(String medicineID, String dosage) {
+    private void getMedicine(String medicineID, String dosage, String notes) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                .orderByChild("medicineID").equalTo(medicineID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -598,7 +600,11 @@ public class PredictionConfirm extends AppCompatActivity {
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
                         medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
                         medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
-                        medicineName.setText(m.getName());
+                        if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
+                            medicineName.setText(notes);
+                        } else {
+                            medicineName.setText(m.getName());
+                        }
                         medicineDosage.setText(dosage);
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
@@ -641,8 +647,8 @@ public class PredictionConfirm extends AppCompatActivity {
             //Then add new prediction medicine to firebase
             for (int i = 0; i < predictionMedicineList.size(); i++) {
                 PredictionMedicine tmp = new PredictionMedicine(mPrediction.getPredictionID(),
-                    predictionMedicineList.get(i).getMedicineID(),
-                    predictionMedicineList.get(i).getDosage(), 1);
+                        predictionMedicineList.get(i).getMedicineID(),
+                        predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getNotes(), 1);
                 addPredictionMedicine(tmp);
             }
         } catch (Exception e) {
@@ -780,6 +786,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     }
                     hiddenMedicineValue.setText(mMedicine.getMedicineID());
                     item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
+
                 }
 
                 @Override
@@ -818,18 +825,24 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             //Loop all layout
             for (int i = 0; i < medicine_confirm_layout_add_list.getChildCount(); i++) {
-                PredictionMedicine prm = new PredictionMedicine(mPrediction.getPredictionID(), "Default", "Default", 1);
+                PredictionMedicine prm = new PredictionMedicine(mPrediction.getPredictionID(), "Default", "Default", "Default", 1);
                 //Get view on each layout
                 View item_add_medicine = medicine_confirm_layout_add_list.getChildAt(i);
                 //Find UI
                 TextInputLayout item_add_medicine_editText_dosage_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
                 TextInputLayout item_add_medicine_editText_order_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
                 AutoCompleteTextView item_add_medicine_autoComplete
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
                 TextView hiddenMedicineValue
-                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+                        = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+
+                //Add event clear error
+                item_add_medicine_editText_dosage_layout.getEditText()
+                        .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_dosage_layout));
+                item_add_medicine_editText_order_layout.getEditText()
+                        .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_order_layout));
 
                 //Check valid on each layout
                 //If AutoCompleteTextView is other medicine
@@ -841,8 +854,8 @@ public class PredictionConfirm extends AppCompatActivity {
                         if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
                             prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
                             prm.setMedicineID(hiddenMedicineValue.getText().toString());
-                            // !!!!! Add note that other medicine name !!!!
-                            // !!!!!
+                            //Add note that other medicine name
+                            prm.setNotes(otherMedicine);
                         }
                     } else {
                         //Other medicine empty
@@ -933,6 +946,35 @@ public class PredictionConfirm extends AppCompatActivity {
             e.printStackTrace();
             Log.d(LOG_TAG, "removeAllPredictionMedicine()");
         }
+    }
+
+    /**
+     * Create a {@link TextWatcher} to clear {@link TextInputLayout} error notification
+     *
+     * @return a {@link TextWatcher}
+     */
+    private TextWatcher clearErrorOnTyping(TextInputLayout layout) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    layout.setError(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(LOG_TAG, "clearErrorOnTyping()");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
     }
 
 }

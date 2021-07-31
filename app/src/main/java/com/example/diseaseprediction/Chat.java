@@ -964,7 +964,7 @@ public class Chat extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1", 1));
+                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1", "Default", 1));
                 }
 
                 @Override

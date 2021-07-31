@@ -81,7 +81,8 @@ public class testActivity extends AppCompatActivity {
                 for (int i = 0; i < predictionMedicineList.size(); i++) {
                     PredictionMedicine tmp = new PredictionMedicine(predictionID,
                             predictionMedicineList.get(i).getMedicineID(),
-                            predictionMedicineList.get(i).getDosage(), 1);
+                            predictionMedicineList.get(i).getDosage(),
+                            predictionMedicineList.get(i).getNotes(), 1);
                     addPredictionMedicine(tmp);
                 }
                 Toast.makeText(testActivity.this, "Enter All Details Correctly!", Toast.LENGTH_SHORT).show();
@@ -229,7 +230,7 @@ public class testActivity extends AppCompatActivity {
 
         //Loop all layout
         for (int i = 0; i < layoutList.getChildCount(); i++) {
-            PredictionMedicine prm = new PredictionMedicine(predictionID, "Default", "Default", 1);
+            PredictionMedicine prm = new PredictionMedicine(predictionID, "Default", "Default", "Default", 1);
             //Get view on each layout
             View item_add_medicine = layoutList.getChildAt(i);
             //Find UI

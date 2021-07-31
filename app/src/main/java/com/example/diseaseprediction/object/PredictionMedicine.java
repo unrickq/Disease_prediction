@@ -8,6 +8,7 @@ public class PredictionMedicine {
     private String predictionID;
     private String medicineID;
     private String dosage;
+    private String notes;
     private int status;
 
     /**
@@ -18,10 +19,11 @@ public class PredictionMedicine {
      * @param dosage       dosage
      * @param status       0: Deleted | 1: Normal
      */
-    public PredictionMedicine(String predictionID, String medicineID, String dosage, int status) {
+    public PredictionMedicine(String predictionID, String medicineID, String dosage, String notes, int status) {
         this.predictionID = predictionID;
         this.medicineID = medicineID;
         this.dosage = dosage;
+        this.notes = notes;
         this.status = status;
     }
 
@@ -84,6 +86,24 @@ public class PredictionMedicine {
      */
     public void setDosage(String dosage) {
         this.dosage = dosage;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return notes
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param notes notes
+     */
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     /**
