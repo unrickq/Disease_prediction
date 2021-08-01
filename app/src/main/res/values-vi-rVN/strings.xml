@@ -221,7 +221,7 @@
     <string name="account_txt_title_gender_format">&lt;b>Giới tính:&lt;/b>  %1$s</string>
     <string name="account_txt_title_address_format">&lt;b>Địa chỉ:&lt;/b>   %1$s</string>
     <string name="account_txt_title_name_format">&lt;b>Tên:&lt;/b>     %1$s</string>
-    <string name="account_info_doctor_experience_format">&lt;b>Kinh nghiệm (năm):&lt;/b>   %1$s</string>
+    <string name="account_info_doctor_experience_format">&lt;b>Kinh nghiệm:&lt;/b>   %1$s năm</string>
     <string name="account_info_doctor_specialization_format">&lt;b>Chuyên khoa:&lt;/b>  %1$s</string>
     <string name="account_info_doctor_description_format">&lt;b>Mô tả ngắn về bạn: &lt;/b>  %1$s</string>
     <string name="account_toolbar_edit">Chỉnh sửa</string>

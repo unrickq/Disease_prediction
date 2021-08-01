@@ -294,6 +294,7 @@ public class AccountFragment extends Fragment {
                             account_shimmer_avatar.setVisibility(View.GONE);
 
                             account_layout_normal.setVisibility(View.VISIBLE);
+                            account_btn_edit.setVisibility(View.VISIBLE);
                         } catch (NullPointerException e) {
                             Log.d(TAG, "Account. Account ID null", e);
                         }
