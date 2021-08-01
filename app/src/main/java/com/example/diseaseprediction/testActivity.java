@@ -2,14 +2,8 @@ package com.example.diseaseprediction;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +12,6 @@ import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.PredictionMedicine;
 import com.example.diseaseprediction.object.Symptom;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,236 +41,236 @@ public class testActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        layoutList = findViewById(R.id.layout_list);
-        buttonAdd = findViewById(R.id.button);
-        submit = findViewById(R.id.submit);
-
-        GetPredictionMedicineToUI(predictionID);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Create default prediction medicine layout
-                getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1 Viên");
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SavePredictionMedicineList();
-            }
-        });
+//        layoutList = findViewById(R.id.layout_list);
+//        buttonAdd = findViewById(R.id.button);
+//        submit = findViewById(R.id.submit);
+//
+//        GetPredictionMedicineToUI(predictionID);
+//        buttonAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //Create default prediction medicine layout
+//                getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1 Viên");
+//            }
+//        });
+//
+//        submit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //SavePredictionMedicineList();
+//            }
+//        });
 
     }
 
-    private void SavePredictionMedicineList() {
-        //Check valid data of UI (Is empty or not)
-        if (checkMedicineLayout() == 0) {
-            //Check predictionMedicineList is empty or not
-            if (predictionMedicineList.size() == 0) {
-                Toast.makeText(testActivity.this, "Add prediction First!", Toast.LENGTH_SHORT).show();
-            } else {
-                removeAllPredictionMedicine(predictionID);
-                for (int i = 0; i < predictionMedicineList.size(); i++) {
-                    PredictionMedicine tmp = new PredictionMedicine(predictionID,
-                            predictionMedicineList.get(i).getMedicineID(),
-                            predictionMedicineList.get(i).getDosage(),
-                            predictionMedicineList.get(i).getNotes(), 1);
-                    addPredictionMedicine(tmp);
-                }
-                Toast.makeText(testActivity.this, "Enter All Details Correctly!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    private void SavePredictionMedicineList() {
+//        //Check valid data of UI (Is empty or not)
+//        if (checkMedicineLayout() == 0) {
+//            //Check predictionMedicineList is empty or not
+//            if (predictionMedicineList.size() == 0) {
+//                Toast.makeText(testActivity.this, "Add prediction First!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                removeAllPredictionMedicine(predictionID);
+//                for (int i = 0; i < predictionMedicineList.size(); i++) {
+//                    PredictionMedicine tmp = new PredictionMedicine(predictionID,
+//                            predictionMedicineList.get(i).getMedicineID(),
+//                            predictionMedicineList.get(i).getDosage(),
+//                            predictionMedicineList.get(i).getNotes(), 1);
+//                    addPredictionMedicine(tmp);
+//                }
+//                Toast.makeText(testActivity.this, "Enter All Details Correctly!", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
-    /**
-     * Load prediction medicine to UI
-     *
-     * @param predictionID prediction ID
-     */
-    private void GetPredictionMedicineToUI(String predictionID) {
-        try {
-            Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
-                    .orderByChild("predictionID").equalTo(predictionID);
-            QGetPredictionMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for (DataSnapshot sn : snapshot.getChildren()) {
-                        PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        //
-                        getMedicineAndDosageToUI(pm.getMedicineID(), pm.getDosage());
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-//            Log.d(LOG_TAG, "checkPredictionStatus()");
-        }
-    }
-
-    private void getMedicineAndDosageToUI(String medicineID, String dosage) {
-        try {
-            Query QGetMedicine = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                    .orderByChild("medicineID").equalTo(medicineID);
-            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for (DataSnapshot sn : snapshot.getChildren()) {
-                        Medicine m = sn.getValue(Medicine.class);
-                        addView(m, dosage);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            //Log.d(LOG_TAG, "checkPredictionStatus()");
-        }
-    }
-
-
-    private void addView(Medicine setMedicine, String dosage) {
-        //Clear medicine array
-        loadMedicineList.clear();
-        //Find view of layout
-        final View item_add_medicine
-                = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
-        TextInputLayout item_add_medicine_editText_order_layout
-                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
-        TextInputLayout item_add_medicine_editText_dosage_layout
-                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
-        AutoCompleteTextView item_add_medicine_autoComplete
-                = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
-        ImageView item_add_medicine_btn_delete
-                = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
-        TextView hiddenMedicineValue
-                = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
-
-        //Load list Medicine
-        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE);
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    Medicine medicine = sn.getValue(Medicine.class);
-                    loadMedicineList.add(medicine);
-                }
-
-                ArrayAdapter arrayAdapter = new ArrayAdapter(testActivity.this, android.R.layout.simple_spinner_item, loadMedicineList);
-                item_add_medicine_autoComplete.setAdapter(arrayAdapter);
-
-                //Handle event item click AutoCompleteTextView
-                item_add_medicine_autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Medicine tmpM = (Medicine) adapterView.getItemAtPosition(i);
-                        hiddenMedicineValue.setText(tmpM.getMedicineID());
-                        if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
-                            item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
-                        } else {
-                            item_add_medicine_editText_order_layout.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
-                //Set data to UI
-                item_add_medicine_autoComplete.setText(setMedicine.getName());
-                arrayAdapter.getFilter().filter(null);
-                //IF value equal to MEDICINE_OTHER_NAME. Then set visible editText
-                if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
-                    item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
-                } else {
-                    item_add_medicine_editText_order_layout.setVisibility(View.GONE);
-                }
-                hiddenMedicineValue.setText(setMedicine.getMedicineID());
-                item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-        //Button X
-        item_add_medicine_btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeView(item_add_medicine);
-            }
-        });
-        //Add layout
-        layoutList.addView(item_add_medicine);
-    }
+//    /**
+//     * Load prediction medicine to UI
+//     *
+//     * @param predictionID prediction ID
+//     */
+//    private void GetPredictionMedicineToUI(String predictionID) {
+//        try {
+//            Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
+//                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+//                    .orderByChild("predictionID").equalTo(predictionID);
+//            QGetPredictionMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                    for (DataSnapshot sn : snapshot.getChildren()) {
+//                        PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
+//                        //
+//                        getMedicineAndDosageToUI(pm.getMedicineID(), pm.getDosage());
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+////            Log.d(LOG_TAG, "checkPredictionStatus()");
+//        }
+//    }
+//
+//    private void getMedicineAndDosageToUI(String medicineID, String dosage) {
+//        try {
+//            Query QGetMedicine = FirebaseDatabase.getInstance()
+//                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+//                    .orderByChild("medicineID").equalTo(medicineID);
+//            QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                    for (DataSnapshot sn : snapshot.getChildren()) {
+//                        Medicine m = sn.getValue(Medicine.class);
+//                        addView(m, dosage);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            //Log.d(LOG_TAG, "checkPredictionStatus()");
+//        }
+//    }
+//
+//
+//    private void addView(Medicine setMedicine, String dosage) {
+//        //Clear medicine array
+//        loadMedicineList.clear();
+//        //Find view of layout
+//        final View item_add_medicine
+//                = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
+//        TextInputLayout item_add_medicine_editText_order_layout
+//                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+//        TextInputLayout item_add_medicine_editText_dosage_layout
+//                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+//        AutoCompleteTextView item_add_medicine_autoComplete
+//                = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+//        ImageView item_add_medicine_btn_delete
+//                = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
+//        TextView hiddenMedicineValue
+//                = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+//
+//        //Load list Medicine
+//        mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE);
+//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                for (DataSnapshot sn : snapshot.getChildren()) {
+//                    Medicine medicine = sn.getValue(Medicine.class);
+//                    loadMedicineList.add(medicine);
+//                }
+//
+//                ArrayAdapter arrayAdapter = new ArrayAdapter(testActivity.this, android.R.layout.simple_spinner_item, loadMedicineList);
+//                item_add_medicine_autoComplete.setAdapter(arrayAdapter);
+//
+//                //Handle event item click AutoCompleteTextView
+//                item_add_medicine_autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                        Medicine tmpM = (Medicine) adapterView.getItemAtPosition(i);
+//                        hiddenMedicineValue.setText(tmpM.getMedicineID());
+//                        if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+//                            item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+//                        } else {
+//                            item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+//                        }
+//                    }
+//                });
+//
+//                //Set data to UI
+//                item_add_medicine_autoComplete.setText(setMedicine.getName());
+//                arrayAdapter.getFilter().filter(null);
+//                //IF value equal to MEDICINE_OTHER_NAME. Then set visible editText
+//                if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+//                    item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+//                } else {
+//                    item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+//                }
+//                hiddenMedicineValue.setText(setMedicine.getMedicineID());
+//                item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//        //Button X
+//        item_add_medicine_btn_delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                removeView(item_add_medicine);
+//            }
+//        });
+//        //Add layout
+//        layoutList.addView(item_add_medicine);
+//    }
 
     //Check data on medicine layout
-    private int checkMedicineLayout() {
-        //List prediction medicine
-        predictionMedicineList.clear();
-        int checkValid = 0;
-        String otherMedicine = "";
-
-        //Loop all layout
-        for (int i = 0; i < layoutList.getChildCount(); i++) {
-            PredictionMedicine prm = new PredictionMedicine(predictionID, "Default", "Default", "Default", 1);
-            //Get view on each layout
-            View item_add_medicine = layoutList.getChildAt(i);
-            //Find UI
-            TextInputLayout item_add_medicine_editText_dosage_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
-            TextInputLayout item_add_medicine_editText_order_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
-            AutoCompleteTextView item_add_medicine_autoComplete
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
-            TextView hiddenMedicineValue
-                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
-
-            //Check valid on each layout
-            //If AutoCompleteTextView is other medicine
-            if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
-                otherMedicine = item_add_medicine_editText_order_layout.getEditText().getText().toString();
-                //Check if other_medicine_editText empty
-                if (!otherMedicine.trim().isEmpty()) {
-                    //Check editText dosage
-                    if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
-                        prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
-                        prm.setMedicineID(hiddenMedicineValue.getText().toString());
-                        // !!!!! Add note that other medicine name !!!!
-                        // !!!!!
-                    }
-                } else {
-                    //Other medicine empty
-                    item_add_medicine_editText_order_layout.setError(getString(R.string.error_field_empty));
-                    checkValid++;
-                    break;
-                }
-            }
-            //Check dosage empty
-            if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
-                prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
-                prm.setMedicineID(hiddenMedicineValue.getText().toString());
-            } else {
-                item_add_medicine_editText_dosage_layout.setError("Please fill this");
-                checkValid++;
-                break;
-            }
-            //Add all prediction medicine to list
-            predictionMedicineList.add(prm);
-        }
-
-        return checkValid;
-    }
+//    private int checkMedicineLayout() {
+//        //List prediction medicine
+//        predictionMedicineList.clear();
+//        int checkValid = 0;
+//        String otherMedicine = "";
+//
+//        //Loop all layout
+//        for (int i = 0; i < layoutList.getChildCount(); i++) {
+//            PredictionMedicine prm = new PredictionMedicine(predictionID, "Default", "Default", "Default", 1);
+//            //Get view on each layout
+//            View item_add_medicine = layoutList.getChildAt(i);
+//            //Find UI
+//            TextInputLayout item_add_medicine_editText_dosage_layout
+//                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+//            TextInputLayout item_add_medicine_editText_order_layout
+//                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+//            AutoCompleteTextView item_add_medicine_autoComplete
+//                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+//            TextView hiddenMedicineValue
+//                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+//
+//            //Check valid on each layout
+//            //If AutoCompleteTextView is other medicine
+//            if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
+//                otherMedicine = item_add_medicine_editText_order_layout.getEditText().getText().toString();
+//                //Check if other_medicine_editText empty
+//                if (!otherMedicine.trim().isEmpty()) {
+//                    //Check editText dosage
+//                    if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+//                        prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+//                        prm.setMedicineID(hiddenMedicineValue.getText().toString());
+//                        // !!!!! Add note that other medicine name !!!!
+//                        // !!!!!
+//                    }
+//                } else {
+//                    //Other medicine empty
+//                    item_add_medicine_editText_order_layout.setError(getString(R.string.error_field_empty));
+//                    checkValid++;
+//                    break;
+//                }
+//            }
+//            //Check dosage empty
+//            if (!item_add_medicine_editText_dosage_layout.getEditText().getText().toString().equals("")) {
+//                prm.setDosage(item_add_medicine_editText_dosage_layout.getEditText().getText().toString());
+//                prm.setMedicineID(hiddenMedicineValue.getText().toString());
+//            } else {
+//                item_add_medicine_editText_dosage_layout.setError("Please fill this");
+//                checkValid++;
+//                break;
+//            }
+//            //Add all prediction medicine to list
+//            predictionMedicineList.add(prm);
+//        }
+//
+//        return checkValid;
+//    }
 
     private void removeView(View view) {
         layoutList.removeView(view);

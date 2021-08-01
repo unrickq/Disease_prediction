@@ -64,7 +64,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private ImageView prediction_confirm_toolbar_img_pre;
     private TextView prediction_confirm_txt_disease_description_result;
     private TextView prediction_confirm_txt_disease_prediction_result;
-    private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout;
+    private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout, medicine_confirm_instruction_edit_layout;
     private AutoCompleteTextView prediction_confirm_disease_select;
     private EditText prediction_confirm_disease_other;
     private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
@@ -73,10 +73,8 @@ public class PredictionConfirm extends AppCompatActivity {
     private Prediction mPrediction;
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
-    private TextView prediction_confirm_txt_medicine_name;
+    private TextView prediction_confirm_txt_medicine_name, medicine_confirm_instruction_txt;
     private TextView prediction_confirm_txt_medicine_dosage, medicine_confirm_img_add;
-    private EditText medicine_confirm_instruction_txt;
-    private TextView medicine_confirm_instruction;
     private LinearLayout medicine_confirm_layout, medicine_confirm_layout_add_list;
     private View item_medicine_view;
     private TextView medicineName;
@@ -96,7 +94,7 @@ public class PredictionConfirm extends AppCompatActivity {
         setUpUI();
         getPredictionMedicine();
         checkPredictionStatus();
-        GetPredictionMedicineToUI(mPrediction.getPredictionID());
+        getPredictionMedicineToUI(mPrediction.getPredictionID());
     }
 
     @Override
@@ -136,7 +134,12 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_prediction_correct_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    displayConfirmDialog(1);
+                    //Check if disease is equal to other_disease
+                    if (mPrediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
+                        displayWarningDialog(getString(R.string.default_other_disease_confirm));
+                    } else {
+                        displayConfirmDialog(1);
+                    }
                 }
             });
             // Event for confirm button
@@ -161,7 +164,7 @@ public class PredictionConfirm extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //Create default prediction medicine layout
-                    getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1",AppConstants.MEDICINE_TYPE_DEFAULT);
+                    getMedicineAndDosageToUI(AppConstants.MEDICINE_OTHER_ID, "1", AppConstants.MEDICINE_TYPE_DEFAULT);
                 }
             });
         } catch (Exception e) {
@@ -200,11 +203,10 @@ public class PredictionConfirm extends AppCompatActivity {
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
             medicine_confirm_layout.removeAllViews();
             medicine_confirm_img_add = findViewById(R.id.medicine_confirm_img_add);
-            medicine_confirm_instruction = findViewById(R.id.medicine_confirm_instruction);
             medicine_confirm_instruction_txt = findViewById(R.id.medicine_confirm_instruction_txt);
+            medicine_confirm_instruction_edit_layout = findViewById(R.id.medicine_confirm_instruction_edit_layout);
             medicine_confirm_layout_add_list = findViewById(R.id.medicine_confirm_layout_add_list);
             medicine_confirm_layout_title = findViewById(R.id.medicine_confirm_layout_title);
-
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");
@@ -251,7 +253,6 @@ public class PredictionConfirm extends AppCompatActivity {
                             }
                         }
                     });
-
                     // Set disease name
                     prediction_confirm_txt_disease_prediction_result.setText(selectedDisease.getName());
                     prediction_confirm_disease_select.setText(selectedDisease.getName());
@@ -409,12 +410,12 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_prediction_confirm_btn.setVisibility(View.VISIBLE);
 
             medicine_confirm_img_add.setVisibility(View.VISIBLE);
-            medicine_confirm_instruction.setVisibility(View.VISIBLE);
-            medicine_confirm_instruction_txt.setVisibility(View.VISIBLE);
+            medicine_confirm_instruction_edit_layout.setVisibility(View.VISIBLE);
             medicine_confirm_layout_add_list.setVisibility(View.VISIBLE);
             // hide
             prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
             prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
+            medicine_confirm_instruction_txt.setVisibility(View.GONE);
 
             medicine_confirm_layout.setVisibility(View.GONE);
             medicine_confirm_layout_title.setVisibility(View.GONE);
@@ -594,6 +595,28 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
+     * Dialog warning
+     */
+    private void displayWarningDialog(String message) {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(message);
+
+            builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            builder.create().show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "displayWarningDialog()");
+        }
+    }
+
+    /**
      * Get Prediction Medicine
      */
     private void getPredictionMedicine() {
@@ -606,7 +629,7 @@ public class PredictionConfirm extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes());
+                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes(), pm.getMedicineTypeID(), pm.getInstruction());
                     }
                 }
 
@@ -625,7 +648,7 @@ public class PredictionConfirm extends AppCompatActivity {
      * Get medicine
      * Then add medicine to layout medicine
      */
-    private void getMedicine(String medicineID, String dosage, String notes) {
+    private void getMedicine(String medicineID, String dosage, String notes, String medicineTypeID, String instruction) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
                     .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
@@ -643,6 +666,14 @@ public class PredictionConfirm extends AppCompatActivity {
                         } else {
                             medicineName.setText(m.getName());
                         }
+                        getMedicineTypeByID(medicineTypeID, dosage, medicineDosage);
+                        //Check if instruction equal to default, then show default_instruction message
+                        if (instruction.equals("Default")) {
+                            medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
+                        } else {
+                            medicine_confirm_instruction_txt.setText(instruction);
+                        }
+
                         medicineDosage.setText(dosage);
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
@@ -660,6 +691,39 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
+     * Get type of medicine by ID
+     *
+     * @param medicineTypeID medicine type
+     * @param dosage         dosage
+     * @param medicineDosage medicine dosage
+     */
+    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage) {
+        try {
+            //get medicine type
+            Query QGetMedicineType = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+                    .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+            QGetMedicineType.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        MedicineType mt = sn.getValue(MedicineType.class);
+                        medicineDosage.setText(dosage + " " + mt.getMedicineName());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(LOG_TAG, "getMedicineTypeByID()");
+        }
+    }
+
+    /**
      * Check valid of medicine_confirm_layout_add_list
      */
     private boolean checkPredictionMedicine() {
@@ -667,6 +731,7 @@ public class PredictionConfirm extends AppCompatActivity {
         if (checkMedicineLayout() == 0) {
             //Check predictionMedicineList is empty or not
             if (predictionMedicineList.size() == 0) {
+                displayWarningDialog(getString(R.string.default_empty_medicine));
                 return false;
             } else {
                 return true;
@@ -701,7 +766,7 @@ public class PredictionConfirm extends AppCompatActivity {
      *
      * @param predictionID prediction ID
      */
-    private void GetPredictionMedicineToUI(String predictionID) {
+    private void getPredictionMedicineToUI(String predictionID) {
         try {
             Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
                     .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
@@ -722,7 +787,7 @@ public class PredictionConfirm extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(LOG_TAG, "GetPredictionMedicineToUI()");
+            Log.d(LOG_TAG, "getPredictionMedicineToUI()");
         }
     }
 
@@ -767,14 +832,13 @@ public class PredictionConfirm extends AppCompatActivity {
      */
     private void addView(Medicine mMedicine, String dosage, String medicineTypeID) {
         try {
-
             //Find view of layout
             final View item_add_medicine
                     = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
             TextInputLayout item_add_medicine_editText_order_layout
                     = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
-            TextInputLayout item_add_medicine_type_editText_order_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_type_editText_order_layout);
+            LinearLayout item_add_medicine_linear_order_medicine
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_linear_order_medicine);
             TextInputLayout item_add_medicine_editText_dosage_layout
                     = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
             AutoCompleteTextView item_add_medicine_autoComplete
@@ -818,9 +882,9 @@ public class PredictionConfirm extends AppCompatActivity {
                             Medicine tmpM = (Medicine) adapterView.getItemAtPosition(i);
                             hiddenMedicineValue.setText(tmpM.getMedicineID());
                             if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
-                                item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                                item_add_medicine_linear_order_medicine.setVisibility(View.VISIBLE);
                             } else {
-                                item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                                item_add_medicine_linear_order_medicine.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -830,9 +894,9 @@ public class PredictionConfirm extends AppCompatActivity {
                     arrayAdapter.getFilter().filter(null);
                     //IF value equal to MEDICINE_OTHER_NAME. Then set visible editText
                     if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
-                        item_add_medicine_editText_order_layout.setVisibility(View.VISIBLE);
+                        item_add_medicine_linear_order_medicine.setVisibility(View.VISIBLE);
                     } else {
-                        item_add_medicine_editText_order_layout.setVisibility(View.GONE);
+                        item_add_medicine_linear_order_medicine.setVisibility(View.GONE);
                     }
                     hiddenMedicineValue.setText(mMedicine.getMedicineID());
                     item_add_medicine_editText_dosage_layout.getEditText().setText(dosage);
@@ -849,14 +913,14 @@ public class PredictionConfirm extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    //Clear medicine array
+                    //Clear medicine type array
                     loadMedicineTypeList.clear();
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         MedicineType medicineType = sn.getValue(MedicineType.class);
                         loadMedicineTypeList.add(medicineType);
                     }
 
-                    // Reverse medicine list
+                    // Reverse medicine type list
                     Collections.reverse(loadMedicineTypeList);
 
                     ArrayAdapter arrayAdapter = new ArrayAdapter(PredictionConfirm.this,
@@ -937,6 +1001,8 @@ public class PredictionConfirm extends AppCompatActivity {
                         .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_dosage_layout));
                 item_add_medicine_editText_order_layout.getEditText()
                         .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_order_layout));
+                medicine_confirm_instruction_edit_layout.getEditText()
+                        .addTextChangedListener(clearErrorOnTyping(medicine_confirm_instruction_edit_layout));
                 //Check valid on each layout
                 //If AutoCompleteTextView is other medicine
                 if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
@@ -966,8 +1032,12 @@ public class PredictionConfirm extends AppCompatActivity {
                     item_add_medicine_editText_dosage_layout.setError(getString(R.string.error_field_empty));
                     checkValid++;
                 }
-                if(!medicine_confirm_instruction_txt.getText().toString().equals("")){
-                    prm.setInstruction(medicine_confirm_instruction_txt.getText().toString());
+                //Check instruction empty
+                if (medicine_confirm_instruction_edit_layout.getEditText().getText().toString().equals("")) {
+                    medicine_confirm_instruction_edit_layout.setError(getString(R.string.error_field_empty));
+                    checkValid++;
+                } else {
+                    prm.setInstruction(medicine_confirm_instruction_edit_layout.getEditText().getText().toString());
                 }
                 //Add all prediction medicine to list
                 predictionMedicineList.add(prm);

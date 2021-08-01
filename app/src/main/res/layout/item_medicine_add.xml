@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/margin_top"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/margin_top">
 
     <ImageView
         android:id="@+id/item_add_medicine_btn_delete"
         android:layout_width="32dp"
         android:layout_height="24dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="@dimen/margin_top"
+        android:layout_marginEnd="3dp"
         app:srcCompat="@drawable/ic_delete" />
 
     <TextView
@@ -20,11 +20,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
     <TextView
         android:id="@+id/hiddenMedicineTypeValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,61 +37,69 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--        Placeholder-->
             <TextView
                 android:id="@+id/item_medicine_txt_name_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_gravity="center"
+                android:layout_marginEnd="3dp"
+                android:layout_weight=".25"
                 android:textColor="@color/black"
-                android:layout_marginEnd="@dimen/margin_top"
-                tools:text="@string/prediction_confirm_txt_medicine_name"
-                android:layout_gravity="center"/>
-            <LinearLayout
+                tools:text="@string/prediction_confirm_txt_medicine_name" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/item_add_medicine_autoComplete_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".7"
-                android:orientation="horizontal">
+                app:boxBackgroundColor="@color/background_B1_lightMode">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/item_add_medicine_autoComplete_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                <AutoCompleteTextView
+                    android:id="@+id/item_add_medicine_autoComplete"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:boxBackgroundColor="@color/background_B1_lightMode">
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:hint="@string/item_add_medicine_autoComplete"
+                    android:inputType="none"
+                    android:textColor="@color/black" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/item_add_medicine_autoComplete"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/item_add_medicine_autoComplete"
-                        android:textColor="@color/black"
-                        android:ellipsize="end"
-                        android:inputType="none" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/item_add_medicine_editText_order_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:endIconMode="clear_text"
-                    app:errorEnabled="true">
-
-                    <EditText
-                        android:id="@+id/item_add_medicine_editText_order"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textColor="@color/black"
-                        android:background="@null"
-                        android:hint="@string/item_add_medicine_editText_order_layout" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_add_medicine_linear_order_medicine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/margin_top"
+                android:layout_weight=".25" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/item_add_medicine_editText_order_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".7"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/item_add_medicine_editText_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="@string/item_add_medicine_editText_order_layout"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,85 +109,80 @@
                 android:id="@+id/item_medicine_txt_dosage_add"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".3"
+                android:layout_gravity="center"
+                android:layout_marginEnd="3dp"
+                android:layout_weight=".25"
                 android:textColor="@color/black"
-                android:layout_marginEnd="@dimen/margin_top"
-                tools:text="@string/prediction_confirm_txt_medicine_dosage"
-                android:layout_gravity="center"/>
+                tools:text="@string/prediction_confirm_txt_medicine_dosage" />
+
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7"
+                android:layout_weight=".25"
                 android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="0dp"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_add_medicine_editText_dosage_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".4"
-                    android:orientation="horizontal">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/item_add_medicine_editText_dosage_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:background="@null"
+                    app:endIconMode="clear_text">
+
+                    <EditText
+                        android:id="@+id/item_add_medicine_editText_dosage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:background="@null"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".9"
-                        app:endIconMode="clear_text">
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-                        <EditText
-                            android:id="@+id/item_add_medicine_editText_dosage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@null"
-                            android:textColor="@color/black"
-                            android:singleLine="true"
-                            android:inputType="number"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".45"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_add_medicine_type_autoComplete_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".6"
-                    android:orientation="horizontal">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/item_add_medicine_type_autoComplete_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    app:boxBackgroundColor="@color/background_B1_lightMode">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/item_add_medicine_type_autoComplete"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:boxBackgroundColor="@color/background_B1_lightMode">
+                        android:layout_height="match_parent"
+                        android:ellipsize="end"
+                        android:hint="@string/item_add_medicine_type_autoComplete"
+                        android:inputType="none"
+                        android:textColor="@color/black" />
 
-                        <AutoCompleteTextView
-                            android:id="@+id/item_add_medicine_type_autoComplete"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="Loại"
-                            android:textColor="@color/black"
-                            android:ellipsize="end"
-                            android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/item_add_medicine_type_editText_order_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/item_add_medicine_type_editText_order_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    <EditText
+                        android:id="@+id/item_add_medicine_type_editText_order"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:endIconMode="clear_text"
-                        app:errorEnabled="true">
-
-                        <EditText
-                            android:id="@+id/item_add_medicine_type_editText_order"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textColor="@color/black"
-                            android:background="@null"
-                            android:hint="@string/item_add_medicine_editText_order_layout" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="@string/item_add_medicine_editText_order_layout"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

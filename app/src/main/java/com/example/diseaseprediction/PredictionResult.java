@@ -512,9 +512,13 @@ public class PredictionResult extends AppCompatActivity {
                         } else {
                             medicineName.setText(m.getName());
                         }
-                        getMedicineTypeByID(medicineTypeID,dosage,medicineDosage);
-
-                        medicine_confirm_instruction_txt.setText(instruction);
+                        getMedicineTypeByID(medicineTypeID, dosage, medicineDosage);
+                        //Check if instruction equal to default, then show default_instruction message
+                        if (instruction.equals("Default")) {
+                            medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
+                        } else {
+                            medicine_confirm_instruction_txt.setText(instruction);
+                        }
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
                 }

@@ -122,6 +122,9 @@
     <string name="default_empty_experience">Please enter your year of experience</string>
     <string name="default_empty_description">Please enter some description about you</string>
     <string name="default_empty_specialization">Please select specialization</string>
+    <string name="default_instruction">No instructions yet</string>
+    <string name="default_empty_medicine">Please add medicine before confirming</string>
+    <string name="default_other_disease_confirm">Please click incorrect to re-diagnose the disease</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>
@@ -210,7 +213,7 @@
     <string name="prediction_confirm_dialog_prediction_status_invalid">Sorry! This prediction already confirm by another doctor\nYou will be redirect to Home screen</string>
     <string name="prediction_confirm_txt_medicine">Medicine</string>
     <string name="prediction_confirm_txt_medicine_name">Medicine name</string>
-    <string name="prediction_confirm_txt_medicine_dosage">Dosage (Per day)</string>
+    <string name="prediction_confirm_txt_medicine_dosage">Dosage \n(Per day)</string>
     <string name="prediction_confirm_txt_medicine_instruction">Instructions for drug use</string>
     <string name="prediction_txt_today">Today</string>
     <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
@@ -227,10 +230,15 @@
     <string name="disconnect_title">No Internet connection</string>
     <string name="disconnect_internet_btn_retry">Retry</string>
     <string name="disconnect_message">Please check your internet connection and try again later</string>
+
     <string name="item_add_medicine_editText_dosage">Dosage</string>
     <string name="item_add_medicine_editText_order_layout">Other medicine</string>
     <string name="item_add_medicine_autoComplete">Select medicine</string>
+    <string name="item_add_medicine_type_autoComplete">Type</string>
+
     <string name="prediction_confirm_add_medicine">Add new Medicine</string>
+    <string name="prediction_confirm_txt_medicine_instruction_title">Instruction</string>
+
     <string name="chat_dialog_attention_title">Attention!</string>
     <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n1) You need to enter your symptoms clearly.\n2) Different symptoms should be separated by commas.\n3) Negative sentences should not be used</string>
     <string name="chat_dialog_attention_btn_understand">I understand</string>
@@ -240,8 +248,6 @@
     <string name="dialog_prediction_edit_check_again">Re-check</string>
 
     <string name="filechooser_picture">Select Picture</string>
-    <string name="prediction_confirm_txt_medicine_instruction_title">Instruction</string>
-
 
     <string-array name="spinner_language">
         <item>EN</item>
