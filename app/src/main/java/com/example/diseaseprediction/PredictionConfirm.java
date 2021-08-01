@@ -256,10 +256,15 @@ public class PredictionConfirm extends AppCompatActivity {
                             }
                         }
                     });
-                    // Set disease name
+
+                    // Set disease name and default selected disease
                     prediction_confirm_txt_disease_prediction_result.setText(selectedDisease.getName());
                     prediction_confirm_disease_select.setText(selectedDisease.getName());
                     diseaseAdapter.getFilter().filter(null);
+                    // if selected disease is "Other disease" -> display Incorrect layout for doctor to edit disease
+                    if (selectedDisease.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
+                        changeUIIncorrect();
+                    }
 
                 }
 
@@ -421,6 +426,7 @@ public class PredictionConfirm extends AppCompatActivity {
             if (selectedDisease.getDiseaseID().equals(AppConstants.MEDICINE_OTHER_ID)) {
                 prediction_confirm_disease_other_layout.setVisibility(View.VISIBLE);
             }
+
             // hide
             prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
             prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
@@ -428,6 +434,7 @@ public class PredictionConfirm extends AppCompatActivity {
 
             medicine_confirm_layout.setVisibility(View.GONE);
             medicine_confirm_layout_title.setVisibility(View.GONE);
+
             // set text
             prediction_confirm_txt_disease_prediction_result.setText(R.string.prediction_confirm_txt_disease_prediction_title);
         } catch (Exception e) {
