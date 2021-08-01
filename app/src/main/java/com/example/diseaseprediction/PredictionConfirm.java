@@ -231,6 +231,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     // Get diseases and add to list
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Disease disease = sn.getValue(Disease.class);
+                        // if this disease is the predicted one -> save for later use
                         if (disease.getDiseaseID().equals(mPrediction.getDiseaseID())) {
                             selectedDisease = disease;
                         }
