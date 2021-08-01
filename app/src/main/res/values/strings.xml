@@ -211,6 +211,7 @@
     <string name="prediction_confirm_txt_medicine">Medicine</string>
     <string name="prediction_confirm_txt_medicine_name">Medicine name</string>
     <string name="prediction_confirm_txt_medicine_dosage">Dosage (Per day)</string>
+    <string name="prediction_confirm_txt_medicine_instruction">Instructions for drug use</string>
     <string name="prediction_txt_today">Today</string>
     <string name="prediction_result_disease_updated">Disease (Disease updated)</string>
     <string name="prediction_result_medicine_updated">Medicine (Doctor confirmed)</string>
@@ -239,6 +240,7 @@
     <string name="dialog_prediction_edit_check_again">Re-check</string>
 
     <string name="filechooser_picture">Select Picture</string>
+    <string name="prediction_confirm_txt_medicine_instruction_title">Instruction</string>
 
 
     <string-array name="spinner_language">

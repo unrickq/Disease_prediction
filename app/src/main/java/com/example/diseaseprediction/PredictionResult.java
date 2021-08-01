@@ -26,6 +26,7 @@ import com.example.diseaseprediction.object.Advise;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.DiseaseAdvise;
 import com.example.diseaseprediction.object.Medicine;
+import com.example.diseaseprediction.object.MedicineType;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Prediction;
 import com.example.diseaseprediction.object.PredictionMedicine;
@@ -61,7 +62,7 @@ public class PredictionResult extends AppCompatActivity {
     private ArrayAdapter<String> adviseAdapter;
     private Prediction mPrediction;
     private String sessionID;
-
+    private ArrayList<MedicineType> loadMedicineTypeList = new ArrayList<>();
     private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
         prediction_listview_advice_result,
         prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
@@ -72,6 +73,7 @@ public class PredictionResult extends AppCompatActivity {
     private View item_medicine_view;
     private TextView medicineName;
     private TextView medicineDosage;
+    private TextView medicine_confirm_instruction_txt;
 
     /**
      * Set height of listview manual
@@ -184,6 +186,7 @@ public class PredictionResult extends AppCompatActivity {
             prediction_layout_contact_doctor = findViewById(R.id.prediction_layout_contact_doctor);
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
             prediction_result_medicine_layout = findViewById(R.id.prediction_result_medicine_layout);
+            medicine_confirm_instruction_txt = findViewById(R.id.medicine_confirm_instruction_txt);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "findView()");
@@ -472,7 +475,7 @@ public class PredictionResult extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
-                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes());
+                        getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes(),pm.getMedicineTypeID(),pm.getInstruction());
                     }
                 }
 
@@ -491,7 +494,7 @@ public class PredictionResult extends AppCompatActivity {
      * Get medicine.
      * Then set data to layout of medicine
      */
-    private void getMedicine(String medicineID, String dosage, String notes) {
+    private void getMedicine(String medicineID, String dosage, String notes, String medicineTypeID, String instruction) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
                     .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
@@ -509,21 +512,43 @@ public class PredictionResult extends AppCompatActivity {
                         } else {
                             medicineName.setText(m.getName());
                         }
-                        medicineDosage.setText(dosage);
+                        getMedicineTypeByID(medicineTypeID,dosage,medicineDosage);
+
+                        medicine_confirm_instruction_txt.setText(instruction);
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
                 }
-
 
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "getMedicine()");
         }
+    }
+    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage){
+        //get medicine type
+        Query QGetMedicineType = FirebaseDatabase.getInstance()
+                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+                .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+        QGetMedicineType.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    MedicineType mt = sn.getValue(MedicineType.class);
+                    medicineDosage.setText(dosage+" "+mt.getMedicineName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
 }

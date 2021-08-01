@@ -292,6 +292,26 @@
                     android:textStyle="bold"
                     android:visibility="gone"
                     app:drawableStartCompat="@drawable/ic_add" />
+                <TextView
+                    android:id="@+id/medicine_confirm_instruction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginBottom="@dimen/margin_top"
+                    android:drawablePadding="3dp"
+                    android:labelFor="@+id/medicine_confirm_img_add"
+                    android:text="@string/prediction_confirm_txt_medicine_instruction_title"
+                    android:textColor="@color/theme_1_P"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+                <EditText
+                    android:id="@+id/medicine_confirm_instruction_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/prediction_confirm_txt_medicine_instruction"
+                    android:visibility="gone">
+
+                </EditText>
             </LinearLayout>
 
 

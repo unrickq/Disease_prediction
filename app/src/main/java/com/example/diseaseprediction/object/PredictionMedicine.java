@@ -8,23 +8,65 @@ public class PredictionMedicine {
     private String predictionID;
     private String medicineID;
     private String dosage;
+    private String medicineTypeID;
     private String notes;
+    private String instruction;
     private int status;
 
     /**
      * Create new Prediction Medicine object
-     *
-     * @param predictionID Prediction ID
-     * @param medicineID   Medicine ID
-     * @param dosage       dosage
-     * @param status       0: Deleted | 1: Normal
+     * @param predictionID
+     * @param medicineID
+     * @param dosage
+     * @param medicineTypeID
+     * @param notes
+     * @param instruction
+     * @param status
      */
-    public PredictionMedicine(String predictionID, String medicineID, String dosage, String notes, int status) {
+    public PredictionMedicine(String predictionID, String medicineID, String dosage, String medicineTypeID, String notes, String instruction, int status) {
         this.predictionID = predictionID;
         this.medicineID = medicineID;
         this.dosage = dosage;
+        this.medicineTypeID = medicineTypeID;
         this.notes = notes;
+        this.instruction = instruction;
         this.status = status;
+    }
+
+    /**
+     * get Medicine Type ID
+     *
+     * @return
+     */
+    public String getMedicineTypeID() {
+        return medicineTypeID;
+    }
+
+    /**
+     * set Medicine Type ID
+     *
+     * @param medicineTypeID
+     */
+    public void setMedicineTypeID(String medicineTypeID) {
+        this.medicineTypeID = medicineTypeID;
+    }
+
+    /**
+     * get Instruction
+     *
+     * @return
+     */
+    public String getInstruction() {
+        return instruction;
+    }
+
+    /**
+     * set Instruction
+     *
+     * @param intruction
+     */
+    public void setInstruction(String intruction) {
+        this.instruction = intruction;
     }
 
     /**
