@@ -114,7 +114,9 @@
     <string name="default_instruction">Chưa có hướng dẫn sử dụng thuốc</string>
     <string name="default_empty_medicine">Xin vui lòng thêm thuốc trước khi xác nhận</string>
     <string name="default_other_disease_confirm">Xin vui lòng nhấn chưa chính xác để chẩn đoán lại bệnh</string>
-
+    <string name="default_medicine_empty_doctor">Xin vui lòng kê đơn thuốc</string>
+    <string name="default_empty_medicine_add">Xin vui lòng nhấn chưa chính xác để thêm thuốc</string>
+    
     <string name="dialog_confirm_change_img">Nhấn Có để chỉnh sửa ảnh đại diện</string>
     <string name="dialog_confirm_change_account">Bạn có chắc muốn lưu lại không?</string>
     <string name="dialog_confirm_change_account_yes">Có</string>

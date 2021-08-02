@@ -64,14 +64,14 @@ public class PredictionResult extends AppCompatActivity {
     private String sessionID;
     private ArrayList<MedicineType> loadMedicineTypeList = new ArrayList<>();
     private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
-        prediction_listview_advice_result,
-        prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
-        prediction_txt_medicine_title;
+            prediction_listview_advice_result,
+            prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
+            prediction_txt_medicine_title;
     private ImageView prediction_img_status, prediction_toolbar_img_pre;
     private LinearLayout prediction_layout_contact_doctor;
     private LinearLayout medicine_confirm_layout, prediction_result_medicine_layout;
     private View item_medicine_view;
-    private TextView medicineName;
+    private TextView medicineName, prediction_txt_medicine_empty;
     private TextView medicineDosage;
     private TextView medicine_confirm_instruction_txt;
 

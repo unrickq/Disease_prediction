@@ -84,7 +84,7 @@
                     style="@style/subTitle_1_bold"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/margin_top"
+                    android:layout_marginStart="@dimen/margin_top"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="@string/prediction_txt_status" />
@@ -110,7 +110,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_top"
+                    android:layout_marginStart="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -119,7 +119,6 @@
                         style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/prediction_txt_disease_title" />
 
                     <TextView
@@ -152,7 +151,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_top"
+                    android:layout_marginStart="@dimen/margin_top"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -161,7 +160,6 @@
                         style="@style/subTitle_1_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/prediction_txt_disease_description_title" />
 
                     <TextView
@@ -169,7 +167,6 @@
                         style="@style/subTitle_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/prediction_txt_disease_description_title" />
 
                 </LinearLayout>
@@ -191,7 +188,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -201,15 +197,29 @@
                         android:layout_weight="1"
                         android:src="@drawable/ic_prediction_medicine" />
 
-                    <TextView
-                        android:id="@+id/prediction_txt_medicine_title"
-                        style="@style/subTitle_1_bold"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_top"
                         android:layout_weight="1"
-                        android:text="@string/prediction_txt_medicine_title" />
 
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/prediction_txt_medicine_title"
+                            style="@style/subTitle_1_bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/prediction_txt_medicine_title" />
+
+                        <TextView
+                            android:id="@+id/prediction_txt_medicine_empty"
+                            style="@style/subTitle_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/default_medicine_empty_doctor"
+                            android:visibility="gone" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -218,6 +228,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView

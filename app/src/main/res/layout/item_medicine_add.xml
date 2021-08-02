@@ -78,7 +78,6 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="@dimen/margin_top"
                 android:layout_weight=".25" />
 
             <com.google.android.material.textfield.TextInputLayout

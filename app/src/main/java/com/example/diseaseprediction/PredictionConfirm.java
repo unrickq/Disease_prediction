@@ -65,12 +65,12 @@ public class PredictionConfirm extends AppCompatActivity {
     private TextView prediction_confirm_txt_disease_description_result;
     private TextView prediction_confirm_txt_disease_prediction_result;
     private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout,
-        medicine_confirm_instruction_edit_layout;
+            medicine_confirm_instruction_edit_layout;
     private AutoCompleteTextView prediction_confirm_disease_select;
     private EditText prediction_confirm_disease_other;
     private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
-        prediction_confirm_prediction_confirm_btn;
-    private TextView prediction_confirm_txt_medicine_name, medicine_confirm_instruction_txt;
+            prediction_confirm_prediction_confirm_btn;
+    private TextView prediction_confirm_txt_medicine_name, medicine_confirm_instruction_txt, prediction_txt_medicine_empty;
     private TextView prediction_confirm_txt_medicine_dosage, medicine_confirm_img_add;
     private LinearLayout medicine_confirm_layout, medicine_confirm_layout_add_list;
     private View item_medicine_view;
@@ -82,6 +82,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private Prediction mPrediction;
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
+    private boolean isMedicineEmpty = true;
 
 
     @Override
@@ -141,7 +142,11 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (mPrediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                         displayWarningDialog(getString(R.string.default_other_disease_confirm));
                     } else {
-                        displayConfirmDialog(1);
+                        if (isMedicineEmpty) {
+                            displayWarningDialog(getString(R.string.default_empty_medicine_add));
+                        } else {
+                            displayConfirmDialog(1);
+                        }
                     }
                 }
             });
@@ -185,9 +190,9 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_toolbar_img_pre = findViewById(R.id.prediction_confirm_toolbar_img_pre);
 
             prediction_confirm_txt_disease_description_result =
-                findViewById(R.id.prediction_confirm_txt_patient_description_txt);
+                    findViewById(R.id.prediction_confirm_txt_patient_description_txt);
             prediction_confirm_txt_disease_prediction_result =
-                findViewById(R.id.prediction_confirm_txt_disease_prediction_disease_name);
+                    findViewById(R.id.prediction_confirm_txt_disease_prediction_disease_name);
 
             prediction_confirm_disease_select_layout = findViewById(R.id.prediction_confirm_disease_select_layout);
             prediction_confirm_disease_select = findViewById(R.id.prediction_confirm_disease_select);
@@ -210,6 +215,7 @@ public class PredictionConfirm extends AppCompatActivity {
             medicine_confirm_instruction_edit_layout = findViewById(R.id.medicine_confirm_instruction_edit_layout);
             medicine_confirm_layout_add_list = findViewById(R.id.medicine_confirm_layout_add_list);
             medicine_confirm_layout_title = findViewById(R.id.medicine_confirm_layout_title);
+            prediction_txt_medicine_empty = findViewById(R.id.prediction_txt_medicine_empty);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(LOG_TAG, "getViews()");
@@ -240,8 +246,8 @@ public class PredictionConfirm extends AppCompatActivity {
 
                     // create new ArrayAdapter
                     diseaseAdapter = new ArrayAdapter(PredictionConfirm.this,
-                        R.layout.support_simple_spinner_dropdown_item,
-                        diseasesList);
+                            R.layout.support_simple_spinner_dropdown_item,
+                            diseasesList);
                     prediction_confirm_disease_select.setAdapter(diseaseAdapter);
 
                     // Set onItemClickListener to check for 'other disease', then set visibility of input layout
@@ -291,7 +297,7 @@ public class PredictionConfirm extends AppCompatActivity {
             String sessionID = mPrediction.getSessionID();
             // get messages in session between user and chat bot
             mRef = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -307,7 +313,7 @@ public class PredictionConfirm extends AppCompatActivity {
                         } catch (NullPointerException e) {
                             Log.e(LOG_TAG, "loadPatientDescription: Null pointer", e);
                             Toast.makeText(PredictionConfirm.this, getString(R.string.error_unknown_contactDev),
-                                Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                     displayMessagesList(messagesList);
@@ -485,7 +491,7 @@ public class PredictionConfirm extends AppCompatActivity {
             // check if prediction status still equal to 0 i.e "waiting for confirmation"
             if (predictionStatus == 0) {
                 mRef =
-                    FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
                 mRef.child("doctorID").setValue(doctorID);
                 // if prediction correct
                 if (type == 0) {
@@ -518,7 +524,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private void checkPredictionStatus() {
         try {
             mRef =
-                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+                    FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -541,7 +547,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     } catch (NullPointerException e) {
                         Log.e(LOG_TAG, "checkPredictionStatus: Param null", e);
                         Toast.makeText(PredictionConfirm.this, getString(R.string.error_unknown_contactDev),
-                            Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -564,20 +570,20 @@ public class PredictionConfirm extends AppCompatActivity {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.dialog_prediction_edit_confirm));
             builder.setPositiveButton(getString(R.string.dialog_prediction_edit_confirmed),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        savePredicitonMedicine();
-                        savePrediction(doctorID, type);
-                    }
-                });
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            savePredicitonMedicine();
+                            savePrediction(doctorID, type);
+                        }
+                    });
             builder.setNegativeButton(getString(R.string.dialog_prediction_edit_check_again),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
+                        }
+                    });
             builder.create().show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -638,15 +644,16 @@ public class PredictionConfirm extends AppCompatActivity {
     private void getPredictionMedicine() {
         try {
             Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
-                .orderByChild("predictionID").equalTo(mPrediction.getPredictionID());
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(mPrediction.getPredictionID());
             QGetPredictionMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         PredictionMedicine pm = sn.getValue(PredictionMedicine.class);
                         getMedicine(pm.getMedicineID(), pm.getDosage(), pm.getNotes(), pm.getMedicineTypeID(),
-                            pm.getInstruction());
+                                pm.getInstruction());
+                        predictionMedicineList.add(pm);
                     }
                 }
 
@@ -669,8 +676,8 @@ public class PredictionConfirm extends AppCompatActivity {
                              String instruction) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                .orderByChild("medicineID").equalTo(medicineID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -694,6 +701,15 @@ public class PredictionConfirm extends AppCompatActivity {
 
                         medicineDosage.setText(dosage);
                         medicine_confirm_layout.addView(item_medicine_view);
+                    }
+                    if (!medicineName.getText().toString().isEmpty()) {
+                        isMedicineEmpty = false;
+                        medicine_confirm_layout_title.setVisibility(View.VISIBLE);
+                        prediction_txt_medicine_empty.setVisibility(View.GONE);
+                    } else {
+                        isMedicineEmpty = true;
+                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
+                        medicine_confirm_layout_title.setVisibility(View.GONE);
                     }
                 }
 
@@ -719,8 +735,8 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             //get medicine type
             Query QGetMedicineType = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
-                .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+                    .orderByChild("medicineTypeID").equalTo(medicineTypeID);
             QGetMedicineType.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -768,9 +784,9 @@ public class PredictionConfirm extends AppCompatActivity {
             //Then add new prediction medicine to firebase
             for (int i = 0; i < predictionMedicineList.size(); i++) {
                 PredictionMedicine tmp = new PredictionMedicine(mPrediction.getPredictionID(),
-                    predictionMedicineList.get(i).getMedicineID(),
-                    predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
-                    predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
+                        predictionMedicineList.get(i).getMedicineID(),
+                        predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
+                        predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
                 addPredictionMedicine(tmp);
             }
         } catch (Exception e) {
@@ -787,8 +803,8 @@ public class PredictionConfirm extends AppCompatActivity {
     private void getPredictionMedicineToUI(String predictionID) {
         try {
             Query QGetPredictionMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
-                .orderByChild("predictionID").equalTo(predictionID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
             QGetPredictionMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -819,8 +835,8 @@ public class PredictionConfirm extends AppCompatActivity {
     private void getMedicineAndDosageToUI(String medicineID, String dosage, String medicineTypeID) {
         try {
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
-                .orderByChild("medicineID").equalTo(medicineID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE)
+                    .orderByChild("medicineID").equalTo(medicineID);
             QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -852,23 +868,23 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             //Find view of layout
             final View item_add_medicine
-                = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
+                    = getLayoutInflater().inflate(R.layout.item_medicine_add, null, false);
             TextInputLayout item_add_medicine_editText_order_layout
-                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
             LinearLayout item_add_medicine_linear_order_medicine
-                = item_add_medicine.findViewById(R.id.item_add_medicine_linear_order_medicine);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_linear_order_medicine);
             TextInputLayout item_add_medicine_editText_dosage_layout
-                = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
             AutoCompleteTextView item_add_medicine_autoComplete
-                = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
             AutoCompleteTextView item_add_medicine_type_autoComplete
-                = item_add_medicine.findViewById(R.id.item_add_medicine_type_autoComplete);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_type_autoComplete);
             ImageView item_add_medicine_btn_delete
-                = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
+                    = item_add_medicine.findViewById(R.id.item_add_medicine_btn_delete);
             TextView hiddenMedicineValue
-                = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
             TextView hiddenMedicineTypeValue
-                = item_add_medicine.findViewById(R.id.hiddenMedicineTypeValue);
+                    = item_add_medicine.findViewById(R.id.hiddenMedicineTypeValue);
             TextView item_medicine_txt_dosage_add = item_add_medicine.findViewById(R.id.item_medicine_txt_dosage_add);
             TextView item_medicine_txt_name_add = item_add_medicine.findViewById(R.id.item_medicine_txt_name_add);
             item_medicine_txt_name_add.setText(R.string.prediction_confirm_txt_medicine_name);
@@ -890,7 +906,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     Collections.reverse(loadMedicineList);
 
                     ArrayAdapter arrayAdapter = new ArrayAdapter(PredictionConfirm.this,
-                        android.R.layout.simple_spinner_item, loadMedicineList);
+                            android.R.layout.simple_spinner_item, loadMedicineList);
                     item_add_medicine_autoComplete.setAdapter(arrayAdapter);
 
                     //Handle event item click AutoCompleteTextView
@@ -942,7 +958,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     Collections.reverse(loadMedicineTypeList);
 
                     ArrayAdapter arrayAdapter = new ArrayAdapter(PredictionConfirm.this,
-                        android.R.layout.simple_spinner_item, loadMedicineTypeList);
+                            android.R.layout.simple_spinner_item, loadMedicineTypeList);
                     item_add_medicine_type_autoComplete.setAdapter(arrayAdapter);
 
                     //Handle event item click AutoCompleteTextView
@@ -1000,28 +1016,28 @@ public class PredictionConfirm extends AppCompatActivity {
             //Loop all layout
             for (int i = 0; i < medicine_confirm_layout_add_list.getChildCount(); i++) {
                 PredictionMedicine prm = new PredictionMedicine(mPrediction.getPredictionID(), "Default", "Default",
-                    AppConstants.MEDICINE_TYPE_DEFAULT, "Default", "Default", 1);
+                        AppConstants.MEDICINE_TYPE_DEFAULT, "Default", "Default", 1);
                 //Get view on each layout
                 View item_add_medicine = medicine_confirm_layout_add_list.getChildAt(i);
                 //Find UI
                 TextInputLayout item_add_medicine_editText_dosage_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
                 TextInputLayout item_add_medicine_editText_order_layout
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
                 AutoCompleteTextView item_add_medicine_autoComplete
-                    = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
+                        = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
                 TextView hiddenMedicineValue
-                    = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
+                        = item_add_medicine.findViewById(R.id.hiddenMedicineValue);
                 TextView hiddenMedicineTypeValue
-                    = item_add_medicine.findViewById(R.id.hiddenMedicineTypeValue);
+                        = item_add_medicine.findViewById(R.id.hiddenMedicineTypeValue);
 
                 //Add event clear error
                 item_add_medicine_editText_dosage_layout.getEditText()
-                    .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_dosage_layout));
+                        .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_dosage_layout));
                 item_add_medicine_editText_order_layout.getEditText()
-                    .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_order_layout));
+                        .addTextChangedListener(clearErrorOnTyping(item_add_medicine_editText_order_layout));
                 medicine_confirm_instruction_edit_layout.getEditText()
-                    .addTextChangedListener(clearErrorOnTyping(medicine_confirm_instruction_edit_layout));
+                        .addTextChangedListener(clearErrorOnTyping(medicine_confirm_instruction_edit_layout));
                 //Check valid on each layout
                 //If AutoCompleteTextView is other medicine
                 if (item_add_medicine_autoComplete.getText().toString().equals(AppConstants.MEDICINE_OTHER_NAME)) {
@@ -1085,12 +1101,12 @@ public class PredictionConfirm extends AppCompatActivity {
     private void addPredictionMedicine(PredictionMedicine predictionMedicine) {
         try {
             DatabaseReference newRef = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE);
             newRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     newRef.child(mRef.push().getKey())
-                        .setValue(predictionMedicine);
+                            .setValue(predictionMedicine);
                 }
 
                 @Override
@@ -1113,8 +1129,8 @@ public class PredictionConfirm extends AppCompatActivity {
         try {
             //Find all prediction medicine where predictionID = "value"
             Query QGetMedicine = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
-                .orderByChild("predictionID").equalTo(predictionID);
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION_MEDICINE)
+                    .orderByChild("predictionID").equalTo(predictionID);
             QGetMedicine.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {

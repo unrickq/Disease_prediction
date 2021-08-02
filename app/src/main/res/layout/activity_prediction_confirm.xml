@@ -217,14 +217,28 @@
                         android:layout_weight="1"
                         android:src="@drawable/ic_prediction_medicine" />
 
-                    <TextView
-                        android:id="@+id/prediction_confirm_txt_medicine_title"
-                        style="@style/subTitle_1_bold"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_top"
                         android:layout_weight="1"
-                        android:text="@string/prediction_confirm_txt_medicine" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/prediction_confirm_txt_medicine_title"
+                            style="@style/subTitle_1_bold"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/prediction_confirm_txt_medicine" />
+
+                        <TextView
+                            android:id="@+id/prediction_txt_medicine_empty"
+                            style="@style/subTitle_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/default_medicine_empty_doctor"
+                            android:visibility="visible" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -234,7 +248,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <!--                    Placeholder-->
                     <ImageView
@@ -315,15 +330,16 @@
                         <TextView
                             android:id="@+id/medicine_confirm_instruction"
                             style="@style/subTitle_1_bold"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/prediction_confirm_txt_medicine_instruction_title" />
 
                         <TextView
                             android:id="@+id/medicine_confirm_instruction_txt"
+                            style="@style/subTitle_2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/prediction_confirm_txt_medicine_instruction" />
+                            android:layout_height="wrap_content"
+                            android:text="@string/prediction_confirm_txt_medicine_instruction" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/medicine_confirm_instruction_edit_layout"
