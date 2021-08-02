@@ -534,25 +534,38 @@ public class PredictionResult extends AppCompatActivity {
             Log.d(TAG, "getMedicine()");
         }
     }
+
+    /**
+     * get medicine type by ID and set text for medicineDosage
+     *
+     * @param medicineTypeID
+     * @param dosage
+     * @param medicineDosage
+     */
     private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage){
-        //get medicine type
-        Query QGetMedicineType = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
-                .orderByChild("medicineTypeID").equalTo(medicineTypeID);
-        QGetMedicineType.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                for (DataSnapshot sn : snapshot.getChildren()) {
-                    MedicineType mt = sn.getValue(MedicineType.class);
-                    medicineDosage.setText(dosage+" "+mt.getMedicineName());
+        try{
+            //get medicine type
+            Query QGetMedicineType = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+                    .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+            QGetMedicineType.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        MedicineType mt = sn.getValue(MedicineType.class);
+                        medicineDosage.setText(dosage+" "+mt.getMedicineName());
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "getMedicineTypeByID");
+        }
     }
 
 }
