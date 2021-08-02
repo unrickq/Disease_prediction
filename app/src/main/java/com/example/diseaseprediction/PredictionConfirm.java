@@ -64,8 +64,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private ImageView prediction_confirm_toolbar_img_pre;
     private TextView prediction_confirm_txt_disease_description_result;
     private TextView prediction_confirm_txt_disease_prediction_result;
-    private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout,
-            medicine_confirm_instruction_edit_layout;
+    private TextInputLayout prediction_confirm_disease_select_layout, prediction_confirm_disease_other_layout;
     private AutoCompleteTextView prediction_confirm_disease_select;
     private EditText prediction_confirm_disease_other;
     private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
@@ -83,7 +82,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
     private boolean isMedicineEmpty = true;
-
+    private boolean isInstructionEmpty = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +141,11 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (mPrediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                         displayWarningDialog(getString(R.string.default_other_disease_confirm));
                     } else {
+                        //Check if medicine is empty
                         if (isMedicineEmpty) {
                             displayWarningDialog(getString(R.string.default_empty_medicine_add));
+                        } else if (isInstructionEmpty) { //check if instruction as a default
+                            displayWarningDialog(getString(R.string.default_empty_instruction));
                         } else {
                             displayConfirmDialog(1);
                         }
@@ -211,8 +213,6 @@ public class PredictionConfirm extends AppCompatActivity {
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
             medicine_confirm_layout.removeAllViews();
             medicine_confirm_img_add = findViewById(R.id.medicine_confirm_img_add);
-            medicine_confirm_instruction_txt = findViewById(R.id.medicine_confirm_instruction_txt);
-            medicine_confirm_instruction_edit_layout = findViewById(R.id.medicine_confirm_instruction_edit_layout);
             medicine_confirm_layout_add_list = findViewById(R.id.medicine_confirm_layout_add_list);
             medicine_confirm_layout_title = findViewById(R.id.medicine_confirm_layout_title);
             prediction_txt_medicine_empty = findViewById(R.id.prediction_txt_medicine_empty);
@@ -426,7 +426,6 @@ public class PredictionConfirm extends AppCompatActivity {
             prediction_confirm_prediction_confirm_btn.setVisibility(View.VISIBLE);
 
             medicine_confirm_img_add.setVisibility(View.VISIBLE);
-            medicine_confirm_instruction_edit_layout.setVisibility(View.VISIBLE);
             medicine_confirm_layout_add_list.setVisibility(View.VISIBLE);
 
             // If current disease is 'Other disease' -> display edit text for doctor to enter disease name
@@ -437,7 +436,6 @@ public class PredictionConfirm extends AppCompatActivity {
             // hide
             prediction_confirm_prediction_correct_btn.setVisibility(View.GONE);
             prediction_confirm_prediction_wrong_btn.setVisibility(View.GONE);
-            medicine_confirm_instruction_txt.setVisibility(View.GONE);
 
             medicine_confirm_layout.setVisibility(View.GONE);
             medicine_confirm_layout_title.setVisibility(View.GONE);
@@ -686,6 +684,7 @@ public class PredictionConfirm extends AppCompatActivity {
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
                         medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
                         medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
+                        medicine_confirm_instruction_txt = item_medicine_view.findViewById(R.id.medicine_confirm_instruction_txt);
                         if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
                             medicineName.setText(notes);
                         } else {
@@ -695,7 +694,9 @@ public class PredictionConfirm extends AppCompatActivity {
                         //Check if instruction equal to default, then show default_instruction message
                         if (instruction.equals("Default")) {
                             medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
+                            isInstructionEmpty = true;
                         } else {
+                            isInstructionEmpty = false;
                             medicine_confirm_instruction_txt.setText(instruction);
                         }
 
@@ -1024,6 +1025,8 @@ public class PredictionConfirm extends AppCompatActivity {
                         = item_add_medicine.findViewById(R.id.item_add_medicine_editText_dosage_layout);
                 TextInputLayout item_add_medicine_editText_order_layout
                         = item_add_medicine.findViewById(R.id.item_add_medicine_editText_order_layout);
+                TextInputLayout medicine_confirm_instruction_edit_layout
+                        = item_add_medicine.findViewById(R.id.medicine_confirm_instruction_edit_layout);
                 AutoCompleteTextView item_add_medicine_autoComplete
                         = item_add_medicine.findViewById(R.id.item_add_medicine_autoComplete);
                 TextView hiddenMedicineValue

@@ -127,6 +127,7 @@
     <string name="default_other_disease_confirm">Please click incorrect to re-diagnose the disease</string>
     <string name="default_medicine_empty_doctor">Please prescribe medicine for the patient</string>
     <string name="default_empty_medicine_add">Please click incorrect to add medicine</string>
+    <string name="default_empty_instruction">Please click incorrect to add instruction</string>
 
     <string name="dialog_confirm_change_img">Press Yes to upload new avatar</string>
     <string name="dialog_confirm_change_account">Are you sure you want to save?</string>

@@ -186,7 +186,6 @@ public class PredictionResult extends AppCompatActivity {
             prediction_layout_contact_doctor = findViewById(R.id.prediction_layout_contact_doctor);
             medicine_confirm_layout = findViewById(R.id.medicine_confirm_layout);
             prediction_result_medicine_layout = findViewById(R.id.prediction_result_medicine_layout);
-            medicine_confirm_instruction_txt = findViewById(R.id.medicine_confirm_instruction_txt);
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "findView()");
@@ -507,6 +506,7 @@ public class PredictionResult extends AppCompatActivity {
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
                         medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
                         medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
+                        medicine_confirm_instruction_txt = item_medicine_view.findViewById(R.id.medicine_confirm_instruction_txt);
                         if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
                             medicineName.setText(notes);
                         } else {

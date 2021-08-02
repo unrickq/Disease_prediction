@@ -308,58 +308,58 @@
                     android:visibility="gone"
                     app:drawableStartCompat="@drawable/ic_add" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    android:orientation="horizontal">-->
 
-                    <ImageView
-                        android:layout_width="61dp"
-                        android:layout_height="36dp"
-                        android:layout_weight="1" />
+                <!--                    <ImageView-->
+                <!--                        android:layout_width="61dp"-->
+                <!--                        android:layout_height="36dp"-->
+                <!--                        android:layout_weight="1" />-->
 
-                    <LinearLayout
-                        android:id="@+id/medicine_confirm_instruction_linear"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_top"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                <!--                    <LinearLayout-->
+                <!--                        android:id="@+id/medicine_confirm_instruction_linear"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_marginStart="@dimen/margin_top"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:orientation="vertical">-->
 
-                        <TextView
-                            android:id="@+id/medicine_confirm_instruction"
-                            style="@style/subTitle_1_bold"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/prediction_confirm_txt_medicine_instruction_title" />
+                <!--                        <TextView-->
+                <!--                            android:id="@+id/medicine_confirm_instruction"-->
+                <!--                            style="@style/subTitle_1_bold"-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:text="@string/prediction_confirm_txt_medicine_instruction_title" />-->
 
-                        <TextView
-                            android:id="@+id/medicine_confirm_instruction_txt"
-                            style="@style/subTitle_2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/prediction_confirm_txt_medicine_instruction" />
+                <!--                        <TextView-->
+                <!--                            android:id="@+id/medicine_confirm_instruction_txt"-->
+                <!--                            style="@style/subTitle_2"-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:text="@string/prediction_confirm_txt_medicine_instruction" />-->
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/medicine_confirm_instruction_edit_layout"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:visibility="gone"
-                            app:endIconMode="clear_text"
-                            app:errorEnabled="true">
+                <!--&lt;!&ndash;                        <com.google.android.material.textfield.TextInputLayout&ndash;&gt;-->
+                <!--&lt;!&ndash;                            android:id="@+id/medicine_confirm_instruction_edit_layout"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            android:visibility="gone"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            app:endIconMode="clear_text"&ndash;&gt;-->
+                <!--&lt;!&ndash;                            app:errorEnabled="true">&ndash;&gt;-->
 
-                            <EditText
-                                android:id="@+id/medicine_confirm_instruction_edit"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:hint="@string/prediction_confirm_txt_medicine_instruction" />
-                        </com.google.android.material.textfield.TextInputLayout>
+                <!--&lt;!&ndash;                            <EditText&ndash;&gt;-->
+                <!--&lt;!&ndash;                                android:id="@+id/medicine_confirm_instruction_edit"&ndash;&gt;-->
+                <!--&lt;!&ndash;                                android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;                                android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;                                android:hint="@string/prediction_confirm_txt_medicine_instruction" />&ndash;&gt;-->
+                <!--&lt;!&ndash;                        </com.google.android.material.textfield.TextInputLayout>&ndash;&gt;-->
 
-                    </LinearLayout>
+                <!--                    </LinearLayout>-->
 
-                </LinearLayout>
+                <!--                </LinearLayout>-->
             </LinearLayout>
 
 
