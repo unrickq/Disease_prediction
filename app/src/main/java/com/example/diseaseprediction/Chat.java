@@ -156,7 +156,7 @@ public class Chat extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(LOG_TAG, "Exception when talking with chatbot ");
+                        Log.e(LOG_TAG, "Exception when talking with chatbot");
                     }
                 }
             });

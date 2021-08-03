@@ -126,7 +126,8 @@
     <string name="chat_speech_support_device">Thiết bị của bạn không hỗ trợ giọng nói thành văn bản</string>
     <string name="chat_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
     <string name="chat_chatbot_disease">Nên chúng tôi đưa ra dự đoán là: %1$s</string>
-    <string name="chat_chatbot_hello">Xin chào mọi người! Hãy bắt đầu nào!</string>
+    <string name="chat_chatbot_hello">Xin chào! %1$s đã có mặt để giúp đỡ bạn!</string>
+    <string name="chat_chatbot_ask">Bạn hãy cho %1$s biết các triệu chứng của bạn là gì để %2$s có thể tìm xem bạn đang bị bệnh gì.</string>
     <string name="chat_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
     <string name="chat_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
     <string name="chat_chatbot_disease_list">Bạn có thể bị các bệnh như: \n</string>
@@ -140,7 +141,7 @@
     <string name="chat_menu_doctor_view_info">Xem thông tin bệnh nhân</string>
     <string name="chat_menu_end_session">Kết thúc phiên chat</string>
     <string name="chat_dialog_attention_title">Lưu ý</string>
-    <string name="chat_dialog_attention_description">Chào mừng bạn đến với chức năng \"Lấy chẩn đoán bệnh\".\nDưới đây là một số lưu ý bạn nên làm theo để hệ thống có thể đưa ra kết quả chính xác nhất:\n1) Bạn cần nhập triệu chứng một cách rõ ràng.\n2) Nên tách các triệu chứng khác nhau bằng dấu phây.\n3) Không nên dùng thể phủ định</string>
+    <string name="chat_dialog_attention_description">Chào mừng bạn đến với chức năng \"Lấy chẩn đoán bệnh\".\nDưới đây là một số lưu ý bạn nên làm theo để hệ thống có thể đưa ra kết quả chính xác nhất:\n1) Bạn cần nhập triệu chứng một cách rõ ràng.\n2) Nên tách các triệu chứng khác nhau bằng dấu phẩy.\n3) Không nên dùng thể phủ định ("Tôi không bị A nhưng bị B")</string>
     <string name="chat_dialog_attention_btn_understand">Tôi đã hiểu</string>
     <string name="chat_dialog_prediction_title">Chẩn đoán đã được tạo</string>
     <string name="chat_dialog_prediction_msg">Chẩn đoán của bạn đã được tạo và sẽ được xác nhận bởi đội ngũ bác sĩ của chúng tôi trong thời gian sớm nhất.\nBạn có muốn kiểm tra trạng thái của chẩn đoán không?</string>

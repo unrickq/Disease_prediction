@@ -137,7 +137,7 @@ public class PredictionResult extends AppCompatActivity {
                         try {
                             String doctorID = Objects.requireNonNull(snapshot.child("doctorID").getValue()).toString();
                             if (!doctorID.equals("Default")) {
-                                createSessionWithCDoctor(doctorID);
+                                createSessionWithDoctor(doctorID);
                             }
                         } catch (NullPointerException e) {
                             Log.d(TAG, "prediction_txt_contact_doctor_click", e);
@@ -195,18 +195,19 @@ public class PredictionResult extends AppCompatActivity {
     /**
      * Load data to UI
      *
-     * @param mPrediction current prediction
+     * @param prediction current prediction
      */
-    private void getDataToUI(Prediction mPrediction) {
+    private void getDataToUI(Prediction prediction) {
         try {
             mRef =
-                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Prediction pr = snapshot.getValue(Prediction.class);
+//                    mPrediction = pr;
                     try {
-                        if (pr.getPredictionID().equals(mPrediction.getPredictionID())) {
+                        if (pr.getPredictionID().equals(prediction.getPredictionID())) {
                             if (pr.getStatus() == 0) {
                                 prediction_layout_contact_doctor.setVisibility(View.GONE);
                                 prediction_txt_status.setText(getString(R.string.prediction_txt_status_pending));
@@ -232,7 +233,7 @@ public class PredictionResult extends AppCompatActivity {
 
                     //Get disease
                     mRef2 =
-                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(mPrediction.getDiseaseID());
+                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(prediction.getDiseaseID());
                     mRef2.addValueEventListener(new ValueEventListener() {
                         @SuppressLint("SetTextI18n")
                         @Override
@@ -293,7 +294,7 @@ public class PredictionResult extends AppCompatActivity {
                 }
             });
 
-            getAdviseList(mPrediction.getDiseaseID());
+            getAdviseList(prediction.getDiseaseID());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,7 +380,7 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDOne is sender
      * accountIDTwo is receiver
      */
-    private void createSessionWithCDoctor(String doctorID) {
+    private void createSessionWithDoctor(String doctorID) {
         mRef =
             FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {

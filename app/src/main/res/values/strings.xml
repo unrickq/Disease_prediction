@@ -135,7 +135,8 @@
     <string name="dialog_confirm_change_account_no">No</string>
 
 
-    <string name="chat_chatbot_hello">Hello all! Let\'s started!</string>
+    <string name="chat_chatbot_hello">Hello! %1$s is here to help!</string>
+    <string name="chat_chatbot_ask"> Please let %1$s know what your symptoms are so that %2$s can find out what disease you are having</string>
     <string name="chat_chatbot_continue_symptom">Do you have any other symptoms?</string>
     <string name="chat_speech_support_device">Your Device Don\'t Support Speech Input</string>
     <string name="chat_chatbot_symptom">Your symptoms: &#160;</string>

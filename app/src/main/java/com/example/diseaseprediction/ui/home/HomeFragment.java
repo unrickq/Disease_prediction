@@ -272,11 +272,17 @@ public class HomeFragment extends Fragment {
                         //Send message started
                         DatabaseReference reference =
                             FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
-
+                        // Send message 1
                         Message msg = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
-                            context.getString(R.string.chat_chatbot_hello)
+                            context.getString(R.string.chat_chatbot_hello, AppConstants.CHATBOT_NAME)
                             , new Date(), sessionID, 1);
                         reference.child(msg.getMessageID()).setValue(msg);
+                        // Send message 2
+                        Message msg2 = new Message(reference.push().getKey(), AppConstants.CHATBOT_ID,
+                            context.getString(R.string.chat_chatbot_ask, AppConstants.CHATBOT_NAME,
+                                AppConstants.CHATBOT_NAME)
+                            , new Date(), sessionID, 1);
+                        reference.child(msg2.getMessageID()).setValue(msg2);
 
                         // Start Chat activity
                         Intent i = new Intent(getActivity(), Chat.class);
