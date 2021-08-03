@@ -342,6 +342,11 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    /**
+     * Send chat message from user to Firebase
+     *
+     * @param msg message to send
+     */
     public void chatWithDoctor(String msg) {
         try {
             if (!msg.equals("")) {
@@ -967,7 +972,8 @@ public class Chat extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1",AppConstants.MEDICINE_TYPE_DEFAULT, "Default","Default", 1));
+                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1",
+                        AppConstants.MEDICINE_TYPE_DEFAULT, "Default", "Default", 1));
                 }
 
                 @Override
@@ -1060,6 +1066,14 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display a dialog after the prediction had been created.
+     * The dialog will notify user about the prediction and ask whether user want to check the status of their
+     * prediction. If they select "Yes", they will be redirected to {@link PredictionResult} screen, else the dialog
+     * will disappear.
+     *
+     * @param prediction The prediction created by Model
+     */
     private void dialogPrediction(Prediction prediction) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
