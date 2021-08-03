@@ -7,12 +7,9 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,9 +61,9 @@ public class PredictionResult extends AppCompatActivity {
     private String sessionID;
     private ArrayList<MedicineType> loadMedicineTypeList = new ArrayList<>();
     private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
-            prediction_listview_advice_result,
-            prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
-            prediction_txt_medicine_title;
+        prediction_listview_advice_result,
+        prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
+        prediction_txt_medicine_title;
     private ImageView prediction_img_status, prediction_toolbar_img_pre;
     private LinearLayout prediction_layout_contact_doctor;
     private LinearLayout medicine_confirm_layout, prediction_result_medicine_layout;
@@ -75,35 +72,35 @@ public class PredictionResult extends AppCompatActivity {
     private TextView medicineDosage;
     private TextView medicine_confirm_instruction_txt;
 
-    /**
-     * Set height of listview manual
-     *
-     * @param listView ListView
-     */
-    public static void setListViewHeightBasedOnChildren(final ListView listView) {
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                ListAdapter listAdapter = listView.getAdapter();
-                if (listAdapter == null) {
-                    return;
-                }
-                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-                int listWidth = listView.getMeasuredWidth();
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    View listItem = listAdapter.getView(i, null, listView);
-                    listItem.measure(
-                        View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-                ViewGroup.LayoutParams params = listView.getLayoutParams();
-                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
-                listView.setLayoutParams(params);
-                listView.requestLayout();
-            }
-        });
-    }
+//    /**
+//     * Set height of listview manual
+//     *
+//     * @param listView ListView
+//     */
+//    public static void setListViewHeightBasedOnChildren(final ListView listView) {
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ListAdapter listAdapter = listView.getAdapter();
+//                if (listAdapter == null) {
+//                    return;
+//                }
+//                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+//                int listWidth = listView.getMeasuredWidth();
+//                for (int i = 0; i < listAdapter.getCount(); i++) {
+//                    View listItem = listAdapter.getView(i, null, listView);
+//                    listItem.measure(
+//                        View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//                    totalHeight += listItem.getMeasuredHeight();
+//                }
+//                ViewGroup.LayoutParams params = listView.getLayoutParams();
+//                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
+//                listView.setLayoutParams(params);
+//                listView.requestLayout();
+//            }
+//        });
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -535,17 +532,25 @@ public class PredictionResult extends AppCompatActivity {
             Log.d(TAG, "getMedicine()");
         }
     }
-    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage){
+
+    /**
+     * Get type of medicine by ID
+     *
+     * @param medicineTypeID medicine type
+     * @param dosage         dosage
+     * @param medicineDosage medicine dosage
+     */
+    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage) {
         //get medicine type
         Query QGetMedicineType = FirebaseDatabase.getInstance()
-                .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
-                .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+            .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+            .orderByChild("medicineTypeID").equalTo(medicineTypeID);
         QGetMedicineType.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for (DataSnapshot sn : snapshot.getChildren()) {
                     MedicineType mt = sn.getValue(MedicineType.class);
-                    medicineDosage.setText(dosage+" "+mt.getMedicineName());
+                    medicineDosage.setText(dosage + " " + mt.getMedicineName());
                 }
             }
 

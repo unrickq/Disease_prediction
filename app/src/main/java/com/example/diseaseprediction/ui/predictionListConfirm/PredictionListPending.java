@@ -136,13 +136,15 @@ public class PredictionListPending extends Fragment {
                                 }
                             }
                             //Create adapter
-                            //goToScreen 0: doctor confirm screen
-                            if (mPredictionListDoctor.size() > 0) {
+                            // if list not empty
+                            if (!mPredictionListDoctor.isEmpty()) {
                                 prediction_list_confirm_txt_title.setVisibility(View.GONE);
                                 //Reverse list index to get latest prediction
 //                            Collections.reverse(mPredictionListDoctor);
                                 doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                                    mPredictionListDoctor, 0, mPredictionListDoctor.size());
+                                    mPredictionListDoctor,
+                                    0, //goToScreen 0: doctor confirm screen
+                                    mPredictionListDoctor.size());
                                 prediction_list_confirm_recycler_view_main.setAdapter(doctorPredictionPendingListAdapter);
                             } else {
                                 prediction_list_confirm_txt_title.setVisibility(View.VISIBLE);

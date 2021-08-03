@@ -32,7 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class TextClassificationClient {
+/**
+ *
+ */
+public class DiseaseClassificationClient {
     private static final String TAG = "Interpreter";
 
     private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
@@ -68,7 +71,7 @@ public class TextClassificationClient {
     Vocabulary vocabulary;
     RDRsegmenter rdRsegmenter;
 
-    public TextClassificationClient(Context context) {
+    public DiseaseClassificationClient(Context context) {
         this.context = context;
         try {
             am = context.getAssets();
@@ -109,12 +112,12 @@ public class TextClassificationClient {
             InputStream dictionaryFile = am.open("vocab.txt");
             System.out.println("check dic :" + dictionaryFile);
             loadDictionaryFile(dictionaryFile);
-            Log.v(TAG, "Dictionary loaded.");
+            Log.d(TAG, "Dictionary loaded.");
 
             // Extract and load the label file.
             InputStream labelFile = metadataExtractor.getAssociatedFile("labels.txt");
             loadLabelFile(labelFile);
-            Log.v(TAG, "Labels loaded.");
+            Log.d(TAG, "Labels loaded.");
 
         } catch (IOException ex) {
             Log.e(TAG, "Error loading TF Lite model.\n", ex);
@@ -134,13 +137,13 @@ public class TextClassificationClient {
      * Classify an input string and returns the classification results.
      */
     public synchronized List<Result> classify(String text) throws IOException {
-        // Pre-prosessing.
+        // Pre-processing.
         int[][] input = tokenizeInputText(text);
         // Run inference.
         Log.v(TAG, "Classifying text with TF Lite...");
         float[][] output = new float[1][labels.size()];
-        tflite.run(input, output);
 
+        tflite.run(input, output);
 
         // Find the best classifications.
         PriorityQueue<Result> pq =
@@ -201,7 +204,7 @@ public class TextClassificationClient {
     }
 
     /**
-     * Pre-prosessing: tokenize and map the input words into a float array.
+     * Pre-processing: tokenize and map the input words into a float array.
      */
     int[][] tokenizeInputText(String text) throws IOException {
 

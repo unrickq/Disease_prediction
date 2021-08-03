@@ -39,8 +39,8 @@ import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.MyClickListener;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
+import com.example.diseaseprediction.model.DiseaseClassificationClient;
 import com.example.diseaseprediction.model.Result;
-import com.example.diseaseprediction.model.TextClassificationClient;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
@@ -94,7 +94,7 @@ public class Chat extends AppCompatActivity {
     private CircleImageView chat_toolbar_img_avatar;
     private EditText chat_txt_enter_mess;
     private String allMess = "";
-    private TextClassificationClient client;
+    private DiseaseClassificationClient client;
     private Handler handler;
     private boolean checkClickPredict = false;
     private boolean checkStartMessage = true;
@@ -107,7 +107,7 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        client = new TextClassificationClient(getApplicationContext());
+        client = new DiseaseClassificationClient(getApplicationContext());
         handler = new Handler();
 
         //Find view

@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment {
         container.removeAllViews();
 
         //find view
-        findView(view);
+        findViews(view);
 
 
         home_doctor_all_prediction_txt_see_more.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +172,7 @@ public class HomeFragment extends Fragment {
      *
      * @param view view
      */
-    private void findView(View view) {
+    private void findViews(View view) {
         try {
             navigationView = getActivity().findViewById(R.id.nav_view);
             home_txt_prediction_see_more = view.findViewById(R.id.home_txt_prediction_see_more);
@@ -322,7 +322,8 @@ public class HomeFragment extends Fragment {
                             consultationLists.add(ss);
                         }
                     }
-                    if (consultationLists.size() > 0) {
+                    // If list not empty
+                    if (!consultationLists.isEmpty()) {
                         // Update UI
                         home_consultation_no_consultation_title.setVisibility(View.GONE);
                         // Display 'See more' button if list size greater than the defined number
@@ -358,9 +359,9 @@ public class HomeFragment extends Fragment {
 
     /**
      * DOCTOR TYPE
-     * Load all prediction pending
+     * Load all pending prediction
      */
-    private void loadAllPredictionPending() {
+    private void loadAllPendingPrediction() {
         try {
             mPredictionListDoctor = new ArrayList<>();
             //Find specialization id of doctor account
@@ -395,9 +396,8 @@ public class HomeFragment extends Fragment {
                             }
                             //Reverse list index to get latest consultation
 //                        Collections.reverse(mPredictionListDoctor);
-                            //Create adapter
-                            //goToScreen 0: doctor confirm screen
-                            if (mPredictionListDoctor.size() > 0) {
+                            // if list not empty
+                            if (!mPredictionListDoctor.isEmpty()) {
                                 // Update UI
                                 home_doctor_all_prediction_no_prediction_title.setVisibility(View.GONE);
                                 // Display 'See more' button if list size greater than the defined number
@@ -406,7 +406,9 @@ public class HomeFragment extends Fragment {
                                 }
                                 // Load list to adapter
                                 doctorPredictionPendingListAdapter = new PredictionAdapter(context,
-                                    mPredictionListDoctor, 0, AppConstants.HOME_NUM_ITEMS_PENDING_PREDICTION);
+                                    mPredictionListDoctor,
+                                    0,   //goToScreen 0: doctor confirm screen
+                                    AppConstants.HOME_NUM_ITEMS_PENDING_PREDICTION);
                                 home_doctor_all_prediction_recycle_view.setAdapter(doctorPredictionPendingListAdapter);
                             } else {
                                 home_doctor_all_prediction_no_prediction_title.setVisibility(View.VISIBLE);
@@ -437,7 +439,7 @@ public class HomeFragment extends Fragment {
     /**
      * Load prediction by type account
      * Load list prediction of patient if account type is 1
-     * Load list prediction that confirmed by account doctor if account type is 0
+     * Load list prediction that confirmed by doctor if account type is 0
      *
      * @param typeAcc type of account. 0: doctor | 1: patient
      */
@@ -453,11 +455,12 @@ public class HomeFragment extends Fragment {
                         Prediction pr = sh.getValue(Prediction.class);
                         //If patientId equal with current accountID
                         try {
+                            // doctor
                             if (typeAcc == 0) {
                                 if (pr.getDoctorID().equals(fUser.getUid())) {
                                     mPredictionListPatient.add(pr);
                                 }
-                            } else if (typeAcc == 1) {
+                            } else if (typeAcc == 1) { // user
                                 if (pr.getPatientID().equals(fUser.getUid())) {
                                     mPredictionListPatient.add(pr);
                                 }
@@ -466,9 +469,9 @@ public class HomeFragment extends Fragment {
                             Log.d(TAG, "Home. Patient ID null", e);
                         }
                     }
-                    //goToScreen 1: prediction result screen
-                    // Only load prediction list when current account is patient
-                    if (mPredictionListPatient.size() > 0) {
+
+                    // if list not empty
+                    if (!mPredictionListPatient.isEmpty()) {
                         //Update UI
                         home_prediction_no_prediction_title.setVisibility(View.GONE);
                         // Display 'See more' button if list size greater than the defined number
@@ -479,10 +482,12 @@ public class HomeFragment extends Fragment {
                         Collections.reverse(mPredictionListPatient);
                         // Load list to adapter
                         patientPredictionAdapter = new PredictionAdapter(context,
-                            mPredictionListPatient, 1, AppConstants.HOME_NUM_ITEMS_PREDICTION);
+                            mPredictionListPatient,
+                            1,  //goToScreen 1: prediction result screen
+                            AppConstants.HOME_NUM_ITEMS_PREDICTION);
 
                         home_recycler_view_disease.setAdapter(patientPredictionAdapter);
-                    } else if (typeAcc == 1) {
+                    } else if (typeAcc == 1) { // display prediction list if account is user
                         home_prediction_no_prediction_title.setVisibility(View.VISIBLE);
                         home_txt_prediction_see_more.setVisibility(View.GONE);
                     }
@@ -524,7 +529,7 @@ public class HomeFragment extends Fragment {
 
             home_doctor_all_prediction_recycle_view.setHasFixedSize(true);
             home_doctor_all_prediction_recycle_view.setLayoutManager(new LinearLayoutManager(context));
-            loadAllPredictionPending();
+            loadAllPendingPrediction();
             //type 0: doctor
             loadAllPredictionOfAccount(0);
         } catch (Exception e) {

@@ -561,7 +561,7 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
-     * Show dialog to make sure doctor is edited
+     * Show dialog to confirm editing before saving
      */
     private void displayConfirmEditDialog(String doctorID, int type) {
         try {
@@ -571,7 +571,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            savePredicitonMedicine();
+                            savePredictionMedicine();
                             savePrediction(doctorID, type);
                         }
                     });
@@ -615,7 +615,9 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
-     * Dialog warning
+     * Create a single positive button dialog for warning
+     *
+     * @param message warning message
      */
     private void displayWarningDialog(String message) {
         try {
@@ -778,16 +780,16 @@ public class PredictionConfirm extends AppCompatActivity {
     /**
      * Save predictionMedicine
      */
-    private void savePredicitonMedicine() {
+    private void savePredictionMedicine() {
         try {
             //Remove all prediction medicine in firebase
             removeAllPredictionMedicine(mPrediction.getPredictionID());
             //Then add new prediction medicine to firebase
             for (int i = 0; i < predictionMedicineList.size(); i++) {
                 PredictionMedicine tmp = new PredictionMedicine(mPrediction.getPredictionID(),
-                        predictionMedicineList.get(i).getMedicineID(),
-                        predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
-                        predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
+                    predictionMedicineList.get(i).getMedicineID(),
+                    predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
+                    predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
                 addPredictionMedicine(tmp);
             }
         } catch (Exception e) {
@@ -830,7 +832,7 @@ public class PredictionConfirm extends AppCompatActivity {
      * Get medicine and dosage
      * Then load it to UI
      *
-     * @param medicineID medicince ID
+     * @param medicineID medicine ID
      * @param dosage     dosage
      */
     private void getMedicineAndDosageToUI(String medicineID, String dosage, String medicineTypeID) {

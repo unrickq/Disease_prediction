@@ -18,7 +18,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,7 +29,6 @@ import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.DoctorInfo;
 import com.example.diseaseprediction.ui.account.AccountFragment;
-import com.example.diseaseprediction.ui.alert.AlertFragment;
 import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
@@ -128,6 +126,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    /**
+     * Init views
+     */
     private void findViews() {
 
         drawer = findViewById(R.id.drawer_layout);
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Set left navigation
+     * Set left navigation menu
      */
     private void setNavigation() {
         try {
@@ -264,21 +265,6 @@ public class MainActivity extends AppCompatActivity {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.alert) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-            //Comment
-            transaction.replace(R.id.nav_host_fragment, new AlertFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**

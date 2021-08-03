@@ -176,13 +176,15 @@ public class PredictionListFragment extends Fragment {
                             Log.d(TAG, "PredictionListFragment. ID null", e);
                         }
                     }
-                    //goToScreen 1: prediction result screen
-                    if (mPredictionList.size() > 0) {
+                    // if list not empty
+                    if (!mPredictionList.isEmpty()) {
                         prediction_list_txt_title.setVisibility(View.GONE);
                         //Reverse list index to get latest prediction
                         Collections.reverse(mPredictionList);
                         patientPredictionAdapter = new PredictionAdapter(context,
-                            mPredictionList, 1, mPredictionList.size());
+                            mPredictionList,
+                            1, //goToScreen 1: prediction result screen
+                            mPredictionList.size());
                         prediction_list_recycler_view_main.setAdapter(patientPredictionAdapter);
                     } else {
                         prediction_list_txt_title.setVisibility(View.VISIBLE);
