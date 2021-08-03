@@ -191,14 +191,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-<!--                TODO: Remember to disable specialization-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/account_edit_doctor_txt_title_specialization"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    android:enabled="true"
+                    android:enabled="false"
                     app:boxBackgroundColor="@color/background_B1_lightMode">
 
                     <AutoCompleteTextView

@@ -127,6 +127,7 @@
     <string name="chat_chatbot_symptom">Triệu chứng của bạn là:&#160;</string>
     <string name="chat_chatbot_disease">Nên chúng tôi đưa ra dự đoán là: %1$s</string>
     <string name="chat_chatbot_hello">Xin chào! %1$s đã có mặt để giúp đỡ bạn!</string>
+    <string name="chat_doctor_hello">Xin chào? Tôi có thể giúp gì cho bạn?</string>
     <string name="chat_chatbot_ask">Bạn hãy cho %1$s biết các triệu chứng của bạn là gì để %2$s có thể tìm xem bạn đang bị bệnh gì.</string>
     <string name="chat_chatbot_continue_symptom">Bạn còn triệu chứng nào khác không?</string>
     <string name="chat_dialog_end_session_prediction">Dự đoán sẽ kết thúc nếu bạn rời khỏi cuộc nói chuyện. Bạn có muốn tiếp tục?</string>
