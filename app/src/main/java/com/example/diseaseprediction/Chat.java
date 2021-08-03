@@ -435,8 +435,9 @@ public class Chat extends AppCompatActivity {
 
     /***
      * Search symptom from firebase
-     * @return
-     * @param tokenList
+     *
+     * @param tokenList list of tokenized input string
+     * @return a string that contain detected symptoms
      */
     private String searchSymptoms(List<String> tokenList) {
         String result = getString(R.string.chat_chatbot_symptom);

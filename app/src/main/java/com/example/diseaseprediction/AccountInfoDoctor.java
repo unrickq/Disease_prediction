@@ -164,9 +164,8 @@ public class AccountInfoDoctor extends AppCompatActivity {
 
     /**
      * Check empty edit text and spinner
-     * Error: 1 | Normal: 0
      *
-     * @return
+     * @return Error: 1 | Normal: 0
      */
     private int checkEmpty() {
         if (!account_info_doctor_txt_title_experience.getEditText().getText().toString().isEmpty() &&

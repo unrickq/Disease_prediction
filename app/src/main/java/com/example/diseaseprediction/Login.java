@@ -182,9 +182,9 @@ public class Login extends AppCompatActivity {
     }
 
     /**
-     * Auth_with_google
+     * Authenticate user using {@link GoogleAuthProvider}. If sign in success, call {@link Login#updateUI}
      *
-     * @param idToken
+     * @param idToken Auth ID Token extracted from Google sign in process
      */
     private void firebaseAuthWithGoogle(String idToken) {
         try {
@@ -233,7 +233,7 @@ public class Login extends AppCompatActivity {
         try {
             //If current user isn't null, then create new account
             if (user != null) {
-                CreateNewAccount(user);
+                createNewAccount(user);
             } else {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show();
             }
@@ -248,7 +248,7 @@ public class Login extends AppCompatActivity {
      *
      * @param user current user
      */
-    private void CreateNewAccount(FirebaseUser user) {
+    private void createNewAccount(FirebaseUser user) {
         try {
             mRef = FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -380,6 +380,9 @@ public class Login extends AppCompatActivity {
         };
     }
 
+    /**
+     * If phone number input is valid then go to {@link CodeVerify} screen
+     */
     private void signInWithPhone() {
         try {
             // Check input
