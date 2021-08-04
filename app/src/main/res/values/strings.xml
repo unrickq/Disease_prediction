@@ -125,7 +125,7 @@
     <string name="default_instruction">No instructions yet</string>
     <string name="default_empty_medicine">Please add medicine before confirming</string>
     <string name="default_other_disease_confirm">Please click incorrect to re-diagnose the disease</string>
-    <string name="default_medicine_empty_doctor">Please prescribe medicine for the patient</string>
+    <string name="default_medicine_empty_doctor">Please prescribe medication if necessary</string>
     <string name="default_empty_medicine_add">Please click incorrect to add medicine</string>
     <string name="default_empty_instruction">Please click incorrect to add instruction</string>
 

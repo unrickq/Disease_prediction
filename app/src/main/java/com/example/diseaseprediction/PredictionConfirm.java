@@ -705,10 +705,10 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (!medicineName.getText().toString().isEmpty()) {
                         isMedicineEmpty = false;
                         medicine_confirm_layout_title.setVisibility(View.VISIBLE);
-                        prediction_txt_medicine_empty.setVisibility(View.GONE);
+//                        prediction_txt_medicine_empty.setVisibility(View.GONE);
                     } else {
                         isMedicineEmpty = true;
-                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
+//                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
                         medicine_confirm_layout_title.setVisibility(View.GONE);
                     }
                 }
@@ -764,12 +764,12 @@ public class PredictionConfirm extends AppCompatActivity {
         //Check valid data of UI (Is empty or not)
         if (checkMedicineLayout() == 0) {
             //Check predictionMedicineList is empty or not
-            if (predictionMedicineList.size() == 0) {
-                displayWarningDialog(getString(R.string.default_empty_medicine));
-                return false;
-            } else {
-                return true;
-            }
+//            if (predictionMedicineList.size() == 0) {
+//                displayWarningDialog(getString(R.string.default_empty_medicine));
+//                return false;
+//            } else {
+            return true;
+//            }
         }
         return false;
     }
