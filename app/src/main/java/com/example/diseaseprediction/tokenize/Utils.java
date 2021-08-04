@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author DatQuocNguyen
+ * @author VuVanHoang edit from http://www.lrec-conf.org/proceedings/lrec2018/pdf/55.pdf
  * 
  */
 public class Utils

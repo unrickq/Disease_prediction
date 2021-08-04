@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 
 /**
- * @author DatQuocNguyen
+ * @author VuVanHoang edit from http://www.lrec-conf.org/proceedings/lrec2018/pdf/55.pdf
  * 
  */
 public class DataPreprocessor {

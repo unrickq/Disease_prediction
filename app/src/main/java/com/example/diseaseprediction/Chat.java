@@ -274,7 +274,7 @@ public class Chat extends AppCompatActivity {
                     circularDot.setVisibility(View.VISIBLE);
                     loadingText.setVisibility(View.VISIBLE);
                     //chatbot chat
-                    String token = client.tokenize1(msg);
+                    String token = client.tokenize(msg);
                     List<Result> results = client.classify(token);
                     //get symptom user input
                     List<String> tokenList = Arrays.asList(token.split(" "));

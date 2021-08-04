@@ -228,20 +228,18 @@ public class DiseaseClassificationClient {
         return ans;
     }
 
-    public List<String> tokenize(String text) throws IOException {
+    /**
+     *  Pre-processing: tokenize segmenter from RDRsegmenter and synonymous binary tree.
+     * @param text
+     * @return
+     * @throws IOException
+     */
+    public String tokenize(String text) throws IOException {
         List<String> token = new ArrayList<>();
-        text = rdRsegmenter.segmentTokenizedString(text);
-        token = Arrays.asList(text.split(" "));
-
-        return token;
-    }
-
-    public String tokenize1(String text) throws IOException {
-        List<String> token = new ArrayList<>();
+        //split the sentence into tokens with '_' each token separated by space
         text = rdRsegmenter.segmentTokenizedString(text);
         token = Arrays.asList(text.split(" "));
         InputStream dictionaryFilevo = am.open("dictionary.txt");
-
         loadDictionary(dictionaryFilevo);
         System.out.println("Token : " + token.toString());
         /* Load the text file into an array of words and their synonyms,
@@ -263,12 +261,6 @@ public class DiseaseClassificationClient {
         return result;
     }
 
-    public String tokenize_sys(String text) throws IOException {
-        List<String> token = new ArrayList<>();
-        text = rdRsegmenter.segmentTokenizedString(text);
-        //token = Arrays.asList(text.split(" "));
-        return text;
-    }
 
     public void loadDictionary(InputStream dictionaryFile) {
         dictionary = new Tree(null);
