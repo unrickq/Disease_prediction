@@ -82,7 +82,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
     private boolean isMedicineEmpty = true;
-    private boolean isInstructionEmpty = true;
+    private int isInstructionEmpty = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +141,8 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (mPrediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                         displayWarningDialog(getString(R.string.default_other_disease_confirm));
                     } else {
-                        //Check if medicine is empty
-                        if (isMedicineEmpty) {
-                            displayWarningDialog(getString(R.string.default_empty_medicine_add));
-                        } else if (isInstructionEmpty) { //check if instruction as a default
+                        //Check if medicine is empty and instruction is default
+                        if (!isMedicineEmpty && isInstructionEmpty != 0) {
                             displayWarningDialog(getString(R.string.default_empty_instruction));
                         } else {
                             displayConfirmDialog(1);
@@ -696,9 +694,8 @@ public class PredictionConfirm extends AppCompatActivity {
                         //Check if instruction equal to default, then show default_instruction message
                         if (instruction.equals("Default")) {
                             medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
-                            isInstructionEmpty = true;
+                            isInstructionEmpty++;
                         } else {
-                            isInstructionEmpty = false;
                             medicine_confirm_instruction_txt.setText(instruction);
                         }
 
@@ -787,9 +784,9 @@ public class PredictionConfirm extends AppCompatActivity {
             //Then add new prediction medicine to firebase
             for (int i = 0; i < predictionMedicineList.size(); i++) {
                 PredictionMedicine tmp = new PredictionMedicine(mPrediction.getPredictionID(),
-                    predictionMedicineList.get(i).getMedicineID(),
-                    predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
-                    predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
+                        predictionMedicineList.get(i).getMedicineID(),
+                        predictionMedicineList.get(i).getDosage(), predictionMedicineList.get(i).getMedicineTypeID(),
+                        predictionMedicineList.get(i).getNotes(), predictionMedicineList.get(i).getInstruction(), 1);
                 addPredictionMedicine(tmp);
             }
         } catch (Exception e) {

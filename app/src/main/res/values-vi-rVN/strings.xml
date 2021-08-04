@@ -114,7 +114,7 @@
     <string name="default_instruction">Chưa có hướng dẫn sử dụng thuốc</string>
     <string name="default_empty_medicine">Xin vui lòng thêm thuốc trước khi xác nhận</string>
     <string name="default_other_disease_confirm">Xin vui lòng nhấn chưa chính xác để chẩn đoán lại bệnh</string>
-    <string name="default_medicine_empty_doctor">Xin vui lòng kê đơn thuốc</string>
+    <string name="default_medicine_empty_doctor">Xin vui lòng kê đơn thuốc nếu cần thiết</string>
     <string name="default_empty_medicine_add">Xin vui lòng nhấn chưa chính xác để thêm thuốc</string>
     <string name="default_empty_instruction">Xin vui lòng nhấn chưa chính xác để thêm hướng dẫn sử dụng thuốc</string>
 

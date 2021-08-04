@@ -253,7 +253,6 @@ public class PredictionResult extends AppCompatActivity {
 
                     // Load medicine if prediction is confirmed
                     if (pr.getStatus() != 0) {
-                        prediction_result_medicine_layout.setVisibility(View.VISIBLE);
                         getPredictionMedicine();
                     } else {
                         prediction_result_medicine_layout.setVisibility(View.GONE);
@@ -499,6 +498,7 @@ public class PredictionResult extends AppCompatActivity {
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    int isMedicineEmpty = 0;
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine m = sn.getValue(Medicine.class);
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
@@ -518,6 +518,10 @@ public class PredictionResult extends AppCompatActivity {
                             medicine_confirm_instruction_txt.setText(instruction);
                         }
                         medicine_confirm_layout.addView(item_medicine_view);
+                        isMedicineEmpty++;
+                    }
+                    if (isMedicineEmpty != 0) {
+                        prediction_result_medicine_layout.setVisibility(View.VISIBLE);
                     }
                 }
 
