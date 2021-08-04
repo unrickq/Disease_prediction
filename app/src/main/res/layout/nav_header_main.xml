@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_name">
 
@@ -96,8 +96,9 @@
             android:ellipsize="none"
             android:fadeScrollbars="false"
             android:requiresFadingEdge="horizontal"
+            android:layout_marginTop="@dimen/margin_top"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/text_T1_lightMode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/nav_header_avatar"
@@ -109,8 +110,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/text_T1_lightMode"
             app:layout_constraintStart_toEndOf="@+id/nav_header_avatar"
             app:layout_constraintTop_toBottomOf="@+id/nav_header_txt_acc_name"
             tools:text="@string/nav_header_txt_acc_phone" />
