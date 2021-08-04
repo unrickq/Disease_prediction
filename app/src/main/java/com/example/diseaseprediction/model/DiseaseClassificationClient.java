@@ -242,8 +242,6 @@ public class DiseaseClassificationClient {
         InputStream dictionaryFilevo = am.open("dictionary.txt");
         loadDictionary(dictionaryFilevo);
         System.out.println("Token : " + token.toString());
-        /* Load the text file into an array of words and their synonyms,
-         * we can specify the size of the array too */
         String result = "";
         for (int i = 0; i < token.size(); i++) {
             String get_Token = token.get(i);
@@ -261,12 +259,16 @@ public class DiseaseClassificationClient {
         return result;
     }
 
-
+    /**
+     * Load data synonym from synonym file
+     * @param dictionaryFile
+     */
     public void loadDictionary(InputStream dictionaryFile) {
         dictionary = new Tree(null);
         /* Load the text file into an array of words and their synonyms,
          * we can specify the size of the array too */
         Word[] dicArr = Helper.getDictionary1(dictionaryFile, 89);
+        // Sort synonym before add to array
         Arrays.sort(dicArr, new Comparator<Word>() {
             @Override
             public int compare(Word o1, Word o2) {
@@ -279,16 +281,26 @@ public class DiseaseClassificationClient {
                 }
             }
         });
+        // Add data in binary search tree
         dictionary.setRoot(dictionary.SArraytoBST(dicArr, 0, dicArr.length - 1));
     }
 
+    /**
+     * Get a synonym in data
+     * @param word_sys
+     * @return
+     */
     public String get_synonymous(String word_sys) {
+        // Find word in data
         Node word = dictionary.findWord(word_sys, dictionary.getRoot());
+        //Check word exist
         if (word != null) {
             System.out.println(word);
+            // Replace synonyms with medical words
             String rs = Helper.arrayToString(word.getWord().getSynonyms(), ", ");
             return rs;
         } else {
+            // Keep the word the same
             return word_sys;
         }
     }

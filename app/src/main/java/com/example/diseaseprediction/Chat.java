@@ -86,7 +86,6 @@ public class Chat extends AppCompatActivity {
     private List<Message> mMessage;
     private List<Symptom> mSymptom;
     private String receiverID, sessionID;
-
     private RelativeLayout chat_send_message_layout;
     private RecyclerView chat_recycler_view;
     private TextView chat_toolbar_txt_name;
