@@ -41,7 +41,7 @@ public class DiseaseClassificationClient {
     private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
     // Simple delimiter to split words.
     private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
-    private static final String MODEL_PATH = "model.tflite";
+    private static final String MODEL_PATH = "model-088-v1.0.4-metadata.tflite";
     private static final String VOCAL_PATH = "model-088-v1.0-vocab.txt";
     private static final String LABEL_PATH = "labels.txt";
     private Tree dictionary;
