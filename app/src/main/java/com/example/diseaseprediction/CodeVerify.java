@@ -48,14 +48,17 @@ public class CodeVerify extends AppCompatActivity {
 
     public static final String INTENT_MOBILE = "mobile";
     private static final String TAG = "CodeVerifyActivity";
+
     //Internet connection
     private NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
     private Account mAccount;
     private DatabaseReference mRef;
     private FirebaseUser fUser;
+
     //fireBase authentication object
     private FirebaseAuth mAuth;
+
     //this is the verification id that will be sent to the user
     private String mVerificationId;
 
@@ -266,11 +269,11 @@ public class CodeVerify extends AppCompatActivity {
     private void startPhoneNumberVerification(String phoneNumber) {
         try {
             PhoneAuthOptions options =
-                    PhoneAuthOptions.newBuilder(mAuth)
-                            .setPhoneNumber(phoneNumber)       // Phone number to verify
-                        // TODO: remove timeout to disable auto verify
-                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                            .setActivity(this)                 // Activity (for callback binding)
+                PhoneAuthOptions.newBuilder(mAuth)
+                    .setPhoneNumber(phoneNumber)       // Phone number to verify
+
+//                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                    .setActivity(this)                 // Activity (for callback binding)
                             .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
                             .build();
             PhoneAuthProvider.verifyPhoneNumber(options);

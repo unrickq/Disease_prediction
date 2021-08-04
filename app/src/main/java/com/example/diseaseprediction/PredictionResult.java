@@ -7,12 +7,9 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,9 +61,9 @@ public class PredictionResult extends AppCompatActivity {
     private String sessionID;
     private ArrayList<MedicineType> loadMedicineTypeList = new ArrayList<>();
     private TextView prediction_txt_disease_result, prediction_txt_disease_description_result,
-            prediction_listview_advice_result,
-            prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
-            prediction_txt_medicine_title;
+        prediction_listview_advice_result,
+        prediction_txt_status, prediction_txt_contact_doctor_click, prediction_txt_disease_title,
+        prediction_txt_medicine_title;
     private ImageView prediction_img_status, prediction_toolbar_img_pre;
     private LinearLayout prediction_layout_contact_doctor;
     private LinearLayout medicine_confirm_layout, prediction_result_medicine_layout;
@@ -75,35 +72,35 @@ public class PredictionResult extends AppCompatActivity {
     private TextView medicineDosage;
     private TextView medicine_confirm_instruction_txt;
 
-    /**
-     * Set height of listview manual
-     *
-     * @param listView ListView
-     */
-    public static void setListViewHeightBasedOnChildren(final ListView listView) {
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                ListAdapter listAdapter = listView.getAdapter();
-                if (listAdapter == null) {
-                    return;
-                }
-                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
-                int listWidth = listView.getMeasuredWidth();
-                for (int i = 0; i < listAdapter.getCount(); i++) {
-                    View listItem = listAdapter.getView(i, null, listView);
-                    listItem.measure(
-                        View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-                ViewGroup.LayoutParams params = listView.getLayoutParams();
-                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
-                listView.setLayoutParams(params);
-                listView.requestLayout();
-            }
-        });
-    }
+//    /**
+//     * Set height of listview manual
+//     *
+//     * @param listView ListView
+//     */
+//    public static void setListViewHeightBasedOnChildren(final ListView listView) {
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ListAdapter listAdapter = listView.getAdapter();
+//                if (listAdapter == null) {
+//                    return;
+//                }
+//                int totalHeight = listView.getPaddingTop() + listView.getPaddingBottom();
+//                int listWidth = listView.getMeasuredWidth();
+//                for (int i = 0; i < listAdapter.getCount(); i++) {
+//                    View listItem = listAdapter.getView(i, null, listView);
+//                    listItem.measure(
+//                        View.MeasureSpec.makeMeasureSpec(listWidth, View.MeasureSpec.EXACTLY),
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//                    totalHeight += listItem.getMeasuredHeight();
+//                }
+//                ViewGroup.LayoutParams params = listView.getLayoutParams();
+//                params.height = (totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)));
+//                listView.setLayoutParams(params);
+//                listView.requestLayout();
+//            }
+//        });
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +134,7 @@ public class PredictionResult extends AppCompatActivity {
                         try {
                             String doctorID = Objects.requireNonNull(snapshot.child("doctorID").getValue()).toString();
                             if (!doctorID.equals("Default")) {
-                                createSessionWithCDoctor(doctorID);
+                                createSessionWithDoctor(doctorID);
                             }
                         } catch (NullPointerException e) {
                             Log.d(TAG, "prediction_txt_contact_doctor_click", e);
@@ -195,18 +192,19 @@ public class PredictionResult extends AppCompatActivity {
     /**
      * Load data to UI
      *
-     * @param mPrediction current prediction
+     * @param prediction current prediction
      */
-    private void getDataToUI(Prediction mPrediction) {
+    private void getDataToUI(Prediction prediction) {
         try {
             mRef =
-                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
+                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(prediction.getPredictionID());
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Prediction pr = snapshot.getValue(Prediction.class);
+//                    mPrediction = pr;
                     try {
-                        if (pr.getPredictionID().equals(mPrediction.getPredictionID())) {
+                        if (pr.getPredictionID().equals(prediction.getPredictionID())) {
                             if (pr.getStatus() == 0) {
                                 prediction_layout_contact_doctor.setVisibility(View.GONE);
                                 prediction_txt_status.setText(getString(R.string.prediction_txt_status_pending));
@@ -232,7 +230,7 @@ public class PredictionResult extends AppCompatActivity {
 
                     //Get disease
                     mRef2 =
-                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(mPrediction.getDiseaseID());
+                        FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DISEASE).child(prediction.getDiseaseID());
                     mRef2.addValueEventListener(new ValueEventListener() {
                         @SuppressLint("SetTextI18n")
                         @Override
@@ -255,7 +253,6 @@ public class PredictionResult extends AppCompatActivity {
 
                     // Load medicine if prediction is confirmed
                     if (pr.getStatus() != 0) {
-                        prediction_result_medicine_layout.setVisibility(View.VISIBLE);
                         getPredictionMedicine();
                     } else {
                         prediction_result_medicine_layout.setVisibility(View.GONE);
@@ -293,7 +290,7 @@ public class PredictionResult extends AppCompatActivity {
                 }
             });
 
-            getAdviseList(mPrediction.getDiseaseID());
+            getAdviseList(prediction.getDiseaseID());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,7 +376,7 @@ public class PredictionResult extends AppCompatActivity {
      * accountIDOne is sender
      * accountIDTwo is receiver
      */
-    private void createSessionWithCDoctor(String doctorID) {
+    private void createSessionWithDoctor(String doctorID) {
         mRef =
             FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_PREDICTION).child(mPrediction.getPredictionID());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -408,7 +405,7 @@ public class PredictionResult extends AppCompatActivity {
                                 FirebaseDatabase.getInstance().getReference().child(FirebaseConstants.FIREBASE_TABLE_MESSAGE + "/" + sessionID);
 
                             Message msg = new Message(reference.push().getKey(), doctorID,
-                                getString(R.string.chat_chatbot_hello)
+                                getString(R.string.chat_doctor_hello)
                                 , new Date(), sessionID, 1);
                             reference.child(msg.getMessageID()).setValue(msg);
                             //Update doctor session of prediction
@@ -501,6 +498,7 @@ public class PredictionResult extends AppCompatActivity {
             QGetMedicine.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    int isMedicineEmpty = 0;
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine m = sn.getValue(Medicine.class);
                         item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
@@ -520,6 +518,10 @@ public class PredictionResult extends AppCompatActivity {
                             medicine_confirm_instruction_txt.setText(instruction);
                         }
                         medicine_confirm_layout.addView(item_medicine_view);
+                        isMedicineEmpty++;
+                    }
+                    if (isMedicineEmpty != 0) {
+                        prediction_result_medicine_layout.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -536,36 +538,31 @@ public class PredictionResult extends AppCompatActivity {
     }
 
     /**
-     * get medicine type by ID and set text for medicineDosage
+     * Get type of medicine by ID
      *
-     * @param medicineTypeID
-     * @param dosage
-     * @param medicineDosage
+     * @param medicineTypeID medicine type
+     * @param dosage         dosage
+     * @param medicineDosage medicine dosage
      */
-    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage){
-        try{
-            //get medicine type
-            Query QGetMedicineType = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
-                    .orderByChild("medicineTypeID").equalTo(medicineTypeID);
-            QGetMedicineType.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    for (DataSnapshot sn : snapshot.getChildren()) {
-                        MedicineType mt = sn.getValue(MedicineType.class);
-                        medicineDosage.setText(dosage+" "+mt.getMedicineName());
-                    }
+    private void getMedicineTypeByID(String medicineTypeID, String dosage, TextView medicineDosage) {
+        //get medicine type
+        Query QGetMedicineType = FirebaseDatabase.getInstance()
+            .getReference(FirebaseConstants.FIREBASE_TABLE_MEDICINE_TYPE)
+            .orderByChild("medicineTypeID").equalTo(medicineTypeID);
+        QGetMedicineType.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot sn : snapshot.getChildren()) {
+                    MedicineType mt = sn.getValue(MedicineType.class);
+                    medicineDosage.setText(dosage + " " + mt.getMedicineName());
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "getMedicineTypeByID");
-        }
+            }
+        });
     }
 
 }

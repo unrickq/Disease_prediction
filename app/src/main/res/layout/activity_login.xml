@@ -46,15 +46,18 @@
 
         <TextView
             android:id="@+id/login_txt_country_code"
-            style="@style/Widget.AppCompat.EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="15dp"
             android:backgroundTint="@color/theme_1_P"
+            android:drawablePadding="8dp"
             android:text="+84"
-            android:textColor="@color/theme_1_P"
+            android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/login_txt_title"
-            app:layout_constraintTop_toTopOf="@+id/login_eTxt_user_layout" />
+            app:layout_constraintTop_toTopOf="@+id/login_eTxt_user_layout"
+            app:drawableStartCompat="@drawable/vietnam_flag" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_eTxt_user_layout"

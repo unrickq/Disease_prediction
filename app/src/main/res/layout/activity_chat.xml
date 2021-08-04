@@ -104,7 +104,7 @@
         <EditText
             android:id="@+id/chat_txt_enter_mess"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_toLeftOf="@+id/chat_layout_right_send"
             android:backgroundTint="@color/theme_1_P"
             android:inputType="textPersonName" />
@@ -172,6 +172,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.571"
         tools:text="Đang xử lý kết quả"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

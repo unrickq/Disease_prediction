@@ -39,8 +39,8 @@ import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.listener.MyClickListener;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
+import com.example.diseaseprediction.model.DiseaseClassificationClient;
 import com.example.diseaseprediction.model.Result;
-import com.example.diseaseprediction.model.TextClassificationClient;
 import com.example.diseaseprediction.object.Account;
 import com.example.diseaseprediction.object.Disease;
 import com.example.diseaseprediction.object.Message;
@@ -94,7 +94,7 @@ public class Chat extends AppCompatActivity {
     private CircleImageView chat_toolbar_img_avatar;
     private EditText chat_txt_enter_mess;
     private String allMess = "";
-    private TextClassificationClient client;
+    private DiseaseClassificationClient client;
     private Handler handler;
     private boolean checkClickPredict = false;
     private boolean checkStartMessage = true;
@@ -107,7 +107,7 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        client = new TextClassificationClient(getApplicationContext());
+        client = new DiseaseClassificationClient(getApplicationContext());
         handler = new Handler();
 
         //Find view
@@ -156,7 +156,7 @@ public class Chat extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(LOG_TAG, "Exception when talking with chatbot ");
+                        Log.e(LOG_TAG, "Exception when talking with chatbot");
                     }
                 }
             });
@@ -342,6 +342,11 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    /**
+     * Send chat message from user to Firebase
+     *
+     * @param msg message to send
+     */
     public void chatWithDoctor(String msg) {
         try {
             if (!msg.equals("")) {
@@ -430,8 +435,9 @@ public class Chat extends AppCompatActivity {
 
     /***
      * Search symptom from firebase
-     * @return
-     * @param tokenList
+     *
+     * @param tokenList list of tokenized input string
+     * @return a string that contain detected symptoms
      */
     private String searchSymptoms(List<String> tokenList) {
         String result = getString(R.string.chat_chatbot_symptom);
@@ -967,7 +973,8 @@ public class Chat extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1",AppConstants.MEDICINE_TYPE_DEFAULT, "Default","Default", 1));
+                    mRef.child(mRef.push().getKey()).setValue(new PredictionMedicine(predictionID, medicineID, "1",
+                        AppConstants.MEDICINE_TYPE_DEFAULT, "Default", "Default", 1));
                 }
 
                 @Override
@@ -1060,6 +1067,14 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display a dialog after the prediction had been created.
+     * The dialog will notify user about the prediction and ask whether user want to check the status of their
+     * prediction. If they select "Yes", they will be redirected to {@link PredictionResult} screen, else the dialog
+     * will disappear.
+     *
+     * @param prediction The prediction created by Model
+     */
     private void dialogPrediction(Prediction prediction) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

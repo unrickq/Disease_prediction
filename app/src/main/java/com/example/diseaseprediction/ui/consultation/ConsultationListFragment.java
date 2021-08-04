@@ -109,7 +109,7 @@ public class ConsultationListFragment extends Fragment {
     }
 
     /**
-     * Load all consultation list depend on user ID
+     * Load all consultation list base on user ID
      */
     private void loadListConsultation() {
         try {
@@ -125,14 +125,16 @@ public class ConsultationListFragment extends Fragment {
                             consultationLists.add(ss);
                         }
                     }
-                    //Reverse list index to get latest consultation
-                    if (consultationLists.size() > 0) {
+                    // If list not empty
+                    if (!consultationLists.isEmpty()) {
                         consultation_list_txt_title.setVisibility(View.GONE);
+                        //Reverse list index to get latest consultation
                         Collections.reverse(consultationLists);
                         consultationAdapter = new ConsultationAdapter(context, consultationLists,
                             consultationLists.size());
                         consultation_list_recycler_view_main.setAdapter(consultationAdapter);
                     } else {
+                        // display empty string
                         consultation_list_txt_title.setVisibility(View.VISIBLE);
                     }
 

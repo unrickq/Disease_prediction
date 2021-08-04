@@ -36,7 +36,7 @@
     <string name="account_txt_title_gender">Gender</string>
     <string name="account_txt_title_gender_format">&lt;b>Gender:&lt;/b>  %1$s</string>
     <string name="account_txt_gender">TextView</string>
-    <string name="account_txt_title_phone">Phone</string>
+    <string name="account_txt_title_phone">Phone number</string>
     <string name="account_txt_title_phone_format">&lt;b>Phone:&lt;/b>  %1$s</string>
     <string name="account_txt_phone">TextView</string>
     <string name="account_txt_title_email">Email</string>
@@ -125,7 +125,7 @@
     <string name="default_instruction">No instructions yet</string>
     <string name="default_empty_medicine">Please add medicine before confirming</string>
     <string name="default_other_disease_confirm">Please click incorrect to re-diagnose the disease</string>
-    <string name="default_medicine_empty_doctor">Please prescribe medicine for the patient</string>
+    <string name="default_medicine_empty_doctor">Please prescribe medication if necessary</string>
     <string name="default_empty_medicine_add">Please click incorrect to add medicine</string>
     <string name="default_empty_instruction">Please click incorrect to add instruction</string>
 
@@ -135,7 +135,9 @@
     <string name="dialog_confirm_change_account_no">No</string>
 
 
-    <string name="chat_chatbot_hello">Hello all! Let\'s started!</string>
+    <string name="chat_chatbot_hello">Hello! %1$s is here to help!</string>
+    <string name="chat_doctor_hello">Hello! How can I help you?</string>
+    <string name="chat_chatbot_ask"> Please let %1$s know what your symptoms are so that %2$s can find out what disease you are having</string>
     <string name="chat_chatbot_continue_symptom">Do you have any other symptoms?</string>
     <string name="chat_speech_support_device">Your Device Don\'t Support Speech Input</string>
     <string name="chat_chatbot_symptom">Your symptoms: &#160;</string>

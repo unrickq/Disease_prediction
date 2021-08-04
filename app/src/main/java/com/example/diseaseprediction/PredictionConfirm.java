@@ -82,7 +82,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
     private boolean isMedicineEmpty = true;
-    private boolean isInstructionEmpty = true;
+    private int isInstructionEmpty = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +141,8 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (mPrediction.getDiseaseID().equals(AppConstants.DISEASE_OTHER_ID)) {
                         displayWarningDialog(getString(R.string.default_other_disease_confirm));
                     } else {
-                        //Check if medicine is empty
-                        if (isMedicineEmpty) {
-                            displayWarningDialog(getString(R.string.default_empty_medicine_add));
-                        } else if (isInstructionEmpty) { //check if instruction as a default
+                        //Check if medicine is empty and instruction is default
+                        if (!isMedicineEmpty && isInstructionEmpty != 0) {
                             displayWarningDialog(getString(R.string.default_empty_instruction));
                         } else {
                             displayConfirmDialog(1);
@@ -561,7 +559,7 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
-     * Show dialog to make sure doctor is edited
+     * Show dialog to confirm editing before saving
      */
     private void displayConfirmEditDialog(String doctorID, int type) {
         try {
@@ -571,7 +569,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            savePredicitonMedicine();
+                            savePredictionMedicine();
                             savePrediction(doctorID, type);
                         }
                     });
@@ -615,7 +613,9 @@ public class PredictionConfirm extends AppCompatActivity {
     }
 
     /**
-     * Dialog warning
+     * Create a single positive button dialog for warning
+     *
+     * @param message warning message
      */
     private void displayWarningDialog(String message) {
         try {
@@ -694,9 +694,8 @@ public class PredictionConfirm extends AppCompatActivity {
                         //Check if instruction equal to default, then show default_instruction message
                         if (instruction.equals("Default")) {
                             medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
-                            isInstructionEmpty = true;
+                            isInstructionEmpty++;
                         } else {
-                            isInstructionEmpty = false;
                             medicine_confirm_instruction_txt.setText(instruction);
                         }
 
@@ -706,10 +705,10 @@ public class PredictionConfirm extends AppCompatActivity {
                     if (!medicineName.getText().toString().isEmpty()) {
                         isMedicineEmpty = false;
                         medicine_confirm_layout_title.setVisibility(View.VISIBLE);
-                        prediction_txt_medicine_empty.setVisibility(View.GONE);
+//                        prediction_txt_medicine_empty.setVisibility(View.GONE);
                     } else {
                         isMedicineEmpty = true;
-                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
+//                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
                         medicine_confirm_layout_title.setVisibility(View.GONE);
                     }
                 }
@@ -765,12 +764,12 @@ public class PredictionConfirm extends AppCompatActivity {
         //Check valid data of UI (Is empty or not)
         if (checkMedicineLayout() == 0) {
             //Check predictionMedicineList is empty or not
-            if (predictionMedicineList.size() == 0) {
-                displayWarningDialog(getString(R.string.default_empty_medicine));
-                return false;
-            } else {
-                return true;
-            }
+//            if (predictionMedicineList.size() == 0) {
+//                displayWarningDialog(getString(R.string.default_empty_medicine));
+//                return false;
+//            } else {
+            return true;
+//            }
         }
         return false;
     }
@@ -778,7 +777,7 @@ public class PredictionConfirm extends AppCompatActivity {
     /**
      * Save predictionMedicine
      */
-    private void savePredicitonMedicine() {
+    private void savePredictionMedicine() {
         try {
             //Remove all prediction medicine in firebase
             removeAllPredictionMedicine(mPrediction.getPredictionID());
@@ -830,7 +829,7 @@ public class PredictionConfirm extends AppCompatActivity {
      * Get medicine and dosage
      * Then load it to UI
      *
-     * @param medicineID medicince ID
+     * @param medicineID medicine ID
      * @param dosage     dosage
      */
     private void getMedicineAndDosageToUI(String medicineID, String dosage, String medicineTypeID) {
