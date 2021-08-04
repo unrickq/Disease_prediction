@@ -1,5 +1,6 @@
 package com.example.diseaseprediction;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import com.example.diseaseprediction.firebase.FirebaseConstants;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.PredictionMedicine;
 import com.example.diseaseprediction.object.Symptom;
+import com.example.diseaseprediction.object.SymptomMedicine;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class testActivity extends AppCompatActivity {
 
@@ -35,11 +42,38 @@ public class testActivity extends AppCompatActivity {
     private ArrayList<Medicine> loadMedicineList = new ArrayList<>();
     private ArrayList<PredictionMedicine> predictionMedicineList = new ArrayList<>();
     private String predictionID = "-Mf8Z9n6PEIjCph3O4YB";
-
+    private AssetManager am;
+    private InputStream is;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+//        addDataSymptomMedicine(new SymptomMedicine("319", "-MgGMlNriAhGkvIdQ3yQ", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("324", "-MgGMlOIGiwuBdwib3_O", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("280", "-MgGMlOIGiwuBdwib3_O", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("259", "-MgGMlOIGiwuBdwib3_O", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("289", "-MgGMlOIGiwuBdwib3_O", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("314", "-MgGMlOIGiwuBdwib3_O", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("290", "-MgGMlOjF332FODwSIF1", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("91", "-MgGMlOntlmRBANUSklZ", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("176", "-MgGMlP9aOsaSy03BPLr", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("274", "-MgGMlP7o2BHMgbUwz57", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("183", "-MgGMlP7o2BHMgbUwz57", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("187", "-MgGMlP7o2BHMgbUwz57", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("177", "-MgGMlPHIOYnipQUQMA_", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("178", "-MgGMlPIPGyGjou5BIG0", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("342", "-MgGMlPMaNKEwia4fKBd", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("258", "-MgGMlPT1cMvQkycTpuk", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("202", "-MgGMlPaTTwXFckzMrFu", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("343", "-MgGMlPkJn0J6vHtui3B", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("23", "-MgGMlQo5OZ8v5Y-341A", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("345", "-MgGMlRFH5kHL6Xhri4D", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("1", "-MgGMlRQwRbObagCtRvp", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("334", "-MgGMlRh6C_yJ1LIiGLL", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("322", "-MgGMlSC5D8Q5f60m8JM", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("321", "-MgGMlSSpZaUWds_TxXv", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("276", "-MgGMlSSpZaUWds_TxXv", 1));
+//        addDataSymptomMedicine(new SymptomMedicine("330", "-MgGMlSsZVYJ5XSPqWg3", 1));
 
 //        layoutList = findViewById(R.id.layout_list);
 //        buttonAdd = findViewById(R.id.button);
@@ -414,21 +448,35 @@ public class testActivity extends AppCompatActivity {
 //        });
 //    }
 //
-//    void addDataMedicine(Medicine md){
-//        mRef = FirebaseDatabase.getInstance().getReference("Medicine");
-//        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                md.setMedicineID(mRef.push().getKey());
-//                mRef.child(md.getMedicineID()).setValue(md);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//    }
+    void addDataMedicine(Medicine md){
+        mRef = FirebaseDatabase.getInstance().getReference("Medicine");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                md.setMedicineID(mRef.push().getKey());
+                mRef.child(md.getMedicineID()).setValue(md);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    void addDataSymptomMedicine(SymptomMedicine md){
+        mRef = FirebaseDatabase.getInstance().getReference("SymptomMedicine");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mRef.child(mRef.push().getKey()).setValue(md);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 //
 //    void addDataDisease(Disease ds){
 //        myRef = FirebaseDatabase.getInstance().getReference("Disease");
@@ -726,6 +774,21 @@ public class testActivity extends AppCompatActivity {
 //        addDataSymptom(new Symptom("id",  "đau đỏ quanh mũi",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("id",  "rỉ nước vàng",  "Default", new Date(),  new Date(), 1));
 
-
+//add medicine
 //        addDataMedicine(new Medicine("id", "name",  "description",  "manufacturer",  "content", new Date(), new Date(), 1));
+//        am = this.getAssets();
+//        try {
+//            is = am.open("medicine.txt");
+//            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                System.out.println("check "+line);
+//                        addDataMedicine(new Medicine("", line,  "Default",  "Default",
+//                "Default", new Date(), new Date(), 1));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
 }

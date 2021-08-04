@@ -61,7 +61,7 @@
                     android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:hint="@string/item_add_medicine_autoComplete"
-                    android:inputType="none"
+                    android:inputType="textAutoComplete"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -160,7 +160,7 @@
                         android:layout_height="match_parent"
                         android:ellipsize="end"
                         android:hint="@string/item_add_medicine_type_autoComplete"
-                        android:inputType="none"
+                        android:inputType="textAutoComplete"
                         android:textColor="@color/black" />
 
                 </com.google.android.material.textfield.TextInputLayout>
