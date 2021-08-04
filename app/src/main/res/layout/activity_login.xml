@@ -44,31 +44,20 @@
             app:layout_constraintStart_toStartOf="@+id/login_txt_title"
             app:layout_constraintTop_toBottomOf="@+id/login_txt_title" />
 
-        <LinearLayout
-            android:id="@+id/login_txt_country_code_layout"
+        <TextView
+            android:id="@+id/login_txt_country_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
+            android:backgroundTint="@color/theme_1_P"
+            android:drawablePadding="8dp"
+            android:text="+84"
+            android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/login_txt_title"
             app:layout_constraintTop_toTopOf="@+id/login_eTxt_user_layout"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:src="@drawable/vietnam_flag" />
-
-            <TextView
-                android:id="@+id/login_txt_country_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:backgroundTint="@color/theme_1_P"
-                android:text="+84"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-        </LinearLayout>
-
+            app:drawableStartCompat="@drawable/vietnam_flag" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_eTxt_user_layout"
@@ -84,7 +73,7 @@
             app:endIconMode="clear_text"
             app:errorEnabled="true"
             app:layout_constraintEnd_toStartOf="@id/login_img_next"
-            app:layout_constraintStart_toEndOf="@+id/login_txt_country_code_layout"
+            app:layout_constraintStart_toEndOf="@+id/login_txt_country_code"
             app:layout_constraintTop_toBottomOf="@+id/login_txt_phone_login">
 
             <EditText

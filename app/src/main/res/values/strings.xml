@@ -36,7 +36,7 @@
     <string name="account_txt_title_gender">Gender</string>
     <string name="account_txt_title_gender_format">&lt;b>Gender:&lt;/b>  %1$s</string>
     <string name="account_txt_gender">TextView</string>
-    <string name="account_txt_title_phone">Phone</string>
+    <string name="account_txt_title_phone">Phone number</string>
     <string name="account_txt_title_phone_format">&lt;b>Phone:&lt;/b>  %1$s</string>
     <string name="account_txt_phone">TextView</string>
     <string name="account_txt_title_email">Email</string>
