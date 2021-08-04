@@ -274,7 +274,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
                         android:text="@string/prediction_confirm_txt_medicine_dosage"
-
                         android:textStyle="bold" />
 
                 </LinearLayout>

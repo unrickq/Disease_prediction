@@ -63,7 +63,7 @@
                 android:layout_marginTop="12dp"
                 android:gravity="start"
                 android:textColor="@color/theme_1_P"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:text="@string/account_info_txt_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.495"

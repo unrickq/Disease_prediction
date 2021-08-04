@@ -692,20 +692,27 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     try {
-                        for (DataSnapshot sn : snapshot.getChildren()) {
-                            Disease d = sn.getValue(Disease.class);
-                            Prediction pre = new Prediction("0", uId, "Default",
-                                sessionID, "Default",
-                                d.getDiseaseID(), "Default", new Date(), new Date(),
-                                d.getSpecializationID(), 0);
-                            // If disease name is "other disease" => set Note
-                            if (disease.equals(AppConstants.DISEASE_OTHER_NAME)) {
-                                pre.setNotes(AppConstants.DISEASE_OTHER_NAME);
+                        // if disease found
+                        if (snapshot.hasChildren()) {
+                            for (DataSnapshot sn : snapshot.getChildren()) {
+                                Disease d = sn.getValue(Disease.class);
+                                Prediction pre = new Prediction("0", uId, "Default",
+                                    sessionID, "Default",
+                                    d.getDiseaseID(), "Default", new Date(), new Date(),
+                                    d.getSpecializationID(), 0);
+                                // If disease name is "other disease" => set Note
+                                if (disease.equals(AppConstants.DISEASE_OTHER_NAME)) {
+                                    pre.setNotes(AppConstants.DISEASE_OTHER_NAME);
+                                }
+                                createPrediction(pre);
                             }
-                            createPrediction(pre);
+                        } else {
+                            Toast.makeText(Chat.this, getString(R.string.error_unknown_contactDev),
+                                Toast.LENGTH_SHORT).show();
+                            Log.e(LOG_TAG, "Not found disease with that name in database");
                         }
                     } catch (Exception e) {
-                        Log.e(LOG_TAG, "Not found disease in database", e);
+                        Log.e(LOG_TAG, "An error happened", e);
                     }
                 }
 
