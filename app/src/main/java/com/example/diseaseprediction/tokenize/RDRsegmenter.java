@@ -123,8 +123,8 @@ public class RDRsegmenter {
             if (sentence.contains(regex))
                 sentence = sentence.replaceAll(regex, Utils.NORMALIZER.get(regex));
 
-        List<String> tokens = Arrays.asList(sentence.split("\\s+"));
-        List<String> lowerTokens = Arrays.asList(sentence.toLowerCase().split("\\s+"));
+        List<String> tokens = Arrays.asList(sentence.split("[ ,]+"));
+        List<String> lowerTokens = Arrays.asList(sentence.toLowerCase().split("[ ,]+"));
 
         int senLength = tokens.size();
         int i = 0;

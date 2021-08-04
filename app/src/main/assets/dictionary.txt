@@ -84,8 +84,9 @@ ngủ không ngon:khó ngủ.
 âu lo:lo lắng.
 tay trái tê:tê tay trái.
 tay trái bị tê:tê tay trái.
-đau ngực trái:đau vùng trươc tim.
+đau ngực trái:đau vùng trước tim.
 tim đập nhanh:nhịp tim nhanh.
 miệng có vị đắng:đắng miệng.
+ngực hơi đau:đau ngực.
 
 
