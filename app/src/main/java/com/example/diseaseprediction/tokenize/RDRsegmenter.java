@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author DatQuocNguyen
+ * @author VuVanHoang edit from http://www.lrec-conf.org/proceedings/lrec2018/pdf/55.pdf
  */
 public class RDRsegmenter {
     private Node root;

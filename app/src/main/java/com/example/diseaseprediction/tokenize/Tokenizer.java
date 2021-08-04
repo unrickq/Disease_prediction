@@ -11,8 +11,7 @@ import java.util.regex.Pattern;
 /**
  * This class contains methods used for tokenization step.
  * 
- * @author tuanphong94
- * @link https://github.com/phongnt570/UETsegmenter/blob/master/src/vn/edu/vnu/uet/nlp/tokenizer/Tokenizer.java
+ * @author VuVanHoang edit from http://www.lrec-conf.org/proceedings/lrec2018/pdf/55.pdf
  *
  */
 public class Tokenizer {
