@@ -39,20 +39,9 @@ public class Vocabulary {
 
     }
 
-//    static {
-////        VN_DICT = new HashSet<String>();
-////        try {
-////
-////            ObjectInputStream ois = new ObjectInputStream(ip);
-////            VN_DICT = (Set<String>) ois.readObject();
-////            ois.close();
-////        }
-////        catch (IOException | ClassNotFoundException e1) {
-////            // TODO Auto-generated catch block
-////            e1.printStackTrace();
-////        }
-//    }
-
+    /**
+     * Vocabulary for Country
+     */
     public static Set<String> COUNTRY_L_NAME;
 
     static {
@@ -438,6 +427,9 @@ public class Vocabulary {
         WORLD_COMPANY.add("vodafone");
     }
 
+    /**
+     * Vocabulary for VietNam locations
+     */
     public static Set<String> VN_LOCATIONS;
 
     static {
@@ -1119,6 +1111,9 @@ public class Vocabulary {
         VN_LOCATIONS.add("tuần giáo");
     }
 
+    /**
+     * Vietname first sent words
+     */
     public static Set<String> VN_FIRST_SENT_WORDS;
 
     static {
@@ -1426,6 +1421,9 @@ public class Vocabulary {
         VN_FIRST_SENT_WORDS.add("wikipedia");
     }
 
+    /**
+     * Vietnam middle name
+     */
     public static Set<String> VN_MIDDLE_NAMES;
 
     static {
@@ -1545,6 +1543,9 @@ public class Vocabulary {
         VN_MIDDLE_NAMES.add("lệ");
     }
 
+    /**
+     * Vietnam family names
+     */
     public static Set<String> VN_FAMILY_NAMES;
 
     static {
