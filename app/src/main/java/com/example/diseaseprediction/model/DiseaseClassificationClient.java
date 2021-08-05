@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import com.example.diseaseprediction.AppConstants;
 import com.example.diseaseprediction.synonymous.Helper;
 import com.example.diseaseprediction.synonymous.Node;
 import com.example.diseaseprediction.synonymous.Tree;
@@ -41,9 +42,9 @@ public class DiseaseClassificationClient {
     private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
     // Simple delimiter to split words.
     private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
-    private static final String MODEL_PATH = "model-088-v1.0.4-metadata.tflite";
-    private static final String VOCAL_PATH = "model-088-v1.0-vocab.txt";
-    private static final String LABEL_PATH = "labels.txt";
+    private static final String MODEL_PATH = AppConstants.MODEL_FILE_NAME;
+    private static final String VOCAL_PATH = AppConstants.VOCAB_FILE_NAME;
+    private static final String LABEL_PATH = AppConstants.LABEL_FILE_NAME;
     private Tree dictionary;
     /*
      * Reserved values in ImdbDataSet dic:
@@ -109,13 +110,13 @@ public class DiseaseClassificationClient {
 
             // Extract and load the dictionary file.
 //      InputStream dictionaryFile = metadataExtractor.getAssociatedFile("model-088-v1.0-vocab.txt");
-            InputStream dictionaryFile = am.open("vocab.txt");
+            InputStream dictionaryFile = am.open(AppConstants.VOCAB_FILE_NAME);
             System.out.println("check dic :" + dictionaryFile);
             loadDictionaryFile(dictionaryFile);
             Log.d(TAG, "Dictionary loaded.");
 
             // Extract and load the label file.
-            InputStream labelFile = metadataExtractor.getAssociatedFile("labels.txt");
+            InputStream labelFile = metadataExtractor.getAssociatedFile(AppConstants.LABEL_FILE_NAME);
             loadLabelFile(labelFile);
             Log.d(TAG, "Labels loaded.");
 
@@ -306,15 +307,15 @@ public class DiseaseClassificationClient {
     }
 
 
-//    Map<String, Integer> getDic() {
-//        return this.dic;
-//    }
-//
-//    Interpreter getTflite() {
-//        return this.tflite;
-//    }
-//
-//    List<String> getLabels() {
-//        return this.labels;
-//    }
+    Map<String, Integer> getDic() {
+        return this.dic;
+    }
+
+    Interpreter getTflite() {
+        return this.tflite;
+    }
+
+    List<String> getLabels() {
+        return this.labels;
+    }
 }

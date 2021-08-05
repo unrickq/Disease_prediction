@@ -15,6 +15,11 @@ public class AppConstants {
 
     public static final String EMAIL_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
+    // Model Settings
+    public static final String MODEL_FILE_NAME = "model-v1.1.1-metadata.tflite";
+    public static final String VOCAB_FILE_NAME = "model-v1.1.1-vocab.txt";
+    public static final String LABEL_FILE_NAME = "labels.txt";
+
     // Settings for Home Fragment
     public static final int HOME_NUM_ITEMS_PREDICTION = 5; // Define number of prediction to be loaded to Home Fragment
     public static final int HOME_NUM_ITEMS_PENDING_PREDICTION = 5; // Define number of pending prediction to be
