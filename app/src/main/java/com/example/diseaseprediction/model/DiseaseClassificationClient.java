@@ -115,7 +115,7 @@ public class DiseaseClassificationClient {
             Log.d(TAG, "Dictionary loaded.");
 
             // Extract and load the label file.
-            InputStream labelFile = metadataExtractor.getAssociatedFile("labels.txt");
+            InputStream labelFile = am.open("labels.txt");;
             loadLabelFile(labelFile);
             Log.d(TAG, "Labels loaded.");
 

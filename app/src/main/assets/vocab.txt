@@ -129,9 +129,9 @@ chảy_nước_mũi_kèm_ho 128
 ho_thường_xuyên 129
 sốt_cao_đột_ngột 130
 đau_tuyến_nước_bọt 131
-nhức_mỏi_toàn_thân 132
-sưng_bìu 133
-đau_tinh_hoàn 134
+nhức_mỏi_toàn_thân 132
+sưng_bìu 133
+đau_tinh_hoàn 134
 hắt_hơi 135
 suy_nhược_cơ_thể 136
 đau_tai 137
