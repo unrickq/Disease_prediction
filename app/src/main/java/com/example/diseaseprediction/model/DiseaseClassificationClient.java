@@ -306,15 +306,15 @@ public class DiseaseClassificationClient {
     }
 
 
-    Map<String, Integer> getDic() {
-        return this.dic;
-    }
-
-    Interpreter getTflite() {
-        return this.tflite;
-    }
-
-    List<String> getLabels() {
-        return this.labels;
-    }
+//    Map<String, Integer> getDic() {
+//        return this.dic;
+//    }
+//
+//    Interpreter getTflite() {
+//        return this.tflite;
+//    }
+//
+//    List<String> getLabels() {
+//        return this.labels;
+//    }
 }
