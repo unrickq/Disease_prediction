@@ -37,7 +37,7 @@ import com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.firebase.FirebaseConstants;
-import com.example.diseaseprediction.listener.MyClickListener;
+import com.example.diseaseprediction.listener.PredictClickListener;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
 import com.example.diseaseprediction.model.DiseaseClassificationClient;
 import com.example.diseaseprediction.model.Result;
@@ -648,7 +648,7 @@ public class Chat extends AppCompatActivity {
                             chatAdapter = new ChatAdapter(Chat.this, mMessage);
                             chat_recycler_view.setAdapter(chatAdapter);
 
-                            chatAdapter.setPredictButtonListener(new MyClickListener() {
+                            chatAdapter.setPredictButtonListener(new PredictClickListener() {
                                 @Override
                                 public void onPredict(View button, int position) {
                                     chatbotCreatePrediction(allMess);

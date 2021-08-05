@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diseaseprediction.R;
-import com.example.diseaseprediction.listener.MyClickListener;
+import com.example.diseaseprediction.listener.PredictClickListener;
 import com.example.diseaseprediction.object.Message;
 import com.example.diseaseprediction.object.Symptom;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +39,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
     public static final int MSG_TYPE_LEFT_BOX = 2;
-    MyClickListener listener;
+    PredictClickListener listener;
 
 
     public ChatAdapter(@NonNull Context context, List<Message> mMessage) {
@@ -52,7 +52,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-    public ChatAdapter(@NonNull Context context, List<Message> mMessage, MyClickListener listener) {
+    public ChatAdapter(@NonNull Context context, List<Message> mMessage, PredictClickListener listener) {
         try {
             this.mContext = context;
             this.mMessage = mMessage;
@@ -135,7 +135,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     //setter button predict
-    public void setPredictButtonListener(MyClickListener myClickListener) {
+    public void setPredictButtonListener(PredictClickListener myClickListener) {
         this.listener = myClickListener;
     }
 
@@ -143,10 +143,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         public TextView item_chat_show_message, item_chat_time;
         public LinearLayout item_chat_layout_show_message;
         public Button item_chat_box_button_predict;
-        MyClickListener myClickListener;
+        PredictClickListener myClickListener;
 
         //constructor use for message button predict
-        public ViewHolder(@NonNull View itemView, MyClickListener listener) {
+        public ViewHolder(@NonNull View itemView, PredictClickListener listener) {
             super(itemView);
             //Find view
             item_chat_show_message = itemView.findViewById(R.id.item_chat_show_message);
