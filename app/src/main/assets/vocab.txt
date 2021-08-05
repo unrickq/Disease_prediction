@@ -42,7 +42,7 @@ hắt_xì 40
 sốt_nhẹ 42
 rét_run 43
 rét_run_toàn_thân 44
-tim_tái 45
+tím_tái 45
 da_khô 46
 rét_người 47
 sốt_thành_cơn_dữ_dội 48
