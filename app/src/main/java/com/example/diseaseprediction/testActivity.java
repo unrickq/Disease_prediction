@@ -44,10 +44,24 @@ public class testActivity extends AppCompatActivity {
     private String predictionID = "-Mf8Z9n6PEIjCph3O4YB";
     private AssetManager am;
     private InputStream is;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+
+//        am = this.getAssets();
+//        try {
+//            is = am.open("abc.txt");
+//            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                addDataSymptom(new Symptom("id", line, "Default", new Date(), new Date(), 1));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //        addDataSymptomMedicine(new SymptomMedicine("319", "-MgGMlNriAhGkvIdQ3yQ", 1));
 //        addDataSymptomMedicine(new SymptomMedicine("324", "-MgGMlOIGiwuBdwib3_O", 1));
 //        addDataSymptomMedicine(new SymptomMedicine("280", "-MgGMlOIGiwuBdwib3_O", 1));
@@ -402,7 +416,7 @@ public class testActivity extends AppCompatActivity {
 //        }
 //    }
 
-//    void addDataSpecialization(DoctorSpecialization sp){
+    //    void addDataSpecialization(DoctorSpecialization sp){
 //        myRef = FirebaseDatabase.getInstance().getReference("Specialization");
 //        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
@@ -448,7 +462,7 @@ public class testActivity extends AppCompatActivity {
 //        });
 //    }
 //
-    void addDataMedicine(Medicine md){
+    void addDataMedicine(Medicine md) {
         mRef = FirebaseDatabase.getInstance().getReference("Medicine");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -463,7 +477,8 @@ public class testActivity extends AppCompatActivity {
             }
         });
     }
-    void addDataSymptomMedicine(SymptomMedicine md){
+
+    void addDataSymptomMedicine(SymptomMedicine md) {
         mRef = FirebaseDatabase.getInstance().getReference("SymptomMedicine");
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -500,7 +515,7 @@ public class testActivity extends AppCompatActivity {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                sm.setSymptomsID(myRef.push().getKey());
+                sm.setSymptomID(mRef.push().getKey());
                 mRef.child(sm.getSymptomID()).setValue(sm);
             }
 
@@ -772,7 +787,7 @@ public class testActivity extends AppCompatActivity {
 //        addDataSymptom(new Symptom("id",  "móng tay bị viêm",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("id",  "mụn rộp",  "Default", new Date(),  new Date(), 1));
 //        addDataSymptom(new Symptom("id",  "đau đỏ quanh mũi",  "Default", new Date(),  new Date(), 1));
-//        addDataSymptom(new Symptom("id",  "rỉ nước vàng",  "Default", new Date(),  new Date(), 1));
+
 
 //add medicine
 //        addDataMedicine(new Medicine("id", "name",  "description",  "manufacturer",  "content", new Date(), new Date(), 1));

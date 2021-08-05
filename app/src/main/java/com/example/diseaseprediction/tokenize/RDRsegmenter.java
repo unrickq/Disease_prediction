@@ -3,6 +3,7 @@ package com.example.diseaseprediction.tokenize;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 
 import java.io.BufferedReader;
@@ -26,7 +27,7 @@ public class RDRsegmenter {
     private Node root;
     private InputStream ip;
     private InputStream fis;
-
+    private static final String LOG_TAG = "RDRsegmenter";
     public RDRsegmenter(InputStream ip, InputStream fis)
             throws IOException {
         this.fis = fis;
@@ -37,13 +38,10 @@ public class RDRsegmenter {
 
     public RDRsegmenter()
             throws IOException {
-//        this.constructTreeFromRulesFile("Model.RDR");
     }
 
     private void constructTreeFromRulesFile()
             throws IOException {
-//        AssetManager am = context.getAssets();
-//        InputStream is = am.open("Model.RDR");
         BufferedReader buffer = new BufferedReader(new InputStreamReader(ip));
         String line = buffer.readLine();
         System.out.println("check read file model :" + line);
@@ -118,11 +116,11 @@ public class RDRsegmenter {
     // An initial word segmenter based on longest matching
     public List<WordTag> getInitialSegmentation(String sentence) {
         List<WordTag> wordtags = new ArrayList<WordTag>();
-
+        // check sentence have NORMALIZER_KEYS if have to replaceAll
         for (String regex : Utils.NORMALIZER_KEYS)
             if (sentence.contains(regex))
                 sentence = sentence.replaceAll(regex, Utils.NORMALIZER.get(regex));
-
+        //split sentence to list tokens and lowercase
         List<String> tokens = Arrays.asList(sentence.split("[ ,]+"));
         List<String> lowerTokens = Arrays.asList(sentence.toLowerCase().split("[ ,]+"));
 
@@ -130,10 +128,12 @@ public class RDRsegmenter {
         int i = 0;
         while (i < senLength) {
             String token = tokens.get(i);
+            //check if a string contains only alphabets and space in java
             if (token.chars().allMatch(Character::isLetter)) {
 
                 if (Character.isLowerCase(token.charAt(0)) && (i + 1) < senLength) {
                     if (Character.isUpperCase(tokens.get(i + 1).charAt(0))) {
+                        //add new word tag "B" is begin
                         wordtags.add(new WordTag(token, "B"));
                         i++;
                         continue;
@@ -143,6 +143,7 @@ public class RDRsegmenter {
                 boolean isSingleSyllabel = true;
                 for (int j = Math.min(i + 4, senLength); j > i + 1; j--) {
                     String word = String.join(" ", lowerTokens.subList(i, j));
+                    //check VietNam dictionary
                     if (Vocabulary.VN_DICT.contains(word) || Vocabulary.VN_LOCATIONS.contains(word)
                             || Vocabulary.COUNTRY_L_NAME.contains(word)) {
 
@@ -206,7 +207,6 @@ public class RDRsegmenter {
             } else {
                 wordtags.add(new WordTag(token, "B"));
             }
-
             i++;
         }
 
@@ -214,88 +214,45 @@ public class RDRsegmenter {
 
     }
 
+    /**
+     * segment Tokenized String
+     * @param str
+     * @return
+     * @throws IOException
+     */
     public String segmentTokenizedString(String str)
             throws IOException {
         StringBuilder sb = new StringBuilder();
         String line = str.trim();
+        //check empty
         if (line.length() == 0) {
             return "\n";
         }
+        try {
+            List<WordTag> wordtags = this.getInitialSegmentation(line);
 
-        List<WordTag> wordtags = this.getInitialSegmentation(line);
-
-        int size = wordtags.size();
-        for (int i = 0; i < size; i++) {
-            FWObject object = Utils.getObject(wordtags, size, i);
-            Node firedNode = findFiredNode(object);
-            if (firedNode.depth > 0) {
-                if (firedNode.conclusion.equals("B"))
-                    sb.append(" " + wordtags.get(i).form);
-                else
-                    sb.append("_" + wordtags.get(i).form);
-            } else {// Fired at root, return initialized tag
-                if (wordtags.get(i).tag.equals("B"))
-                    sb.append(" " + wordtags.get(i).form);
-                else
-                    sb.append("_" + wordtags.get(i).form);
+            int size = wordtags.size();
+            for (int i = 0; i < size; i++) {
+                FWObject object = Utils.getObject(wordtags, size, i);
+                Node firedNode = findFiredNode(object);
+                if (firedNode.depth > 0) {
+                    if (firedNode.conclusion.equals("B"))
+                        sb.append(" " + wordtags.get(i).form);
+                    else
+                        sb.append("_" + wordtags.get(i).form);
+                } else {// Fired at root, return initialized tag
+                    if (wordtags.get(i).tag.equals("B"))
+                        sb.append(" " + wordtags.get(i).form);
+                    else
+                        sb.append("_" + wordtags.get(i).form);
+                }
             }
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Exception when segement tokenize ");
         }
         return sb.toString().trim();
     }
 
-    public String segmentRawString(String str)
-            throws IOException {
-        return segmentTokenizedString(String.join(" ", Tokenizer.tokenize(str)));
-    }
-
-    public void segmentTokenizedCorpus(String inFilePath)
-            throws IOException {
-        BufferedReader buffer = new BufferedReader(
-                new InputStreamReader(new FileInputStream(new File(inFilePath)), "UTF-8"));
-        BufferedWriter bw = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(inFilePath + ".WS"), "UTF-8"));
-        for (String line; (line = buffer.readLine()) != null; ) {
-            bw.write(segmentTokenizedString(line) + "\n");
-        }
-        buffer.close();
-        bw.close();
-
-    }
-
-    public void segmentRawCorpus(String inFilePath)
-            throws IOException {
-        BufferedReader buffer = new BufferedReader(
-                new InputStreamReader(new FileInputStream(new File(inFilePath)), "UTF-8"));
-        BufferedWriter bw = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(inFilePath + ".WSeg"), "UTF-8"));
-        for (String line; (line = buffer.readLine()) != null; ) {
-            // bw.write(segmentTokenizedString(String.join(" ", Tokenizer.tokenize(line))) + "\n");
-            for (String sentence : Tokenizer.joinSentences(Tokenizer.tokenize(line))) {
-                bw.write(segmentTokenizedString(sentence) + "\n");
-            }
-        }
-        buffer.close();
-        bw.close();
-
-    }
-
-    public void segmentDirectory(String inDirectoryPath, String suffix)
-            throws IOException {
-        File directoryPath = new File(inDirectoryPath);
-        FilenameFilter textFilefilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                if (name.endsWith(suffix)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
-        File filesList[] = directoryPath.listFiles(textFilefilter);
-
-        for (File file : filesList) {
-            segmentRawCorpus(file.getAbsolutePath());
-        }
-    }
 
 }
