@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(MainActivity.this, Login.class);
                             startActivity(i);
+                            //End activity
+                            finish();
                             break;
                         }
                     }
@@ -320,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                         //set image
                         nav_header_avatar = findViewById(R.id.nav_header_avatar);
                         if (!mAccount.getImage().equals("Default")) {
-                            Glide.with(MainActivity.this)
+                            Glide.with(getApplicationContext())
                                 .load(mAccount.getImage())
                                 .error(R.mipmap.ic_default_avatar_round)
                                 .into(nav_header_avatar);

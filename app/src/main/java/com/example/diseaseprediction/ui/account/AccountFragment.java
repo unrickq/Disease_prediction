@@ -282,7 +282,7 @@ public class AccountFragment extends Fragment {
 
                             //Set image
                             if (!mAccount.getImage().equals("Default")) {
-                                Glide.with(AccountFragment.this)
+                                Glide.with(context)
                                     .load(mAccount.getImage())
                                     .error(R.mipmap.ic_default_avatar_round)
                                     .into(account_img_avatar);
