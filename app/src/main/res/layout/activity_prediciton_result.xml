@@ -64,33 +64,37 @@
             android:paddingRight="@dimen/padding"
             android:paddingBottom="@dimen/padding">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_home_component"
                 android:background="@drawable/background_list_custom"
-                android:orientation="horizontal"
                 android:padding="@dimen/margin_top">
 
                 <ImageView
                     android:id="@+id/prediction_img_status"
-                    android:layout_width="61dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:src="@drawable/ic_edit" />
 
                 <TextView
+                    app:layout_constraintStart_toEndOf="@id/prediction_img_status"
+                    app:layout_constraintTop_toTopOf="@+id/prediction_img_status"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:id="@+id/prediction_txt_status"
                     style="@style/subTitle_1_bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_top"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/prediction_txt_status" />
+                    tools:text="@string/prediction_txt_status" />
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
