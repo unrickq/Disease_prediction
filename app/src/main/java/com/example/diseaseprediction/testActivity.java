@@ -2,6 +2,7 @@ package com.example.diseaseprediction;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -26,16 +27,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class testActivity extends AppCompatActivity {
 
+    private static final String TAG = "test";
     private static final int REQUEST_CODE_SPEECH = 10;
     FirebaseUser firebaseUser;
     DatabaseReference mRef;
@@ -52,12 +51,27 @@ public class testActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+        String temp = "";
         client = new DiseaseClassificationClient(getApplicationContext());
         client.load();
         try {
-            String a = client.tokenize(" ax lao vỡ alo fpt db");
+            String a = client.tokenize("tuyến_nước_bọt_đau_nhức tuyến_nước_bọt_sưng_to đau_tinh_hoàn  qq");
             List<Result> results = client.classify(a);
-            System.out.println(a);
+            Log.d(TAG, a);
+            for (int i = 0; i <= 3; i++) {
+                // If the percentage greater than 1%
+                if (results.get(i).getConfidence() > 0.01) {
+                    // If this is the last disease -> do not create new line
+                    if (i == 3) {
+                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
+                            results.get(i).getTitle(), results.get(i).getConfidence() * 100);
+                    } else {
+                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
+                            results.get(i).getTitle(), results.get(i).getConfidence() * 100) + "\n";
+                    }
+                }
+            }
+            Log.d(TAG, temp);
         } catch (IOException e) {
             e.printStackTrace();
         }
