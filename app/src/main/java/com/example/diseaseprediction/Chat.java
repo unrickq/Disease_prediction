@@ -37,8 +37,8 @@ import com.agrawalsuneet.dotsloader.loaders.CircularDotsLoader;
 import com.bumptech.glide.Glide;
 import com.example.diseaseprediction.adapter.ChatAdapter;
 import com.example.diseaseprediction.firebase.FirebaseConstants;
-import com.example.diseaseprediction.listener.PredictClickListener;
 import com.example.diseaseprediction.listener.NetworkChangeListener;
+import com.example.diseaseprediction.listener.PredictClickListener;
 import com.example.diseaseprediction.model.DiseaseClassificationClient;
 import com.example.diseaseprediction.model.Result;
 import com.example.diseaseprediction.object.Account;
@@ -384,7 +384,7 @@ public class Chat extends AppCompatActivity {
                     Account receiver = snapshot.getValue(Account.class);
                     if (receiver != null) {
                         chat_toolbar_txt_name.setText(receiver.getName());
-                        Glide.with(Chat.this)
+                        Glide.with(getApplicationContext())
                                 .load(receiver.getImage())
                                 .error(R.mipmap.ic_default_avatar_round)
                                 .into(chat_toolbar_img_avatar);
