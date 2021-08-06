@@ -39,7 +39,7 @@ import java.util.PriorityQueue;
 public class DiseaseClassificationClient {
     private static final String TAG = "Interpreter";
 
-    private static final int SENTENCE_LEN = 100; // The maximum length of an input sentence.
+    private static final int SENTENCE_LEN = 30; // The maximum length of an input sentence.
     // Simple delimiter to split words.
     private static final String SIMPLE_SPACE_OR_PUNCTUATION = " |\\,|\\.|\\!|\\?|\n";
     private static final String MODEL_PATH = AppConstants.MODEL_FILE_NAME;
@@ -140,6 +140,7 @@ public class DiseaseClassificationClient {
     public synchronized List<Result> classify(String text) throws IOException {
         // Pre-processing.
         int[][] input = tokenizeInputText(text);
+        Log.d(TAG, Arrays.deepToString(input));
         // Run inference.
         Log.v(TAG, "Classifying text with TF Lite...");
         float[][] output = new float[1][labels.size()];
