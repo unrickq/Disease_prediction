@@ -91,7 +91,7 @@ public class CodeVerify extends AppCompatActivity {
             public void onClick(View view) {
                 if (checkCodeInput()) {
                     verifyPhoneNumberWithCode(mVerificationId,
-                            code_verify_edit_txt_code_layout.getEditText().getText().toString());
+                        code_verify_edit_txt_code_layout.getEditText().getText().toString());
                 }
             }
         });
@@ -143,15 +143,17 @@ public class CodeVerify extends AppCompatActivity {
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
                     Log.e(TAG, "Phone number format is not valid", e);
-                    displayOKDialog(getString(R.string.error_txt), getString(R.string.code_verify_exception_phone_invalid));
+                    displayOKDialog(getString(R.string.error_txt),
+                        getString(R.string.code_verify_exception_phone_invalid));
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
                     Log.e(TAG, "The SMS quota for the project has been exceeded", e);
-                    displayOKDialog(getString(R.string.error_txt), getString(R.string.code_verify_exception_device_blocked));
+                    displayOKDialog(getString(R.string.error_txt),
+                        getString(R.string.code_verify_exception_device_blocked));
                 } else {
                     // Show a message and update the UI
                     displayOKDialog(getString(R.string.error_txt),
-                            getString(R.string.code_verify_exception_verification_failed_unknown));
+                        getString(R.string.code_verify_exception_verification_failed_unknown));
                 }
 
 
@@ -271,11 +273,10 @@ public class CodeVerify extends AppCompatActivity {
             PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
                     .setPhoneNumber(phoneNumber)       // Phone number to verify
-
-//                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                    .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
                     .setActivity(this)                 // Activity (for callback binding)
-                            .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                            .build();
+                    .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                    .build();
             PhoneAuthProvider.verifyPhoneNumber(options);
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,13 +312,13 @@ public class CodeVerify extends AppCompatActivity {
                                         PhoneAuthProvider.ForceResendingToken token) {
         try {
             PhoneAuthOptions options =
-                    PhoneAuthOptions.newBuilder(mAuth)
-                            .setPhoneNumber(phoneNumber)       // Phone number to verify
-                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                            .setActivity(this)                 // Activity (for callback binding)
-                            .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                            .setForceResendingToken(token)     // ForceResendingToken from callbacks
-                            .build();
+                PhoneAuthOptions.newBuilder(mAuth)
+                    .setPhoneNumber(phoneNumber)       // Phone number to verify
+                    .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
+                    .setActivity(this)                 // Activity (for callback binding)
+                    .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                    .setForceResendingToken(token)     // ForceResendingToken from callbacks
+                    .build();
             PhoneAuthProvider.verifyPhoneNumber(options);
             displayOKDialog("Code Sent", "The OTP code have been sent!");
         } catch (Exception e) {
@@ -334,61 +335,64 @@ public class CodeVerify extends AppCompatActivity {
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         try {
             mAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithCredential:success");
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
 
-                                FirebaseUser user = task.getResult().getUser();
-                                mAccount = new Account();
-                                mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
-                                mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        try {
-                                            //check user exist in firebase
-                                            //if exist then set UI
-                                            if (snapshot.hasChild(user.getUid())) {
-                                                Log.d(TAG, "User exist");
-                                                mAccount = snapshot.child(user.getUid()).getValue(Account.class);
-                                                if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
-                                                        mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
-                                                        mAccount.getAddress().equals("Default")) {
-                                                    Intent intent = new Intent(CodeVerify.this, AccountInfo.class);
-                                                    intent.putExtra(INTENT_MOBILE, phoneNumber);
-                                                    startActivity(intent);
-                                                } else {
-                                                    Intent intent = new Intent(CodeVerify.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                }
+                            FirebaseUser user = task.getResult().getUser();
+                            mAccount = new Account();
+                            mRef =
+                                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
+                            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    try {
+                                        //check user exist in firebase
+                                        //if exist then set UI
+                                        if (snapshot.hasChild(user.getUid())) {
+                                            Log.d(TAG, "User exist");
+                                            mAccount = snapshot.child(user.getUid()).getValue(Account.class);
+                                            if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
+                                                mAccount.getPhone().equals("Default") || mAccount.getEmail().equals(
+                                                "Default") ||
+                                                mAccount.getAddress().equals("Default")) {
+                                                Intent intent = new Intent(CodeVerify.this, AccountInfo.class);
+                                                intent.putExtra(INTENT_MOBILE, phoneNumber);
+                                                startActivity(intent);
                                             } else {
-                                                createNewFirebaseAccount(user);
+                                                Intent intent = new Intent(CodeVerify.this, MainActivity.class);
+                                                startActivity(intent);
                                             }
-                                        } catch (NullPointerException e) {
-                                            Log.e(TAG, "signInWithPhoneAuthCredential: UID Null", e);
-                                            Toast.makeText(CodeVerify.this, getString(R.string.error_unknown_relogin), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            createNewFirebaseAccount(user);
                                         }
+                                    } catch (NullPointerException e) {
+                                        Log.e(TAG, "signInWithPhoneAuthCredential: UID Null", e);
+                                        Toast.makeText(CodeVerify.this, getString(R.string.error_unknown_relogin),
+                                            Toast.LENGTH_LONG).show();
                                     }
-
-                                    @Override
-                                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                                    }
-                                });
-
-
-                            } else {
-                                // Sign in failed, display a message and update the UI
-                                Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                    // The verification code entered was invalid
-                                    code_verify_edit_txt_code_layout.setError(getString(R.string.code_verify_error_code_invalid));
                                 }
+
+                                @Override
+                                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                                }
+                            });
+
+
+                        } else {
+                            // Sign in failed, display a message and update the UI
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                                code_verify_edit_txt_code_layout.setError(getString(R.string.code_verify_error_code_invalid));
                             }
                         }
-                    });
+                    }
+                });
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "signInWithPhoneAuthCredential()");
@@ -408,7 +412,7 @@ public class CodeVerify extends AppCompatActivity {
 
             // Set content
             builder.setTitle(title)
-                    .setMessage(msg);
+                .setMessage(msg);
 
             // Set button
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -441,7 +445,7 @@ public class CodeVerify extends AppCompatActivity {
             String imgURL = "Default";
             //Create new account
             Account account = new Account(user.getUid(), type, 0, phone, name, gender, address, email, imgURL
-                    , new Date(), new Date(), 1);
+                , new Date(), new Date(), 1);
             //Save new account to firebase
             //If write data success, start new activity
             mRef.child(user.getUid()).setValue(account, new DatabaseReference.CompletionListener() {

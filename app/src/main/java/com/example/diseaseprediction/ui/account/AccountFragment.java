@@ -75,8 +75,8 @@ public class AccountFragment extends Fragment {
     private Uri imgPath;
 
     private TextView account_txt_name, account_txt_gender, account_txt_phone, account_txt_email,
-            account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
-            account_doctor_txt_description;
+        account_txt_address, account_doctor_txt_specialization, account_doctor_txt_experience,
+        account_doctor_txt_description;
 
     private AutoCompleteTextView account_spinner_gender, account_doctor_spinner_specialization;
 
@@ -332,7 +332,8 @@ public class AccountFragment extends Fragment {
                         try {
                             //Set spinner
                             specialization = new ArrayList<>();
-                            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SPECIALIZATION);
+                            mRef =
+                                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SPECIALIZATION);
                             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -352,7 +353,7 @@ public class AccountFragment extends Fragment {
                                     }
                                     //Set spinner
                                     specializationAdapter = new ArrayAdapter<>(context,
-                                            R.layout.support_simple_spinner_dropdown_item, specialization);
+                                        R.layout.support_simple_spinner_dropdown_item, specialization);
                                     account_doctor_spinner_specialization.setAdapter(specializationAdapter);
                                 }
 
@@ -416,10 +417,11 @@ public class AccountFragment extends Fragment {
                                 public void onSuccess(Uri uri) {
                                     mRef =
                                         FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT);
+                                    // Update image path of user
                                     mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
-                                    // load image
+                                    // load local image
                                     Glide.with(requireContext())
-                                        .load(uri.toString())
+                                        .load(imgPath)
                                         .error(R.mipmap.ic_default_avatar_round)
                                         .into(account_img_avatar);
                                 }
