@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(MainActivity.this, Login.class);
                             startActivity(i);
+                            //End activity
+                            finish();
                             break;
                         }
                     }
