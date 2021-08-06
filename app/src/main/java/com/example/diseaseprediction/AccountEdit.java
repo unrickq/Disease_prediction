@@ -118,6 +118,7 @@ public class AccountEdit extends AppCompatActivity {
             dialogConfirm(1);
         } else {
             super.onBackPressed();
+            finish(); //clear this activity from back stack
         }
 
     }

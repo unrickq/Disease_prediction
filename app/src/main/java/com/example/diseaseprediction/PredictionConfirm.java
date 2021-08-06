@@ -602,6 +602,7 @@ public class PredictionConfirm extends AppCompatActivity {
                     // Navigation to Home
                     Intent intent = new Intent(PredictionConfirm.this, MainActivity.class);
                     startActivity(intent);
+                    finish(); //clear this activity from back stack
                 }
             });
 
