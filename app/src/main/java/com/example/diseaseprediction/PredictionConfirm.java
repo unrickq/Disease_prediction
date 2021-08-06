@@ -702,14 +702,17 @@ public class PredictionConfirm extends AppCompatActivity {
                         medicineDosage.setText(dosage);
                         medicine_confirm_layout.addView(item_medicine_view);
                     }
-                    if (!medicineName.getText().toString().isEmpty()) {
-                        isMedicineEmpty = false;
-                        medicine_confirm_layout_title.setVisibility(View.VISIBLE);
-//                        prediction_txt_medicine_empty.setVisibility(View.GONE);
-                    } else {
-                        isMedicineEmpty = true;
-//                        prediction_txt_medicine_empty.setVisibility(View.VISIBLE);
-                        medicine_confirm_layout_title.setVisibility(View.GONE);
+                    try {
+                        if (!medicineName.getText().toString().isEmpty()) {
+                            isMedicineEmpty = false;
+                            medicine_confirm_layout_title.setVisibility(View.VISIBLE);
+                        } else {
+                            isMedicineEmpty = true;
+                            medicine_confirm_layout_title.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d(LOG_TAG, "getMedicine(), empty medicineName");
                     }
                 }
 
@@ -763,13 +766,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private boolean checkPredictionMedicine() {
         //Check valid data of UI (Is empty or not)
         if (checkMedicineLayout() == 0) {
-            //Check predictionMedicineList is empty or not
-//            if (predictionMedicineList.size() == 0) {
-//                displayWarningDialog(getString(R.string.default_empty_medicine));
-//                return false;
-//            } else {
             return true;
-//            }
         }
         return false;
     }
