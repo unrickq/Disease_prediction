@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.diseaseprediction.firebase.FirebaseConstants;
+import com.example.diseaseprediction.model.DiseaseClassificationClient;
+import com.example.diseaseprediction.model.Result;
 import com.example.diseaseprediction.object.Medicine;
 import com.example.diseaseprediction.object.PredictionMedicine;
 import com.example.diseaseprediction.object.Symptom;
@@ -30,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class testActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class testActivity extends AppCompatActivity {
     DatabaseReference mRef;
     LinearLayout layoutList;
     Button buttonAdd, submit;
-
+    private DiseaseClassificationClient client;
     private ArrayList<Medicine> loadMedicineList = new ArrayList<>();
     private ArrayList<PredictionMedicine> predictionMedicineList = new ArrayList<>();
     private String predictionID = "-Mf8Z9n6PEIjCph3O4YB";
@@ -49,7 +52,15 @@ public class testActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-
+        client = new DiseaseClassificationClient(getApplicationContext());
+        client.load();
+        try {
+            String a = client.tokenize(" ax lao vỡ alo fpt db");
+            List<Result> results = client.classify(a);
+            System.out.println(a);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        am = this.getAssets();
 //        try {
 //            is = am.open("abc.txt");

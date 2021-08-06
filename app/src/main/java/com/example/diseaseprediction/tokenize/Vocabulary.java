@@ -46,6 +46,7 @@ public class Vocabulary {
 
     static {
         COUNTRY_L_NAME = new HashSet<String>();
+        COUNTRY_L_NAME.add("tuyến nước bọt đau nhức");
         COUNTRY_L_NAME.add("na uy");
         COUNTRY_L_NAME.add("san marino");
         COUNTRY_L_NAME.add("phần lan");
