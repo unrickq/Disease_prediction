@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class testActivity extends AppCompatActivity {
@@ -46,35 +48,48 @@ public class testActivity extends AppCompatActivity {
     private String predictionID = "-Mf8Z9n6PEIjCph3O4YB";
     private AssetManager am;
     private InputStream is;
+    private List<Symptom> mSymptom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        String temp = "";
-        client = new DiseaseClassificationClient(getApplicationContext());
-        client.load();
-        try {
-            String a = client.tokenize("tuyến_nước_bọt_đau_nhức tuyến_nước_bọt_sưng_to đau_tinh_hoàn  qq");
-            List<Result> results = client.classify(a);
-            Log.d(TAG, a);
-            for (int i = 0; i <= 3; i++) {
-                // If the percentage greater than 1%
-                if (results.get(i).getConfidence() > 0.01) {
-                    // If this is the last disease -> do not create new line
-                    if (i == 3) {
-                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
-                            results.get(i).getTitle(), results.get(i).getConfidence() * 100);
-                    } else {
-                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
-                            results.get(i).getTitle(), results.get(i).getConfidence() * 100) + "\n";
-                    }
-                }
-            }
-            Log.d(TAG, temp);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        addDataSymptom(new Symptom("id", "sưng một bên mặt", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "đau dạ dày", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "tuyến nước bọt sưng to", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "đau tim", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "hạ thân nhiệt", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "sụt cân nhanh", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "phân nước", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "đói bụng", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "rét", "Default", new Date(), new Date(), 1));
+//        getSymptomFirebase();
+//        String temp = "";
+//        client = new DiseaseClassificationClient(getApplicationContext());
+//        client.load();
+//        try {
+//            String a = client.tokenize("hôm nay tôi bị đau họng");
+//            List<String> tokenList = Arrays.asList(a.split(" "));
+//            List<String> output = searchSymptoms(tokenList);
+//            List<Result> results = client.classify(a);
+//            Log.d(TAG, a);
+//            for (int i = 0; i <= 3; i++) {
+//                // If the percentage greater than 1%
+//                if (results.get(i).getConfidence() > 0.01) {
+//                    // If this is the last disease -> do not create new line
+//                    if (i == 3) {
+//                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
+//                            results.get(i).getTitle(), results.get(i).getConfidence() * 100);
+//                    } else {
+//                        temp += String.format(getString(R.string.chat_chatbot_disease_list_item),
+//                            results.get(i).getTitle(), results.get(i).getConfidence() * 100) + "\n";
+//                    }
+//                }
+//            }
+//            Log.d(TAG, temp);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //        am = this.getAssets();
 //        try {
 //            is = am.open("abc.txt");
@@ -134,6 +149,111 @@ public class testActivity extends AppCompatActivity {
 //            }
 //        });
 
+    }
+
+    /***
+     * Search symptom from firebase
+     *
+     * @param tokenList list of tokenized input string
+     * @return a string that contain detected symptoms
+     */
+    private List<String> searchSymptoms(List<String> tokenList) {
+        List<String> output = new ArrayList<>();
+        String notSymptom = "";
+        String symptom = "";
+        String result = getString(R.string.chat_chatbot_symptom);
+//        tempSymptom = new ArrayList<>();
+        //search binary symptom
+        int mid = mSymptom.size() / 2;
+        boolean checkNotEmpty = false;
+        for (String tk : tokenList) {
+            tk = tk.replace("_", " ");
+            boolean check = false;
+            if (mSymptom.get(mid).getName().equals(tk)) {
+                result += tk + ", ";
+                symptom += tk.replace(" ", "_") + " ";
+//                tempSymptom.add(mSymptom.get(mid));
+                checkNotEmpty = true;
+            } else {
+                for (int i = 0; i < mid; i++) {
+                    if (mSymptom.get(i).getName().equals(tk)) {
+                        result += tk + ", ";
+                        check = true;
+                        symptom += tk.replace(" ", "_") + " ";
+//                        tempSymptom.add(mSymptom.get(i));
+                        checkNotEmpty = true;
+                    }
+                }
+                if (!check) {
+                    for (int i = mid + 1; i < mSymptom.size(); i++) {
+                        if (mSymptom.get(i).getName().equals(tk)) {
+                            result += tk + ", ";
+//                            tempSymptom.add(mSymptom.get(i));
+                            symptom += tk.replace(" ", "_") + " ";
+                            checkNotEmpty = true;
+                        }
+                    }
+                }
+            }
+            if (checkNotEmpty == false) {
+                notSymptom += tk + " ";
+            }
+        }
+        if (checkNotEmpty == false)
+            result = "";
+        else
+            //print symptom user input
+            result = result.substring(0, result.length() - 2);
+        output.add(symptom);
+        output.add(notSymptom);
+        output.add(result);
+        return output;
+    }
+
+    /**
+     * Get symptom in firebase
+     */
+    private void getSymptomFirebase() {
+        try {
+            mSymptom = new ArrayList<>();
+            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_SYMPTOM);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    mSymptom.clear();
+                    for (DataSnapshot sn : snapshot.getChildren()) {
+                        Symptom msg = sn.getValue(Symptom.class);
+                        mSymptom.add(msg);
+                    }
+                    String a = null;
+                    try {
+                        a = client.tokenize("đau tinh hoàn");
+
+                        List<Result> results = new ArrayList<>();
+                        List<String> tokenList = Arrays.asList(a.split(" "));
+                        List<String> output = searchSymptoms(tokenList);
+                        float percent = Float.valueOf(output.get(1).length()) / Float.valueOf(a.length());
+                        if (percent >= 0.35) {
+//                            disease = "Bệnh khác";
+                        } else {
+                            results = client.classify(a);
+                        }
+                        System.out.println(results);
+                        System.out.println("check " + output.get(0));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("aa", "getSymptomFirebase()");
+        }
     }
 
 //    private void SavePredictionMedicineList() {
