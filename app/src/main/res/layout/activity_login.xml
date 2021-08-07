@@ -69,7 +69,7 @@
             android:layout_marginEnd="16dp"
             app:boxBackgroundColor="@color/white"
             app:counterEnabled="true"
-            app:counterMaxLength="@integer/length_log_in"
+            app:counterMaxLength="@integer/length_account_info_phone"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
             app:layout_constraintEnd_toStartOf="@id/login_img_next"
@@ -83,7 +83,7 @@
                 android:background="@null"
                 android:hint="@string/login_eTxt_user"
                 android:inputType="number"
-                android:maxLength="@integer/length_log_in" />
+                android:maxLength="@integer/length_account_info_phone" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

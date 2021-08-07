@@ -134,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_top"
-                    app:counterMaxLength="@integer/length_log_in"
+                    app:counterMaxLength="@integer/length_account_info_phone"
                     app:counterEnabled="true"
                     app:boxBackgroundColor="@color/background_B1_lightMode">
 
@@ -156,6 +156,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/length_account_info_email"
                 app:boxBackgroundColor="@color/background_B1_lightMode">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -164,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:maxLength="@integer/length_account_info_email"
                     android:hint="@string/account_txt_title_email"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
