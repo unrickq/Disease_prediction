@@ -132,7 +132,10 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setType("image/*");
+                // Accepted image types
+                String[] imageTypes = {"image/png", "image/jpg", "image/jpeg"};
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, imageTypes);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, getString(R.string.filechooser_picture)),
                     PICK_IMAGE_REQUEST);
