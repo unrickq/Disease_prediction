@@ -149,9 +149,9 @@ public class Chat extends AppCompatActivity {
                     String msg = chat_txt_enter_mess.getText().toString();
                     try {
                         if (!receiverID.equals(AppConstants.CHATBOT_ID)) {
-                            chatWithDoctor(msg);
+                            chatWithDoctor(msg.trim());
                         } else {
-                            chatWithChatbot(msg);
+                            chatWithChatbot(msg.trim());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -363,6 +363,8 @@ public class Chat extends AppCompatActivity {
                 Message message = new Message("", fUser.getUid(), msg
                         , new Date(), sessionID, 1);
                 setMessageFirebase(message);
+                chat_txt_enter_mess.setText("");
+            }else {
                 chat_txt_enter_mess.setText("");
             }
         } catch (Exception e) {
@@ -1142,7 +1144,7 @@ public class Chat extends AppCompatActivity {
         try {
             if (!msg.equals("")) {
                 Message message = new Message("", fUser.getUid()
-                        , msg, new Date(), sessionID, 1);
+                        , msg.trim(), new Date(), sessionID, 1);
                 setMessageFirebase(message);
                 //Chatbot chat
                 Message message1 = new Message("", AppConstants.CHATBOT_ID,
@@ -1150,6 +1152,8 @@ public class Chat extends AppCompatActivity {
                 setMessageFirebase(message1);
                 chat_txt_enter_mess.setText("");
                 allMess += msg + " ";
+            }else {
+                chat_txt_enter_mess.setText("");
             }
         } catch (Exception e) {
             e.printStackTrace();
