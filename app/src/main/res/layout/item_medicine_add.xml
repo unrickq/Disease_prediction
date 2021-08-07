@@ -62,7 +62,7 @@
                     android:ellipsize="end"
                     android:hint="@string/item_add_medicine_autoComplete"
                     android:inputType="textAutoComplete"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,9 +126,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:layout_marginEnd="5dp"
-                    app:endIconMode="clear_text">
+                    android:background="@null">
 
                     <EditText
                         android:id="@+id/item_add_medicine_editText_dosage"

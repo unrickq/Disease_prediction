@@ -16,7 +16,12 @@ public class Vocabulary {
     public Vocabulary()  {
 
     }
-    public void test(InputStream ip){
+
+    /**
+     * add vocabulary of tokenize to Vocabulary
+     * @param ip
+     */
+    public void addVocabularyTokenize(InputStream ip){
 
         BufferedReader buffer;
         VN_DICT = new HashSet<>();

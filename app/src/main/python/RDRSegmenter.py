@@ -13,7 +13,7 @@ class RDRSegmenter:
     def __init__(self):
         self._root = None
         try:
-            fname = join(dirname(__file__), "Model.RDR")
+            fname = join(dirname(__file__), "SCRDR_Model.RDR")
             self.constructTreeFromRulesFile(fname)
         except IOError as e:
             raise e

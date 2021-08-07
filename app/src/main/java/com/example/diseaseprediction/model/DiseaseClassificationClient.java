@@ -76,11 +76,12 @@ public class DiseaseClassificationClient {
         this.context = context;
         try {
             am = context.getAssets();
-            is = am.open("Model.RDR");
-            fis = am.open("VnVocab.txt");
-            fsysn = am.open("dictionary.txt");
+            is = am.open("SCRDR_Model.RDR");
+            fis = am.open("vocab_tokenize.txt");
+            fsysn = am.open("vocab_sym.txt");
             vocabulary = new Vocabulary();
-            vocabulary.test(fis);
+            //add vocabulary of tokenize to vocabulary
+            vocabulary.addVocabularyTokenize(fis);
             rdRsegmenter = new RDRsegmenter(is, fis);
         } catch (IOException e) {
             e.printStackTrace();
@@ -241,7 +242,7 @@ public class DiseaseClassificationClient {
         //split the sentence into tokens with '_' each token separated by space
         text = rdRsegmenter.segmentTokenizedString(text);
         token = Arrays.asList(text.split(" "));
-        InputStream dictionaryFilevo = am.open("dictionary.txt");
+        InputStream dictionaryFilevo = am.open("vocab_sym.txt");
         loadDictionary(dictionaryFilevo);
         System.out.println("Token : " + token.toString());
         String result = "";
