@@ -3,7 +3,7 @@ from os.path import dirname, join
 
 class Vocabulary:
     def __init__(self):
-        fname = join(dirname(__file__), "VnVocab.txt")
+        fname = join(dirname(__file__), "vocab_tokenize.txt")
         self._VN_DICT = set(line.strip() for line in open(fname, 'r', encoding='utf8'))
         self._COUNTRY_L_NAME = {"na uy"}
         self._COUNTRY_L_NAME.add("san marino")

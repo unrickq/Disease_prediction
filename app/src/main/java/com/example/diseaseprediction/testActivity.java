@@ -99,7 +99,7 @@ public class testActivity extends AppCompatActivity {
 //        }
 //        am = this.getAssets();
 //        try {
-//            is = am.open("abc.txt");
+//            is = am.open("symptom_in_firebase.txt");
 //            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 //
 //            String line;
