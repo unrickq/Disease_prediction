@@ -49,12 +49,11 @@ public class testActivity extends AppCompatActivity {
     private AssetManager am;
     private InputStream is;
     private List<Symptom> mSymptom;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-//        addDataSymptom(new Symptom("id", "sưng một bên mặt", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "tuyến nước bọt", "Default", new Date(), new Date(), 1));
 //        addDataSymptom(new Symptom("id", "đau dạ dày", "Default", new Date(), new Date(), 1));
 //        addDataSymptom(new Symptom("id", "tuyến nước bọt sưng to", "Default", new Date(), new Date(), 1));
 //        addDataSymptom(new Symptom("id", "đau tim", "Default", new Date(), new Date(), 1));
@@ -63,12 +62,20 @@ public class testActivity extends AppCompatActivity {
 //        addDataSymptom(new Symptom("id", "phân nước", "Default", new Date(), new Date(), 1));
 //        addDataSymptom(new Symptom("id", "đói bụng", "Default", new Date(), new Date(), 1));
 //        addDataSymptom(new Symptom("id", "rét", "Default", new Date(), new Date(), 1));
+//        addDataSymptom(new Symptom("id", "sưng một bên mặt", "Default", new Date(), new Date(), 1));
 //        getSymptomFirebase();
 //        String temp = "";
 //        client = new DiseaseClassificationClient(getApplicationContext());
 //        client.load();
 //        try {
-//            String a = client.tokenize("hôm nay tôi bị đau họng");
+        client = new DiseaseClassificationClient(getApplicationContext());
+        client.load();
+        try {
+            String a = client.tokenize("đau trong khi ăn");
+            System.out.println(a);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //            List<String> tokenList = Arrays.asList(a.split(" "));
 //            List<String> output = searchSymptoms(tokenList);
 //            List<Result> results = client.classify(a);
