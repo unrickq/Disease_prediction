@@ -420,7 +420,7 @@ public class AccountFragment extends Fragment {
                                     // Update image path of user
                                     mRef.child(fUser.getUid()).child("image").setValue(uri.toString());
                                     // load local image
-                                    Glide.with(requireContext())
+                                    Glide.with(context)
                                         .load(imgPath)
                                         .error(R.mipmap.ic_default_avatar_round)
                                         .into(account_img_avatar);

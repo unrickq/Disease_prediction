@@ -152,17 +152,17 @@ public class MainActivity extends AppCompatActivity {
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home,
-                    R.id.nav_account,
-                    R.id.nav_consultationList,
-                    R.id.nav_predictionList,
-                    R.id.nav_settings
+                R.id.nav_home,
+                R.id.nav_account,
+                R.id.nav_consultationList,
+                R.id.nav_predictionList,
+                R.id.nav_settings
             )
-                    .setDrawerLayout(drawer)
-                    .build();
+                .setDrawerLayout(drawer)
+                .build();
 
             navHostFragment =
-                    (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
             NavController navController = navHostFragment.getNavController();
 
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
@@ -174,37 +174,37 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_home: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new HomeFragment()).commit();
+                                new HomeFragment()).commit();
                             drawer.close();
                             break;
                         }
                         case R.id.nav_account: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new AccountFragment()).commit();
+                                new AccountFragment()).commit();
                             drawer.close();
                             break;
                         }
                         case R.id.nav_consultationList: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new ConsultationListFragment()).commit();
+                                new ConsultationListFragment()).commit();
                             drawer.close();
                             break;
                         }
                         case R.id.nav_predictionListConfirm: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new PredictionListPending()).commit();
+                                new PredictionListPending()).commit();
                             drawer.close();
                             break;
                         }
                         case R.id.nav_predictionList: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new PredictionListFragment()).commit();
+                                new PredictionListFragment()).commit();
                             drawer.close();
                             break;
                         }
                         case R.id.nav_settings: {
                             getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                    new SettingsFragment()).commit();
+                                new SettingsFragment()).commit();
                             drawer.close();
                             break;
                         }
@@ -222,7 +222,8 @@ public class MainActivity extends AppCompatActivity {
             });
 
             //Set prediction list confirm visibility depend on type account
-            mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
+            mRef =
+                FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_ACCOUNT).child(fUser.getUid());
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -238,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
 
                     } catch (NullPointerException e) {
                         Log.e(TAG, "setNavigation: TypeID null", e);
-                        Toast.makeText(MainActivity.this, getString(R.string.error_unknown_contactDev), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, getString(R.string.error_unknown_contactDev),
+                            Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -266,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+            || super.onSupportNavigateUp();
     }
 
     /**
@@ -322,10 +324,13 @@ public class MainActivity extends AppCompatActivity {
                         //set image
                         nav_header_avatar = findViewById(R.id.nav_header_avatar);
                         if (!mAccount.getImage().equals("Default")) {
-                            Glide.with(getApplicationContext())
-                                .load(mAccount.getImage())
-                                .error(R.mipmap.ic_default_avatar_round)
-                                .into(nav_header_avatar);
+                            // Check if activity is not destroyed -> load profile image
+                            if (!MainActivity.this.isFinishing()) {
+                                Glide.with(MainActivity.this)
+                                    .load(mAccount.getImage())
+                                    .error(R.mipmap.ic_default_avatar_round)
+                                    .into(nav_header_avatar);
+                            }
                         } else {
                             nav_header_avatar.setImageResource(R.mipmap.ic_default_avatar_round);
 //                        Glide.with(MainActivity.this).load(R.drawable.background_avatar).into(nav_header_avatar);
@@ -374,8 +379,8 @@ public class MainActivity extends AppCompatActivity {
                             //Get data
                             //Go to info activity if data is default
                             if (mAccount.getName().equals("Default") || mAccount.getGender() == -1 ||
-                                    mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
-                                    mAccount.getAddress().equals("Default")) {
+                                mAccount.getPhone().equals("Default") || mAccount.getEmail().equals("Default") ||
+                                mAccount.getAddress().equals("Default")) {
                                 Intent intent = new Intent(MainActivity.this, AccountInfo.class);
                                 startActivity(intent);
                             } else {
@@ -424,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
                             //Get data
                             //Go to info activity if data is default
                             if (mDoctor.getShortDescription().equals("Default") || mDoctor.getExperience() == -1 ||
-                                    mDoctor.getSpecializationID().equals("Default")) {
+                                mDoctor.getSpecializationID().equals("Default")) {
                                 Intent intent = new Intent(MainActivity.this, AccountInfoDoctor.class);
                                 startActivity(intent);
                             }
@@ -432,7 +437,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "Main. checkDataOfAccountDoctor", e);
                         }
                     } else {
-                        DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(), new Date(), 1);
+                        DoctorInfo doctorInfo = new DoctorInfo(user.getUid(), "Default", "Default", -1, new Date(),
+                            new Date(), 1);
                         mRef.child(user.getUid()).setValue(doctorInfo);
                     }
                 }
