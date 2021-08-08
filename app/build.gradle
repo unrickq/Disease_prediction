@@ -91,11 +91,11 @@ dependencies {
 
     // Add Firebase ML dependency
     //noinspection OutdatedLibrary
-    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.3'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.4'
     // Add TFLite Task API (Text) dependency
     implementation 'org.tensorflow:tensorflow-lite-support:0.2.0'
     implementation 'org.tensorflow:tensorflow-lite-task-text:0.2.0'
-    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc1'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0-rc2'
     //read file csv
     implementation 'com.opencsv:opencsv:4.6'
     //circular dots loader
