@@ -281,8 +281,8 @@ public class Chat extends AppCompatActivity {
                     List<String> outputSymtom = searchSymptoms(tokenList);
                     //outputSymptom index 1 is symptoms not in firebase
                     float percent = Float.valueOf(outputSymtom.get(1).length()) / Float.valueOf(token.length());
-                    //not symptom >= 35%
-                    if (percent < 0.35) {
+                    //not symptom >= 50%
+                    if (percent < 0.5) {
                         //outputSymptom index 0 is symptoms have been filtered
                         results = client.classify(outputSymtom.get(0));
                     }
@@ -292,7 +292,7 @@ public class Chat extends AppCompatActivity {
                     if (!outputSymtom.get(2).isEmpty() && !results.isEmpty()) {
                         //print symptom list
                         Message mess = new Message("", AppConstants.CHATBOT_ID,
-                                outputSymtom.get(2), new Date(), sessionID, 1);
+                            outputSymtom.get(2), new Date(), sessionID, 1);
                         setMessageFirebase(mess);
 
                         //get disease from model

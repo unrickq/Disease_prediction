@@ -245,7 +245,7 @@
     <string name="prediction_confirm_txt_medicine_instruction_title">Instruction</string>
 
     <string name="chat_dialog_attention_title">Attention!</string>
-    <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n1) You need to enter your symptoms clearly.\n2) Different symptoms should be separated by commas.\n3) Negative sentences should not be used</string>
+    <string name="chat_dialog_attention_description">Welcome to the \"Get Prediction\" function.\nHere are some notices you should follow to get the most accurate result:\n1) You need to enter your symptoms clearly.\n2) You should enter at least 3 different symptoms.\n3) Negative sentences should not be used</string>
     <string name="chat_dialog_attention_btn_understand">I understand</string>
     <string name="chat_loader_txt">Processing</string>
 
