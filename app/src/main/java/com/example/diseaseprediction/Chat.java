@@ -489,9 +489,9 @@ public class Chat extends AppCompatActivity {
                         }
                     }
                 }
-            }
-            if (checkNotEmpty == false) {
-                notSymptom += tk + " ";
+                if(!check){
+                    notSymptom += tk + " ";
+                }
             }
         }
         if (checkNotEmpty == false)
