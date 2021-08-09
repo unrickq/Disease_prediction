@@ -1,4 +1,6 @@
+tê tay trái
 chóng mặt
+tức ngực
 mệt mỏi
 khó chịu
 phát ban da
@@ -328,9 +330,8 @@ phân đen
 khả năng gắng sức giảm
 lo lắng
 nhức đầu
-tê tay trái
 tê hàm
-đổ mồ hôi lạnh
+mồ hôi lạnh
 khó nuốt
 miệng tiết ra nhiều nước bọt
 ợ hơi
@@ -399,6 +400,7 @@ ho có dịch nhầy
 ho ra đờm
 đầu dương vật sưng
 sụt cân
+sụt cân nhanh
 phân lẫn máu
 đầy hơi
 bụng sôi ùng ục
@@ -424,7 +426,6 @@ amidan sưng to
 mất giọng
 chảy mũi
 hắt xì
-tim tái
 mắt ngứa
 đau khắp người
 chảy dịch mũi

@@ -1,5 +1,5 @@
 đau nhiều nơi:đau khắp người.
-nhức đầu:đau đầu.
+đau đầu:nhức đầu.
 hắt hơi:hắt xì.
 hôi miệng:hơi thở có mùi hôi.
 hơi sốt:sốt nhẹ.
@@ -64,7 +64,6 @@ thở khó:thở gắng sức.
 ho có dịch nhầy:ho có đờm.
 ho ra đờm:ho có đờm.
 đầu dương vật sưng:Sưng bìu.
-sụt cân:gầy sút cân nhanh.
 phân lẫn máu:phân có máu.
 phân toàn nước ít:phân lỏng.
 đầy hơi:đầy bụng.
@@ -84,10 +83,12 @@ ngủ không ngon:khó ngủ.
 âu lo:lo lắng.
 tay trái tê:tê tay trái.
 tay trái bị tê:tê tay trái.
+tay trái:tê tay trái.
 đau ngực trái:đau vùng trước tim.
 tim đập nhanh:nhịp tim nhanh.
 miệng có vị đắng:đắng miệng.
 ngực hơi đau:đau ngực.
 tuyến nước bọt: tuyến nước bọt sưng to.
+
 
 
