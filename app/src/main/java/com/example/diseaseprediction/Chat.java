@@ -286,6 +286,11 @@ public class Chat extends AppCompatActivity {
                         //outputSymptom index 0 is symptoms have been filtered
                         results = client.classify(outputSymtom.get(0));
                     }
+                    System.out.println("check result"+outputSymtom.get(0));
+                    System.out.println(token);
+                    System.out.println(outputSymtom.get(1));
+                    System.out.println(Float.valueOf(outputSymtom.get(1).length()));
+                    System.out.println(Float.valueOf(token.length()));
                     //get symptom user input
                     // If symptom found
                     // outputSymptom index 2 is result of find symptoms in firebase
@@ -448,13 +453,11 @@ public class Chat extends AppCompatActivity {
      * Search symptom from firebase
      *
      * @param tokenList list of tokenized input string
-     * @return list string includes symptom, not symptom, result use for MSG
+     * @return a string that contain detected symptoms
      */
     private List<String> searchSymptoms(List<String> tokenList) {
         List<String> output = new ArrayList<>();
-        //save not symptom
         String notSymptom = "";
-        //save symptom
         String symptom = "";
         String result = getString(R.string.chat_chatbot_symptom);
         tempSymptom = new ArrayList<>();
@@ -470,6 +473,7 @@ public class Chat extends AppCompatActivity {
                 tempSymptom.add(mSymptom.get(mid));
                 checkNotEmpty = true;
             } else {
+
                 for (int i = 0; i < mid; i++) {
                     if (mSymptom.get(i).getName().equals(tk)) {
                         result += tk + ", ";
@@ -486,6 +490,7 @@ public class Chat extends AppCompatActivity {
                             tempSymptom.add(mSymptom.get(i));
                             symptom += tk.replace(" ", "_") + " ";
                             checkNotEmpty = true;
+                            check = true;
                         }
                     }
                 }
