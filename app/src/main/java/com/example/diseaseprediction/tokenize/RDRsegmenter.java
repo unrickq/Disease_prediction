@@ -253,6 +253,4 @@ public class RDRsegmenter {
         }
         return sb.toString().trim();
     }
-
-
 }

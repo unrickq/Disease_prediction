@@ -79,6 +79,11 @@ public class DataPreprocessor {
 
 	}
 
+	/**
+	 * run process data
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		DataPreprocessor segmenter = new DataPreprocessor();
 		segmenter.getCorpusInitialSegmentation(args[0]);
