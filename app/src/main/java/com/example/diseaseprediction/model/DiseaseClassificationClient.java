@@ -240,7 +240,7 @@ public class DiseaseClassificationClient {
     public String tokenize(String text) throws IOException {
         List<String> token = new ArrayList<>();
         //split the sentence into tokens with '_' each token separated by space
-        text = rdRsegmenter.segmentTokenizedString(text);
+        text = rdRsegmenter.segmentTokenizedString(text.toLowerCase());
         token = Arrays.asList(text.split(" "));
         InputStream dictionaryFilevo = am.open("vocab_sym.txt");
         loadDictionary(dictionaryFilevo);
