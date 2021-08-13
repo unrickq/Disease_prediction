@@ -33,7 +33,6 @@ import com.example.diseaseprediction.ui.consultation.ConsultationListFragment;
 import com.example.diseaseprediction.ui.home.HomeFragment;
 import com.example.diseaseprediction.ui.prediction.PredictionListFragment;
 import com.example.diseaseprediction.ui.predictionListConfirm.PredictionListPending;
-import com.example.diseaseprediction.ui.settings.SettingsFragment;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -155,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home,
                 R.id.nav_account,
                 R.id.nav_consultationList,
-                R.id.nav_predictionList,
-                R.id.nav_settings
+                R.id.nav_predictionList
+//                R.id.nav_settings
             )
                 .setDrawerLayout(drawer)
                 .build();
@@ -202,12 +201,12 @@ public class MainActivity extends AppCompatActivity {
                             drawer.close();
                             break;
                         }
-                        case R.id.nav_settings: {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new SettingsFragment()).commit();
-                            drawer.close();
-                            break;
-                        }
+//                        case R.id.nav_settings: {
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+//                                new SettingsFragment()).commit();
+//                            drawer.close();
+//                            break;
+//                        }
                         case R.id.nav_out: {
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(MainActivity.this, Login.class);
