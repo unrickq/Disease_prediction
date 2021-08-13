@@ -28,9 +28,7 @@
         <activity
             android:name=".CodeVerify"
             android:screenOrientation="locked" />
-        <activity
-            android:name=".testActivity"
-            android:screenOrientation="locked" />
+
         <activity
             android:name=".PredictionResult"
             android:screenOrientation="locked" />
