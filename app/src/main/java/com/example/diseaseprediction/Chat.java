@@ -429,7 +429,7 @@ public class Chat extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     // If input empty
-                    if (chat_txt_enter_mess.getText().toString().equals("")) {
+                    if (chat_txt_enter_mess.getText().toString().trim().isEmpty()) {
                         chat_img_send.setVisibility(View.GONE);
                         chat_img_mic.setVisibility(View.VISIBLE);
                     } else {
