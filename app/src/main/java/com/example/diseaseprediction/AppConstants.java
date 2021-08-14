@@ -19,8 +19,8 @@ public class AppConstants {
     public static final String EMAIL_PATTERN = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
 
     // Model Settings
-    public static final String MODEL_FILE_NAME = "model-v1.1.2-metadata.tflite";
-    public static final String VOCAB_FILE_NAME = "model-v1.1.2-vocab.txt";
+    public static final String MODEL_FILE_NAME = "model-v1.1.3-metadata.tflite";
+    public static final String VOCAB_FILE_NAME = "model-v1.1.3-vocab.txt";
     public static final String LABEL_FILE_NAME = "labels.txt";
 
     // Settings for Home Fragment
