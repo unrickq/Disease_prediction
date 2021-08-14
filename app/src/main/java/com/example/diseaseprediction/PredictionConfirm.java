@@ -682,26 +682,28 @@ public class PredictionConfirm extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine m = sn.getValue(Medicine.class);
-                        item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
-                        medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
-                        medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
-                        medicine_confirm_instruction_txt = item_medicine_view.findViewById(R.id.medicine_confirm_instruction_txt);
-                        if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
-                            medicineName.setText(notes);
-                        } else {
-                            medicineName.setText(m.getName());
-                        }
-                        getMedicineTypeByID(medicineTypeID, dosage, medicineDosage);
-                        //Check if instruction equal to default, then show default_instruction message
-                        if (instruction.equals("Default")) {
-                            medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
-                            isInstructionEmpty++;
-                        } else {
-                            medicine_confirm_instruction_txt.setText(instruction);
-                        }
+                        if(m.getStatus()!=0){
+                            item_medicine_view = getLayoutInflater().inflate(R.layout.item_medicine_view, null, false);
+                            medicineName = item_medicine_view.findViewById(R.id.item_medicine_txt_name);
+                            medicineDosage = item_medicine_view.findViewById(R.id.item_medicine_txt_dosage);
+                            medicine_confirm_instruction_txt = item_medicine_view.findViewById(R.id.medicine_confirm_instruction_txt);
+                            if (medicineID.equals(AppConstants.MEDICINE_OTHER_ID)) {
+                                medicineName.setText(notes);
+                            } else {
+                                medicineName.setText(m.getName());
+                            }
+                            getMedicineTypeByID(medicineTypeID, dosage, medicineDosage);
+                            //Check if instruction equal to default, then show default_instruction message
+                            if (instruction.equals("Default")) {
+                                medicine_confirm_instruction_txt.setText(getString(R.string.default_instruction));
+                                isInstructionEmpty++;
+                            } else {
+                                medicine_confirm_instruction_txt.setText(instruction);
+                            }
 
-                        medicineDosage.setText(dosage);
-                        medicine_confirm_layout.addView(item_medicine_view);
+                            medicineDosage.setText(dosage);
+                            medicine_confirm_layout.addView(item_medicine_view);
+                        }
                     }
                     try {
                         if (!medicineName.getText().toString().isEmpty()) {
@@ -840,7 +842,9 @@ public class PredictionConfirm extends AppCompatActivity {
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine m = sn.getValue(Medicine.class);
-                        addView(m, dosage, medicineTypeID);
+                        if(m.getStatus()!=0){
+                            addView(m, dosage, medicineTypeID);
+                        }
                     }
                 }
 
@@ -897,7 +901,9 @@ public class PredictionConfirm extends AppCompatActivity {
                     loadMedicineList.clear();
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         Medicine medicine = sn.getValue(Medicine.class);
-                        loadMedicineList.add(medicine);
+                        if(medicine.getStatus()!=0){
+                            loadMedicineList.add(medicine);
+                        }
                     }
 
                     // Reverse medicine list
