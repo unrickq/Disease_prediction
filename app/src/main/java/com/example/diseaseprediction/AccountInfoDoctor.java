@@ -46,7 +46,7 @@ public class AccountInfoDoctor extends AppCompatActivity {
     private ArrayAdapter<Specialization> specializationAdapter;
     private ArrayList<Specialization> specialization;
     private DoctorInfo mDoctor;
-    private Specialization ds;
+    private Specialization mSpecialization;
 
     private TextInputLayout account_info_doctor_txt_title_experience, account_info_doctor_txt_title_description, account_info_doctor_txt_title_specialization;
     private Button account_info_doctor_btn_edit_done;
@@ -232,13 +232,13 @@ public class AccountInfoDoctor extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot sh : snapshot.getChildren()) {
-                                        ds = sh.getValue(Specialization.class);
+                                        mSpecialization = sh.getValue(Specialization.class);
                                         try {
-                                            assert ds != null;
-                                            if (mDoctor.getSpecializationID().equals(ds.getSpecializationID())) {
-                                                account_info_doctor_spinner_specialization.setText(ds.getName());
+                                            assert mSpecialization != null;
+                                            if (mDoctor.getSpecializationID().equals(mSpecialization.getSpecializationID())) {
+                                                account_info_doctor_spinner_specialization.setText(mSpecialization.getName());
                                             }
-                                            specialization.add(ds);
+                                            specialization.add(mSpecialization);
                                         } catch (NullPointerException e) {
                                             Log.d(TAG, "AccountInfoDoctor. loadData", e);
                                         }
@@ -309,12 +309,12 @@ public class AccountInfoDoctor extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot sh : snapshot.getChildren()) {
-                            ds = sh.getValue(Specialization.class);
+                            mSpecialization = sh.getValue(Specialization.class);
                             try {
-                                assert ds != null;
-                                if (ds.getName().equals(account_info_doctor_spinner_specialization.getText().toString())) {
+                                assert mSpecialization != null;
+                                if (mSpecialization.getName().equals(account_info_doctor_spinner_specialization.getText().toString())) {
                                     mRef = FirebaseDatabase.getInstance().getReference(FirebaseConstants.FIREBASE_TABLE_DOCTOR_INFO);
-                                    mRef.child(fUser.getUid()).child("specializationID").setValue(ds.getSpecializationID());
+                                    mRef.child(fUser.getUid()).child("specializationID").setValue(mSpecialization.getSpecializationID());
                                 }
                             } catch (NullPointerException e) {
                                 Log.d(TAG, "AccountInfoDoctor. saveData", e);
