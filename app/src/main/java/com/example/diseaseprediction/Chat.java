@@ -83,6 +83,7 @@ public class Chat extends AppCompatActivity {
     private PopupMenu pm;
 
     private ChatAdapter chatAdapter;
+    private Session mSession;
     private List<Message> mMessage;
     private List<Symptom> mSymptom;
     private String receiverID, sessionID;

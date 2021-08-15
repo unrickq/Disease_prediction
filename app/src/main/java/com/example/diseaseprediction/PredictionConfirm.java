@@ -70,7 +70,7 @@ public class PredictionConfirm extends AppCompatActivity {
     private Button prediction_confirm_prediction_wrong_btn, prediction_confirm_prediction_correct_btn,
         prediction_confirm_prediction_confirm_btn;
     private TextView prediction_confirm_txt_medicine_name, medicine_confirm_instruction_txt,
-        prediction_txt_medicine_empty;
+            prediction_txt_medicine_empty;
     private TextView prediction_confirm_txt_medicine_dosage, medicine_confirm_img_add;
     private LinearLayout medicine_confirm_layout, medicine_confirm_layout_add_list;
     private View item_medicine_view;
@@ -80,6 +80,9 @@ public class PredictionConfirm extends AppCompatActivity {
 
     private ArrayAdapter diseaseAdapter;
     private Prediction mPrediction;
+    private Disease mDisease;
+    private Medicine mMedicine;
+    private PredictionMedicine mPredictionMedicine;
     private int predictionStatus;
     private Disease selectedDisease; // currently selected disease in combo box
     private boolean isMedicineEmpty = true;
